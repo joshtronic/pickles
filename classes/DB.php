@@ -58,6 +58,7 @@ class DB {
 			self::$results = @mysql_query($sql, self::$connection);
 			if (empty(self::$results)) {
 				Error::addError('There was an error executing the SQL');
+				Error::addError(mysql_error());
 			}
 			else {
 				return true;
@@ -88,7 +89,7 @@ class DB {
 			Error::addError('There is no valid MySQL result resource');
 		}
 
-		return false;
+		return null;
 	}
 
 	public static function getRow($sql = null) {
@@ -109,7 +110,7 @@ class DB {
 			Error::addError('There is no valid MySQL result resource');
 		}
 
-		return false;
+		return null;
 	}
 
 	public static function getArray($sql = null) {
@@ -118,9 +119,12 @@ class DB {
 		}
 
 		if (is_resource(self::$results)) {
-			$return = array();
-
+			$return = null;
         	while ($row =& mysql_fetch_assoc(self::$results)) {
+				if (!is_array($return)) {
+					$return = array();
+				}
+
                 array_push($return, $row);
             }
 
@@ -130,16 +134,20 @@ class DB {
 			Error::addError('There is no valid MySQL result resource');
 		}
 
-		return false;
+		return null;
 	}
 
 	public static function insert($table, $columnValues) {
+        if (!is_resource(self::$connection)) {
+            self::open();
+        }
+
 		if (trim($table) != '') {
 			// @todo Check that the table exists, and possibly check that the columns exist as well
 
 			if (is_array($columnValues)) {
 				foreach ($columnValues as $key => $value) {
-					$columnValues[$key] = "'" . mysql_real_escape_string($value, self::$connection) . "'";
+					$columnValues[$key] = $value == null ? 'NULL' : "'" . mysql_real_escape_string(stripslashes($value), self::$connection) . "'";
 				}
 
 				self::execute("

@@ -43,7 +43,18 @@ class Error {
 
 	public function display() {
 		if (self::isError()) {
-			var_dump(self::getError(), self::getWarning());
+			if (self::getError()) {
+				foreach (self::getError() as $error) {
+					echo "{$error}<br />";
+				}
+			}
+
+			if (self::getWarning()) {
+				foreach (self::getWarning() as $error) {
+					echo "{$warning}<br />";
+				}
+			}
+			
 			self::$errors = self::$warnings = null;
 			return true;
 		}

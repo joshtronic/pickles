@@ -1,0 +1,10 @@
+.center { text-align: center; }
+.left { text-align: left; }
+.right { text-align: right; }
+.top { vertical-align: top; }
+.middle { vertical-align: middle; }
+.bottom { vertical-align: bottom; }
+.nowrap { white-space: nowrap; }
+.bold { font-weight: bold; }
+.italic { font-style: italic; }
+.clear { clear: both; }
