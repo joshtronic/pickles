@@ -16,6 +16,7 @@ if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false) {
 ini_set('arg_separator.output', '&amp;');
 ini_set('url_rewriter.tags', 'a=href,area=href,frame=src,input=src,fieldset=');
 
+$_SERVER['SERVER_NAME'] = str_replace('.localhost', '.com', $_SERVER['SERVER_NAME']);
 Config::load($_SERVER['SERVER_NAME']);
 
 // Generic "site down" message
