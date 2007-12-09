@@ -24,7 +24,7 @@ if (Config::getDisable()) {
 	exit("<h2><em>{$_SERVER['SERVER_NAME']} is currently down for maintenance</em></h2>");
 }
 
-if (Config::getSession()) {
+if (Config::getSession() && !isset($_SESSION)) {
 	session_start();
 }
 
