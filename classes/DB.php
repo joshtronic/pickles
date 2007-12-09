@@ -120,7 +120,7 @@ class DB {
 
 		if (is_resource(self::$results)) {
 			$return = null;
-			while ($row =& mysql_fetch_assoc(self::$results)) {
+			while ($row = mysql_fetch_assoc(self::$results)) {
 				if (!is_array($return)) {
 					$return = array();
 				}
