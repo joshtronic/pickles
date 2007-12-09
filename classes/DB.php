@@ -7,9 +7,9 @@ class DB {
 	private static $password;
 	private static $database;
 
-    private static $connection;
+	private static $connection;
 	private static $results;
-    
+
 	public static function open() {
 		self::$hostname = Config::get('hostname', 'database');
 		self::$username = Config::get('username', 'database');
@@ -50,9 +50,9 @@ class DB {
 	}
 
 	public static function execute($sql) {
-        if (!is_resource(self::$connection)) {
-            self::open();
-        }
+		if (!is_resource(self::$connection)) {
+			self::open();
+		}
 		
 		if (trim($sql) != '') {
 			self::$results = @mysql_query($sql, self::$connection);
@@ -77,9 +77,9 @@ class DB {
 		}
 
 		if (is_resource(self::$results)) {
-        	$results = @mysql_fetch_row(self::$results);
+			$results = @mysql_fetch_row(self::$results);
 			if (is_array($results)) {
-        		return $results[0];
+				return $results[0];
 			}
 			else {
 				Error::addWarning('There is nothing to return');
@@ -98,9 +98,9 @@ class DB {
 		}
 
 		if (is_resource(self::$results)) {
-        	$results = @mysql_fetch_assoc(self::$results);
+			$results = @mysql_fetch_assoc(self::$results);
 			if (is_array($results)) {
-        		return $results;
+				return $results;
 			}
 			else {
 				Error::addWarning('There is nothing to return');
@@ -120,13 +120,13 @@ class DB {
 
 		if (is_resource(self::$results)) {
 			$return = null;
-        	while ($row =& mysql_fetch_assoc(self::$results)) {
+			while ($row =& mysql_fetch_assoc(self::$results)) {
 				if (!is_array($return)) {
 					$return = array();
 				}
 
-                array_push($return, $row);
-            }
+				array_push($return, $row);
+			}
 
 			return $return;
 		}
@@ -138,9 +138,9 @@ class DB {
 	}
 
 	public static function insert($table, $columnValues) {
-        if (!is_resource(self::$connection)) {
-            self::open();
-        }
+		if (!is_resource(self::$connection)) {
+			self::open();
+		}
 
 		if (trim($table) != '') {
 			// @todo Check that the table exists, and possibly check that the columns exist as well

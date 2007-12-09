@@ -1,15 +1,17 @@
 <?php
 
+date_default_timezone_set('America/New_York');
+
 function __autoload($class) {
 	require_once "/var/www/josh/common/classes/{$class}.php";
 }
 
 // Obliterates any passed in PHPSESSID (thanks Google)
 if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false) {
-    list($request_uri, $phpsessid) = split('\?PHPSESSID=', $_SERVER['REQUEST_URI'], 2);
-    header("HTTP/1.1 301 Moved Permanently");
-    header("Location: {$request_uri}");
-    exit(); 
+	list($request_uri, $phpsessid) = split('\?PHPSESSID=', $_SERVER['REQUEST_URI'], 2);
+	header("HTTP/1.1 301 Moved Permanently");
+	header("Location: {$request_uri}");
+	exit();
 }
 
 // XHTML compliancy stuff

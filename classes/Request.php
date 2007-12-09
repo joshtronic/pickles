@@ -2,10 +2,10 @@
 
 class Request {
 
-    private static $request;
+	private static $request;
 
 	public static function load() {
-        if (is_array($_REQUEST)) {
+		if (is_array($_REQUEST)) {
 			foreach ($_REQUEST as $key => $value) {
 				self::$request[$key] = $value;
 				unset($_REQUEST[$key]);
