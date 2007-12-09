@@ -10,7 +10,7 @@ class Config {
 		// @todo no hardcoded paths!
 		$file = "/var/www/josh/common/config/{$site}.ini";
 		if (file_exists($file)) {
-			self::$data =& parse_ini_file($file, true);
+			self::$data = parse_ini_file($file, true);
 		}
 		else {
 			Error::addError('Unable to load the configuration file');

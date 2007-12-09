@@ -11,10 +11,10 @@ class DB {
 	private static $results;
     
 	public static function open() {
-		self::$hostname =& Config::get('hostname', 'database');
-		self::$username =& Config::get('username', 'database');
-		self::$password =& Config::get('password', 'database');
-		self::$database =& Config::get('database', 'database');
+		self::$hostname = Config::get('hostname', 'database');
+		self::$username = Config::get('username', 'database');
+		self::$password = Config::get('password', 'database');
+		self::$database = Config::get('database', 'database');
 
 		if (isset(self::$hostname) && isset(self::$username) && isset(self::$password) && isset(self::$database)) {
 			self::$connection = @mysql_connect(self::$hostname, self::$username, self::$password);
@@ -178,6 +178,7 @@ class DB {
 	public static function delete($table, $columnValues, $conditions) {
 
 	}
+
 }
 
 ?>
