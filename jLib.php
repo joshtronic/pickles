@@ -18,7 +18,17 @@ if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false) {
 ini_set('arg_separator.output', '&amp;');
 ini_set('url_rewriter.tags', 'a=href,area=href,frame=src,input=src,fieldset=');
 
-$_SERVER['SERVER_NAME'] = str_replace('.localhost', '.com', $_SERVER['SERVER_NAME']);
+if (strpos($_SERVER['SERVER_NAME'], '.localhost')) {
+	foreach (array('com', 'net', 'org') as $tld) {
+		$config = str_replace('.localhost', '.' . $tld, $_SERVER['SERVER_NAME']);
+
+		if (Config::check($config)) {
+			$_SERVER['SERVER_NAME'] = $config;
+			break;
+		}
+	}
+}
+
 Config::load($_SERVER['SERVER_NAME']);
 
 // Generic "site down" message
@@ -55,6 +65,11 @@ if (Config::getSmarty()) {
 // Use the FCKeditor instead of textareas
 if (Config::getFCKEditor()) {
 	require_once '/var/www/josh/common/static/fckeditor/fckeditor.php';
+}
+
+// Use the FCKeditor instead of textareas
+if (Config::getMagpieRSS()) {
+	require_once '/var/www/josh/common/contrib/magpierss/rss_fetch.inc';
 }
 
 //Request::load();
