@@ -10,6 +10,9 @@ class Config {
 		if (file_exists('/var/www/josh/common/config/' . $site . '.ini')) {
 			return true;
 		}
+		else if (file_exists('/var/www/josh/common/config/' . $site . '.xml')) {
+			return true;
+		}
 		else {
 			return false;
 		}
@@ -22,8 +25,17 @@ class Config {
 			self::$data = parse_ini_file($file, true);
 		}
 		else {
-			Error::addError('Unable to load the configuration file');
-			return false;
+			$file = str_replace('ini', 'xml', $file);
+
+			if (file_exists($file)) {
+				$xml = ArrayUtils::object2array(simplexml_load_file($file));
+
+				self::$data = $xml;
+			}
+			else {
+				Error::addError('Unable to load the configuration file');
+				return false;
+			}
 		}
 
 		return true;		
