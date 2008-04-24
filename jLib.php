@@ -18,9 +18,16 @@ if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false) {
 ini_set('arg_separator.output', '&amp;');
 ini_set('url_rewriter.tags', 'a=href,area=href,frame=src,input=src,fieldset=');
 
+// Strips the subdomain before loading the configuration file
+$config_array = split('\.', $_SERVER['SERVER_NAME']);
+if (count($config_array) == 3) {
+	$subless_server = $config_array[1] . '.' . $config_array[2];
+}
+
+// Do some prep work if we're working locally
 if (strpos($_SERVER['SERVER_NAME'], '.localhost')) {
 	foreach (array('com', 'net', 'org') as $tld) {
-		$config = str_replace('.localhost', '.' . $tld, $_SERVER['SERVER_NAME']);
+		$config = str_replace('.localhost', '.' . $tld, $config);
 
 		if (Config::check($config)) {
 			$_SERVER['SERVER_NAME'] = $config;
@@ -29,7 +36,7 @@ if (strpos($_SERVER['SERVER_NAME'], '.localhost')) {
 	}
 }
 
-Config::load($_SERVER['SERVER_NAME']);
+Config::load($subless_server ? $subless_server : $_SERVER['SERVER_NAME']);
 
 // Generic "site down" message
 if (Config::getDisable()) {
@@ -42,7 +49,7 @@ if (Config::getSession() && !isset($_SESSION)) {
 
 // Smarty default stuff
 if (Config::getSmarty()) {
-	require_once 'smarty/Smarty.class.php';
+	require_once 'contrib/smarty/Smarty.class.php';
 
 	$smarty = new Smarty();
 

@@ -6,8 +6,11 @@ class Controller {
 		global $smarty;
 
 		$sections = Config::get('sections');
-
-		if (isset($_REQUEST['section']) && in_array($_REQUEST['section'], array_keys($sections))) {
+		
+		if (
+			isset($_REQUEST['section']) && in_array($_REQUEST['section'], array_keys($sections))
+			|| file_exists('../logic/' . $_REQUEST['section'] . ($_REQUEST['action'] ? '.' . $_REQUEST['action'] : null) . '.php')
+		) {
 			$section = $_REQUEST['section'];
 
 			if (isset($_REQUEST['action'])) {
