@@ -9,17 +9,18 @@ function __autoload($class) {
 // Obliterates any passed in PHPSESSID (thanks Google)
 if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false) {
 	list($request_uri, $phpsessid) = split('\?PHPSESSID=', $_SERVER['REQUEST_URI'], 2);
-	header("HTTP/1.1 301 Moved Permanently");
-	header("Location: {$request_uri}");
+	header('HTTP/1.1 301 Moved Permanently');
+	header('Location: ' . $request_uri);
 	exit();
 }
 
 // XHTML compliancy stuff
 ini_set('arg_separator.output', '&amp;');
-ini_set('url_rewriter.tags', 'a=href,area=href,frame=src,input=src,fieldset=');
+ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
 
 // Strips the subdomain before loading the configuration file
-$config_array = split('\.', $_SERVER['SERVER_NAME']);
+$config_array   = split('\.', $_SERVER['SERVER_NAME']);
+$subless_server = null;
 if (count($config_array) == 3) {
 	$subless_server = $config_array[1] . '.' . $config_array[2];
 }
@@ -27,7 +28,7 @@ if (count($config_array) == 3) {
 // Do some prep work if we're working locally
 if (strpos($_SERVER['SERVER_NAME'], '.localhost')) {
 	foreach (array('com', 'net', 'org') as $tld) {
-		$config = str_replace('.localhost', '.' . $tld, $config);
+		$config = str_replace('.localhost', '.' . $tld, $_SERVER['SERVER_NAME']);
 
 		if (Config::check($config)) {
 			$_SERVER['SERVER_NAME'] = $config;

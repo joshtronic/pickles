@@ -5,21 +5,24 @@ class Controller {
 	public function __construct() {
 		global $smarty;
 
-		$sections = Config::get('sections');
-		
-		if (
-			isset($_REQUEST['section']) && in_array($_REQUEST['section'], array_keys($sections))
-			|| file_exists('../logic/' . $_REQUEST['section'] . ($_REQUEST['action'] ? '.' . $_REQUEST['action'] : null) . '.php')
-		) {
-			$section = $_REQUEST['section'];
+		define('PATH', '../logic/');
 
-			if (isset($_REQUEST['action'])) {
-				$action = $_REQUEST['action'];
+		$section = $action = null;
+
+		if (isset($_REQUEST['section'])) {
+			// Check for section.action.php
+			if (isset($_REQUEST['action']) && file_exists(PATH . $_REQUEST['section'] . '.' . $_REQUEST['action'] . '.php')) {
+				$section = $_REQUEST['section'];
+				$action  = $_REQUEST['action'];
 			}
-		}
-		else {
-			$section = Config::get('default');
-			$action  = '';
+			// else check for section.php
+			else if (file_exists(PATH . $_REQUEST['section'] . '.php')) {
+				$section = $_REQUEST['section'];
+			}
+			// else use the default section
+			else {
+				$section = Config::get('default');
+			}
 		}
 
 		$file     = '../logic/' . $section . ($action ? '.' . $action : null) . '.php';
@@ -30,6 +33,8 @@ class Controller {
 		}
 
 		/*
+		@todo not sure I need this at all anymore... 
+
 		if (!file_exists('../templates/' . $template)) {
 			$section = Config::get('default');
 			$action  = '';
@@ -47,10 +52,10 @@ class Controller {
 		}
 		*/
 
-		$smarty->assign('sections', $sections);
-		$smarty->assign('section',  $section);
-		$smarty->assign('action',   $action);
-		$smarty->assign('template', $template);
+		$smarty->assign('navigation', Config::get('navigation'));
+		$smarty->assign('section',    $section);
+		$smarty->assign('action',     $action);
+		$smarty->assign('template',   $template);
 
 		header('Content-type: text/html; charset=UTF-8');
 		$smarty->display('index.tpl');
