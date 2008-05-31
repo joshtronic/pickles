@@ -5,24 +5,31 @@ class Controller {
 	public function __construct() {
 		global $smarty;
 
-		define('PATH', '../logic/');
-
 		$section = $action = null;
 
 		if (isset($_REQUEST['section'])) {
 			// Check for section.action.php
-			if (isset($_REQUEST['action']) && file_exists(PATH . $_REQUEST['section'] . '.' . $_REQUEST['action'] . '.php')) {
+			if (isset($_REQUEST['action']) && file_exists('../logic/' . $_REQUEST['section'] . '.' . $_REQUEST['action'] . '.php')) {
 				$section = $_REQUEST['section'];
 				$action  = $_REQUEST['action'];
 			}
 			// else check for section.php
-			else if (file_exists(PATH . $_REQUEST['section'] . '.php')) {
+			else if (file_exists('../logic/' . $_REQUEST['section'] . '.php')) {
 				$section = $_REQUEST['section'];
 			}
-			// else use the default section
-			else {
-				$section = Config::get('default');
+			// Check for section.action.tpl
+			else if (isset($_REQUEST['action']) && file_exists('../templates/' . $_REQUEST['section'] . '.' . $_REQUEST['action'] . '.tpl')) {
+				$section = $_REQUEST['section'];
+				$action  = $_REQUEST['action'];
 			}
+			// else check for section.tpl
+			else if (file_exists('../templates/' . $_REQUEST['section'] . '.tpl')) {
+				$section = $_REQUEST['section'];
+			}
+		}
+
+		if (!isset($section)) {
+			$section = Config::get('default');
 		}
 
 		$file     = '../logic/' . $section . ($action ? '.' . $action : null) . '.php';
@@ -31,26 +38,6 @@ class Controller {
 		if (file_exists('../logic/' . $file)) {
 			require_once $file; 
 		}
-
-		/*
-		@todo not sure I need this at all anymore... 
-
-		if (!file_exists('../templates/' . $template)) {
-			$section = Config::get('default');
-			$action  = '';
-		
-			$file     = '../logic/' . $section . ($action ? '.' . $action : null) . '.php';
-			$template = $section . ($action ? '.' . $action : null) . '.tpl';
-
-			if (file_exists('../logic/' . $file)) {
-				require_once $file; 
-			}
-
-			if (!file_exists('../templates/' . $template)) {
-				// This would be considered a critical error
-			}
-		}
-		*/
 
 		$smarty->assign('navigation', Config::get('navigation'));
 		$smarty->assign('section',    $section);

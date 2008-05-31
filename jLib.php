@@ -1,9 +1,10 @@
 <?php
 
 date_default_timezone_set('America/New_York');
+define('JLIB_PATH', '/var/www/josh/common/');
 
 function __autoload($class) {
-	require_once "/var/www/josh/common/classes/{$class}.php";
+	require_once JLIB_PATH . 'classes/' . $class . '.php';
 }
 
 // Obliterates any passed in PHPSESSID (thanks Google)
@@ -68,6 +69,21 @@ if (Config::getSmarty()) {
 	$smarty->compile_dir = $compile_dir;
 
 	$smarty->load_filter('output','trimwhitespace');
+
+	// Include custom Smarty functions
+	$directory = JLIB_PATH . 'smarty/';
+	if (is_dir($directory)) {
+	    if ($handle = opendir($directory)) {
+			while (($file = readdir($handle)) !== false) {
+				if (!preg_match('/^\./', $file)) {
+					list($type, $name, $ext) = split('\.', $file);
+					require_once $directory . $file;
+					$smarty->register_function($name, "smarty_{$type}_{$name}");
+				}
+			}
+			closedir($handle);
+		}
+	}
 }
 
 // Use the FCKeditor instead of textareas
