@@ -2,7 +2,7 @@
 	<debug></debug>
 	<disable></disable>
 	<fckeditor></fckeditor>
-	<session></session>
+	<session>true</session>
 	<smarty>true</smarty>
 	<magpierss></magpierss>
 	<database>
@@ -21,9 +21,8 @@
 		<contact>Contact</contact>
 	</navigation>
 	<admin>
-		<news>News</news>
-		<releases>Releases</releases>
-		<artists>Artists</artists>
-		<shop>Shop</shop>
+		<artist>Artist Profile</artist>
+		<user>User Account</user>
+		<logout>Logout</logout>
 	</admin>
 </config>

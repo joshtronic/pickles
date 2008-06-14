@@ -7,43 +7,88 @@ class Controller {
 
 		$section = $action = null;
 
+		// Set up the section and action from the _REQUEST values
 		if (isset($_REQUEST['section'])) {
 			// Check for section.action.php
 			if (isset($_REQUEST['action']) && file_exists('../logic/' . $_REQUEST['section'] . '.' . $_REQUEST['action'] . '.php')) {
 				$section = $_REQUEST['section'];
 				$action  = $_REQUEST['action'];
 			}
-			// else check for section.php
+			// Else check for section.php
 			else if (file_exists('../logic/' . $_REQUEST['section'] . '.php')) {
 				$section = $_REQUEST['section'];
 			}
-			// Check for section.action.tpl
+			// Else check for section.action.tpl
 			else if (isset($_REQUEST['action']) && file_exists('../templates/' . $_REQUEST['section'] . '.' . $_REQUEST['action'] . '.tpl')) {
 				$section = $_REQUEST['section'];
 				$action  = $_REQUEST['action'];
 			}
-			// else check for section.tpl
+			// Else check for section.tpl
 			else if (file_exists('../templates/' . $_REQUEST['section'] . '.tpl')) {
 				$section = $_REQUEST['section'];
 			}
 		}
 
+		// Determine if we're on an admin page
+		$is_admin = preg_match('/^admin\./', $section);
+
+		// Check that the user is authenticated
+		if ($is_admin && !isset($_SESSION['user_id'])) {
+			$section = 'admin';
+			$action  = null;
+		}
+
+		// If we've come this far without a section, use the default
 		if (!isset($section)) {
 			$section = Config::get('default');
 		}
 
-		$file     = '../logic/' . $section . ($action ? '.' . $action : null) . '.php';
-		$template = $section . ($action ? '.' . $action : null) . '.tpl';
-
-		if (file_exists('../logic/' . $file)) {
+		// Check that the logic script exists and if so, load it
+		$file = '../logic/' . $section . ($action ? '.' . $action : null) . '.php';
+		if (file_exists($file)) {
 			require_once $file; 
 		}
 
-		$smarty->assign('navigation', Config::get('navigation'));
+		// Check if we're accessing an admin sub section and load the logic script
+		if ($section != 'admin' && $is_admin) {
+			$template = $section . '.tpl';
+
+			$file = '../logic/' . $section . '.php';
+
+			if (file_exists($file)) {
+				require_once $file;
+			}
+
+			$section = 'admin';
+		}
+		// Else, just define the template
+		else {
+			$template = $section . ($action ? '.' . $action : null) . '.tpl';
+		}
+
+		// Load the main navigation from the config
+		$navigation = Config::get('navigation');
+
+		// Add the admin section if we're authenticated
+		if (isset($_SESSION['user_id'])) {
+			$navigation['admin'] = 'Admin';
+
+			if ($section == 'admin') {
+				$smarty->assign('admin', Config::get('admin'));
+			}
+		}
+
+		// Pass all of our controller values to Smarty
+		$smarty->assign('navigation', $navigation);
 		$smarty->assign('section',    $section);
 		$smarty->assign('action',     $action);
 		$smarty->assign('template',   $template);
 
+		if (isset($_SESSION)) {
+			$smarty->assign('session', $_SESSION);
+		}
+
+		// Load it up
 		header('Content-type: text/html; charset=UTF-8');
 		$smarty->display('index.tpl');
 	}
