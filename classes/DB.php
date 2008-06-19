@@ -172,7 +172,49 @@ class DB {
 	}
 
 	public static function update($table, $columnValues, $conditions) {
+		if (!is_resource(self::$connection)) {
+			self::open();
+		}
 
+		if (trim($table) != '') {
+			// @todo Check that the table exists, and possibly check that the columns exist as well
+
+			$fields = $where = null;			
+			if (is_array($columnValues)) {
+				foreach ($columnValues as $key => $value) {
+					$fields .= ($fields ? ', ' : null) . $key . " = '" . mysql_real_escape_string(stripslashes($value), self::$connection) . "'";
+				}
+
+				if (is_array($conditions)) {
+					foreach ($conditions as $key => $value) {
+						$where = ($where == null) ? 'WHERE ' : ' AND ';
+
+						if ($value == null) {
+							$where .= $key . ' IS NULL';
+						}
+						else {
+							$where .= $key . " = '" . mysql_real_escape_string(stripslashes($value), self::$connection) . "'";
+						}
+					}
+
+					$sql = 'UPDATE ' . $table . ' SET ' . $fields . $where;
+					if (self::execute($sql)) {
+						return true;
+					}
+				}
+				else {
+					Error::addError('No conditions were specified');
+				}
+			}
+			else {
+				Error::addError('No data was specified');
+			}
+		}
+		else {
+			Error::addError('No database table was specified');
+		}
+
+		return false;
 	}
 
 	public static function delete($table, $columnValues, $conditions) {
