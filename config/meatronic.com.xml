@@ -1,0 +1,14 @@
+<config>
+	<debug></debug>
+	<disable></disable>
+	<fckeditor></fckeditor>
+	<session>true</session>
+	<smarty>true</smarty>
+	<magpierss></magpierss>
+	<database>
+		<hostname>localhost</hostname>
+		<username>meatronic</username>
+		<password>m347r0n1c</password>
+		<database>meatronic</database>
+	</database>
+</config>

@@ -1,0 +1,14 @@
+<config>
+	<debug></debug>
+	<disable></disable>
+	<fckeditor></fckeditor>
+	<session>true</session>
+	<smarty>true</smarty>
+	<magpierss></magpierss>
+	<database>
+		<hostname>localhost</hostname>
+		<username>813noise</username>
+		<password>813n0153</password>
+		<database>813noise</database>
+	</database>
+</config>

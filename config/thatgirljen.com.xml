@@ -1,0 +1,14 @@
+<config>
+	<debug></debug>
+	<disable></disable>
+	<fckeditor></fckeditor>
+	<session></session>
+	<smarty>true</smarty>
+	<magpierss></magpierss>
+	<database>
+		<hostname>localhost</hostname>
+		<username>thatgirljen</username>
+		<password>7h47g1rlj3n</password>
+		<database>thatgirljen</database>
+	</database>
+</config>

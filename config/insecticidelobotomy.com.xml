@@ -1,0 +1,14 @@
+<config>
+	<debug></debug>
+	<disable></disable>
+	<fckeditor></fckeditor>
+	<session></session>
+	<smarty>true</smarty>
+	<magpierss></magpierss>
+	<database>
+		<hostname>localhost</hostname>
+		<username>insecticidelobotomy</username>
+		<password>1ns3c71c1d3l0b070my</password>
+		<database>insecticidelobotomy</database>
+	</database>
+</config>
