@@ -51,7 +51,7 @@ if (Config::getSession() && !isset($_SESSION)) {
 
 // Smarty default stuff
 if (Config::getSmarty()) {
-	require_once 'contrib/smarty/Smarty.class.php';
+	require_once 'contrib/smarty/libs/Smarty.class.php';
 
 	$smarty = new Smarty();
 
@@ -71,7 +71,7 @@ if (Config::getSmarty()) {
 	$smarty->load_filter('output','trimwhitespace');
 
 	// Include custom Smarty functions
-	$directory = JLIB_PATH . 'smarty/';
+	$directory = JLIB_PATH . 'smarty/functions/';
 	if (is_dir($directory)) {
 	    if ($handle = opendir($directory)) {
 			while (($file = readdir($handle)) !== false) {

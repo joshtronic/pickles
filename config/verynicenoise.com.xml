@@ -25,4 +25,11 @@
 		<user>User Account</user>
 		<logout>Logout</logout>
 	</admin>
+	<contact>
+		<prefix>VNN</prefix>
+		<recipients>
+			<recipient>verynicenoise@gmail.com</recipient>
+			<recipient>joshsherman@gmail.com</recipient>
+		</recipients>
+	</contact>
 </config>

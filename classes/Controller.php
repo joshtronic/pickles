@@ -88,9 +88,10 @@ class Controller {
 			$smarty->assign('session', $_SESSION);
 		}
 
-		// Load it up
+		// Load it up!
 		header('Content-type: text/html; charset=UTF-8');
-		$smarty->display('index.tpl');
+		// @todo
+		$smarty->display(isset($_REQUEST['ajax']) ? '/var/www/josh/common/smarty/templates/ajax.tpl' : 'index.tpl');
 	}
 
 	private function authenticate() {
