@@ -5,10 +5,19 @@ class Controller {
 	public function __construct() {
 		global $smarty;
 
-		$section = $action = null;
+		$section = $action = $is_admin = null;
+
+		if ((isset($_REQUEST['section']) && $_REQUEST['section'] == 'admin')) {
+			Session::authenticate();
+		}
 
 		// Set up the section and action from the _REQUEST values
+		// @todo this needs to be refactored.. my idea is to take what's there and throw it out, then loop through and load the variables that are
+		// present, then go ahead and set flags as to what kind of page it is, and what to load (is_admin, load_logic, load_template
 		if (isset($_REQUEST['section'])) {
+			// Determine if we're on an admin page
+			$is_admin = preg_match('/^admin/', $_REQUEST['section']);
+
 			// Check for section.action.php
 			if (isset($_REQUEST['action']) && file_exists('../logic/' . $_REQUEST['section'] . '.' . $_REQUEST['action'] . '.php')) {
 				$section = $_REQUEST['section'];
@@ -29,37 +38,40 @@ class Controller {
 			}
 		}
 
-		// Determine if we're on an admin page
-		$is_admin = preg_match('/^admin\./', $section);
-
 		// Check that the user is authenticated
-		if ($is_admin && !isset($_SESSION['user_id'])) {
+		// @todo need to fucking fix this
+		if ($is_admin && !isset($_SESSION['user_id']) && !isset($_SESSION['artist_id'])) {
 			$section = 'admin';
 			$action  = null;
 		}
 
 		// If we've come this far without a section, use the default
 		if (!isset($section)) {
-			$section = Config::get('default');
+			$section = Config::get('default', 'navigation');
 		}
 
 		// Check that the logic script exists and if so, load it
 		$file = '../logic/' . $section . ($action ? '.' . $action : null) . '.php';
 		if (file_exists($file)) {
-			require_once $file; 
+			require_once $file;
 		}
 
 		// Check if we're accessing an admin sub section and load the logic script
-		if ($section != 'admin' && $is_admin) {
-			$template = $section . '.tpl';
-
-			$file = '../logic/' . $section . '.php';
-
-			if (file_exists($file)) {
-				require_once $file;
+		if (isset($_REQUEST['section']) && $_REQUEST['section'] != 'admin' && $is_admin) {
+			if ($_REQUEST['section'] == 'admin.logout') {
+				Session::logout();
 			}
+			else {
+				$template = $_REQUEST['section'] . '.tpl';
 
-			$section = 'admin';
+				$file = '../logic/' . $_REQUEST['section'] . '.php';
+
+				if (file_exists($file)) {
+					require_once $file;
+				}
+
+				$section = 'admin';
+			}
 		}
 		// Else, just define the template
 		else {
@@ -67,15 +79,15 @@ class Controller {
 		}
 
 		// Load the main navigation from the config
-		$navigation = Config::get('navigation');
+		$navigation = Config::get('sections', 'navigation');
 
 		// Add the admin section if we're authenticated
-		if (isset($_SESSION['user_id'])) {
-			$navigation['admin'] = 'Admin';
-
-			if ($section == 'admin') {
-				$smarty->assign('admin', Config::get('admin'));
+		if (isset($_SESSION['user_id']) || isset($_SESSION['artist_id'])) {
+			if (Config::get('menu', 'admin') == 'true') {
+				$navigation['admin'] = 'Admin';
 			}
+			
+			$smarty->assign('admin', Config::get('sections', 'admin'));
 		}
 
 		// Pass all of our controller values to Smarty
@@ -90,38 +102,8 @@ class Controller {
 
 		// Load it up!
 		header('Content-type: text/html; charset=UTF-8');
-		// @todo
+		// @todo path is hardcoded case i am teh suckage
 		$smarty->display(isset($_REQUEST['ajax']) ? '/var/www/josh/common/smarty/templates/ajax.tpl' : 'index.tpl');
-	}
-
-	private function authenticate() {
-		if (isset($_SERVER['PHP_AUTH_USER'])) {
-			$from = '
-				FROM user
-				WHERE email = "' . $_SERVER['PHP_AUTH_USER'] . '"
-				AND password = "' . md5($_SERVER['PHP_AUTH_PW']) . '"
-				AND admin = 1;
-			';
-
-			DB::execute('SELECT COUNT(id) ' . $from);
-			if (DB::getField() != 0) {
-				DB::execute('SELECT id ' . $from);
-				$_SESSION['user_id'] = DB::getField();
-			}
-			else {
-				$_SESSION['user_id'] = null;
-			}
-		}
-
-		if (!isset($_SESSION['user_id'])) {
-			header('WWW-Authenticate: Basic realm="Site Admin"');
-			header('HTTP/1.0 401 Unauthorized');
-			exit('No shirt, no shoes, no salvation. Access denied.');
-		}
-		else {
-			header('Location: /');
-			exit();
-		}
 	}
 
 }
