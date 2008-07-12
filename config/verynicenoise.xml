@@ -1,28 +1,29 @@
 <config>
+	<debug></debug>
+	<disable></disable>
+	<fckeditor></fckeditor>
+	<session>true</session>
+	<smarty>true</smarty>
+	<magpierss></magpierss>
 	<database>
 		<hostname>localhost</hostname>
 		<username>verynicenoise</username>
 		<password>v3ryn1c3n0153</password>
 		<database>verynicenoise</database>
 	</database>
+	<default>home</default>
 	<navigation>
-		<default>home</default>
-		<sections>
-			<home>Home</home>
-			<about>About</about>
-			<releases>Releases</releases>
-			<artists>Artists</artists>
-			<shop>Shop</shop>
-			<contact>Contact</contact>
-		</sections>
+		<home>Home</home>
+		<about>About</about>
+		<releases>Releases</releases>
+		<artists>Artists</artists>
+		<shop>Shop</shop>
+		<contact>Contact</contact>
 	</navigation>
 	<admin>
-		<menu>true</menu>
-		<sections>
-			<artist>Artist Profile</artist>
-			<user>User Account</user>
-			<logout>Logout</logout>
-		</sections>
+		<artist>Artist Profile</artist>
+		<user>User Account</user>
+		<logout>Logout</logout>
 	</admin>
 	<contact>
 		<prefix>VNN</prefix>

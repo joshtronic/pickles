@@ -4,7 +4,10 @@ date_default_timezone_set('America/New_York');
 define('JLIB_PATH', '/var/www/josh/common/');
 
 function __autoload($class) {
-	require_once JLIB_PATH . 'classes/' . $class . '.php';
+	$file = JLIB_PATH . 'classes/' . $class . '.php';
+	if (file_exists($file)) {
+		require_once $file;
+	}
 }
 
 // Obliterates any passed in PHPSESSID (thanks Google)
@@ -88,12 +91,12 @@ if (Config::getSmarty()) {
 
 // Use the FCKeditor instead of textareas
 if (Config::getFCKEditor()) {
-	require_once '/var/www/josh/common/static/fckeditor/fckeditor.php';
+	require_once JLIB_PATH . 'common/static/fckeditor/fckeditor.php';
 }
 
-// Use the FCKeditor instead of textareas
+// Load up MagpieRSS is so desired
 if (Config::getMagpieRSS()) {
-	require_once '/var/www/josh/common/contrib/magpierss/rss_fetch.inc';
+	require_once JLIB_PATH . '/var/www/josh/common/contrib/magpierss/rss_fetch.inc';
 }
 
 //Request::load();

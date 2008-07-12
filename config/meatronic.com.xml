@@ -11,4 +11,32 @@
 		<password>m347r0n1c</password>
 		<database>meatronic</database>
 	</database>
+	<navigation>
+		<default>home</default>
+		<sections>
+			<home>home</home>
+			<artists>artists</artists>
+			<releases>releases</releases>
+			<events>events</events>
+			<links>links</links>
+			<about>about</about>
+		</sections>
+	</navigation>
+	<admin>
+		<sections>
+			<news>news</news>
+			<artists>artists</artists>
+			<releases>releases</releases>
+			<links>links</links>
+			<downloads>download stats</downloads>
+			<logout>logout</logout>
+		</sections>
+	</admin>
+	<contact>
+		<prefix>VNN</prefix>
+		<recipients>
+			<recipient>verynicenoise@gmail.com</recipient>
+			<recipient>joshsherman@gmail.com</recipient>
+		</recipients>
+	</contact>
 </config>
