@@ -1,61 +1,98 @@
 <?php
 
+// @todo Possibly remove the conditionals for the CLI view
+
 class Controller extends Object {
 
 	private $model  = null;
 	private $viewer = null;
 
 	private $session = null;
-
-	public function __construct($controller) {
-		parent::__construct();
 	
+	/*
+	protected $config = null;
+	private $controller = null;
+	*/
+
+	public function __construct($site, $controller = 'Web') {
+
+		parent::__construct();
 
 		// Establish the session
-		if ($controller != 'CLI') {
-			$this->session = Session::getInstance();
+		$this->session = Session::getInstance();
+
+		// Load the config for the site passed in
+		$this->config = Config::getInstance();
+		$this->config->load($site);
+
+		// Generate a generic "site down" message
+		if ($this->config->get('disabled')) {
+			exit("<h2><em>{$_SERVER['SERVER_NAME']} is currently down for maintenance</em></h2>");
 		}
 		
 		// Grab the passed in model or use the default
 		$name = isset($_REQUEST['model']) ? $_REQUEST['model'] : $this->config->get('navigation', 'default');
 
-		// Load the model
-		$file = '../models/' . $name . '.php';
-		if (file_exists($file)) {
-			require_once $file;
+		if ($name == 'logout') {
+			Security::logout();		
+		}
+		else {
+			// Load the model
+			$file = '../models/' . $name . '.php';
+			if (file_exists($file)) {
+				require_once $file;
 
-			if (strpos($name, '/') === false) {
-				$class   = $name;
-				$section = $name;
-				$event  = null;
-			}
-			else {
-				$class = str_replace('/', '_', $name);
-				list($section, $event) = split('/', $name);
-			}
-
-			if (class_exists($class)) {
-				$this->model = new $class;
-
-				if ($this->model->get('auth') === true) {
-					Security::authenticate();
+				if (strpos($name, '/') === false) {
+					$class   = $name;
+					$section = $name;
+					$event  = null;
+				}
+				else {
+					$class = str_replace('/', '_', $name);
+					list($section, $event) = split('/', $name);
 				}
 
-				$this->model->set('name',    $name);
-				$this->model->set('section', $section);
-				$this->model->set('event',   $event);
+				if (class_exists($class)) {
+					$this->model = new $class;
 
-				$this->model->__default();
-			}
-			else {
-				// @todo
-				exit();
-			}
+					if ($this->model->get('auth') == false) {
+						$this->model->set('auth', $this->config->get('behavior', 'auth'));
+					}
+					
+					if ($this->model->get('view') == false) {
+						if ($this->config->get('behavior', 'view') != false) {
+							$view = $this->config->get('behavior', 'view');
+						}
+						else {
+							// Perhaps Smarty shouldn't be assumed at this point...
+							$view = isset($argv) ? 'CLI' : 'Smarty';
+						}
 
-			// Load the viewer
-			$this->viewer = Viewer::factory($this->model);
-			$this->viewer->display();
+						$this->model->set('view', $view);
+					}
+
+					if ($this->model->get('auth') === true && $controller != 'CLI') {
+						Security::authenticate();
+					}
+
+					$this->model->set('name',    $name);
+					$this->model->set('section', $section);
+					$this->model->set('event',   $event);
+
+					$this->model->__default();
+				}
+				else {
+					// @todo
+					exit();
+				}
+
+				// Load the viewer
+				$this->viewer = Viewer::factory($this->model);
+				$this->viewer->display();
+			}
 		}
+
+		//var_dump($name, $this->session, $_SESSION, $_SERVER);
 	}
 
 	/*
@@ -68,13 +105,6 @@ class Controller extends Object {
 			if ($_REQUEST['section'] == 'admin.logout') {
 				Session::logout();
 			}
-
-		// Add the admin section if we're authenticated
-		if (isset($_SESSION['user_id']) || isset($_SESSION['artist_id'])) {
-			if (Config::get('menu', 'admin') == 'true') {
-				$navigation['admin'] = 'Admin';
-			}
-	}
 
 	*/
 

@@ -3,7 +3,8 @@
 class Security extends Object {
 	
 	static function authenticate() {
-		$db = DB::getInstance();
+		$db      = DB::getInstance();
+		$session = Session::getInstance();
 
 		if (isset($_SERVER['PHP_AUTH_USER'])) {
 			$from = '
@@ -16,14 +17,14 @@ class Security extends Object {
 			$db->execute('SELECT COUNT(id) ' . $from);
 			if ($db->getField() != 0) {
 				$db->execute('SELECT id ' . $from);
-				$_SESSION['user_id'] = $db->getField();
+				$session->user_id = $db->getField();
 			}
 			else {
-				$_SESSION['user_id'] = null;
+				$session->user_id = null;
 			}
 		}
 
-		if (!isset($_SESSION['user_id'])) {
+		if (!isset($session->user_id)) {
 			header('WWW-Authenticate: Basic realm="Site Admin"');
 			header('HTTP/1.0 401 Unauthorized');
 			exit('No shirt, no shoes, no salvation. Access denied.');
@@ -36,12 +37,11 @@ class Security extends Object {
 	}
 
 	static function logout() {
-		$_SERVER['PHP_AUTH_USER'] = null;
-		$_SESSION['user_id']      = null;
-		$_SESSION['artist_id']    = null;
-		$_SESSION['admin']        = false;
+		$session = Session::getInstance();
+		$session->destroy();
 
-		session_destroy();
+		unset($_SERVER['PHP_AUTH_USER']);
+		unset($_SERVER['PHP_AUTH_PW']);
 
 		header('Location: /');
 	}

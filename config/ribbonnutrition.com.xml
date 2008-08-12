@@ -1,0 +1,26 @@
+<config>
+	<database>
+		<hostname>localhost</hostname>
+		<username>ribbonnutrition</username>
+		<password>r1bb0nnu7r1710n</password>
+		<database>ribbonnutrition</database>
+	</database>
+	<navigation>
+		<default>home</default>
+		<sections>
+			<home>home</home>
+		</sections>
+	</navigation>
+	<admin>
+		<menu>false</menu>
+		<sections>
+			<logout>Logout</logout>
+		</sections>
+	</admin>
+	<contact>
+		<prefix>RN</prefix>
+		<recipients>
+			<recipient>joshsherman@gmail.com</recipient>
+		</recipients>
+	</contact>
+</config>

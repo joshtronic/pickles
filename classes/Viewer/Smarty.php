@@ -16,7 +16,6 @@ class Viewer_Smarty extends Viewer_Common {
 		ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
 
 		// @todo Create a wrapper so that we can auto load this
-		//var_dump(getcwd(), );
 		require_once 'contrib/smarty/libs/Smarty.class.php';
 
 		$smarty = new Smarty();
@@ -53,8 +52,18 @@ class Viewer_Smarty extends Viewer_Common {
 			}
 		}
 
+		$navigation = $this->config->get('navigation', 'sections');
+
+		// Add the admin section if we're authenticated
+		// @todo add code to check if the user is logged in
+		if (false) {
+			if ($this->config->get('admin', 'menu') == true) {
+				$navigation['admin'] = 'Admin';
+			}
+		}
+
 		// Pass all of our controller values to Smarty
-		$smarty->assign('navigation', $this->config->get('navigation', 'sections'));
+		$smarty->assign('navigation', $navigation);
 		$smarty->assign('section',    $this->model->get('section'));
 		$smarty->assign('action',     $this->model->get('action')); // @todo rename me to event
 		$smarty->assign('admin',      $this->config->get('admin', 'sections'));

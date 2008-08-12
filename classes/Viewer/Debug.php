@@ -8,6 +8,14 @@ class Viewer_Debug extends Viewer_Common {
 		echo '<pre>';
 		var_dump($_REQUEST);
 		echo '</pre>';
+		echo '<h2>$_SESSION</h2>' . "\n";
+		echo '<pre>';
+		var_dump($_SESSION);
+		echo '</pre>';
+		echo '<h2>$_SERVER</h2>' . "\n";
+		echo '<pre>';
+		var_dump($_SERVER);
+		echo '</pre>';
 	}
 
 }

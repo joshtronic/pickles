@@ -71,17 +71,15 @@ function ajaxSubmit(form) {
 
 		request.onreadystatechange = function() {
 			if (request.readyState == 4 && request.status == 200) {
-
-				// We need to split the response because the response comes
-				// back in this format: type | message
-				// Where type could be error or success (and eventually warning)
-				var responseText = request.responseText;
-				var splitResponse = responseText.split('|');
+				var responseObject = eval( "(" + request.responseText + ")" );
 
 				var responseElement = document.createElement('div');
-				responseElement.className = splitResponse[0];
-				var responseMessage = document.createTextNode(splitResponse[1]);
+				responseElement.className = responseObject.type;
+
+				var responseMessage = document.createTextNode(responseObject.message);
+
 				responseElement.appendChild(responseMessage);
+
 				form.insertBefore(responseElement, form.firstChild);
 			}
 		}

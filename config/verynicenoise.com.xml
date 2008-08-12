@@ -6,9 +6,9 @@
 		<database>verynicenoise</database>
 	</database>
 	<navigation>
-		<default>home</default>
+		<default>news</default>
 		<sections>
-			<home>Home</home>
+			<news>News</news>
 			<about>About</about>
 			<releases>Releases</releases>
 			<artists>Artists</artists>
@@ -19,8 +19,8 @@
 	<admin>
 		<menu>true</menu>
 		<sections>
-			<artist>Artist Profile</artist>
-			<user>User Account</user>
+			<artist_edit>Artist Profile</artist_edit>
+			<user_edit>User Account</user_edit>
 			<logout>Logout</logout>
 		</sections>
 	</admin>
