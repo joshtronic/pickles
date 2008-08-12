@@ -39,57 +39,57 @@ class Controller extends Object {
 		else {
 			// Load the model
 			$file = '../models/' . $name . '.php';
+
+			if (strpos($name, '/') === false) {
+				$class   = $name;
+				$section = $name;
+				$event  = null;
+			}
+			else {
+				$class = str_replace('/', '_', $name);
+				list($section, $event) = split('/', $name);
+			}
+
 			if (file_exists($file)) {
 				require_once $file;
 
-				if (strpos($name, '/') === false) {
-					$class   = $name;
-					$section = $name;
-					$event  = null;
-				}
-				else {
-					$class = str_replace('/', '_', $name);
-					list($section, $event) = split('/', $name);
-				}
-
 				if (class_exists($class)) {
 					$this->model = new $class;
-
-					if ($this->model->get('auth') == false) {
-						$this->model->set('auth', $this->config->get('behavior', 'auth'));
-					}
-					
-					if ($this->model->get('view') == false) {
-						if ($this->config->get('behavior', 'view') != false) {
-							$view = $this->config->get('behavior', 'view');
-						}
-						else {
-							// Perhaps Smarty shouldn't be assumed at this point...
-							$view = isset($argv) ? 'CLI' : 'Smarty';
-						}
-
-						$this->model->set('view', $view);
-					}
-
-					if ($this->model->get('auth') === true && $controller != 'CLI') {
-						Security::authenticate();
-					}
-
-					$this->model->set('name',    $name);
-					$this->model->set('section', $section);
-					$this->model->set('event',   $event);
-
-					$this->model->__default();
+				}
+			}
+			else {
+				$this->model = new Model();
+			}
+			
+			if ($this->model->get('auth') == false) {
+				$this->model->set('auth', $this->config->get('behavior', 'auth'));
+			}
+			
+			if ($this->model->get('view') == false) {
+				if ($this->config->get('behavior', 'view') != false) {
+					$view = $this->config->get('behavior', 'view');
 				}
 				else {
-					// @todo
-					exit();
+					// Perhaps Smarty shouldn't be assumed at this point...
+					$view = isset($argv) ? 'CLI' : 'Smarty';
 				}
 
-				// Load the viewer
-				$this->viewer = Viewer::factory($this->model);
-				$this->viewer->display();
+				$this->model->set('view', $view);
 			}
+
+			if ($this->model->get('auth') === true && $controller != 'CLI') {
+				Security::authenticate();
+			}
+
+			$this->model->set('name',    $name);
+			$this->model->set('section', $section);
+			$this->model->set('event',   $event);
+
+			$this->model->__default();
+
+			// Load the viewer
+			$this->viewer = Viewer::factory($this->model);
+			$this->viewer->display();
 		}
 
 		//var_dump($name, $this->session, $_SESSION, $_SERVER);
