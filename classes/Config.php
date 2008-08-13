@@ -16,7 +16,7 @@ class Config extends Singleton {
 
 	public function load($site) {
 		// @todo no hardcoded paths!
-		$file = '/var/www/josh/common/config/' . $site . '.xml';
+		$file = '/var/www/josh/pickles/config/' . $site . '.xml';
 
 		if (file_exists($file)) {
 			$config_array = ArrayUtils::object2array(simplexml_load_file($file));
