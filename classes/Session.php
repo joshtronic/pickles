@@ -4,14 +4,13 @@ class Session extends Singleton {
 
 	private static $instance;
 
-	public $id = null;
+	public static $id = null;
 
 	private function __construct() {
 		if (ini_get('session.auto_start') == 0) {
 			session_start();
+			$this->id = session_id();
 		}
-
-		$this->id = session_id();
 	}
 
 	public static function getInstance() {
@@ -43,7 +42,7 @@ class Session extends Singleton {
 		return $_SESSION[$var];
 	}
 
-	function __set($var,$val) {
+	function __set($var, $val) {
 		return ($_SESSION[$var] = $val);
 	}
 

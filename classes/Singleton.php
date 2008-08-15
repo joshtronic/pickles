@@ -25,6 +25,19 @@ class Singleton {
 		$this->$$variable = $value;
 	}
 
+	public function freeze() {
+		$session = Session::getInstance();
+		$class = get_class($this);
+		$session->$class = serialize($this);
+	}
+
+	public static function thaw($class) {
+		__autoload($class);
+
+		$session = Session::getInstance();
+		return unserialize($session->$class);
+	}
+
 }
 
 ?>

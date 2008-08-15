@@ -15,8 +15,15 @@ class DB extends Singleton {
 	private function __construct() { }
 
 	public static function getInstance() {
-		if (!self::$instance instanceof DB) {
-			self::$instance = new DB();
+		$session = Session::getInstance();
+		
+		$class = __CLASS__;
+
+		if (isset($session->$class)) {
+			self::$instance = Singleton::thaw($class);
+		}
+		else if (!self::$instance instanceof $class) {
+			self::$instance = new $class();
 		}
 
 		return self::$instance;

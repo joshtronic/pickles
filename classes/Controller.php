@@ -31,7 +31,7 @@ class Controller extends Object {
 		}
 		
 		// Grab the passed in model or use the default
-		$name = isset($_REQUEST['model']) ? $_REQUEST['model'] : $this->config->get('navigation', 'default');
+		$name = isset($_REQUEST['model']) ? str_replace('-', '_', $_REQUEST['model']) : $this->config->get('navigation', 'default');
 
 		if ($name == 'logout') {
 			Security::logout();		
@@ -60,7 +60,7 @@ class Controller extends Object {
 			else {
 				$this->model = new Model();
 			}
-			
+
 			if ($this->model->get('auth') == false) {
 				$this->model->set('auth', $this->config->get('behavior', 'auth'));
 			}
