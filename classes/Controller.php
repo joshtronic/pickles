@@ -29,7 +29,7 @@ class Controller extends Object {
 		if ($this->config->get('disabled')) {
 			exit("<h2><em>{$_SERVER['SERVER_NAME']} is currently down for maintenance</em></h2>");
 		}
-		
+
 		// Grab the passed in model or use the default
 		$name = isset($_REQUEST['model']) ? str_replace('-', '_', $_REQUEST['model']) : $this->config->get('navigation', 'default');
 

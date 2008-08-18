@@ -18,7 +18,8 @@
 		</sections>
 	</admin>
 	<contact>
-		<prefix>RN</prefix>
+		<subject>Ribbon Nutrition Contact Request</subject>
+		<response>Thank you. A member of our staff will respond to your message as soon as possible.</response>
 		<recipients>
 			<recipient>joshsherman@gmail.com</recipient>
 		</recipients>

@@ -24,11 +24,23 @@ class Mail {
 			$prefix = isset($defaults['prefix']) ? $defaults['prefix'] : null;
 		}
 
-		$subject = str_replace("\n", '', (isset($prefix) ? "[{$prefix}] " : '') . $_REQUEST['subject']);
+		if (isset($defaults['subject'])) {
+			$subject = $defaults['subject'];
+		}
+		else {
+			$subject = str_replace("\n", '', (isset($prefix) ? "[{$prefix}] " : '') . $_REQUEST['subject']);
+		}
 
-		if (mail($to, $subject, stripslashes($_REQUEST['message']), "From: {$_REQUEST['email']}\r\n")) {
+		if (isset($_REQUEST['name'])) {
+			$from = "{$_REQUEST['name']} <{$_REQUEST['email']}>";
+		}
+		else {
+			$from = $_REQUEST['email'];
+		}
+
+		if (mail($to, $subject, stripslashes($_REQUEST['message']), "From: {$from}\r\n")) {
 			$type    = 'success';
-			$message = 'Message sent successfully';
+			$message = isset($defaults['response']) ? $defaults['response'] : 'Message sent successfully';
 		}
 		else {
 			$type    = 'error';
@@ -36,7 +48,7 @@ class Mail {
 		}
 
 		$return = array(
-			'type' => $type,
+			'type'    => $type,
 			'message' => $message
 		);
 

@@ -65,7 +65,10 @@ class Viewer_Smarty extends Viewer_Common {
 		// Pass all of our controller values to Smarty
 		$smarty->assign('navigation', $navigation);
 		$smarty->assign('section',    $this->model->get('section'));
-		$smarty->assign('action',     $this->model->get('action')); // @todo rename me to event
+		$smarty->assign('model',      $this->model->get('name'));
+		$smarty->assign('action',     $this->model->get('action')); // @todo rename me to event...
+		$smarty->assign('event',      $this->model->get('action')); //       but it almost seems like we don't need these anymore at all
+                                                                    //       Thanks to new naming conventions
 		$smarty->assign('admin',      $this->config->get('admin', 'sections'));
 		$smarty->assign('template',   '../templates/' . $this->model->get('name') . '.tpl'); //$template);
 

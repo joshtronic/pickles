@@ -14,7 +14,7 @@ function getForm(form) {
 			case 'textarea':
 				// Check if it's required
 				if (element.title == 'required' && element.value == '') {
-					alert('Error: The ' + element.name + ' field is required.');
+					alert('Error: The ' + element.name.replace('_', ' ') + ' field is required.');
 					element.focus();
 					return false;
 				}
@@ -60,7 +60,7 @@ function createRequest() {
 
 function ajaxSubmit(form) {
 	var params = '';
-	
+
 	if (params = getForm(form)) {
 		createRequest();
 		request.open(form.method, form.action, true);
