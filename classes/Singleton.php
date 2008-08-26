@@ -27,6 +27,7 @@ class Singleton {
 
 	public function freeze() {
 		$session = Session::getInstance();
+		$this->timestamp = time();
 		$class = get_class($this);
 		$session->$class = serialize($this);
 	}

@@ -37,7 +37,8 @@ class Viewer_Smarty extends Viewer_Common {
 		$smarty->load_filter('output','trimwhitespace');
 
 		// Include custom Smarty functions
-		$directory = PATH . '../../common/smarty/functions/';
+		// @todo Stupid fucking hard coded path
+		$directory = PATH . '../../pickles/smarty/functions/';
 
 		if (is_dir($directory)) {
 			if ($handle = opendir($directory)) {
@@ -62,20 +63,33 @@ class Viewer_Smarty extends Viewer_Common {
 			}
 		}
 
+		$template        = '../templates/' . $this->model->get('name') . '.tpl';
+		$shared_template = str_replace('../', '../../pickles/', $template);
+
+		if (!file_exists($template)) {
+			if (file_exists($shared_template)) {
+				$template = $shared_template;
+			}
+		}
+
 		// Pass all of our controller values to Smarty
 		$smarty->assign('navigation', $navigation);
 		$smarty->assign('section',    $this->model->get('section'));
 		$smarty->assign('model',      $this->model->get('name'));
 		$smarty->assign('action',     $this->model->get('action')); // @todo rename me to event...
 		$smarty->assign('event',      $this->model->get('action')); //       but it almost seems like we don't need these anymore at all
-                                                                    //       Thanks to new naming conventions
+
+		// Thanks to new naming conventions
 		$smarty->assign('admin',      $this->config->get('admin', 'sections'));
-		$smarty->assign('template',   '../templates/' . $this->model->get('name') . '.tpl'); //$template);
+		$smarty->assign('template',   $template);
 
 		// Only load the session if it's available
+		// @todo not entirely sure that the view needs full access to the session (seems insecure at best)
+		/*
 		if (isset($_SESSION)) {
 			$smarty->assign('session', $_SESSION);
 		}
+		*/
 
 		$data = $this->model->getData();
 

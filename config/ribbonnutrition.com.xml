@@ -14,14 +14,32 @@
 	<admin>
 		<menu>false</menu>
 		<sections>
+			<news>News</news>
+			<faqs>FAQs</faqs>
 			<logout>Logout</logout>
 		</sections>
 	</admin>
+	<store>
+		<sections>
+			<home>Shopping Home</home>
+			<account>My Account</account>
+			<cart>View Cart / Checkout</cart>
+			<sale>What's on Sale?</sale>
+			<new>What's New?</new>
+			<terms>Shipping / Returns</terms>
+		</sections>
+	</store>
 	<contact>
 		<subject>Ribbon Nutrition Contact Request</subject>
 		<response>Thank you. A member of our staff will respond to your message as soon as possible.</response>
 		<recipients>
 			<recipient>joshsherman@gmail.com</recipient>
 		</recipients>
+		<blech>
+			(04:46:10 PM) Dekin Dorcas: sales@...
+			(04:46:27 PM) Dekin Dorcas: nutritionist@...
+			(04:46:33 PM) joshrecovery: w0rd
+			(04:46:46 PM) Dekin Dorcas: general inquiries will be info@...
+		</blech>
 	</contact>
 </config>

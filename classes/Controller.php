@@ -38,7 +38,8 @@ class Controller extends Object {
 		}
 		else {
 			// Load the model
-			$file = '../models/' . $name . '.php';
+			$file        = '../models/' . $name . '.php';
+			$shared_file = '../../pickles/models/' . $name . '.php';
 
 			if (strpos($name, '/') === false) {
 				$class   = $name;
@@ -57,9 +58,15 @@ class Controller extends Object {
 					$this->model = new $class;
 				}
 			}
+			elseif (file_exists($shared_file)) {
+				if (class_exists($class)) {
+					$this->model = new $class;
+				}
+			}
 			else {
 				$this->model = new Model();
 			}
+
 
 			if ($this->model->get('auth') == false) {
 				$this->model->set('auth', $this->config->get('behavior', 'auth'));
