@@ -58,8 +58,10 @@ function createRequest() {
     }
 }
 
-function ajaxSubmit(form) {
+function ajaxSubmit(form, customHandler, beforeOrAfter) {
 	var params = '';
+	var customHandler = (customHandler == null) ? null     : customHandler;
+	var beforeOrAfter = (beforeOrAfter == null) ? 'before' : beforeOrAfter;
 
 	if (params = getForm(form)) {
 		createRequest();
@@ -71,16 +73,21 @@ function ajaxSubmit(form) {
 
 		request.onreadystatechange = function() {
 			if (request.readyState == 4 && request.status == 200) {
-				var responseObject = eval( "(" + request.responseText + ")" );
-
+				var responseObject  = eval( "(" + request.responseText + ")" );
 				var responseElement = document.createElement('div');
-				responseElement.className = responseObject.type;
 
-				var responseMessage = document.createTextNode(responseObject.message);
+				if (customHandler) {
+					responseElement = window[customHandler](responseObject, responseElement);
+				}
+				else {
+					var responseMessage = document.createTextNode(responseObject.message);
+				
+					responseElement.className = responseObject.type;
 
-				responseElement.appendChild(responseMessage);
+					responseElement.appendChild(responseMessage);
+				}
 
-				form.insertBefore(responseElement, form.firstChild);
+				form.insertBefore(responseElement, (beforeOrAfter == 'before') ? form.firstChild : form.lastChild);
 			}
 		}
 
