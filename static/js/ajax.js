@@ -81,13 +81,17 @@ function ajaxSubmit(form, customHandler, beforeOrAfter) {
 				}
 				else {
 					var responseMessage = document.createTextNode(responseObject.message);
-				
 					responseElement.className = responseObject.type;
-
 					responseElement.appendChild(responseMessage);
 				}
+				
+				if (document.getElementById('ajaxResponse') != null) {
+					form.removeChild(document.getElementById('ajaxResponse'));
+				}
 
+				responseElement.id = 'ajaxResponse';
 				form.insertBefore(responseElement, (beforeOrAfter == 'before') ? form.firstChild : form.lastChild);
+
 			}
 		}
 
