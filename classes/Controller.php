@@ -98,8 +98,6 @@ class Controller extends Object {
 			$this->viewer = Viewer::factory($this->model);
 			$this->viewer->display();
 		}
-
-		//var_dump($name, $this->session, $_SESSION, $_SERVER);
 	}
 
 	/*
