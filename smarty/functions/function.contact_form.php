@@ -10,7 +10,7 @@ function smarty_function_contact_form($params, &$smarty) {
 			Message:<br />
 			<textarea name="message" title="required" class="contact_textarea"></textarea><br /><br />
 			<div class="contact_button">
-				<input type="button" value="Send Message" onclick="ajaxSubmit(this.parentNode.parentNode); return false;" />
+				<input type="button" value="Send Message" onclick="ajaxRequest(this.parentNode.parentNode); return false;" />
 			</div>
 		</form>
 	';

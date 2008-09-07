@@ -67,7 +67,6 @@ class Controller extends Object {
 				$this->model = new Model();
 			}
 
-
 			if ($this->model->get('auth') == false) {
 				$this->model->set('auth', $this->config->get('behavior', 'auth'));
 			}

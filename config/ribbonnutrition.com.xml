@@ -14,8 +14,8 @@
 	<admin>
 		<menu>false</menu>
 		<sections>
-			<news>News</news>
-			<faqs>FAQs</faqs>
+			<news_edit>News</news_edit>
+			<faqs_edit>FAQs</faqs_edit>
 			<logout>Logout</logout>
 		</sections>
 	</admin>
