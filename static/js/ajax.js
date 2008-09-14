@@ -66,24 +66,37 @@ function createRequest() {
     }
 }
 
-function ajaxRequest(htmlElement, customHandler, beforeOrAfter, url) {
+function ajaxRequest(htmlElement, customHandler, placement, url) {
 	var params = '';
+	var return_status = '';
 	var customHandler = (customHandler == null) ? null     : customHandler;
-	var beforeOrAfter = (beforeOrAfter == null) ? 'before' : beforeOrAfter;
+	var placement     = (placement     == null) ? 'before' : placement;
 	var url           = (url           == null) ? null     : url;
 
 	if (typeof htmlElement.value == 'undefined') {
 		params = getForm(htmlElement);
 		method = htmlElement.method;
 		action = htmlElement.action;
+
+		var formElement = htmlElement
 	}
 	else {
-		params = 'id=' + htmlElement.value;
+		if (htmlElement.id != '') {
+			var variable = htmlElement.id;
+		}
+		else if (htmlElement.name != '') {
+			var variable = htmlElement.name;
+		}
+		else {
+			var variable = 'id';
+		}
+
+		params = variable + '=' + htmlElement.value;
 		method = 'POST';
 		action = url;
-
+	
 		// @todo this may eventually need to be a loop that keeps going up until it's at a form tag?
-		htmlElement = htmlElement.parentNode;
+		var formElement = htmlElement.parentNode;
 	}
 
 	if (params) {
@@ -103,16 +116,27 @@ function ajaxRequest(htmlElement, customHandler, beforeOrAfter, url) {
 					var responseObject  = eval( "(" + request.responseText + ")" );
 					
 					if (document.getElementById(responseElement.id) != null) {
-						htmlElement.removeChild(document.getElementById(responseElement.id));
+						formElement.removeChild(document.getElementById(responseElement.id));
 					}
 
 					if (customHandler) {
 						responseElement = window[customHandler](responseObject, responseElement);
 					}
 					else {
-						var responseMessage = document.createTextNode(responseObject.message);
-						responseElement.className = responseObject.type;
-						responseElement.appendChild(responseMessage);
+						if (placement == 'inside') {
+							if (responseObject.type == 'error') {
+								htmlElement.style.backgroundColor = '#C88';
+								htmlElement.style.borderColor = '#600';
+								htmlElement.style.color = '#600';
+								htmlElement.style.fontWeight = 'bold';
+								htmlElement.value = responseObject.message;
+							}
+						}
+						else {
+							var responseMessage = document.createTextNode(responseObject.message);
+							responseElement.className = responseObject.type;
+							responseElement.appendChild(responseMessage);
+						}
 					}
 				}
 				else {
@@ -120,10 +144,18 @@ function ajaxRequest(htmlElement, customHandler, beforeOrAfter, url) {
 				}
 			
 				if (document.getElementById(responseElement.id) != null) {
-					htmlElement.removeChild(document.getElementById(responseElement.id));
+					formElement.removeChild(document.getElementById(responseElement.id));
 				}
 
-				htmlElement.insertBefore(responseElement, (beforeOrAfter == 'before') ? htmlElement.firstChild : htmlElement.lastChild);
+				if (responseElement != false) {
+					formElement.insertBefore(responseElement, (placement == 'before') ? formElement.firstChild : formElement.lastChild);
+				}
+
+				if (typeof responseObject.type != 'undefined') {
+					if (responseObject.type == 'success') {
+						formElement.submit();
+					}
+				}
 			}
 		}
 

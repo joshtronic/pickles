@@ -1,0 +1,27 @@
+<config>
+	<database>
+		<hostname>localhost</hostname>
+		<username>root</username>
+		<password>q9p38v765b</password>
+		<database>scenekids</database>
+	</database>
+	<navigation>
+		<default>splash</default>
+		<sections>
+			<splash>Splash</splash>
+		</sections>
+	</navigation>
+	<contact>
+		<prefix>S2N</prefix>
+		<recipients>
+			<recipient>joshsherman@gmail.com</recipient>
+		</recipients>
+	</contact>
+	<rss>
+		<releases>
+			<title>Very Nice Noise Releases</title>
+			<description>Very Nice Noise is primarily a netlabel, which means that we offer music that is available exclusively through free MP3 downloads, and we will eventually start releasing the occasional CD-R and DVD-R releases as well. All MP3 releases on this site are free for you to download and distribute as you wish, as long as it it not done for profit. The label was started to help give more control back to the talented artists of the noise "music" community by way of faster turn around times on releases, no file type restrictions (if you want to release in the less popular OGG format, that's cool with us) and by giving artists the ability to maintain their own artist profile on the site. Our genre focus, as our name suggests is noise (harsh noise, drone, glitch, power electronics and the like).</description>
+			<category>Music</category>
+		</releases>
+	</rss>
+</config>

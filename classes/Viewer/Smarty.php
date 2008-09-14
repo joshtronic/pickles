@@ -99,6 +99,21 @@ class Viewer_Smarty extends Viewer_Common {
 			}
 		}
 
+		/*
+		@todo there's no error checking for the index... should it be 
+		      shared, and should the error checking occur anyway since 
+			  any shit could happen?
+
+		$template        = '../templates/index.tpl';
+		$shared_template = str_replace('../', '../../pickles/', $template);
+
+		if (!file_exists($template)) {
+			if (file_exists($shared_template)) {
+				$template = $shared_template;
+			}
+		}
+		*/
+
 		// Load it up!
 		header('Content-type: text/html; charset=UTF-8');
 		$smarty->display('index.tpl');
