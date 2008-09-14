@@ -152,7 +152,7 @@ function ajaxRequest(htmlElement, customHandler, placement, url) {
 				}
 
 				if (typeof responseObject.type != 'undefined') {
-					if (responseObject.type == 'success') {
+					if (responseObject.type == 'success' && placement == 'inside') {
 						formElement.submit();
 					}
 				}
