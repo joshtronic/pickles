@@ -25,7 +25,8 @@ class store extends Model {
 		$object = new store_home();
 		$object->__default();
 
-		$this->set('name',   'store/home');
+		$this->data = $object->data;
+		$this->set('name', 'store/home');
 	}
 
 }
