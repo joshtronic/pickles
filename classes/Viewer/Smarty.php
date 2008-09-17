@@ -23,7 +23,6 @@ class Viewer_Smarty extends Viewer_Common {
 		// @todo Perhaps the templates directory would be better suited as a config variable?
 		$smarty->template_dir = '../templates/';
 
-		// @todo instead of having this in /tmp (which is Linux-scentric) perhaps move it to a folder in the common dir
 		$cache_dir   = TEMP_PATH . 'cache';
 		$compile_dir = TEMP_PATH . 'compile';
 
@@ -36,7 +35,6 @@ class Viewer_Smarty extends Viewer_Common {
 		$smarty->load_filter('output','trimwhitespace');
 
 		// Include custom Smarty functions
-		// @todo Stupid fucking hard coded path
 		$directory = PICKLES_PATH . 'smarty/functions/';
 
 		if (is_dir($directory)) {
