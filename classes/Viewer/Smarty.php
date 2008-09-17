@@ -24,9 +24,8 @@ class Viewer_Smarty extends Viewer_Common {
 		$smarty->template_dir = '../templates/';
 
 		// @todo instead of having this in /tmp (which is Linux-scentric) perhaps move it to a folder in the common dir
-		$temp_path   = "/tmp/smarty/{$_SERVER['SERVER_NAME']}/";
-		$cache_dir   = $temp_path . 'cache';
-		$compile_dir = $temp_path . 'compile';
+		$cache_dir   = TEMP_PATH . 'cache';
+		$compile_dir = TEMP_PATH . 'compile';
 
 		if (!file_exists($cache_dir))   { mkdir($cache_dir,   0777, true); }
 		if (!file_exists($compile_dir)) { mkdir($compile_dir, 0777, true); }
@@ -38,7 +37,7 @@ class Viewer_Smarty extends Viewer_Common {
 
 		// Include custom Smarty functions
 		// @todo Stupid fucking hard coded path
-		$directory = PATH . '../../pickles/smarty/functions/';
+		$directory = PICKLES_PATH . 'smarty/functions/';
 
 		if (is_dir($directory)) {
 			if ($handle = opendir($directory)) {

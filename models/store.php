@@ -10,10 +10,16 @@ class store extends Model {
 		$this->data['subnav'] = $config->get('store', 'sections');
 
 		// Loads the categories
-		$categories = $this->db->getArray('SELECT id, name FROM categories WHERE parent_id IS NULL AND visible = "Y" ORDER BY weight;');
+		$categories = $this->db->getArray('SELECT id, name, permalink FROM categories WHERE parent_id IS NULL AND visible = "Y" ORDER BY weight;');
 		if (is_array($categories)) {
 			foreach ($categories as $key => $category) {
-				$categories[$key]['subcategories'] = $this->db->getArray('SELECT id, name FROM categories WHERE parent_id = "' . $category['id'] . '" AND visible = "Y" ORDER BY weight;');
+				$categories[$key]['subcategories'] = $this->db->getArray('
+					SELECT id, name, permalink
+					FROM categories
+					WHERE parent_id = "' . $category['id'] . '"
+					AND visible = "Y"
+					ORDER BY weight;
+				');
 			}
 		}
 

@@ -1,0 +1,22 @@
+<config>
+	<database>
+		<hostname>localhost</hostname>
+		<username>ribbonnutritio</username>
+		<password>XrP5DZbZ</password>
+		<database>ribbonnutrition_com_-_storelocator</database>
+	</database>
+	<navigation>
+		<default>home</default>
+		<sections>
+			<home>Home</home>
+			<products>Products and Formula</products>
+			<contact>Retail Locator and Contact</contact>
+		</sections>
+	</navigation>
+	<contact>
+		<prefix>MenoSol</prefix>
+		<recipients>
+			<recipient>joshsherman@gmail.com</recipient>
+		</recipients>
+	</contact>
+</config>

@@ -25,8 +25,7 @@ class Config extends Singleton {
 
 	public function load($site) {
 		if (!isset($this->file) || filemtime($this->file) > $this->timestamp) {
-			// @todo no hardcoded paths!
-			$file = '/var/www/josh/pickles/config/' . $site . '.xml';
+			$file = PICKLES_PATH . 'config/' . $site . '.xml';
 
 			if (file_exists($file)) {
 				$this->file = $file;

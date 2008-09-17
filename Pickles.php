@@ -1,16 +1,18 @@
 <?php
 
 date_default_timezone_set('America/New_York');
-define('PATH', getcwd() . '/');
+
+define('PICKLES_PATH', getcwd() . '/../../pickles/');
+define('TEMP_PATH',    '/tmp/smarty/' . $_SERVER['SERVER_NAME'] . '/');
 
 function __autoload($class) {
-	$file = PATH . '../../pickles/classes/' . str_replace('_', '/', $class) . '.php';
+	$file = PICKLES_PATH . 'classes/' . str_replace('_', '/', $class) . '.php';
 	
 	if (file_exists($file)) {
 		require_once $file;
 	}
 	else {
-		$file = PATH . '../../pickles/models/' . str_replace('_', '/', $class) . '.php';
+		$file = PICKLES_PATH . 'models/' . str_replace('_', '/', $class) . '.php';
 
 		if (file_exists($file)) {
 			require_once $file;
