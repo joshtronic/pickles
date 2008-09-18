@@ -24,7 +24,8 @@ class Config extends Singleton {
 	}
 
 	public function load($site) {
-		if (!isset($this->file) || filemtime($this->file) > $this->timestamp) {
+		// @todo getting warnings on the filemtime
+		if (!isset($this->file) || @filemtime($this->file) > $this->timestamp) {
 			$file = PICKLES_PATH . 'config/' . $site . '.xml';
 
 			if (file_exists($file)) {

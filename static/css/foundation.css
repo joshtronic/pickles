@@ -8,6 +8,8 @@
 .bold { font-weight: bold }
 .italic { font-style: italic }
 .clear { clear: both }
+.clear-left { clear: left }
+.clear-right { clear: right }
 .underline { text-decoration: underline }
 .float-left { float: left }
 .float-right { float: right }
