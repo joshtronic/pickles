@@ -23,11 +23,17 @@ class Config extends Singleton {
 		return self::$instance;
 	}
 
-	public function load($site) {
-		// @todo getting warnings on the filemtime
-		if (!isset($this->file) || @filemtime($this->file) > $this->timestamp) {
-			$file = PICKLES_PATH . 'config/' . $site . '.xml';
-
+	public function load($file) {
+		$load = true;
+		if (isset($this->file)) {
+			if (file_exists($this->file) && isset($this->timestamp)) {
+				if (filemtime($this->file) < $this->timestamp) {
+					$load = false;
+				}
+			}
+		}
+		
+		if ($load) {
 			if (file_exists($file)) {
 				$this->file = $file;
 

@@ -14,7 +14,7 @@ class Controller extends Object {
 	private $controller = null;
 	*/
 
-	public function __construct($site, $controller = 'Web') {
+	public function __construct($file = '../config.xml', $controller = 'Web') {
 
 		parent::__construct();
 
@@ -23,7 +23,7 @@ class Controller extends Object {
 
 		// Load the config for the site passed in
 		$this->config = Config::getInstance();
-		$this->config->load($site);
+		$this->config->load($file);
 
 		// Generate a generic "site down" message
 		if ($this->config->get('disabled')) {
