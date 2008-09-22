@@ -1,12 +1,26 @@
 <?php
 
-// @todo Possibly remove the conditionals for the CLI view
-
+/**
+ * Controller class
+ *
+ * The heavy lifter of PICKLES, makes the calls to get the session and
+ * configuration loaded.  Loads models, serves up user authentication when the
+ * model asks for it, and loads the viewer that the model has requested.  Default
+ * values are present to make things easier on the user.
+ *
+ * @package   PICKLES
+ * @author    Joshua Sherman <josh@phpwithpickles.org>
+ * @copyright 2007-2008 Joshua Sherman
+ * @usage     new Controller(); or new Controller('/path/to/config.xml');
+ * @todo      Possibly remove the conditionals for the CLI view
+ */
 class Controller extends Object {
 
-	private $model  = null;
-	private $viewer = null;
-
+	/**
+	 * Private objects
+	 */
+	private $model   = null;
+	private $viewer  = null;
 	private $session = null;
 	
 	/*
@@ -14,8 +28,17 @@ class Controller extends Object {
 	private $controller = null;
 	*/
 
+	/**
+	 * Constructor
+	 *
+	 * To make life a bit easier when using PICKLES, the Controller logic is
+	 * executed automatically via use of a constructor.
+	 * 
+	 * @params string $file File name of the configuration file to be loaded
+	 * @params string $controller Type of controller to create (Web or CLI)
+	 * @todo   Need to internally document the process better
+	 */
 	public function __construct($file = '../config.xml', $controller = 'Web') {
-
 		parent::__construct();
 
 		// Establish the session
@@ -44,7 +67,7 @@ class Controller extends Object {
 			if (strpos($name, '/') === false) {
 				$class   = $name;
 				$section = $name;
-				$event  = null;
+				$event   = null;
 			}
 			else {
 				$class = str_replace('/', '_', $name);
@@ -111,7 +134,6 @@ class Controller extends Object {
 			}
 
 	*/
-
 }
 
 ?>

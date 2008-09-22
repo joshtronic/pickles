@@ -1,7 +1,21 @@
 <?php
 
+/**
+ * Smarty viewer
+ *
+ * Displays the associated Smarty templates for the Model.
+ *
+ * @package    PICKLES
+ * @subpackage Viewer
+ * @author     Joshua Sherman <josh@phpwithpickles.org>
+ * @copyright  2007-2008 Joshua Sherman
+ * @link       http://smart.net/
+ */
 class Viewer_Smarty extends Viewer_Common {
 
+	/**
+	 * Displays the Smarty generated pages
+	 */
 	public function display() {
 		// Obliterates any passed in PHPSESSID (thanks Google)
 		if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false) {
@@ -15,12 +29,17 @@ class Viewer_Smarty extends Viewer_Common {
 		ini_set('arg_separator.output', '&amp;');
 		ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
 
-		// @todo Create a wrapper so that we can auto load this
+		/**
+		 * @todo Create a wrapper so that we can auto load this
+		 */
 		require_once 'contrib/smarty/libs/Smarty.class.php';
 
 		$smarty = new Smarty();
 
-		// @todo Perhaps the templates directory would be better suited as a config variable?
+		/**
+		 * @todo Perhaps the templates directory would be better suited as a
+		 *       config variable?
+		 */
 		$smarty->template_dir = '../templates/';
 
 		$cache_dir   = TEMP_PATH . 'cache';
@@ -53,13 +72,19 @@ class Viewer_Smarty extends Viewer_Common {
 		$navigation = $this->config->get('navigation', 'sections');
 
 		// Add the admin section if we're authenticated
-		// @todo add code to check if the user is logged in
+		/**
+		 * @todo Add logic to check if the user is already logged in.  Currently
+		 *       it is always assumed that they are not.
+		 */
 		if (false) {
 			if ($this->config->get('admin', 'menu') == true) {
 				$navigation['admin'] = 'Admin';
 			}
 		}
 
+		/**
+		 * @todo Maybe the template path should be part of the configuration?
+		 */
 		$template        = '../templates/' . $this->model->get('name') . '.tpl';
 		$shared_template = str_replace('../', '../../pickles/', $template);
 
@@ -73,15 +98,23 @@ class Viewer_Smarty extends Viewer_Common {
 		$smarty->assign('navigation', $navigation);
 		$smarty->assign('section',    $this->model->get('section'));
 		$smarty->assign('model',      $this->model->get('name'));
-		$smarty->assign('action',     $this->model->get('action')); // @todo rename me to event...
-		$smarty->assign('event',      $this->model->get('action')); //       but it almost seems like we don't need these anymore at all
+		/**
+		 * @todo Rename action to event
+		 * @todo I'm not entirely sure that these values are necessary at all due
+		 *       to new naming conventions.
+		 */
+		$smarty->assign('action',     $this->model->get('action'));
+		$smarty->assign('event',      $this->model->get('action'));
 
 		// Thanks to new naming conventions
 		$smarty->assign('admin',      $this->config->get('admin', 'sections'));
 		$smarty->assign('template',   $template);
 
 		// Only load the session if it's available
-		// @todo not entirely sure that the view needs full access to the session (seems insecure at best)
+		/**
+		 * @todo Not entirely sure that the view needs full access to the session
+		 *       (seems insecure at best)
+		 */
 		/*
 		if (isset($_SESSION)) {
 			$smarty->assign('session', $_SESSION);
@@ -96,11 +129,12 @@ class Viewer_Smarty extends Viewer_Common {
 			}
 		}
 
+		/**
+		 * @todo There's no error checking for the index... should it be shared,
+		 *       and should the error checking occur anyway since any shit could
+		 *       happen?
+		 */
 		/*
-		@todo there's no error checking for the index... should it be 
-		      shared, and should the error checking occur anyway since 
-			  any shit could happen?
-
 		$template        = '../templates/index.tpl';
 		$shared_template = str_replace('../', '../../pickles/', $template);
 
@@ -113,9 +147,19 @@ class Viewer_Smarty extends Viewer_Common {
 
 		// Load it up!
 		header('Content-type: text/html; charset=UTF-8');
-		$smarty->display('index.tpl');
-	}
 
+		// If the index.tpl file is present, load it, else load the template directly
+		/**
+		 * @todo Should there be additional logic to allow the model or the
+		 *       template to determine whether or not the index should be loaded?
+		 */
+		if ($smarty->template_exists('index.tpl')) {
+			$smarty->display('index.tpl');
+		}
+		else {
+			$smarty->display($template);
+		}
+	}
 }
 
 ?>
