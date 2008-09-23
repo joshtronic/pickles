@@ -5,6 +5,25 @@ class store extends Model {
 	public function __construct() {
 		parent::__construct();
 
+		// Loads up the cart in case we need it
+		if (!isset($_SESSION['cart'])) {
+			$_SESSION['cart'] = array();
+			$_SESSION['cart'] = array('count' => 0, 'products' => null);
+		}
+		else {
+			$count = 0;
+		
+			if (is_array($_SESSION['cart']['products'])) {
+				foreach ($_SESSION['cart']['products'] as $product_id => $product_info) {
+					$count += $product_info['quantity'];
+				}
+			}
+
+			$_SESSION['cart']['count'] = $count;
+		}
+
+		$this->data['cart'] = $_SESSION['cart'];
+
 		// Loads the navigation
 		$config = Config::getInstance();
 		$this->data['subnav'] = $config->get('store', 'sections');

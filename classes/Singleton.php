@@ -68,10 +68,9 @@ class Singleton {
 	 * @todo Needs to return the status for error tracking.
 	 */
 	public function freeze() {
-		$session = Session::getInstance();
 		$this->timestamp = time();
 		$class = get_class($this);
-		$session->$class = serialize($this);
+		$_SESSION['objects'][$class] = serialize($this);
 	}
 
 	/**
@@ -88,8 +87,7 @@ class Singleton {
 	public static function thaw($class) {
 		__autoload($class);
 
-		$session = Session::getInstance();
-		return unserialize($session->$class);
+		return unserialize($_SESSION['objects'][$class]);
 	}
 }
 

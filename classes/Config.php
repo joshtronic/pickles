@@ -41,11 +41,9 @@ class Config extends Singleton {
 	 * @return An instace of the Config class
 	 */
 	public static function getInstance() {
-		$session = Session::getInstance();
-		
 		$class = __CLASS__;
 
-		if (isset($session->$class)) {
+		if (isset($_SESSION['objects'][$class])) {
 			self::$instance = Singleton::thaw($class);
 		}
 		else if (!self::$instance instanceof $class) {
@@ -75,7 +73,6 @@ class Config extends Singleton {
 			}
 		}
 	
-		$load = true;
 		if ($load) {
 			if (file_exists($file)) {
 				$this->file = $file;

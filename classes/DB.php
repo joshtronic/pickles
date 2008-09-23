@@ -53,11 +53,9 @@ class DB extends Singleton {
 	 * @return object An instace of the DB class
 	 */
 	public static function getInstance() {
-		$session = Session::getInstance();
-		
 		$class = __CLASS__;
 
-		if (isset($session->$class)) {
+		if (isset($_SESSION['objects'][$class])) {
 			self::$instance = Singleton::thaw($class);
 		}
 		else if (!self::$instance instanceof $class) {
@@ -75,6 +73,7 @@ class DB extends Singleton {
 	 *
 	 * @return boolean Based on the success or failure of mysql_connect()
 	 * @todo   Remove the error supressing @ from mysql_connect()
+	 * @todo   Currently the DBO is not being cached in the object, since it stores the password, it's a security issue.
 	 */
 	public function open() {
 		if (!is_resource($this->connection)) {

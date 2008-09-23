@@ -21,7 +21,6 @@ class Controller extends Object {
 	 */
 	private $model   = null;
 	private $viewer  = null;
-	private $session = null;
 	
 	/*
 	protected $config = null;
@@ -41,8 +40,13 @@ class Controller extends Object {
 	public function __construct($file = '../config.xml', $controller = 'Web') {
 		parent::__construct();
 
-		// Establish the session
-		$this->session = Session::getInstance();
+		// Start the session if it's not started already
+		/**
+		 * @todo Need to make the session not so mandatory.
+		 */
+		if (ini_get('session.auto_start') == 0) {
+			session_start();
+		}
 
 		// Load the config for the site passed in
 		$this->config = Config::getInstance();
