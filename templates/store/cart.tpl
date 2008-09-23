@@ -22,6 +22,7 @@
 					<td class="product-description">{$product.name}</td>
 					<td class="product-price">${$product.price}</td>
 					<td class="product-total">${$product.total}</td>
+				</tr>
 			{/foreach}
 			<tr>
 				<td colspan="5">
@@ -32,4 +33,4 @@
 	{else}
 		You have no items in your shopping cart.
 	{/if}
-<div>
+</div>
