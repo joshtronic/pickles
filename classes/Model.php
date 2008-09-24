@@ -21,12 +21,16 @@ class Model extends Object {
 	/**
 	 * Database object
 	 */
-	protected $db   = null;
+	protected $db = null;
 
 	/**
 	 * Name of the model
 	 */
 	protected $name = null;
+
+	protected $authenticate = null;
+	protected $viewer = null;
+	protected $session = null;
 
 	/**
 	 * Constructor
@@ -41,12 +45,56 @@ class Model extends Object {
 	}
 
 	/**
-	 * Gets the auth variable
+	 * Gets the authenticate value
 	 *
-	 * @return boolean Whether or not the model requires authorization to use
+	 * @todo Add in configuration level override
+	 * @return boolean Whether or not the model requires user authentication to use
 	 */
-	public function getAuth() {
-		return $this->get('auth');
+	public function getAuthenticate() {
+		// Order of precedence: Model, Config, Guess
+		if ($this->authenticate == null) {
+			return false; 
+		}
+		else {
+			return $this->authenticate;
+		}
+	}
+
+	/**
+	 * Gets the session value
+	 *
+	 * @todo Add in configuration level override
+	 * @return boolean Whether or not the session needs to be started
+	 */
+	public function getSession() {
+		// Order of precedence: Auth On, Model, Config, Guess
+		if ($this->authenticate === true) {
+			return true;
+		}
+		else {
+			if ($this->session == null) {
+				return false;
+			}
+			else {
+				return $this->session;
+			}
+		}
+	}
+
+	/**
+	 * Gets the requested Viewer
+	 *
+	 * @todo Add in configuration level override
+	 * @return string The viewer that the model has requested to be used
+	 */
+	public function getViewer() {
+		// Order of precedence: Model, Config, Guess
+		if ($this->viewer == null) {
+			return isset($argv) ? 'CLI' : 'Smarty';
+		}
+		else {
+			return $this->viewer;
+		}
 	}
 
 	/**
@@ -56,15 +104,6 @@ class Model extends Object {
 	 */
 	public function getData() {
 		return $this->get('data');
-	}
-
-	/**
-	 * Gets the view type
-	 *
-	 * @return string The viewer that the model has requested to be used
-	 */
-	public function getView() {
-		return $this->get('view');
 	}
 
 	/**

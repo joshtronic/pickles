@@ -3,19 +3,19 @@
 /**
  * Database abstraction layer for MySQL
  *
- * All database usage inside PICKLES-based sites should be done via the database
- * object that is a part of every model ($this->db).  Because the database
- * object can execute raw SQL, there should be no limitations.
+ * All database usage inside PICKLES-based sites should be done via the
+ * database object that is a part of every model ($this->db).  Because the
+ * database object can execute raw SQL, there should be no limitations.
  *
  * @package   PICKLES
  * @author    Joshua Sherman <josh@phpwithpickles.org>
  * @copyright 2007-2008 Joshua Sherman
  * @todo      Internally document the functions better.
- * @todo      Potentially switch to PDO to be able to easily accomodate different
- *            database types.
- * @todo      Eventually finish adding in my ActiveRecord class, even though I
- *            feel active record dumbs people down since it's a crutch for
- *            actually being able to write SQL.
+ * @todo      Potentially switch to PDO to be able to easily accomodate
+ *            different database types.
+ * @todo      Eventually finish adding in my ActiveRecord class, even
+ *            though I feel active record dumbs people down since it's a
+ *            crutch for actually being able to write SQL.
  */
 class DB extends Singleton {
 
@@ -46,19 +46,15 @@ class DB extends Singleton {
 	/**
 	 * Gets an instance of the database object
 	 *
-	 * Determines if a DB object has already been instantiated, if so it will use
-	 * it.  If not, it will check to see if a frozen copy of the object is
-	 * available.  If not, then a new object will be created.
+	 * Determines if a DB object has already been instantiated, if so it
+	 * will use it.  If not, it will create one.
 	 *
 	 * @return object An instace of the DB class
 	 */
 	public static function getInstance() {
 		$class = __CLASS__;
 
-		if (isset($_SESSION['objects'][$class])) {
-			self::$instance = Singleton::thaw($class);
-		}
-		else if (!self::$instance instanceof $class) {
+		if (!self::$instance instanceof $class) {
 			self::$instance = new $class();
 		}
 
@@ -68,12 +64,11 @@ class DB extends Singleton {
 	/**
 	 * Opens database connection
 	 *
-	 * Establishes a connection to the MySQL database based on the configuration
-	 * options that are available in the Config object.
+	 * Establishes a connection to the MySQL database based on the
+	 * configuration options that are available in the Config object.
 	 *
 	 * @return boolean Based on the success or failure of mysql_connect()
 	 * @todo   Remove the error supressing @ from mysql_connect()
-	 * @todo   Currently the DBO is not being cached in the object, since it stores the password, it's a security issue.
 	 */
 	public function open() {
 		if (!is_resource($this->connection)) {
@@ -115,9 +110,9 @@ class DB extends Singleton {
 	/**
 	 * Closes database connection
 	 *
-	 * Checks to see if the connection is available, and if so, closes it out.
+	 * Checks to see if the connection is available, and if so, closes it.
 	 *
-	 * @return boolean Returns the status of mysql_close() or false (default)
+	 * @return boolean Returns the status of mysql_close() (default = false)
 	 */
 	public function close() {
 		if (is_resource($this->connection)) {
@@ -130,9 +125,9 @@ class DB extends Singleton {
 	/**
 	 * Executes SQL
 	 *
-	 * Executes the passed SQL without any manipulation.  If no SQL is passed in
-	 * the function will return false (why return true if it didn't actually do
-	 * something?)
+	 * Executes the passed SQL without any manipulation.  If no SQL is
+	 * passed in the function will return false (why return true if it
+	 * didn't actually do something?)
 	 *
 	 * @param  string $sql SQL statement to be executed
 	 * @return boolean Returns the status of the execution
@@ -162,20 +157,21 @@ class DB extends Singleton {
 	 * Gets a field from a result set
 	 *
 	 * Returns the value of a single field from either a previously executed
-	 * query, or from the passed SQL.  This function assumes your query results
-	 * only contain a single field.  If multiple fields are returned, this
-	 * function will only return the first one.
+	 * query, or from the passed SQL.  This function assumes your query
+	 * results only contain a single field.  If multiple fields are
+	 * returned, this function will only return the first one.
 	 *
 	 * @param  string $sql SQL statement to be executed (optional)
 	 * @return string Returns the value of the field or null if none
 	 * @todo   Need to remove the error supression
-	 * @todo   Right now it assumes your query only returns a single field, that
-	 *         probably should be changed to allow someone to specify what field
-	 *         they want from a row of data.  Actually, this is still debatable
-	 *         as someone could use getRow and reference the field they want to
-	 *         accomplish the same goal.
-	 * @todo   Another debate point, should it return false instead of null, or
-	 *         perhaps have some sort of error indicator in the result set?
+	 * @todo   Right now it assumes your query only returns a single field,
+	 *         that probably should be changed to allow someone to specify
+	 *         what field they want from a row of data.  Actually, this is
+	 *         still debatable as someone could use getRow and reference the
+	 *         field they want to accomplish the same goal.
+	 * @todo   Another debate point, should it return false instead of null,
+	 *         or perhaps have some sort of error indicator in the result
+	 *         set?
 	 */
 	public function getField($sql = null) {
 		if (isset($sql)) {
@@ -201,26 +197,27 @@ class DB extends Singleton {
 	/**
 	 * Gets a row from a result set
 	 *
-	 * Returns a row in an associative array from either a previously executed
-	 * query, or from the passed SQL.  This function assumes your query results
-	 * only contain a single row.  If multiple rows are returned, this function
-	 * will only return the first one.
+	 * Returns a row in an associative array from either a previously
+	 * executed query, or from the passed SQL.  This function assumes your
+	 * query results only contain a single row.  If multiple rows are
+	 * returned, this function will only return the first one.
 	 *
 	 * @param  string $sql SQL statement to be executed (optional)
-	 * @return string Returns the row in an associative array or null if none
+	 * @return mixed The row in an associative array or null if none
 	 * @todo   Need to remove the error supression
-	 * @todo   Right now it assumes your query only returns a single row, that
-	 *         probably should be changed to allow someone to specify what row
-	 *         they want from a set of data.  Actually, this is still debatable
-	 *         as someone could use getArray and reference the row they want to
-	 *         accomplish the same goal.
-	 * @todo   Another debate point, should it return false instead of null, or
-	 *         perhaps have some sort of error indicator in the result set?
-	 * @todo   Calling bullshit on my own code, apparently this should only be
-	 *         returning a single row, but returns all the rows instead of just
-	 *         the first one.  So basically, this function is functioning exactly
-	 *         the same as DB::getArray().  Just goes to show how often I
-	 *         actually use this function.
+	 * @todo   Right now it assumes your query only returns a single row,
+	 *         that probably should be changed to allow someone to specify
+	 *         what row they want from a set of data.  Actually, this is
+	 *         still debatable as someone could use getArray and reference
+	 *         the row they want to accomplish the same goal.
+	 * @todo   Another debate point, should it return false instead of null,
+	 *         or perhaps have some sort of error indicator in the result
+	 *         set?
+	 * @todo   Calling bullshit on my own code, apparently this should only
+	 *         be returning a single row, but returns all the rows instead
+	 *         of just the first one.  So basically, this function is
+	 *         functioning exactly the same as DB::getArray().  Just goes to
+	 *         show how often I actually use this function.
 	 */
 	public function getRow($sql = null) {
 		if (isset($sql)) {
@@ -252,8 +249,9 @@ class DB extends Singleton {
 	 * @param  string $sql SQL statement to be executed (optional)
 	 * @return string Returns the rows in an array or null if none
 	 * @todo   Need to remove the error supression
-	 * @todo   Another debate point, should it return false instead of null, or
-	 *         perhaps have some sort of error indicator in the result set?
+	 * @todo   Another debate point, should it return false instead of null,
+	 *         or perhaps have some sort of error indicator in the result
+	 *         set?
 	 */
 	public function getArray($sql = null) {
 		if (isset($sql)) {
@@ -282,15 +280,16 @@ class DB extends Singleton {
 	/**
 	 * Inserts a row into a table
 	 *
-	 * Easy insertion of a row into a table without being too savvy with SQL.
+	 * Easy insertion of a row into a table without being too savvy with
+	 * SQL.
 	 *
 	 * @param  string $table Name of the table you want to insert to
 	 * @param  array $columnValues Associative array of name value pairs
 	 *         (Corresponds with the column names for the table)
 	 * @return boolean Returns the status of the execution
 	 * @todo   Convert from camel case to underscores
-	 * @todo   Check that the table exists, and possibly check that the columns
-	 *         exist as well
+	 * @todo   Check that the table exists, and possibly check that the
+	 *         columns exist as well
 	 */
 	public function insert($table, $columnValues) {
 		$this->open();
@@ -331,12 +330,12 @@ class DB extends Singleton {
 	 * @params string $table Name of the table you want to insert to
 	 * @params array $columnValues Associative array of name value pairs
 	 *         (Corresponds with the column names for the table)
-	 * @params array $conditions Associative array of name value pairs that will
-	 *         be used to create a WHERE clause in the SQL.
+	 * @params array $conditions Associative array of name value pairs that
+	           will be used to create a WHERE clause in the SQL.
 	 * @return boolean Returns the status of the execution
 	 * @todo   Convert from camel case to underscores
-	 * @todo   Check that the table exists, and possibly check that the columns
-	 *         exist and conditional columns exist as well
+	 * @todo   Check that the table exists, and possibly check that the
+	 *         columns exist and conditional columns exist as well
 	 */
 	public function update($table, $columnValues, $conditions) {
 		$this->open();
@@ -390,8 +389,8 @@ class DB extends Singleton {
 	 * @params string $table Name of the table you want to insert to
 	 * @params array $columnValues Associative array of name value pairs
 	 *         (Corresponds with the column names for the table)
-	 * @params array $conditions Associative array of name value pairs that will
-	 *         be used to create a WHERE clause in the SQL.
+	 * @params array $conditions Associative array of name value pairs that
+	 *         will be used to create a WHERE clause in the SQL.
 	 * @return boolean Returns the status of the execution
 	 * @todo   This function doesn't exist yet
 	 * @todo   Convert from camel case to underscores
@@ -399,7 +398,6 @@ class DB extends Singleton {
 	public function delete($table, $columnValues, $conditions) {
 
 	}
-
 }
 
 ?>

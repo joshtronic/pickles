@@ -31,7 +31,7 @@ class Viewer {
 	 *         constants would each be uppercase instead of mixedcase.
 	 */
 	public static function factory(Model $model) {
-		$class = 'Viewer_' . $model->getView();
+		$class = 'Viewer_' . $model->getViewer();
 		return new $class($model);
 	}
 }

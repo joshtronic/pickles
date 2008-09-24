@@ -4,10 +4,10 @@
  * Configuration class
  *
  * Handles loading and caching of the configuration into a Singleton object.
- * Contains logic to determine if the configuration has already been loaded and
- * will opt to use a "frozen" object rather than instantiate a new one.  Also
- * contains logic to reload configurations if the configuration file had been
- * modified since it was originally instantiated (smart caching).
+ * Contains logic to determine if the configuration has already been loaded
+ * and will opt to use a "frozen" object rather than instantiate a new one.
+ * Also contains logic to reload configurations if the configuration file
+ * had been modified since it was originally instantiated (smart caching).
  *
  * @package   PICKLES
  * @author    Joshua Sherman <josh@phpwithpickles.org>
@@ -22,11 +22,6 @@ class Config extends Singleton {
 	private static $instance;
 
 	/**
-	 * Timestamp from when the object was frozen
-	 */
-	public $timestamp = null;
-
-	/**
 	 * Private constructor
 	 */
 	private function __construct() { }
@@ -34,19 +29,15 @@ class Config extends Singleton {
 	/**
 	 * Gets an instance of the configuration object
 	 *
-	 * Determines if a Config object has already been instantiated, if so it will
-	 * use it.  If not, it will check to see if a frozen copy of the object is
-	 * available.  If not, then a new object will be created.
+	 * Determines if a Config object has already been instantiated, if so it
+	 * will use it.  If not, it will create one.
 	 *
 	 * @return An instace of the Config class
 	 */
 	public static function getInstance() {
 		$class = __CLASS__;
 
-		if (isset($_SESSION['objects'][$class])) {
-			self::$instance = Singleton::thaw($class);
-		}
-		else if (!self::$instance instanceof $class) {
+		if (!self::$instance instanceof $class) {
 			self::$instance = new $class();
 		}
 
@@ -56,70 +47,59 @@ class Config extends Singleton {
 	/**
 	 * Loads a configuration file
 	 *
-	 * Handles the potentialy loading of the configuration file, sanitizing the
-	 * boolean values and freezing the instance for later use.
+	 * Handles the potential loading of the configuration file and
+	 * sanitizing the boolean strings into actual boolean values.
 	 *
 	 * @param  string $file File name of the configuration file to be loaded
 	 * @return boolean Based on the success or failure of the file load
 	 * @todo   Either get rid of or make better use of the Error object
 	 */
 	public function load($file) {
-		$load = true;
-		if (isset($this->file)) {
-			if (file_exists($this->file) && isset($this->timestamp)) {
-				if (filemtime($this->file) < $this->timestamp) {
-					$load = false;
-				}
-			}
-		}
-	
-		if ($load) {
-			if (file_exists($file)) {
-				$this->file = $file;
+		if (file_exists($file)) {
+			$this->file = $file;
 
-				$config_array = ArrayUtils::object2array(simplexml_load_file($file));
+			$config_array = ArrayUtils::object2array(simplexml_load_file($file));
 
-				if (is_array($config_array)) {
-					foreach ($config_array as $variable => $value) {
-						if ($value == 'true' || $value == array()) {
-							$value = (bool)$value;
-						}
-
-						$this->$variable = $value == array() ? (bool)$value : $value;
+			if (is_array($config_array)) {
+				foreach ($config_array as $variable => $value) {
+					if ($value == 'true' || $value == array()) {
+						$value = (bool)$value;
 					}
+
+					$this->$variable = $value == array() ? (bool)$value : $value;
 				}
-
-				/**
-				 * @todo Okay, now if no default section is specified, we'll
-				 *       default to the first section listed.  But what should be
-				 *       done if no sections are specified?  Perhaps force just
-				 *       the index to load, or perhaps error out?  I have to keep
-				 *       in mind that single page sites exist where no navigation
-				 *       will exist.  So yeah, I suppose just specifying the
-				 *       default would combat against that, or should I drill
-				 *       down further, and see if any site level models exist and
-				 *       load the first one, or even better I'm thinking that a
-				 *       shared model / template would be good when nothing is
-				 *       available.  That would in turn tell the user to fix the
-				 *       issue to be able to get it all working again.  Damn,
-				 *       this ended up being a long @todo.
-				 * @todo This may be better suited in the loop above since we're
-				 *       already looping through all the values, we could snag it
-				 *       in passing.
-				 */
-				if (!isset($this->navigation['default']) || $this->navigation['default'] == '') {
-					$this->navigation['default'] = key($this->navigation['sections']);
-				
-				}
-
-				$this->freeze();
-
-				return true;
 			}
-			else {
-				Error::addError('Unable to load the configuration file');
-				return false;
+
+			/**
+			 * @todo Okay, now if no default section is specified, we'll
+			 *       default to the first section listed.  But what
+			 *       should be done if no sections are specified?
+			 *       Perhaps force just the index to load, or perhaps
+			 *       error out?  I have to keep in mind that single
+			 *       page sites exist where no navigation will exist.
+			 *       So yeah, I suppose just specifying the default
+			 *       would combat against that, or should I drill down
+			 *       further, and see if any site level models exist and
+			 *       load the first one, or even better I'm thinking
+			 *       that a shared model / template would be good when
+			 *       nothing is available.  That would in turn tell the
+			 *       user to fix the issue to be able to get it all
+			 *       working again.  Damn, this ended up being a very
+			 *       long @todo.
+			 * @todo This may be better suited in the loop above since
+			 *       we're already looping through all the values, we
+			 *       could snag it in passing.
+			 */
+			if (!isset($this->navigation['default']) || $this->navigation['default'] == '') {
+				$this->navigation['default'] = key($this->navigation['sections']);
+			
 			}
+
+			return true;
+		}
+		else {
+			Error::addError('Unable to load the configuration file');
+			return false;
 		}
 	}
 }

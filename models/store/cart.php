@@ -16,7 +16,7 @@
 class store_cart extends store {
 
 	public function __default() {
-		//session_destroy();
+		$this->data['cart'] = $_SESSION['cart'];
 	}
 }
 

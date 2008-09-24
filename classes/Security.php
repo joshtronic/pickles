@@ -29,8 +29,7 @@ class Security extends Object {
 	 *       the configuration as well.
 	 */
 	static function authenticate() {
-		$db      = DB::getInstance();
-		$session = Session::getInstance();
+		$db = DB::getInstance();
 
 		if (isset($_SERVER['PHP_AUTH_USER'])) {
 			$from = '
@@ -43,14 +42,14 @@ class Security extends Object {
 			$db->execute('SELECT COUNT(id) ' . $from);
 			if ($db->getField() != 0) {
 				$db->execute('SELECT id ' . $from);
-				$session->user_id = $db->getField();
+				$_SESSION['user_id'] = $db->getField();
 			}
 			else {
-				$session->user_id = null;
+				$_SESSION['user_id'] = null;
 			}
 		}
 
-		if (!isset($session->user_id)) {
+		if (!isset($_SESSION['user_id'])) {
 			header('WWW-Authenticate: Basic realm="Site Admin"');
 			header('HTTP/1.0 401 Unauthorized');
 			exit('No shirt, no shoes, no salvation. Access denied.');

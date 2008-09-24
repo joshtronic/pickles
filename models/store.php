@@ -2,6 +2,8 @@
 
 class store extends Model {
 
+	protected $session = true;
+
 	public function __construct() {
 		parent::__construct();
 

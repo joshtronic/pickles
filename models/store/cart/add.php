@@ -17,6 +17,8 @@ class store_cart_add extends store {
 	 * @todo Add handling for an invalid product
 	 */
 	public function __default() {
+		var_dump($_SESSION);
+
 		if ($this->db->getField('SELECT COUNT(id) FROM products WHERE id = "' . $_REQUEST['id'] . '";') != 1) {
 			
 		}

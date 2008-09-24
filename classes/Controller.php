@@ -40,14 +40,6 @@ class Controller extends Object {
 	public function __construct($file = '../config.xml', $controller = 'Web') {
 		parent::__construct();
 
-		// Start the session if it's not started already
-		/**
-		 * @todo Need to make the session not so mandatory.
-		 */
-		if (ini_get('session.auto_start') == 0) {
-			session_start();
-		}
-
 		// Load the config for the site passed in
 		$this->config = Config::getInstance();
 		$this->config->load($file);
@@ -94,30 +86,28 @@ class Controller extends Object {
 				$this->model = new Model();
 			}
 
-			if ($this->model->get('auth') == false) {
-				$this->model->set('auth', $this->config->get('behavior', 'auth'));
-			}
-			
-			if ($this->model->get('view') == false) {
-				if ($this->config->get('behavior', 'view') != false) {
-					$view = $this->config->get('behavior', 'view');
+			// Start the session if it's not started already
+			/**
+			 * @todo Need to make the session not so mandatory.
+			 */
+			if ($this->model->getSession() === true) {
+				if (ini_get('session.auto_start') == 0) {
+					session_start();
 				}
-				else {
-					// Perhaps Smarty shouldn't be assumed at this point...
-					$view = isset($argv) ? 'CLI' : 'Smarty';
-				}
-
-				$this->model->set('view', $view);
 			}
 
-			if ($this->model->get('auth') === true && $controller != 'CLI') {
+			if ($this->model->getAuthenticate() === true && $controller != 'CLI') {
 				Security::authenticate();
 			}
 
+			/**
+			 * @todo are any of these relevant any more?
+			 */
 			$this->model->set('name',    $name);
 			$this->model->set('section', $section);
 			$this->model->set('event',   $event);
 
+			// Execute the model's logic
 			$this->model->__default();
 
 			// Load the viewer

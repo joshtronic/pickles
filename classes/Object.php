@@ -16,8 +16,6 @@ class Object {
 
 	/**
 	 * Protected instance of the Config class
-	 *
-	 * @todo Perhaps this should be private?
 	 */
 	protected $config = null;
 
