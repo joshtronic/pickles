@@ -15,6 +15,11 @@
 class Singleton {
 
 	/**
+	 * Protected collection of data
+	 */
+	protected $data; 
+
+	/**
 	 * Private constructor
 	 */
 	private function __construct() { }
@@ -40,16 +45,16 @@ class Singleton {
 	 *         should be thrown?
 	 */
 	public function get($variable, $array_element = null) {
-		if (isset($this->$variable)) {
+		if (isset($this->data[$variable])) {
 			if (isset($array_element)) {
-				$array = $this->$variable;
+				$array = $this->data[$variable];
 
 				if (isset($array[$array_element])) {
 					return $array[$array_element];
 				}
 			}
 			else {
-				return $this->$variable;
+				return $this->data[$variable];
 			}
 		}
 
@@ -63,7 +68,7 @@ class Singleton {
 	 * @param mixed $value Value to be assigned to the passed variable
      */
 	public function set($variable, $value) {
-		$this->$$variable = $value;
+		$this->data[$variable] = $value;
 	}
 }
 

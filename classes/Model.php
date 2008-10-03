@@ -28,9 +28,9 @@ class Model extends Object {
 	 */
 	protected $name = null;
 
-	protected $authenticate = null;
-	protected $viewer = null;
-	protected $session = null;
+	protected $authentication = null;
+	protected $viewer         = null;
+	protected $session        = null;
 
 	/**
 	 * Constructor
@@ -50,13 +50,13 @@ class Model extends Object {
 	 * @todo Add in configuration level override
 	 * @return boolean Whether or not the model requires user authentication to use
 	 */
-	public function getAuthenticate() {
+	public function getAuthentication() {
 		// Order of precedence: Model, Config, Guess
-		if ($this->authenticate == null) {
+		if ($this->authentication == null) {
 			return false; 
 		}
 		else {
-			return $this->authenticate;
+			return $this->authentication;
 		}
 	}
 
@@ -68,7 +68,7 @@ class Model extends Object {
 	 */
 	public function getSession() {
 		// Order of precedence: Auth On, Model, Config, Guess
-		if ($this->authenticate === true) {
+		if ($this->authentication === true) {
 			return true;
 		}
 		else {

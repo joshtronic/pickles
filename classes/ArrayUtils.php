@@ -26,17 +26,27 @@ class ArrayUtils {
 	 * @return array Resulting array formed from the passed object
 	 */
 	public static function object2array($object) {
-		if (is_object($object)) {
-			$object = (array)$object;
+		$array = null;
+		  
+		if (is_array($object)) {
+			foreach ($object as $key => $value) {
+				$array[$key] = self::object2array($value);
+			}
 		}
-
-		foreach ($object as $key => $value) {
-			if (is_object($value)) {
-				$object[$key] = self::object2array($value);
+		else {
+			$variables = get_object_vars($object);
+			  
+			if (is_array($variables)) {
+				foreach ($variables as $key => $value) {
+					$array[$key] = ($key && !$value) ? null : self::object2array($value);
+				}
+			}
+			else {
+				return $object;
 			}
 		}
 
-		return $object;
+		return $array;
 	}
 }
 

@@ -22,6 +22,11 @@ class Config extends Singleton {
 	private static $instance;
 
 	/**
+	 * Private collection of data to be loaded by the viewer
+	 */
+	private $viewer_data;
+
+	/**
 	 * Private constructor
 	 */
 	private function __construct() { }
@@ -53,46 +58,42 @@ class Config extends Singleton {
 	 * @param  string $file File name of the configuration file to be loaded
 	 * @return boolean Based on the success or failure of the file load
 	 * @todo   Either get rid of or make better use of the Error object
+	 * @todo   Some of this code seems screwy, (bool) on an array??
 	 */
 	public function load($file) {
 		if (file_exists($file)) {
 			$this->file = $file;
 
-			$config_array = ArrayUtils::object2array(simplexml_load_file($file));
+			/**
+			 * @todo LIBXML_NOCDATA is 5.1+ and I want PICKLES to be 5.0+ compatible
+			 */
+			$config_array = ArrayUtils::object2array(simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOCDATA));
 
+			/**
+			 * @todo Loop through the object and deal with it accordingly
+			 */
 			if (is_array($config_array)) {
 				foreach ($config_array as $variable => $value) {
 					if ($value == 'true' || $value == array()) {
 						$value = (bool)$value;
 					}
+					
+					if (isset($value['@attributes']['public'])) {
+						if ($value['@attributes']['public'] == true) {
+							
+							if (count($value['@attributes']) == 1) {
+								unset($value['@attributes']);
+							}
+							else {
+								unset($value['@attributes']['public']);
+							}
 
-					$this->$variable = $value == array() ? (bool)$value : $value;
+							$this->viewer_data[$variable] = $value;
+						}
+					}
+
+					$this->data[$variable] = $value == array() ? (bool)$value : $value;
 				}
-			}
-
-			/**
-			 * @todo Okay, now if no default section is specified, we'll
-			 *       default to the first section listed.  But what
-			 *       should be done if no sections are specified?
-			 *       Perhaps force just the index to load, or perhaps
-			 *       error out?  I have to keep in mind that single
-			 *       page sites exist where no navigation will exist.
-			 *       So yeah, I suppose just specifying the default
-			 *       would combat against that, or should I drill down
-			 *       further, and see if any site level models exist and
-			 *       load the first one, or even better I'm thinking
-			 *       that a shared model / template would be good when
-			 *       nothing is available.  That would in turn tell the
-			 *       user to fix the issue to be able to get it all
-			 *       working again.  Damn, this ended up being a very
-			 *       long @todo.
-			 * @todo This may be better suited in the loop above since
-			 *       we're already looping through all the values, we
-			 *       could snag it in passing.
-			 */
-			if (!isset($this->navigation['default']) || $this->navigation['default'] == '') {
-				$this->navigation['default'] = key($this->navigation['sections']);
-			
 			}
 
 			return true;
@@ -101,6 +102,37 @@ class Config extends Singleton {
 			Error::addError('Unable to load the configuration file');
 			return false;
 		}
+	}
+
+	/**
+	 * Gets the default model
+	 *
+	 * @return Returns the default model as set
+	 */
+	public function getDefaultModel() {
+		if (isset($this->data['models']['default'])) {
+			return $this->data['models']['default'];
+		}
+
+		return false;
+	}
+
+	/**
+	 * Gets the viewer data
+	 *
+	 * @return Returns either the variable value or false if no variable.
+	 * @todo   Need better checking if the passed variable is an array when
+	 *         the array element value is present
+	 * @todo   Returning false could be misleading, especially if you're
+	 *         expecting a boolean value to begin with.  Perhaps an error
+	 *         should be thrown?
+	 */
+	public function getViewerData() {
+		if (isset($this->viewer_data)) {
+			return $this->viewer_data;
+		}
+
+		return false;
 	}
 }
 

@@ -50,7 +50,7 @@ class Controller extends Object {
 		}
 
 		// Grab the passed in model or use the default
-		$name = isset($_REQUEST['model']) ? str_replace('-', '_', $_REQUEST['model']) : $this->config->get('navigation', 'default');
+		$name = isset($_REQUEST['model']) ? str_replace('-', '_', $_REQUEST['model']) : $this->config->getDefaultModel();
 
 		if ($name == 'logout') {
 			Security::logout();		
@@ -77,7 +77,10 @@ class Controller extends Object {
 					$this->model = new $class;
 				}
 			}
-			elseif (file_exists($shared_file)) {
+			/**
+			 * @todo Fix the shared stuff
+			 */
+			elseif (file_exists($shared_file) && $this->config->get('models', 'shared') != false) {
 				if (class_exists($class)) {
 					$this->model = new $class;
 				}
@@ -86,33 +89,34 @@ class Controller extends Object {
 				$this->model = new Model();
 			}
 
-			// Start the session if it's not started already
-			/**
-			 * @todo Need to make the session not so mandatory.
-			 */
-			if ($this->model->getSession() === true) {
-				if (ini_get('session.auto_start') == 0) {
-					session_start();
+			if ($this->model != null) {
+				// Start the session if it's not started already
+				if ($this->model->getSession() === true) {
+					if (ini_get('session.auto_start') == 0) {
+						session_start();
+					}
 				}
+
+				if ($this->model->getAuthentication() === true && $controller != 'CLI') {
+					Security::authenticate();
+				}
+
+				/**
+				 * @todo are any of these relevant any more?
+				 */
+				$this->model->set('name',    $name);
+				$this->model->set('section', $section);
+				//$this->model->set('event',   $event);
+
+				// Execute the model's logic
+				if (method_exists($this->model, '__default')) {
+					$this->model->__default();
+				}
+
+				// Load the viewer
+				$this->viewer = Viewer::factory($this->model);
+				$this->viewer->display();
 			}
-
-			if ($this->model->getAuthenticate() === true && $controller != 'CLI') {
-				Security::authenticate();
-			}
-
-			/**
-			 * @todo are any of these relevant any more?
-			 */
-			$this->model->set('name',    $name);
-			$this->model->set('section', $section);
-			$this->model->set('event',   $event);
-
-			// Execute the model's logic
-			$this->model->__default();
-
-			// Load the viewer
-			$this->viewer = Viewer::factory($this->model);
-			$this->viewer->display();
 		}
 	}
 

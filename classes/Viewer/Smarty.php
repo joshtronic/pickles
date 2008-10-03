@@ -9,7 +9,7 @@
  * @subpackage Viewer
  * @author     Joshua Sherman <josh@phpwithpickles.org>
  * @copyright  2007-2008 Joshua Sherman
- * @link       http://smart.net/
+ * @link       http://smarty.net/
  */
 class Viewer_Smarty extends Viewer_Common {
 
@@ -69,19 +69,6 @@ class Viewer_Smarty extends Viewer_Common {
 			}
 		}
 
-		$navigation = $this->config->get('navigation', 'sections');
-
-		// Add the admin section if we're authenticated
-		/**
-		 * @todo Add logic to check if the user is already logged in.  Currently
-		 *       it is always assumed that they are not.
-		 */
-		if (false) {
-			if ($this->config->get('admin', 'menu') == true) {
-				$navigation['admin'] = 'Admin';
-			}
-		}
-
 		/**
 		 * @todo Maybe the template path should be part of the configuration?
 		 */
@@ -95,7 +82,6 @@ class Viewer_Smarty extends Viewer_Common {
 		}
 
 		// Pass all of our controller values to Smarty
-		$smarty->assign('navigation', $navigation);
 		$smarty->assign('section',    $this->model->get('section'));
 		$smarty->assign('model',      $this->model->get('name'));
 		/**
@@ -103,8 +89,8 @@ class Viewer_Smarty extends Viewer_Common {
 		 * @todo I'm not entirely sure that these values are necessary at all due
 		 *       to new naming conventions.
 		 */
-		$smarty->assign('action',     $this->model->get('action'));
-		$smarty->assign('event',      $this->model->get('action'));
+		//$smarty->assign('action',     $this->model->get('action'));
+		//$smarty->assign('event',      $this->model->get('action'));
 
 		// Thanks to new naming conventions
 		$smarty->assign('admin',      $this->config->get('admin', 'sections'));
@@ -121,6 +107,14 @@ class Viewer_Smarty extends Viewer_Common {
 		}
 		*/
 
+		// Loads the data from the config
+		$data = $this->config->getViewerData();
+		
+		if (isset($data) && is_array($data)) {
+			$smarty->assign('config', $data);
+		}
+
+		// Loads the data from the model
 		$data = $this->model->getData();
 
 		if (isset($data) && is_array($data)) {

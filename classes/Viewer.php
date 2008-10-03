@@ -24,8 +24,6 @@ class Viewer {
 	 *
 	 * @param  object $model The model to be displayed
 	 * @return object An instance of the viewer, loaded with the passed model
-	 * @todo   Add some checking to determine if the passed object is really a
-	 *         valid instance of Model.
 	 * @todo   Create constants to correspond with each viewer type so it's
 	 *         potentially easier to reference from the model (since the
 	 *         constants would each be uppercase instead of mixedcase.
