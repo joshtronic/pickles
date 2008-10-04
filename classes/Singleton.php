@@ -44,6 +44,7 @@ class Singleton {
 	 *         expecting a boolean value to begin with.  Perhaps an error
 	 *         should be thrown?
 	 */
+	 /*
 	public function get($variable, $array_element = null) {
 		if (isset($this->data[$variable])) {
 			if (isset($array_element)) {
@@ -60,6 +61,7 @@ class Singleton {
 
 		return false;
 	}
+	*/
 
 	/**
 	 * Sets a variable
@@ -67,9 +69,9 @@ class Singleton {
 	 * @param string $variable Name of the variable to be set
 	 * @param mixed $value Value to be assigned to the passed variable
      */
-	public function set($variable, $value) {
-		$this->data[$variable] = $value;
-	}
+	//public function set($variable, $value) {
+	//	$this->data[$variable] = $value;
+	//}
 }
 
 ?>

@@ -35,16 +35,16 @@ class Mail {
 	 */
 	static function send($recipients = null, $prefix = null) {
 		$config   = Config::getInstance();
-		$defaults = $config->get('contact');
+		$defaults = $config->contact;
 
 		if (!isset($recipients)) {
-			$recipients = $defaults['recipients']['recipient'];
+			$recipients = $defaults->recipients->recipient;
 		}
 
-		if (is_array($recipients)) {
+		if (is_object($recipients)) {
 			$to = null;
 			foreach ($recipients as $recipient) {
-				$to .= (isset($to) ? ',' : '') . $recipient;
+				$to .= (isset($to) ? ',' : '') . (string)$recipient;
 			}
 		}
 		else {
@@ -52,14 +52,16 @@ class Mail {
 		}
 
 		if (!isset($prefix)) {
-			$prefix = isset($defaults['prefix']) ? $defaults['prefix'] : null;
+			$prefix = isset($defaults->prefix) && $defaults->prefix != '' ? $defaults->prefix : null;
 		}
 
-		if (isset($defaults['subject'])) {
-			$subject = $defaults['subject'];
+		$subject = str_replace("\n", '', (isset($prefix) ? "[{$prefix}] " : ''));
+
+		if (isset($defaults->subject)) {
+			$subject .= $defaults->subject;
 		}
 		else {
-			$subject = str_replace("\n", '', (isset($prefix) ? "[{$prefix}] " : '') . $_REQUEST['subject']);
+			$subject .= $_REQUEST['subject'];
 		}
 
 		if (isset($_REQUEST['name'])) {

@@ -41,46 +41,55 @@ class Controller extends Object {
 		parent::__construct();
 
 		// Load the config for the site passed in
-		$this->config = Config::getInstance();
-		$this->config->load($file);
+		$config = Config::getInstance();
+		$config->load($file);
 
 		// Generate a generic "site down" message
-		if ($this->config->get('disabled')) {
+		if ($config->disabled === true) {
 			exit("<h2><em>{$_SERVER['SERVER_NAME']} is currently down for maintenance</em></h2>");
 		}
 
 		// Grab the passed in model or use the default
-		$name = isset($_REQUEST['model']) ? str_replace('-', '_', $_REQUEST['model']) : $this->config->getDefaultModel();
+		$model_name = isset($_REQUEST['model']) ? str_replace('-', '_', $_REQUEST['model']) : $config->getDefaultModel();
 
-		if ($name == 'logout') {
+		if ($model_name == 'logout') {
 			Security::logout();		
 		}
 		else {
 			// Load the model
-			$file        = '../models/' . $name . '.php';
-			$shared_file = '../../pickles/models/' . $name . '.php';
+			$model_file = '../models/' . $model_name . '.php';
 
-			if (strpos($name, '/') === false) {
-				$class   = $name;
-				$section = $name;
+			if (strpos($model_name, '/') === false) {
+				$class   = $model_name;
+				$section = $model_name;
 				$event   = null;
 			}
 			else {
-				$class = str_replace('/', '_', $name);
-				list($section, $event) = split('/', $name);
+				$class = str_replace('/', '_', $model_name);
+				list($section, $event) = split('/', $model_name);
 			}
 
-			if (file_exists($file)) {
-				require_once $file;
+			$shared_model_name = $config->getSharedModel($model_name);
+			$shared_model_file = PICKLES_PATH . 'models/' . $shared_model_name . '.php';
+
+			if (file_exists($model_file)) {
+				require_once $model_file;
 
 				if (class_exists($class)) {
 					$this->model = new $class;
 				}
 			}
-			/**
-			 * @todo Fix the shared stuff
-			 */
-			elseif (file_exists($shared_file) && $this->config->get('models', 'shared') != false) {
+			else if (file_exists($shared_model_file) && $shared_model_name != false) {
+				if (strpos($shared_model_name, '/') === false) {
+					$class   = $shared_model_name;
+					//$section = $shared_model_name;
+					//$event   = null;
+				}
+				else {
+					$class = str_replace('/', '_', $shared_model_name);
+					//list($section, $event) = split('/', $shared_model_name);
+				}
+
 				if (class_exists($class)) {
 					$this->model = new $class;
 				}
@@ -101,12 +110,9 @@ class Controller extends Object {
 					Security::authenticate();
 				}
 
-				/**
-				 * @todo are any of these relevant any more?
-				 */
-				$this->model->set('name',    $name);
-				$this->model->set('section', $section);
-				//$this->model->set('event',   $event);
+				$this->model->set('name',        $model_name);
+				$this->model->set('shared_name', $shared_model_name);
+				$this->model->set('section',     $section);
 
 				// Execute the model's logic
 				if (method_exists($this->model, '__default')) {

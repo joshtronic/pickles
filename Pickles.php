@@ -4,9 +4,9 @@
  * PICKLES core include file
  *
  * This is the file that you include on the page you're instantiating the
- * controller from (typically index.php).  The path to the PICKLES code base is
- * established as well as the path that Smarty will use to store the compiled
- * pages.
+ * controller from (typically index.php).  The path to the PICKLES code base
+ * is established as well as the path that Smarty will use to store the
+ * compiled pages.
  *
  * @package   PICKLES
  * @author    Joshua Sherman <josh@phpwithpickles.org>
@@ -22,9 +22,9 @@ if (ini_get('date.timezone') == '') {
 }
 
 /**
- * @todo      Change the TEMP_PATH to be named more accordingly (Smarty-centric)
- *            and ditch sys_get_temp_dir() and point to a directory inside the 
- *            PICKLES path.
+ * @todo Change the TEMP_PATH to be named more accordingly (Smarty-centric)
+ *       and ditch sys_get_temp_dir() and point to a directory inside the 
+ *       PICKLES path.
  */
 define('PICKLES_PATH', (phpversion() < 5.3 ? dirname(__FILE__) : __DIR__) . '/');
 define('TEMP_PATH',    sys_get_temp_dir() . '/pickles/smarty/' . $_SERVER['SERVER_NAME'] . '/');
@@ -39,20 +39,18 @@ define('TEMP_PATH',    sys_get_temp_dir() . '/pickles/smarty/' . $_SERVER['SERVE
  * @return boolean Return value of require_once() or false (default)
  */
 function __autoload($class) {
-	$file = PICKLES_PATH . 'classes/' . str_replace('_', '/', $class) . '.php';
-	
-	if (file_exists($file)) {
-		return require_once $file;
+	$class_file = PICKLES_PATH . 'classes/' . str_replace('_', '/', $class) . '.php';
+	$model_file = PICKLES_PATH . 'models/' . str_replace('_', '/', $class) . '.php';
+
+	if (file_exists($class_file)) {
+		return require_once $class_file;
+	}
+	else if (file_exists($model_file)) {
+		return require_once $model_file;
 	}
 	else {
-		$file = PICKLES_PATH . 'models/' . str_replace('_', '/', $class) . '.php';
-
-		if (file_exists($file)) {
-			return require_once $file;
-		}
+		return false;
 	}
-
-	return false;
 }
 
 ?>

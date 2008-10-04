@@ -52,6 +52,7 @@ class Object {
 	 *         expecting a boolean value to begin with.  Perhaps an error should
 	 *         be thrown?
 	 */
+	/*
 	public function get($variable, $array_element = null) {
 		if (isset($this->$variable)) {
 			if (isset($array_element)) {
@@ -67,6 +68,15 @@ class Object {
 		}
 
 		return false;
+	}
+	*/
+
+	public function __get($variable) {
+		if (isset($this->$variable)) {
+			return $this->$variable;
+		}
+
+		return null;
 	}
 
 	/**

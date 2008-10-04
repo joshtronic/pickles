@@ -16,6 +16,7 @@
  * @todo      Eventually finish adding in my ActiveRecord class, even
  *            though I feel active record dumbs people down since it's a
  *            crutch for actually being able to write SQL.
+ * @todo      Rename me to Database (maybe)
  */
 class DB extends Singleton {
 
@@ -23,14 +24,6 @@ class DB extends Singleton {
 	 * Private instance of the DB class
 	 */
 	private static $instance;
-
-	/**
-	 * Private database information and login credentials
-	 */
-	private $hostname;
-	private $username;
-	private $password;
-	private $database;
 
 	/**
 	 * Private MySQL resources
@@ -74,17 +67,19 @@ class DB extends Singleton {
 		if (!is_resource($this->connection)) {
 			$config = Config::getInstance();
 
-			$this->hostname = $config->get('database', 'hostname');
-			$this->username = $config->get('database', 'username');
-			$this->password = $config->get('database', 'password');
-			$this->database = $config->get('database', 'database');
+			if ($config->database->hostname == '') {
+				$config->database->hostname = 'localhost';
+			}
 
-			if (isset($this->hostname) && isset($this->username) && isset($this->password) && isset($this->database)) {
-				$this->connection = @mysql_connect($this->hostname, $this->username, $this->password);
+			if (isset($config->database->username, $config->database->password, $config->database->database)) {
+				/**
+				 * @todo I removed the @ and changed to be pconnect... let's see
+				 */
+				$this->connection = mysql_pconnect($config->database->hostname, $config->database->username, $config->database->password);
 
 				if (is_resource($this->connection)) {
-					if (!mysql_select_db($this->database, $this->connection)) {
-						Error::addWarning("There was an error selecting the '" . $this->database , "' database");
+					if (!mysql_select_db($config->database->database, $this->connection)) {
+						Error::addWarning("There was an error selecting the '" . $this->database->database , "' database");
 						return false;
 					}
 					else {

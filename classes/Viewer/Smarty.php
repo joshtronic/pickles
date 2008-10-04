@@ -17,6 +17,7 @@ class Viewer_Smarty extends Viewer_Common {
 	 * Displays the Smarty generated pages
 	 */
 	public function display() {
+
 		// Obliterates any passed in PHPSESSID (thanks Google)
 		if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false) {
 			list($request_uri, $phpsessid) = split('\?PHPSESSID=', $_SERVER['REQUEST_URI'], 2);
@@ -72,9 +73,12 @@ class Viewer_Smarty extends Viewer_Common {
 		/**
 		 * @todo Maybe the template path should be part of the configuration?
 		 */
-		$template        = '../templates/' . $this->model->get('name') . '.tpl';
-		$shared_template = str_replace('../', '../../pickles/', $template);
+		$template        = '../templates/' . $this->model->name . '.tpl';
+		$shared_template = getcwd() . '/templates/' . $this->model->shared_name . '.tpl';
 
+		/**
+		 * @todo There's a bug with the store home page since it's a redirect
+		 */
 		if (!file_exists($template)) {
 			if (file_exists($shared_template)) {
 				$template = $shared_template;
@@ -82,30 +86,9 @@ class Viewer_Smarty extends Viewer_Common {
 		}
 
 		// Pass all of our controller values to Smarty
-		$smarty->assign('section',    $this->model->get('section'));
-		$smarty->assign('model',      $this->model->get('name'));
-		/**
-		 * @todo Rename action to event
-		 * @todo I'm not entirely sure that these values are necessary at all due
-		 *       to new naming conventions.
-		 */
-		//$smarty->assign('action',     $this->model->get('action'));
-		//$smarty->assign('event',      $this->model->get('action'));
-
-		// Thanks to new naming conventions
-		$smarty->assign('admin',      $this->config->get('admin', 'sections'));
+		$smarty->assign('section',    $this->model->section);
+		$smarty->assign('model',      $this->model->name);
 		$smarty->assign('template',   $template);
-
-		// Only load the session if it's available
-		/**
-		 * @todo Not entirely sure that the view needs full access to the session
-		 *       (seems insecure at best)
-		 */
-		/*
-		if (isset($_SESSION)) {
-			$smarty->assign('session', $_SESSION);
-		}
-		*/
 
 		// Loads the data from the config
 		$data = $this->config->getViewerData();

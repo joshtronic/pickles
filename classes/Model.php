@@ -98,12 +98,16 @@ class Model extends Object {
 	}
 
 	/**
-	 * Gets the data variable
+	 * Alias for $model->data
 	 *
 	 * @return array Associative array of data that was set by the model
 	 */
 	public function getData() {
-		return $this->get('data');
+		if (isset($this->data)) {
+			return $this->data;
+		}
+
+		return null;
 	}
 
 	/**

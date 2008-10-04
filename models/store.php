@@ -28,7 +28,7 @@ class store extends Model {
 
 		// Loads the navigation
 		$config = Config::getInstance();
-		$this->data['subnav'] = $config->get('store', 'sections');
+		$this->data['subnav'] = $config->store->sections;
 
 		// Loads the categories
 		$categories = $this->db->getArray('SELECT id, name, permalink FROM categories WHERE parent_id IS NULL AND visible = "Y" ORDER BY weight;');
