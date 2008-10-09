@@ -41,8 +41,8 @@ if (ini_get('date.timezone') == '') {
 // Establishes our paths
 define('SITE_PATH',    getcwd() . '/');
 define('PICKLES_PATH', dirname(__FILE__) . '/');
-define('TEMP_PATH',    PICKLES_PATH . 'tmp/');
-define('SMARTY_PATH',  TEMP_PATH . 'smarty/' . $_SERVER['SERVER_NAME'] . '/');
+define('VAR_PATH',     PICKLES_PATH . 'var/' . $_SERVER['SERVER_NAME'] . '/');
+define('SMARTY_PATH',  VAR_PATH . 'smarty/');
 
 // Loads the appropriately named configuration file
 Config::load(SITE_PATH . '../config.xml');

@@ -56,7 +56,7 @@ class Viewer_Smarty extends Viewer_Common {
 		$smarty->load_filter('output','trimwhitespace');
 
 		// Includes the PICKLES custom Smarty functions
-		$directory = PICKLES_PATH . 'smarty/functions/';
+		$directory = PICKLES_PATH . 'functions/smarty/';
 
 		if (is_dir($directory)) {
 			if ($handle = opendir($directory)) {
