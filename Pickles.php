@@ -17,17 +17,19 @@
 /**
  * @todo Allow users to override the timezone from their configuration file.
  */
+// Sets the timezone to avoid Smarty warnings
 if (ini_get('date.timezone') == '') {
-	date_default_timezone_set('America/New_York');
+	ini_set('date.timezone', 'America/New_York');
 }
 
-/**
- * @todo Change the TEMP_PATH to be named more accordingly (Smarty-centric)
- *       and ditch sys_get_temp_dir() and point to a directory inside the 
- *       PICKLES path.
- */
-define('PICKLES_PATH', (phpversion() < 5.3 ? dirname(__FILE__) : __DIR__) . '/');
-define('TEMP_PATH',    sys_get_temp_dir() . '/pickles/smarty/' . $_SERVER['SERVER_NAME'] . '/');
+// Establishes our paths
+define('SITE_PATH',    getcwd() . '/');
+define('PICKLES_PATH', dirname(__FILE__) . '/');
+define('TEMP_PATH',    PICKLES_PATH . 'tmp/');
+define('SMARTY_PATH',  TEMP_PATH . 'smarty/' . $_SERVER['SERVER_NAME'] . '/');
+
+// Loads the appropriately named configuration file
+Config::load(SITE_PATH . '../config.xml');
 
 /**
  * Magic function to automatically load classes
@@ -39,15 +41,24 @@ define('TEMP_PATH',    sys_get_temp_dir() . '/pickles/smarty/' . $_SERVER['SERVE
  * @return boolean Return value of require_once() or false (default)
  */
 function __autoload($class) {
-	$class_file = PICKLES_PATH . 'classes/' . str_replace('_', '/', $class) . '.php';
-	$model_file = PICKLES_PATH . 'models/' . str_replace('_', '/', $class) . '.php';
+	$filename = str_replace('_', '/', $class) . '.php';
 
+	$class_file = PICKLES_PATH . 'classes/' . $filename;
+	$model_file = PICKLES_PATH . 'models/' . $filename;
+
+	// Loads the class file
 	if (file_exists($class_file)) {
 		return require_once $class_file;
 	}
+	// Loads the shared model
 	else if (file_exists($model_file)) {
 		return require_once $model_file;
 	}
+	// Loads Smarty
+	else if ($class == 'Smarty') {
+		return require_once 'contrib/smarty/libs/Smarty.class.php';
+	}
+	// Loads nothing
 	else {
 		return false;
 	}

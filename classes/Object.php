@@ -1,16 +1,37 @@
 <?php
 
 /**
- * Object class
+ * Object Class File for PICKLES
  *
- * Every non-Singleton-based class needs to extend this class.  Any models will
- * extend the Model class which entends the Object class already.  This class
- * handles getting an instance of the Config object so that it's available.  Also
- * provides a getter and setter for variables.
+ * PICKLES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ * 
+ * PICKLES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with PICKLES.  If not, see
+ * <http://www.gnu.org/licenses/>.
  *
+ * @author    Joshua John Sherman <josh@phpwithpickles.org>
+ * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @link      http://phpwithpickles.org
+ * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
- * @author    Joshua Sherman <josh@phpwithpickles.org>
- * @copyright 2007-2008 Joshua Sherman
+ */
+
+/**
+ * Object Class
+ *
+ * Every non-Singleton-based class needs to extend this class.
+ * Any models will extend the Model class which entends the Object
+ * class already.  This class handles getting an instance of the
+ * Config object so that it's available.  Also provides a getter
+ * and setter for variables.
  */
 class Object {
 
@@ -33,44 +54,6 @@ class Object {
 	 */
 	public function __destruct() { }
 
-	/*
-	// @todo maybe later
-	public function __get($variable) {
-		if (!isset($this->data[$variable])) {
-			$this->data[$variable] = null;
-		}
-
-		return $this->data[$variable];
-	}
-	*/
-
-	/**
-	 * Gets a variable
-	 *
-	 * @return Returns either the variable value or false if no variable.
-	 * @todo   Returning false could be misleading, especially if you're
-	 *         expecting a boolean value to begin with.  Perhaps an error should
-	 *         be thrown?
-	 */
-	/*
-	public function get($variable, $array_element = null) {
-		if (isset($this->$variable)) {
-			if (isset($array_element)) {
-				$array = $this->$variable;
-
-				if (isset($array[$array_element])) {
-					return $array[$array_element];
-				}
-			}
-			else {
-				return $this->$variable;
-			}
-		}
-
-		return false;
-	}
-	*/
-
 	public function __get($variable) {
 		if (isset($this->$variable)) {
 			return $this->$variable;
@@ -84,6 +67,7 @@ class Object {
 	 *
 	 * @param string $variable Name of the variable to be set
 	 * @param mixed $value Value to be assigned to the passed variable
+	 * @todo  Not sure we need this at all, grep to check if it's being used.
 	 */
 	public function set($variable, $value) {
 		$this->$variable = $value;

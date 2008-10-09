@@ -1,27 +1,49 @@
 <?php
 
 /**
- * Configuration class
+ * Configuration Class File for PICKLES
  *
- * Handles loading a configuration file and parsing the data for any public
- * nodes that need to be made available to the viewer.
+ * PICKLES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ * 
+ * PICKLES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with PICKLES.  If not, see
+ * <http://www.gnu.org/licenses/>.
  *
+ * @author    Joshua John Sherman <josh@phpwithpickles.org>
+ * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @link      http://phpwithpickles.org
+ * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
- * @author    Joshua Sherman <josh@phpwithpickles.org>
- * @copyright 2007-2008 Joshua Sherman
- * @todo      Add the ability to load in multiple configuration files.
+ */
+
+/**
+ * Config Class
+ *
+ * Handles loading a configuration file and parsing the data for
+ * any public nodes that need to be made available to the viewer.
+ *
+ * @usage <code>$config = Config::getInstance();
+ *$config->node; // Returns SimpleXML object</code>
  */
 class Config extends Singleton {
 
 	/**
 	 * Private instance of the Config class
 	 */
-	private static $instance;
+	private static $_instance;
 
 	/**
-	 * Private collection of data to be loaded by the viewer
+	 * Private collection of public config data
 	 */
-	private $viewer_data;
+	private $_public;
 
 	/**
 	 * Private constructor
@@ -31,19 +53,19 @@ class Config extends Singleton {
 	/**
 	 * Gets an instance of the configuration object
 	 *
-	 * Determines if a Config object has already been instantiated, if so it
-	 * will use it.  If not, it will create one.
+	 * Determines if a Config object has already been instantiated,
+	 * if so it will use it.  If not, it will create one.
 	 *
 	 * @return An instace of the Config class
 	 */
 	public static function getInstance() {
 		$class = __CLASS__;
 
-		if (!self::$instance instanceof $class) {
-			self::$instance = new $class();
+		if (!self::$_instance instanceof $class) {
+			self::$_instance = new $class();
 		}
 
-		return self::$instance;
+		return self::$_instance;
 	}
 
 	/**
@@ -52,57 +74,109 @@ class Config extends Singleton {
 	 * Handles the potential loading of the configuration file and
 	 * sanitizing the boolean strings into actual boolean values.
 	 *
-	 * @param  string $file File name of the config file to be loaded
-	 * @return boolean Based on the success or failure of the file load
-	 * @todo   Either get rid of or make better use of the Error object
+	 * @param  string $file Filename of the XML file to be loaded
+	 * @return boolean Success of the load process
+ 	 * @todo   Add the ability to load in multiple configuration files.
 	 */
-	public function load($file) {
+	public static function load($file) {
+		$config = Config::getInstance();
+
 		if (file_exists($file)) {
-			$this->file = $file;
-			
 			/**
-			 * @todo LIBXML_NOCDATA is 5.1+ and I want PICKLES to be 5.0+
-			 *       compatible.  Potential fix is to read the file in as
-			 *       a string, and if it has CDATA, throw an internal
-			 *       warning.
+			 * @todo LIBXML_NOCDATA is 5.1+ and I want PICKLES to
+			 *       be 5.0+ compatible.  Potential fix is to read
+			 *       the file in as a string, and if it has CDATA, 
+			 *       throw an internal warning.
 			 */
-			$this->data = simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOCDATA);
+			$data = simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOCDATA);
 
 			// Loops through the top level nodes to find public nodes
-			$variables = get_object_vars($this->data);
+			$variables = get_object_vars($data);
 
 			if (is_array($variables)) {
 				foreach ($variables as $key => $value) {
 					if (is_object($value) && isset($value->attributes()->public) && $value->attributes()->public == true) {
-						$this->viewer_data[$key] = $value;
+						$config->_public[$key] = $value;
 					}
+
+					$config->$key = $value;
 				}
 			}
 
 			return true;
 		}
-		else {
-			Error::addError('Unable to load the configuration file');
-			return false;
+	}
+
+	/** 
+	 * Gets the authentication value
+	 *
+	 * @return boolean The model's authentication setting or false
+	 */
+	public function getAuthentication() {
+		if (isset($this->models->authentication) && $this->models->authentication == 'true') {
+			return true;
 		}
+
+		return false;
 	}
 
 	/**
-	 * Alias for $config->models->default
+	 * Alias for $config->models->default with string cast
 	 *
 	 * @return Returns the default model set or null
-	 * @todo   Need to add a PICKLES fallback model just in case
 	 */
 	public function getDefaultModel() {
-		if (isset($this->data->models->default)) {
-			return (string)$this->data->models->default;
+		if (isset($this->models->default)) {
+			return (string)$this->models->default;
+		}
+
+		return 'home';
+	}
+	
+	/** 
+	 * Gets active status of the site
+	 *
+	 * @return boolean The site's disabled setting or false
+	 */
+	public function getDisabled() {
+		if (isset($this->models->disabled) && $this->models->disabled == 'true') {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Alias for $config->_public 
+	 *
+	 * @return Returns the variable value or null if no variable.
+	 */
+	public function getPublicData() {
+		if (isset($this->_public)) {
+			return $this->_public;
 		}
 
 		return null;
 	}
 
-	/**
+	/** 
+	 * Gets the session value
 	 *
+	 * @return boolean The model's session setting or false
+	 */
+	public function getSession() {
+		if (isset($this->models->session) && $this->models->session == 'true') {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Gets the shared model
+	 *
+	 * @param  string $requested_model The model being requested
+	 * @return string The name of the shared model or null
 	 */
 	public function getSharedModel($requested_model) {
 
@@ -113,8 +187,8 @@ class Config extends Singleton {
 			$additional = '/' . $additional;
 		}
 
-		if (isset($this->data->models->shared->model)) {
-			foreach ($this->data->models->shared->model as $shared_model) {
+		if (isset($this->models->shared->model)) {
+			foreach ($this->models->shared->model as $shared_model) {
 				if (isset($shared_model->alias)) {
 					if ($requested_model == $shared_model->alias) {
 						return (string)$shared_model->name . $additional;
@@ -128,33 +202,20 @@ class Config extends Singleton {
 			}
 		}
 
-		return null;
+		return 'home';
 	}
 
-	/**
-	 * Alias for $config->viewer_data 
+	/** 
+	 * Gets the viewer value
 	 *
-	 * @return Returns either the variable value or null if no variable.
+	 * @return boolean The model's viewer setting or false
 	 */
-	public function getViewerData() {
-		if (isset($this->viewer_data)) {
-			return $this->viewer_data;
+	public function getViewer() {
+		if (isset($this->models->viewer) && $this->models->viewer == 'true') {
+			return true;
 		}
 
-		return null;
-	}
-
-	public function __get($node) {
-		if (isset($this->data->$node) && $this->data->$node != '') {
-			if (in_array($this->data->$node, array('true', 'false'))) {
-				return (bool)$this->data->$node;
-			}
-			else if (is_object($this->data->$node)) {
-				return $this->data->$node;
-			}
-		}
-
-		return null;
+		return false;
 	}
 }
 

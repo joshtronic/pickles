@@ -1,6 +1,30 @@
 <?php
 
 /**
+ * Image Utilities Class File for PICKLES
+ *
+ * PICKLES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ * 
+ * PICKLES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with PICKLES.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author    Joshua John Sherman <josh@phpwithpickles.org>
+ * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @link      http://phpwithpickles.org
+ * @license   http://www.gnu.org/copyleft/lesser.html
+ * @package   PICKLES
+ */
+
+/**
  * Incomplete collection of image manipulation utilities
  *
  * I'm not entirely sure if this class is being utilized anywhere, especially
@@ -11,10 +35,7 @@
  * processing, it seems there's an ImageMagick module that can utilized, that may
  * end up being the route that is taken.  Until then, this class is useless shit.
  *
- * @package   PICKLES
- * @author    Joshua Sherman <josh@phpwithpickles.org>
- * @copyright 2007-2008 Joshua Sherman
- * @todo      Make the class usable.
+ * @todo Make the class usable.
  */
 class ImageUtils {
 

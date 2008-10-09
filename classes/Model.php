@@ -1,15 +1,36 @@
 <?php
 
 /**
- * Model class
+ * Model Class File for PICKLES
  *
- * Every model in PICKLES at both the core and site levels need to extend this
- * class. It handles the getting of common model variables (auth, data and view)
- * as well as making sure that every model has a database object available.
+ * PICKLES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ * 
+ * PICKLES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with PICKLES.  If not, see
+ * <http://www.gnu.org/licenses/>.
  *
+ * @author    Joshua John Sherman <josh@phpwithpickles.org>
+ * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @link      http://phpwithpickles.org
+ * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
- * @author    Joshua Sherman <josh@phpwithpickles.org>
- * @copyright 2007-2008 Joshua Sherman
+ */
+
+/**
+ * Model Class
+ *
+ * Every model in PICKLES at both the core and site levels need to extend
+ * this class. It handles the getting of common model variables (auth, data
+ * and view) as well as making sure that every model has a database object
+ * available.
  */
 class Model extends Object {
 	
@@ -18,6 +39,11 @@ class Model extends Object {
 	 */
 	protected $data = array();
 	
+	/**
+	 * Config object
+	 */
+	protected $config = null;
+
 	/**
 	 * Database object
 	 */
@@ -35,60 +61,65 @@ class Model extends Object {
 	/**
 	 * Constructor
 	 *
-	 * Handles calling the parent constructor and sets up the model's internal
-	 * database object
+	 * Handles calling the parent constructor and sets up the model's
+	 * internal config and database object
 	 */
 	public function __construct() {
 		parent::__construct();
 
-		$this->db = DB::getInstance();
+		$this->config = Config::getInstance();
+		$this->db     = DB::getInstance();
 	}
 
 	/**
 	 * Gets the authenticate value
 	 *
-	 * @todo Add in configuration level override
-	 * @return boolean Whether or not the model requires user authentication to use
+	 * Order of precedence: Model, Config, Guess (guess is always false)
+	 *
+	 * @return boolean Whether or not the model requires user authentication
 	 */
 	public function getAuthentication() {
-		// Order of precedence: Model, Config, Guess
-		if ($this->authentication == null) {
-			return false; 
-		}
-		else {
+		if ($this->authentication != null) {
 			return $this->authentication;
 		}
+		else if (is_bool($this->config->getAuthentication())) {
+			return $this->config->getAuthentication();
+		}
+
+		return false;
 	}
 
 	/**
 	 * Gets the session value
 	 *
-	 * @todo Add in configuration level override
+	 * Order of precedence: Auth On, Model, Config, Guess (guess is always false)
+	 *
 	 * @return boolean Whether or not the session needs to be started
 	 */
 	public function getSession() {
-		// Order of precedence: Auth On, Model, Config, Guess
 		if ($this->authentication === true) {
 			return true;
 		}
-		else {
-			if ($this->session == null) {
-				return false;
-			}
-			else {
-				return $this->session;
-			}
+		else if ($this->session != null) {
+			return $this->session;
 		}
+		else if (is_bool($this->config->getSession())) {
+			return $this->config->getSession();
+		}
+
+		return false;
 	}
 
 	/**
 	 * Gets the requested Viewer
 	 *
-	 * @todo Add in configuration level override
+	 * Order of precedence: Model, Config, Guess (guess is always Smarty)
+	 *
 	 * @return string The viewer that the model has requested to be used
+	 * @todo   Guess shouldn't be Smarty, it should be the dummy PHP template.
+	 * @todo   Use the config override value to help determine.
 	 */
 	public function getViewer() {
-		// Order of precedence: Model, Config, Guess
 		if ($this->viewer == null) {
 			return isset($argv) ? 'CLI' : 'Smarty';
 		}
@@ -110,6 +141,10 @@ class Model extends Object {
 		return null;
 	}
 
+	public function __set($variable, $value) {
+		$this->data[$variable] = $value;
+	}
+
 	/**
 	 * Destructor
 	 *
@@ -122,11 +157,12 @@ class Model extends Object {
 	/**
 	 * Default function
 	 *
-	 * This function is overloaded by the model.  The __default() function is
-	 * where any code that needs to be executed at run time needs to be placed.
-	 * It's not in the constructor as the model needs to be instantiated first
-	 * so that the authorization requirements can be checked without running
-	 * code it's potentially not supposed to have run.
+	 * This function is overloaded by the model.  The __default() function
+	 * is where any code that needs to be executed at run time needs to be
+	 * placed.  It's not in the constructor as the model needs to be
+	 * instantiated first so that the authorization requirements can be
+	 * checked without running code it's potentially not supposed to have
+	 * been executed.
 	 */
 	public function __default() { }
 }

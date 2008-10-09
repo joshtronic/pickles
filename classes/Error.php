@@ -1,6 +1,30 @@
 <?php
 
 /**
+ * Error Class File for PICKLES
+ *
+ * PICKLES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ * 
+ * PICKLES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with PICKLES.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author    Joshua John Sherman <josh@phpwithpickles.org>
+ * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @link      http://phpwithpickles.org
+ * @license   http://www.gnu.org/copyleft/lesser.html
+ * @package   PICKLES
+ */
+
+/**
  * Error handling class
  *
  * Handles (for the most part) all the errors and warnings that are encountered
@@ -9,9 +33,6 @@
  * add logic to appropriately report the errors, perhaps as a variable in the
  * model data array.
  *
- * @package   PICKLES
- * @author    Joshua Sherman <josh@phpwithpickles.org>
- * @copyright 2007-2008 Joshua Sherman
  * @todo      Internally document the functions better.
  * @todo      Convert the class to extend Singleton.
  * @todo      Quite possibly revamp the class entirely as it is still left over

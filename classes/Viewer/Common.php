@@ -1,21 +1,35 @@
 <?php
 
 /**
- * Common viewer class
+ * Common Viewer Class File for PICKLES
+ *
+ * PICKLES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ * 
+ * PICKLES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with PICKLES.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author    Joshua John Sherman <josh@phpwithpickles.org>
+ * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @link      http://phpwithpickles.org
+ * @license   http://www.gnu.org/copyleft/lesser.html
+ * @package   PICKLES
+ */
+
+/**
+ * Common Viewer Class
  *
  * This is the class that each viewer class should be extending from.
- *
- * @package    PICKLES
- * @subpackage Viewer
- * @author     Joshua Sherman <josh@phpwithpickles.org>
- * @copyright  2007-2008 Joshua Sherman
  */
 abstract class Viewer_Common extends Object {
-
-	/**
-	 * Protected model object
-	 */
-	protected $model = null;
 
 	/**
 	 * Constructor
@@ -23,11 +37,26 @@ abstract class Viewer_Common extends Object {
 	 * Runs the parent's constructor and adds the model to the object.
 	 *
 	 * @param object $model Object for the model we're loading
-	 * @todo  Need better validation of the passed model.
 	 */
-	public function __construct(Model $model) {
+	public function __construct() {
 		parent::__construct();
-		$this->model = $model;
+
+		/**
+		 * @todo This may need to be flipped on only for Smarty and PHP templates
+		 */
+		// Obliterates any passed in PHPSESSID (thanks Google)
+		if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false) {
+			list($request_uri, $phpsessid) = split('\?PHPSESSID=', $_SERVER['REQUEST_URI'], 2);
+			header('HTTP/1.1 301 Moved Permanently');
+			header('Location: ' . $request_uri);
+			exit();
+		}
+
+		// XHTML compliancy stuff
+		ini_set('arg_separator.output', '&amp;');
+		ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
+		
+		header('Content-type: text/html; charset=UTF-8');
 	}
 
 	/**

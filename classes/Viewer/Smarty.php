@@ -1,14 +1,34 @@
 <?php
 
 /**
- * Smarty viewer
+ * Smarty Viewer Class File for PICKLES
+ *
+ * PICKLES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ * 
+ * PICKLES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with PICKLES.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author    Joshua John Sherman <josh@phpwithpickles.org>
+ * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @link      http://phpwithpickles.org
+ * @license   http://www.gnu.org/copyleft/lesser.html
+ * @package   PICKLES
+ */
+
+/**
+ * Smarty Viewer
  *
  * Displays the associated Smarty templates for the Model.
  *
- * @package    PICKLES
- * @subpackage Viewer
- * @author     Joshua Sherman <josh@phpwithpickles.org>
- * @copyright  2007-2008 Joshua Sherman
  * @link       http://smarty.net/
  */
 class Viewer_Smarty extends Viewer_Common {
@@ -18,33 +38,13 @@ class Viewer_Smarty extends Viewer_Common {
 	 */
 	public function display() {
 
-		// Obliterates any passed in PHPSESSID (thanks Google)
-		if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false) {
-			list($request_uri, $phpsessid) = split('\?PHPSESSID=', $_SERVER['REQUEST_URI'], 2);
-			header('HTTP/1.1 301 Moved Permanently');
-			header('Location: ' . $request_uri);
-			exit();
-		}
-
-		// XHTML compliancy stuff
-		ini_set('arg_separator.output', '&amp;');
-		ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
-
-		/**
-		 * @todo Create a wrapper so that we can auto load this
-		 */
-		require_once 'contrib/smarty/libs/Smarty.class.php';
-
 		$smarty = new Smarty();
 
-		/**
-		 * @todo Perhaps the templates directory would be better suited as a
-		 *       config variable?
-		 */
-		$smarty->template_dir = '../templates/';
+		// Establishes our paths
+		$smarty->template_dir = SITE_PATH . '../templates/';
 
-		$cache_dir   = TEMP_PATH . 'cache';
-		$compile_dir = TEMP_PATH . 'compile';
+		$cache_dir   = SMARTY_PATH . 'cache';
+		$compile_dir = SMARTY_PATH . 'compile';
 
 		if (!file_exists($cache_dir))   { mkdir($cache_dir,   0777, true); }
 		if (!file_exists($compile_dir)) { mkdir($compile_dir, 0777, true); }
@@ -52,9 +52,10 @@ class Viewer_Smarty extends Viewer_Common {
 		$smarty->cache_dir   = $cache_dir ;
 		$smarty->compile_dir = $compile_dir;
 
+		// Loads the trim whitespace filter
 		$smarty->load_filter('output','trimwhitespace');
 
-		// Include custom Smarty functions
+		// Includes the PICKLES custom Smarty functions
 		$directory = PICKLES_PATH . 'smarty/functions/';
 
 		if (is_dir($directory)) {
@@ -70,11 +71,9 @@ class Viewer_Smarty extends Viewer_Common {
 			}
 		}
 
-		/**
-		 * @todo Maybe the template path should be part of the configuration?
-		 */
-		$template        = '../templates/' . $this->model->name . '.tpl';
-		$shared_template = getcwd() . '/templates/' . $this->model->shared_name . '.tpl';
+		// Establishes the template names
+		$template        = SITE_PATH . '../templates/' . $this->model_name . '.tpl';
+		$shared_template = PICKLES_PATH . 'templates/' . $this->shared_name . '.tpl';
 
 		/**
 		 * @todo There's a bug with the store home page since it's a redirect
@@ -86,22 +85,20 @@ class Viewer_Smarty extends Viewer_Common {
 		}
 
 		// Pass all of our controller values to Smarty
-		$smarty->assign('section',    $this->model->section);
-		$smarty->assign('model',      $this->model->name);
+		$smarty->assign('section',    $this->section);
+		$smarty->assign('model',      $this->model_name);
 		$smarty->assign('template',   $template);
 
 		// Loads the data from the config
-		$data = $this->config->getViewerData();
+		$data = $this->config->getPublicData();
 		
 		if (isset($data) && is_array($data)) {
 			$smarty->assign('config', $data);
 		}
 
-		// Loads the data from the model
-		$data = $this->model->getData();
-
-		if (isset($data) && is_array($data)) {
-			foreach ($data as $variable => $value) {
+		// Loads the model's data
+		if (isset($this->data) && is_array($this->data)) {
+			foreach ($this->data as $variable => $value) {
 				$smarty->assign($variable, $value);
 			}
 		}
@@ -121,9 +118,6 @@ class Viewer_Smarty extends Viewer_Common {
 			}
 		}
 		*/
-
-		// Load it up!
-		header('Content-type: text/html; charset=UTF-8');
 
 		// If the index.tpl file is present, load it, else load the template directly
 		/**

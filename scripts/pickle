@@ -1,0 +1,54 @@
+#!/usr/bin/php -f
+<?php
+
+$error = null;
+
+$path = isset($argv[1]) ? $argv[1] . (substr($path, -1, 1) != '/' ? '/' : '') : './';
+
+if (!file_exists($path)) {
+	if (!mkdir($path, 0777, true)) {
+		exit("Error: Unable to create directory ({$path})\n");
+	}
+}
+
+if (!is_dir($path)) {
+	exit("Error: The path specified ({$path}) is not a directory\n");
+}
+else if (!is_writable($path)) {
+	exit("Error: The path specified ({$path}) is not writable\n");
+}
+else {
+	$pickles_path   = str_replace('scripts', '', dirname(__FILE__));
+
+	foreach (array('public', 'models', 'templates') as $directory) {
+		$directory = $path . $directory;
+
+		if (!file_exists($directory)) {
+			mkdir($directory);
+		}
+
+		if (!is_writable($directory)) {
+			exit("Error: The path specified ({$directory}) is not writable\n");
+		}
+	}
+
+	// config.xml
+	file_put_contents($path . 'config.xml', "<config>\n\t<database>\n\t\t<hostname>localhost</hostname>\n\t\t<username></username>\n\t\t<password></password>\n\t\t<database></database>\n\t</database>\n\t<navigation>\n\t\t<default>home</default>\n\t\t<sections>\n\t\t\t<home>Home</home>\n\t\t\t<about>About</about>\n\t\t\t<contact>Contact</contact>\n\t\t</sections>\n\t</navigation>\n</config>");
+
+	// public/.htaccess
+	file_put_contents($path . 'public/.htaccess', "# Alias the static libraries\n#Alias /static/ {$pickles_path}static/\n\n# Set the PHP include path\nphp_value include_path \".:{$pickles_path}\"\n\n# Prevent session IDs from appearing\nphp_value session.use_only_cookies 1\nphp_value session.use_trans_sid 0\n\n# Sets up the mod_rewrite engine\nRewriteEngine on\n\n# Sets the base path (document root)\nRewriteBase /\n\n# Strips the trailing slash\nRewriteRule ^(.+)/$ $1 [R]\n\n# Redirects /section/action to index.php?section=&action=\nRewriteRule ^([a-z-]+)$           index.php?model=$1    [NC,QSA]\nRewriteRule ^([a-z-]+)/([a-z-]+)$ index.php?model=$1/$2 [NC,QSA]\n\n# Set up the error documents\nErrorDocument 400 /\nErrorDocument 401 /\nErrorDocument 403 /\nErrorDocument 404 /\nErrorDocument 500 /\n\n# Blocks access to .htaccess\n<Files .htaccess>\n\torder allow,deny\n\tdeny from all\n</Files>");
+
+	// public/index.php
+	file_put_contents($path . 'public/index.php', "<?php\n\n// ini_set('include_path', ini_get('include_path') . ':{$pickles_path}');\n\nrequire_once 'Pickles.php';\nnew Controller();\n\n?>");
+
+	// models/home.php
+	file_put_contents($path . 'models/home.php', "<?php\n\nclass home extends Model {\n\n\tprotected \$view = 'Smarty';\n\tprotected \$auth = false;\n\n\tpublic function __default() {\n\n\t\t// \$this->db->getField('SELECT ...');\n\t\t// \$this->db->getRow('SELECT ...');\n\t\t// \$this->db->getArray('SELECT ...');\n\n\t\t\$this->data['message'] = \"You have successfully set up a site <a href='http://phpwithpickles.org/'>with PICKLES!</a>\";\n\t}\n}\n\n?>");
+
+	// templates/index.tpl
+	file_put_contents($path . 'templates/index.tpl', "<html>\n\t<head>\n\t\t<title>Congratulations</title>\n\t</head>\n\t<body>\n\t\t{include file=\"\$template\"}\n\t</body>\n</html>");
+
+	// templates/home.tpl
+	file_put_contents($path . 'templates/home.tpl', "<h1>Congratulations!</h1>\n<h2>{\$message}</h2>");
+}
+
+?>

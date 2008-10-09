@@ -1,64 +1,77 @@
 <?php
 
 /**
- * Controller class
+ * Controller Class File for PICKLES
+ *
+ * PICKLES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ * 
+ * PICKLES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with PICKLES.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author    Joshua John Sherman <josh@phpwithpickles.org>
+ * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @link      http://phpwithpickles.org
+ * @license   http://www.gnu.org/copyleft/lesser.html
+ * @package   PICKLES
+ */
+
+/**
+ * Controller Class
  *
  * The heavy lifter of PICKLES, makes the calls to get the session and
- * configuration loaded.  Loads models, serves up user authentication when the
- * model asks for it, and loads the viewer that the model has requested.  Default
- * values are present to make things easier on the user.
+ * configuration loaded.  Loads models, serves up user authentication when
+ * the model asks for it, and loads the viewer that the model has requested.
+ * Default values are present to make things easier on the user.
  *
- * @package   PICKLES
- * @author    Joshua Sherman <josh@phpwithpickles.org>
- * @copyright 2007-2008 Joshua Sherman
- * @usage     new Controller(); or new Controller('/path/to/config.xml');
- * @todo      Possibly remove the conditionals for the CLI view
+ * @usage <code>new Controller();</code>
  */
 class Controller extends Object {
-
-	/**
-	 * Private objects
-	 */
-	private $model   = null;
-	private $viewer  = null;
-	
-	/*
-	protected $config = null;
-	private $controller = null;
-	*/
 
 	/**
 	 * Constructor
 	 *
 	 * To make life a bit easier when using PICKLES, the Controller logic is
 	 * executed automatically via use of a constructor.
-	 * 
-	 * @params string $file File name of the configuration file to be loaded
-	 * @params string $controller Type of controller to create (Web or CLI)
-	 * @todo   Need to internally document the process better
 	 */
-	public function __construct($file = '../config.xml', $controller = 'Web') {
+	public function __construct() {
 		parent::__construct();
 
 		// Load the config for the site passed in
 		$config = Config::getInstance();
-		$config->load($file);
 
 		// Generate a generic "site down" message
-		if ($config->disabled === true) {
+		if ($config->getDisabled()) {
 			exit("<h2><em>{$_SERVER['SERVER_NAME']} is currently down for maintenance</em></h2>");
 		}
 
 		// Grab the passed in model or use the default
 		$model_name = isset($_REQUEST['model']) ? str_replace('-', '_', $_REQUEST['model']) : $config->getDefaultModel();
 
+		/**
+		 * @todo Maybe the logout shouldn't be an internal thing, what if the
+		 *       user wanted to call the logout page something else? or better
+		 *       yet, they want to next it, like /users/logout?
+		 */
 		if ($model_name == 'logout') {
-			Security::logout();		
+			Security::logout();
 		}
 		else {
-			// Load the model
+			// Loads the requested model's information
 			$model_file = '../models/' . $model_name . '.php';
 
+			/**
+			 * @todo Rename "section" to something like "current" or "selected"
+			 * @todo Figure out WTF "event" is being used for
+			 */
 			if (strpos($model_name, '/') === false) {
 				$class   = $model_name;
 				$section = $model_name;
@@ -69,75 +82,70 @@ class Controller extends Object {
 				list($section, $event) = split('/', $model_name);
 			}
 
+			// Establishes the shared model information
 			$shared_model_name = $config->getSharedModel($model_name);
 			$shared_model_file = PICKLES_PATH . 'models/' . $shared_model_name . '.php';
 
+			// Tries to load the site level model
 			if (file_exists($model_file)) {
 				require_once $model_file;
 
 				if (class_exists($class)) {
-					$this->model = new $class;
+					$model = new $class;
 				}
 			}
+			// Tries to load the shared model
 			else if (file_exists($shared_model_file) && $shared_model_name != false) {
 				if (strpos($shared_model_name, '/') === false) {
 					$class   = $shared_model_name;
-					//$section = $shared_model_name;
-					//$event   = null;
 				}
 				else {
 					$class = str_replace('/', '_', $shared_model_name);
-					//list($section, $event) = split('/', $shared_model_name);
 				}
 
 				if (class_exists($class)) {
-					$this->model = new $class;
+					$model = new $class;
 				}
 			}
+			// Loads the stock model
 			else {
-				$this->model = new Model();
+				$model = new Model();
 			}
 
-			if ($this->model != null) {
-				// Start the session if it's not started already
-				if ($this->model->getSession() === true) {
+			// Checks if we loaded a model file and no class was present
+			if ($model != null) {
+
+				// Potentially starts the session if it's not started already
+				if ($model->getSession() === true) {
 					if (ini_get('session.auto_start') == 0) {
 						session_start();
 					}
 				}
 
-				if ($this->model->getAuthentication() === true && $controller != 'CLI') {
+				// Potentially requests use authentication
+				if ($model->getAuthentication() === true) {
 					Security::authenticate();
 				}
 
-				$this->model->set('name',        $model_name);
-				$this->model->set('shared_name', $shared_model_name);
-				$this->model->set('section',     $section);
-
-				// Execute the model's logic
-				if (method_exists($this->model, '__default')) {
-					$this->model->__default();
+				// Potentially executes the model's logic
+				if (method_exists($model, '__default')) {
+					$model->__default();
 				}
 
-				// Load the viewer
-				$this->viewer = Viewer::factory($this->model);
-				$this->viewer->display();
+				// Creates a new viewer object
+				$viewer = Viewer::factory($model->getViewer());
+
+				// Sets the viewers properties
+				$viewer->model_name  = $model_name;
+				$viewer->shared_name = $shared_model_name;
+				$viewer->section     = $section;
+				$viewer->data        = $model->getData();
+
+				// Runs the requested viewer's display function
+				$viewer->display();
 			}
 		}
 	}
-
-	/*
-
-		if ((isset($_REQUEST['section']) && $_REQUEST['section'] == 'admin')) {
-		}
-		
-		// Check if we're accessing an admin sub section and load the logic script
-		if (isset($_REQUEST['section']) && $_REQUEST['section'] != 'admin' && $is_admin) {
-			if ($_REQUEST['section'] == 'admin.logout') {
-				Session::logout();
-			}
-
-	*/
 }
 
 ?>

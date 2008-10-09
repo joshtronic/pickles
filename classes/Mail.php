@@ -1,21 +1,42 @@
 <?php
 
 /**
+ * Mail Class File for PICKLES
+ *
+ * PICKLES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ * 
+ * PICKLES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with PICKLES.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author    Joshua John Sherman <josh@phpwithpickles.org>
+ * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @link      http://phpwithpickles.org
+ * @license   http://www.gnu.org/copyleft/lesser.html
+ * @package   PICKLES
+ */
+
+/**
  * Small collection of mail utilities
  *
  * A bit too small actually, as there is still only one function in here.  Since
  * I have built PICKLES based around my own needs, this has been the only 
  * function I have felt the need to add.
  *
- * @package   PICKLES
- * @author    Joshua Sherman <josh@phpwithpickles.org>
- * @copyright 2007-2008 Joshua Sherman
- * @todo      Just so it doesn't seem so bare, I need to come up and implement a
- *            few more mail functions.
- * @todo      Still thinking about making this an instantiated object instead of
- *            a static class.  Perhaps I should add a mail (rename it to mailer
- *            maybe) object to each model so it's ready to be loaded, and if it
- *            is loaded, then go ahead and automatically send it?!? Loves it.
+ * @todo Just so it doesn't seem so bare, I need to come up and implement a
+ *       few more mail functions.
+ * @todo Still thinking about making this an instantiated object instead of
+ *       a static class.  Perhaps I should add a mail (rename it to mailer
+ *       maybe) object to each model so it's ready to be loaded, and if it
+ *       is loaded, then go ahead and automatically send it?!? Loves it.
  */
 class Mail {
 
