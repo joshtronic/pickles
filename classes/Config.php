@@ -33,7 +33,7 @@
  * @usage <code>$config = Config::getInstance();
  *$config->node; // Returns SimpleXML object</code>
  */
-class Config extends Singleton {
+class Config {
 
 	/**
 	 * Private instance of the Config class
@@ -51,18 +51,24 @@ class Config extends Singleton {
 	private function __construct() { }
 
 	/**
-	 * Gets an instance of the configuration object
+	 * __clone
+	 */
+	public function __clone() {
+		trigger_error('Cloning is not available on a Singleton (that would defeat the purpose wouldn\'t it?)', E_USER_ERROR);
+	}
+
+	/**
+	 * Gets an instance of the requested class object
 	 *
-	 * Determines if a Config object has already been instantiated,
-	 * if so it will use it.  If not, it will create one.
+	 * Determines if a requested class object has already
+	 * been instantiated, if so it will use it.  If not,
+	 * it will create one.
 	 *
-	 * @return An instace of the Config class
+	 * @return An instace of the requested class
 	 */
 	public static function getInstance() {
-		$class = __CLASS__;
-
-		if (!self::$_instance instanceof $class) {
-			self::$_instance = new $class();
+		if (!self::$_instance instanceof Config) {
+			self::$_instance = new Config();
 		}
 
 		return self::$_instance;
@@ -79,6 +85,7 @@ class Config extends Singleton {
  	 * @todo   Add the ability to load in multiple configuration files.
 	 */
 	public static function load($file) {
+
 		$config = Config::getInstance();
 
 		if (file_exists($file)) {

@@ -48,6 +48,8 @@ class Controller extends Object {
 		// Load the config for the site passed in
 		$config = Config::getInstance();
 
+		$db = new DB($config->database->hostname, $config->database->username, $config->database->password, $config->database->database);
+
 		// Generate a generic "site down" message
 		if ($config->getDisabled()) {
 			exit("<h2><em>{$_SERVER['SERVER_NAME']} is currently down for maintenance</em></h2>");
@@ -91,25 +93,25 @@ class Controller extends Object {
 				require_once $model_file;
 
 				if (class_exists($class)) {
-					$model = new $class;
+					$model = new $class($config, $db);
 				}
 			}
 			// Tries to load the shared model
 			else if (file_exists($shared_model_file) && $shared_model_name != false) {
 				if (strpos($shared_model_name, '/') === false) {
-					$class   = $shared_model_name;
+					$class = $shared_model_name;
 				}
 				else {
 					$class = str_replace('/', '_', $shared_model_name);
 				}
 
 				if (class_exists($class)) {
-					$model = new $class;
+					$model = new $class($config, $db);
 				}
 			}
 			// Loads the stock model
 			else {
-				$model = new Model();
+				$model = new Model($config, $db);
 			}
 
 			// Checks if we loaded a model file and no class was present
@@ -133,7 +135,7 @@ class Controller extends Object {
 				}
 
 				// Creates a new viewer object
-				$viewer = Viewer::factory($model->getViewer());
+				$viewer = Viewer::create($model->getViewer());
 
 				// Sets the viewers properties
 				$viewer->model_name  = $model_name;

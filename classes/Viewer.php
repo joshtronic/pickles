@@ -38,7 +38,7 @@ class Viewer {
 	private function __construct() { }
 
 	/**
-	 * Viewer factory
+	 * Viewer Factory
 	 *
 	 * Creates an instance of the Viewer type that the model requests.
 	 *
@@ -48,7 +48,7 @@ class Viewer {
 	 *         potentially easier to reference from the model (since the
 	 *         constants would each be uppercase instead of mixedcase.
 	 */
-	public static function factory($type) {
+	public static function create($type) {
 		$class = 'Viewer_' . $type;
 		return new $class();
 	}

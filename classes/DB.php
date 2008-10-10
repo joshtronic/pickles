@@ -40,12 +40,12 @@
  *            crutch for actually being able to write SQL.
  * @todo      Rename me to Database (maybe)
  */
-class DB extends Singleton {
+class DB extends Object {
 
-	/**
-	 * Private instance of the DB class
-	 */
-	private static $instance;
+	private $hostname;
+	private $username;
+	private $password;
+	private $database;
 
 	/**
 	 * Private MySQL resources
@@ -53,27 +53,11 @@ class DB extends Singleton {
 	private $connection;
 	private $results;
 
-	/**
-	 * Private constructor
-	 */
-	private function __construct() { }
-	
-	/**
-	 * Gets an instance of the database object
-	 *
-	 * Determines if a DB object has already been instantiated, if so it
-	 * will use it.  If not, it will create one.
-	 *
-	 * @return object An instace of the DB class
-	 */
-	public static function getInstance() {
-		$class = __CLASS__;
-
-		if (!self::$instance instanceof $class) {
-			self::$instance = new $class();
-		}
-
-		return self::$instance;
+	public function __construct($hostname, $username, $password, $database) {
+		$this->hostname = $hostname;
+		$this->username = $username;
+		$this->password = $password;
+		$this->database = $database;
 	}
 
 	/**
@@ -83,25 +67,22 @@ class DB extends Singleton {
 	 * configuration options that are available in the Config object.
 	 *
 	 * @return boolean Based on the success or failure of mysql_connect()
-	 * @todo   Remove the error supressing @ from mysql_connect()
 	 */
 	public function open() {
 		if (!is_resource($this->connection)) {
-			$config = Config::getInstance();
-
-			if ($config->database->hostname == '') {
-				$config->database->hostname = 'localhost';
+			if ($this->hostname == '') {
+				$this->hostname = 'localhost';
 			}
 
-			if (isset($config->database->username, $config->database->password, $config->database->database)) {
+			if (isset($this->username, $this->password, $this->database)) {
 				/**
 				 * @todo I removed the @ and changed to be pconnect... let's see
 				 */
-				$this->connection = mysql_pconnect($config->database->hostname, $config->database->username, $config->database->password);
+				$this->connection = mysql_pconnect($this->hostname, $this->username, $this->password);
 
 				if (is_resource($this->connection)) {
-					if (!mysql_select_db($config->database->database, $this->connection)) {
-						Error::addWarning("There was an error selecting the '" . $this->database->database , "' database");
+					if (!mysql_select_db($this->database, $this->connection)) {
+						Error::addWarning("There was an error selecting the '" . $this->database , "' database");
 						return false;
 					}
 					else {
@@ -148,13 +129,12 @@ class DB extends Singleton {
 	 *
 	 * @param  string $sql SQL statement to be executed
 	 * @return boolean Returns the status of the execution
-	 * @todo   Need to get rid of the error suppressing @ symbol.
 	 */
 	public function execute($sql) {
 		$this->open();
 		
 		if (trim($sql) != '') {
-			$this->results = @mysql_query($sql, $this->connection);
+			$this->results = mysql_query($sql, $this->connection);
 			if (empty($this->results)) {
 				Error::addError('There was an error executing the SQL');
 				Error::addError(mysql_error());
@@ -180,7 +160,6 @@ class DB extends Singleton {
 	 *
 	 * @param  string $sql SQL statement to be executed (optional)
 	 * @return string Returns the value of the field or null if none
-	 * @todo   Need to remove the error supression
 	 * @todo   Right now it assumes your query only returns a single field,
 	 *         that probably should be changed to allow someone to specify
 	 *         what field they want from a row of data.  Actually, this is
@@ -196,7 +175,7 @@ class DB extends Singleton {
 		}
 
 		if (is_resource($this->results)) {
-			$results = @mysql_fetch_row($this->results);
+			$results = mysql_fetch_row($this->results);
 			if (is_array($results)) {
 				return $results[0];
 			}
@@ -221,7 +200,6 @@ class DB extends Singleton {
 	 *
 	 * @param  string $sql SQL statement to be executed (optional)
 	 * @return mixed The row in an associative array or null if none
-	 * @todo   Need to remove the error supression
 	 * @todo   Right now it assumes your query only returns a single row,
 	 *         that probably should be changed to allow someone to specify
 	 *         what row they want from a set of data.  Actually, this is
@@ -242,7 +220,7 @@ class DB extends Singleton {
 		}
 
 		if (is_resource($this->results)) {
-			$results = @mysql_fetch_assoc($this->results);
+			$results = mysql_fetch_assoc($this->results);
 			if (is_array($results)) {
 				return $results;
 			}
@@ -265,7 +243,6 @@ class DB extends Singleton {
 	 *
 	 * @param  string $sql SQL statement to be executed (optional)
 	 * @return string Returns the rows in an array or null if none
-	 * @todo   Need to remove the error supression
 	 * @todo   Another debate point, should it return false instead of null,
 	 *         or perhaps have some sort of error indicator in the result
 	 *         set?

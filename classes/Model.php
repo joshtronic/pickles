@@ -64,11 +64,11 @@ class Model extends Object {
 	 * Handles calling the parent constructor and sets up the model's
 	 * internal config and database object
 	 */
-	public function __construct() {
+	public function __construct($config, $db) {
 		parent::__construct();
 
-		$this->config = Config::getInstance();
-		$this->db     = DB::getInstance();
+		$this->config = $config;
+		$this->db     = $db;
 	}
 
 	/**
