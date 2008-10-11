@@ -7,12 +7,12 @@
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * PICKLES is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with PICKLES.  If not, see
  * <http://www.gnu.org/licenses/>.
@@ -50,7 +50,7 @@ class Mailer extends Object {
 	 * @return array An associative array with a status type and message
 	 */
 	public function send() {
-	
+
 		// Gets the values (is any) set in the config
 		$defaults = $this->config->contact;
 
@@ -72,11 +72,11 @@ class Mailer extends Object {
 
 		// Loads the subject line prefix
 		$prefix = isset($this->prefix) ? $this->prefix : (isset($defaults->prefix) && $defaults->prefix != '' ? $defaults->prefix : null);
-	
+
 		// Assembles the subject line with prefix
 		$subject = str_replace("\n", '', (isset($prefix) ? '[' . $prefix . '] ' : ''));
 
-		// Tacks on the subject 
+		// Tacks on the subject
 		if (isset($this->subject)) {
 			$subject .= $this->subject;
 		}

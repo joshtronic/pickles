@@ -7,12 +7,12 @@
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * PICKLES is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with PICKLES.  If not, see
  * <http://www.gnu.org/licenses/>.
@@ -38,8 +38,10 @@ abstract class Viewer_Common extends Object {
 	 *
 	 * @param object $model Object for the model we're loading
 	 */
-	public function __construct(Config $config) {
+	public function __construct(Config $config, Error $error) {
 		parent::__construct($config);
+
+		$this->error = $error;
 
 		/**
 		 * @todo This may need to be flipped on only for Smarty and PHP templates
@@ -55,7 +57,7 @@ abstract class Viewer_Common extends Object {
 		// XHTML compliancy stuff
 		ini_set('arg_separator.output', '&amp;');
 		ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
-		
+
 		header('Content-type: text/html; charset=UTF-8');
 	}
 

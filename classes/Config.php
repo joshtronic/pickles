@@ -7,12 +7,12 @@
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * PICKLES is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with PICKLES.  If not, see
  * <http://www.gnu.org/licenses/>.
@@ -64,7 +64,7 @@ class Config extends Object {
 			/**
 			 * @todo LIBXML_NOCDATA is 5.1+ and I want PICKLES to
 			 *       be 5.0+ compatible.  Potential fix is to read
-			 *       the file in as a string, and if it has CDATA, 
+			 *       the file in as a string, and if it has CDATA,
 			 *       throw an internal warning.
 			 */
 			$data = simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -86,7 +86,7 @@ class Config extends Object {
 		}
 	}
 
-	/** 
+	/**
 	 * Gets the authentication value
 	 *
 	 * @return boolean The model's authentication setting or false
@@ -111,8 +111,8 @@ class Config extends Object {
 
 		return 'home';
 	}
-	
-	/** 
+
+	/**
 	 * Gets active status of the site
 	 *
 	 * @return boolean The site's disabled setting or false
@@ -126,7 +126,7 @@ class Config extends Object {
 	}
 
 	/**
-	 * Alias for $config->_public 
+	 * Alias for $config->_public
 	 *
 	 * @return Returns the variable value or null if no variable.
 	 */
@@ -138,7 +138,7 @@ class Config extends Object {
 		return null;
 	}
 
-	/** 
+	/**
 	 * Gets the session value
 	 *
 	 * @return boolean The model's session setting or false
@@ -198,7 +198,7 @@ class Config extends Object {
 			foreach ($this->mappings->table as $table) {
 				if (isset($table->name) && trim($table->name) != '' && $table->name == $requested_table) {
 					$table_mapping['name'] = (string)(isset($table->alias) && trim($table->alias) != '' ? $table->alias : $table->name);
-					
+
 					if (isset($table->fields->field)) {
 						foreach ($table->fields->field as $field) {
 							if (isset($field->name) && trim($field->name) != '') {
@@ -213,7 +213,7 @@ class Config extends Object {
 		return $table_mapping;
 	}
 
-	/** 
+	/**
 	 * Gets the viewer value
 	 *
 	 * @return boolean The model's viewer setting or false

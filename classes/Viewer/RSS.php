@@ -7,12 +7,12 @@
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * PICKLES is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with PICKLES.  If not, see
  * <http://www.gnu.org/licenses/>.
@@ -46,21 +46,19 @@ class Viewer_RSS extends Viewer_Common {
 	 * @todo Error handling is non-existant.
 	 */
 	public function display() {
-		$config  = Config::getInstance();
-		$data    = $this->model->getData();
+		if (isset($this->data->channel)) {
+			$channel = $this->data['channel'];
+			$channel = $this->config->rss->$channel;
 
-		if (isset($data['channel'])) {
-			$channel = $config->rss[$data['channel']];
-			
-			if (isset($data['items'])) {
-				$items = $data['items'];
+			if (isset($this->data->items)) {
+				$items = $this->data['items'];
 			}
 			else {
-				// Error - no items
+				$this->error->addError('No items were provided');
 			}
 		}
 		else {
-			// Error - no channel specified
+			$this->error->addError('No channel was specified');
 		}
 
 		header('Content-type: application/rss+xml; charset=UTF-8');

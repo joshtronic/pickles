@@ -7,12 +7,12 @@
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * PICKLES is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with PICKLES.  If not, see
  * <http://www.gnu.org/licenses/>.
@@ -106,7 +106,7 @@ class DB extends Object {
 
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -137,7 +137,7 @@ class DB extends Object {
 	 */
 	public function execute($sql) {
 		$this->open();
-		
+
 		if (trim($sql) != '') {
 			$this->results = mysql_query($sql, $this->connection);
 			if (empty($this->results)) {
@@ -194,7 +194,7 @@ class DB extends Object {
 
 		return null;
 	}
-	
+
 	/**
 	 * Gets a row from a result set
 	 *
@@ -239,7 +239,7 @@ class DB extends Object {
 
 		return null;
 	}
-	
+
 	/**
 	 * Gets all the rows from a result set
 	 *
@@ -322,7 +322,7 @@ class DB extends Object {
 	/**
 	 * Updates an existing row row in a table
 	 *
-	 * Easy update of an existing row or rows (depending on the passed 
+	 * Easy update of an existing row or rows (depending on the passed
 	 * conditions) in a table without being too savvy with SQL.
 	 *
 	 * @params string $table Name of the table you want to insert to
@@ -338,7 +338,7 @@ class DB extends Object {
 		$this->open();
 
 		if (trim($table) != '') {
-			$fields = $where = null;			
+			$fields = $where = null;
 			if (is_array($values)) {
 				foreach ($values as $key => $value) {
 					$fields .= ($fields ? ', ' : null) . $key . " = '" . mysql_real_escape_string(stripslashes($value), $this->connection) . "'";

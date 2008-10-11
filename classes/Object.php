@@ -7,12 +7,12 @@
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * PICKLES is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with PICKLES.  If not, see
  * <http://www.gnu.org/licenses/>.
@@ -39,7 +39,7 @@ class Object {
 	 * Protected instance of the Config class
 	 */
 	protected $config = null;
-	
+
 	/**
 	 * Protected instance of the DB class
 	 */
@@ -64,7 +64,7 @@ class Object {
 		}
 
 		$parents = class_parents($this);
-		
+
 		$logger = new Logger();
 		$logger->write('object', get_class($this) . (is_array($parents) ? ' -> ' . implode(' -> ', $parents) : ''));
 	}
