@@ -54,6 +54,11 @@ class Model extends Object {
 	 */
 	protected $name = null;
 
+	/**
+	 * Mailer object
+	 */
+	protected $mailer = null;
+
 	protected $authentication = null;
 	protected $viewer         = null;
 	protected $session        = null;
@@ -64,11 +69,13 @@ class Model extends Object {
 	 * Handles calling the parent constructor and sets up the model's
 	 * internal config and database object
 	 */
-	public function __construct($config, $db) {
+	public function __construct(Config $config, DB $db, Mailer $mailer = null) {
 		parent::__construct($config);
 
 		$this->config = $config;
 		$this->db     = $db;
+
+		$this->mailer = isset($mailer) ? $mailer : new Mailer($config);
 	}
 
 	/**

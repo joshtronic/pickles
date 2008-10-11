@@ -50,6 +50,7 @@ class Controller extends Object {
 		$logger = new Logger();
 		$error  = new Error($config, $logger);
 		$db     = new DB($config, $error);
+		$mailer = new Mailer($config, $error);
 
 		// Generate a generic "site down" message
 		if ($config->getDisabled()) {
@@ -95,7 +96,7 @@ class Controller extends Object {
 				require_once $model_file;
 
 				if (class_exists($class)) {
-					$model = new $class($config, $db);
+					$model = new $class($config, $db, $mailer);
 				}
 			}
 			// Tries to load the shared model
@@ -108,12 +109,12 @@ class Controller extends Object {
 				}
 
 				if (class_exists($class)) {
-					$model = new $class($config, $db);
+					$model = new $class($config, $db, $mailer);
 				}
 			}
 			// Loads the stock model
 			else {
-				$model = new Model($config, $db);
+				$model = new Model($config, $db, $mailer);
 			}
 
 			// Checks if we loaded a model file and no class was present
@@ -137,6 +138,12 @@ class Controller extends Object {
 				// Potentially executes the model's logic
 				if (method_exists($model, '__default')) {
 					$model->__default();
+
+					if (isset($mailer->message)) {
+						$status = $mailer->send();
+						$model->type    = $status['type'];
+						$model->message = $status['message'];
+					}
 				}
 
 				// Creates a new viewer object
