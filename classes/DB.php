@@ -38,7 +38,9 @@
  * @todo      Eventually finish adding in my ActiveRecord class, even
  *            though I feel active record dumbs people down since it's a
  *            crutch for actually being able to write SQL.
- * @todo      Rename me to Database (maybe)
+ * @todo      Rename DB to Database (maybe, as to not conflict with the
+ *            PEAR class or any other generically named class... until
+ *            we have namespaces))
  */
 class DB extends Object {
 
@@ -47,17 +49,23 @@ class DB extends Object {
 	private $password;
 	private $database;
 
+	private $error;
+
 	/**
 	 * Private MySQL resources
 	 */
 	private $connection;
 	private $results;
 
-	public function __construct($hostname, $username, $password, $database) {
-		$this->hostname = $hostname;
-		$this->username = $username;
-		$this->password = $password;
-		$this->database = $database;
+	public function __construct(Config $config, Error $error = null) {
+		parent::__construct($config);
+
+		$this->error = isset($error) ? $error : new Error($config);
+
+		$this->hostname = $config->database->hostname;
+		$this->username = $config->database->username;
+		$this->password = $config->database->password;
+		$this->database = $config->database->database;
 	}
 
 	/**
@@ -75,14 +83,11 @@ class DB extends Object {
 			}
 
 			if (isset($this->username, $this->password, $this->database)) {
-				/**
-				 * @todo I removed the @ and changed to be pconnect... let's see
-				 */
 				$this->connection = mysql_pconnect($this->hostname, $this->username, $this->password);
 
 				if (is_resource($this->connection)) {
 					if (!mysql_select_db($this->database, $this->connection)) {
-						Error::addWarning("There was an error selecting the '" . $this->database , "' database");
+						$this->error->addWarning('There was an error selecting the "' . $this->database . '" database');
 						return false;
 					}
 					else {
@@ -90,13 +95,13 @@ class DB extends Object {
 					}
 				}
 				else {
-					Error::addError('There was an error connecting to the database server');
+					$this->error->addError('There was an error connecting to the database server');
 				}
 
 				return false;
 			}
 			else {
-				Error::addError('There was an error loading the configuration');
+				$this->error->addError('There was an error loading the database configuration');
 			}
 
 			return false;
@@ -136,15 +141,15 @@ class DB extends Object {
 		if (trim($sql) != '') {
 			$this->results = mysql_query($sql, $this->connection);
 			if (empty($this->results)) {
-				Error::addError('There was an error executing the SQL');
-				Error::addError(mysql_error());
+				$this->error->addError('There was an error executing the SQL');
+				$this->error->addError(mysql_error());
 			}
 			else {
 				return true;
 			}
 		}
 		else {
-			Error::addWarning('There was no SQL to execute');
+			$this->error->addWarning('There was no SQL to execute');
 		}
 
 		return false;
@@ -180,11 +185,11 @@ class DB extends Object {
 				return $results[0];
 			}
 			else {
-				Error::addWarning('There is nothing to return');
+				$this->error->addWarning('There is nothing to return');
 			}
 		}
 		else {
-			Error::addError('There is no valid MySQL result resource');
+			$this->error->addError('There is no valid MySQL result resource');
 		}
 
 		return null;
@@ -225,11 +230,11 @@ class DB extends Object {
 				return $results;
 			}
 			else {
-				Error::addWarning('There is nothing to return');
+				$this->error->addWarning('There is nothing to return');
 			}
 		}
 		else {
-			Error::addError('There is no valid MySQL result resource');
+			$this->error->addError('There is no valid MySQL result resource');
 		}
 
 		return null;
@@ -265,7 +270,7 @@ class DB extends Object {
 			return $return;
 		}
 		else {
-			Error::addError('There is no valid MySQL result resource');
+			$this->error->addError('There is no valid MySQL result resource');
 		}
 
 		return null;
@@ -281,35 +286,34 @@ class DB extends Object {
 	 * @param  array $columnValues Associative array of name value pairs
 	 *         (Corresponds with the column names for the table)
 	 * @return boolean Returns the status of the execution
-	 * @todo   Convert from camel case to underscores
 	 * @todo   Check that the table exists, and possibly check that the
 	 *         columns exist as well
 	 */
-	public function insert($table, $columnValues) {
+	public function insert($table, $values) {
 		$this->open();
 
 		if (trim($table) != '') {
-			if (is_array($columnValues)) {
-				foreach ($columnValues as $key => $value) {
-					$columnValues[$key] = $value == null ? 'NULL' : "'" . mysql_real_escape_string(stripslashes($value), $this->connection) . "'";
+			if (is_array($values)) {
+				foreach ($values as $key => $value) {
+					$values[$key] = $value == null ? 'NULL' : "'" . mysql_real_escape_string(stripslashes($value), $this->connection) . "'";
 				}
 
 				$this->execute("
 					INSERT INTO {$table} (
-						" . implode(array_keys($columnValues), ', ') . "
+						" . implode(array_keys($values), ', ') . "
 					) VALUES (
-						" . implode($columnValues, ", ") . "
+						" . implode($values, ", ") . "
 					);
 				");
 
 				return mysql_insert_id($this->connection);
 			}
 			else {
-				Error::addError('No data was specified');
+				$this->error->addError('No data was specified');
 			}
 		}
 		else {
-			Error::addError('No database table was specified');
+			$this->error->addError('No database table was specified');
 		}
 
 		return false;
@@ -327,17 +331,16 @@ class DB extends Object {
 	 * @params array $conditions Associative array of name value pairs that
 	           will be used to create a WHERE clause in the SQL.
 	 * @return boolean Returns the status of the execution
-	 * @todo   Convert from camel case to underscores
 	 * @todo   Check that the table exists, and possibly check that the
 	 *         columns exist and conditional columns exist as well
 	 */
-	public function update($table, $columnValues, $conditions) {
+	public function update($table, $values, $conditions) {
 		$this->open();
 
 		if (trim($table) != '') {
 			$fields = $where = null;			
-			if (is_array($columnValues)) {
-				foreach ($columnValues as $key => $value) {
+			if (is_array($values)) {
+				foreach ($values as $key => $value) {
 					$fields .= ($fields ? ', ' : null) . $key . " = '" . mysql_real_escape_string(stripslashes($value), $this->connection) . "'";
 				}
 
@@ -359,15 +362,15 @@ class DB extends Object {
 					}
 				}
 				else {
-					Error::addError('No conditions were specified');
+					$this->error->addError('No conditions were specified');
 				}
 			}
 			else {
-				Error::addError('No data was specified');
+				$this->error->addError('No data was specified');
 			}
 		}
 		else {
-			Error::addError('No database table was specified');
+			$this->error->addError('No database table was specified');
 		}
 
 		return false;
@@ -387,9 +390,8 @@ class DB extends Object {
 	 *         will be used to create a WHERE clause in the SQL.
 	 * @return boolean Returns the status of the execution
 	 * @todo   This function doesn't exist yet
-	 * @todo   Convert from camel case to underscores
 	 */
-	public function delete($table, $columnValues, $conditions) {
+	public function delete($table, $values, $conditions) {
 
 	}
 }

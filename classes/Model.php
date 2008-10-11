@@ -65,7 +65,7 @@ class Model extends Object {
 	 * internal config and database object
 	 */
 	public function __construct($config, $db) {
-		parent::__construct();
+		parent::__construct($config);
 
 		$this->config = $config;
 		$this->db     = $db;

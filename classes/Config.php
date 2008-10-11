@@ -30,15 +30,9 @@
  * Handles loading a configuration file and parsing the data for
  * any public nodes that need to be made available to the viewer.
  *
- * @usage <code>$config = Config::getInstance();
- *$config->node; // Returns SimpleXML object</code>
+ * @usage <code>$config = new Config($filename); // $filename is optional, default = ../config.xml</code>
  */
-class Config {
-
-	/**
-	 * Private instance of the Config class
-	 */
-	private static $_instance;
+class Config extends Object {
 
 	/**
 	 * Private collection of public config data
@@ -46,32 +40,12 @@ class Config {
 	private $_public;
 
 	/**
-	 * Private constructor
+	 * Constructor
 	 */
-	private function __construct() { }
+	public function __construct($file = '../config.xml') {
+		parent::__construct($this);
 
-	/**
-	 * __clone
-	 */
-	public function __clone() {
-		trigger_error('Cloning is not available on a Singleton (that would defeat the purpose wouldn\'t it?)', E_USER_ERROR);
-	}
-
-	/**
-	 * Gets an instance of the requested class object
-	 *
-	 * Determines if a requested class object has already
-	 * been instantiated, if so it will use it.  If not,
-	 * it will create one.
-	 *
-	 * @return An instace of the requested class
-	 */
-	public static function getInstance() {
-		if (!self::$_instance instanceof Config) {
-			self::$_instance = new Config();
-		}
-
-		return self::$_instance;
+		$this->load($file);
 	}
 
 	/**
@@ -84,9 +58,7 @@ class Config {
 	 * @return boolean Success of the load process
  	 * @todo   Add the ability to load in multiple configuration files.
 	 */
-	public static function load($file) {
-
-		$config = Config::getInstance();
+	public function load($file) {
 
 		if (file_exists($file)) {
 			/**
@@ -103,10 +75,10 @@ class Config {
 			if (is_array($variables)) {
 				foreach ($variables as $key => $value) {
 					if (is_object($value) && isset($value->attributes()->public) && $value->attributes()->public == true) {
-						$config->_public[$key] = $value;
+						$this->_public[$key] = $value;
 					}
 
-					$config->$key = $value;
+					$this->$key = $value;
 				}
 			}
 
@@ -210,6 +182,35 @@ class Config {
 		}
 
 		return 'home';
+	}
+
+	/**
+	 * Gets the mapping for a table
+	 *
+	 * @param  string $requested_table The table being requested
+	 * @return array The mapping for the table
+	 */
+	public function getTableMapping($requested_table, $default_mapping) {
+
+		$table_mapping = $default_mapping;
+
+		if (isset($this->mappings->table)) {
+			foreach ($this->mappings->table as $table) {
+				if (isset($table->name) && trim($table->name) != '' && $table->name == $requested_table) {
+					$table_mapping['name'] = (string)(isset($table->alias) && trim($table->alias) != '' ? $table->alias : $table->name);
+					
+					if (isset($table->fields->field)) {
+						foreach ($table->fields->field as $field) {
+							if (isset($field->name) && trim($field->name) != '') {
+								$table_mapping['fields'][(string)$field->name] = (string)(isset($field->alias) && trim($field->alias) != '' ? $field->alias : $field->name);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return $table_mapping;
 	}
 
 	/** 

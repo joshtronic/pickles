@@ -50,21 +50,29 @@ class Security extends Object {
 	 *       add in the ability for someone to add a custom message and/or
 	 *       landing page in the configuration as well.
 	 */
-	static function authenticate() {
-		$db = DB::getInstance();
+	public function authenticate() {
+		$table = array(
+			'name'   => 'users',
+			'fields' => array(
+				'id'       => 'id',
+				'username' => 'username',
+				'password' => 'password'
+			)
+		);
+
+		$table = $this->config->getTableMapping('users', $table);
 
 		if (isset($_SERVER['PHP_AUTH_USER'])) {
 			$from = '
-				FROM users
-				WHERE email = "' . $_SERVER['PHP_AUTH_USER'] . '"
-				AND password = "' . md5($_SERVER['PHP_AUTH_PW']) . '"
-				AND admin = 1;
+				FROM ' . $table['name'] . '
+				WHERE ' . $table['fields']['username'] . ' = "' . $_SERVER['PHP_AUTH_USER'] . '"
+				AND ' . $table['fields']['password'] . ' = "' . md5($_SERVER['PHP_AUTH_PW']) . '";
 			';
 
-			$db->execute('SELECT COUNT(id) ' . $from);
-			if ($db->getField() != 0) {
-				$db->execute('SELECT id ' . $from);
-				$_SESSION['user_id'] = $db->getField();
+			$this->db->execute('SELECT COUNT(' . $table['fields']['id'] . ') ' . $from);
+			if ($this->db->getField() != 0) {
+				$this->db->execute('SELECT ' . $table['fields']['id'] . ' ' . $from);
+				$_SESSION['user_id'] = $this->db->getField();
 			}
 			else {
 				$_SESSION['user_id'] = null;
@@ -72,12 +80,14 @@ class Security extends Object {
 		}
 
 		if (!isset($_SESSION['user_id'])) {
-			header('WWW-Authenticate: Basic realm="Site Admin"');
+			header('WWW-Authenticate: Basic realm="' . $_SERVER['SERVER_NAME'] . ' Secured Page"');
 			header('HTTP/1.0 401 Unauthorized');
-			exit('No shirt, no shoes, no salvation. Access denied.');
+			exit('Invalid login credentials, access denied.');
 		}
 		else {
-			// Commented out to allow navigation to the page intended
+			/**
+			 * @todo add logic to allow the site owner to force a redirect when a user logs in
+			 */
 			//header('Location: /');
 			//exit();
 		}
@@ -86,16 +96,10 @@ class Security extends Object {
 	/**
 	 * Logs the user out
 	 *
-	 * Destroys the session, clears out the authentication variables in the
-	 * $_SERVER super global and redirects the user to the root of the site.
+	 * Destroys the session, and redirects the user to the root of the site.
 	 */
-	static function logout() {
-		$session = Session::getInstance();
-		$session->destroy();
-
-		unset($_SERVER['PHP_AUTH_USER']);
-		unset($_SERVER['PHP_AUTH_PW']);
-
+	public function logout() {
+		session_destroy();
 		header('Location: /');
 	}
 }

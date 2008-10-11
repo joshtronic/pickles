@@ -32,7 +32,7 @@
  * the model asks for it, and loads the viewer that the model has requested.
  * Default values are present to make things easier on the user.
  *
- * @usage <code>new Controller();</code>
+ * @usage <code>new Controller($config);</code>
  */
 class Controller extends Object {
 
@@ -41,14 +41,15 @@ class Controller extends Object {
 	 *
 	 * To make life a bit easier when using PICKLES, the Controller logic is
 	 * executed automatically via use of a constructor.
+	 *
+	 * @param object Config object
 	 */
-	public function __construct() {
-		parent::__construct();
+	public function __construct(Config $config) {
+		parent::__construct($config);
 
-		// Load the config for the site passed in
-		$config = Config::getInstance();
-
-		$db = new DB($config->database->hostname, $config->database->username, $config->database->password, $config->database->database);
+		$logger = new Logger();
+		$error  = new Error($config, $logger);
+		$db     = new DB($config, $error);
 
 		// Generate a generic "site down" message
 		if ($config->getDisabled()) {
@@ -64,7 +65,8 @@ class Controller extends Object {
 		 *       yet, they want to next it, like /users/logout?
 		 */
 		if ($model_name == 'logout') {
-			Security::logout();
+			$security = new Security($config, $db);
+			$security->logout();
 		}
 		else {
 			// Loads the requested model's information
@@ -126,7 +128,10 @@ class Controller extends Object {
 
 				// Potentially requests use authentication
 				if ($model->getAuthentication() === true) {
-					Security::authenticate();
+					if (!isset($security)) {
+						$security = new Security($config, $db);
+					}
+					$security->authenticate();
 				}
 
 				// Potentially executes the model's logic
@@ -135,7 +140,8 @@ class Controller extends Object {
 				}
 
 				// Creates a new viewer object
-				$viewer = Viewer::create($model->getViewer());
+				$viewer_class = 'Viewer_' . $model->getViewer();
+				$viewer = new $viewer_class($config, null);
 
 				// Sets the viewers properties
 				$viewer->model_name  = $model_name;

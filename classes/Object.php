@@ -39,14 +39,34 @@ class Object {
 	 * Protected instance of the Config class
 	 */
 	protected $config = null;
+	
+	/**
+	 * Protected instance of the DB class
+	 */
+	protected $db = null;
+
+	protected $logger = null;
 
 	/**
 	 * Constructor
 	 *
 	 * Handles getting an instance of the Config class.
+	 *
+	 * @param object Config object
 	 */
-	public function __construct() {
-		$this->config = Config::getInstance();
+	public function __construct(Config $config, DB $db = null) {
+		if (isset($config)) {
+			$this->config = $config;
+		}
+
+		if (isset($db)) {
+			$this->db = $db;
+		}
+
+		$parents = class_parents($this);
+		
+		$logger = new Logger();
+		$logger->write('object', get_class($this) . (is_array($parents) ? ' -> ' . implode(' -> ', $parents) : ''));
 	}
 
 	/**
@@ -54,6 +74,9 @@ class Object {
 	 */
 	public function __destruct() { }
 
+	/**
+	 *
+	 */
 	public function __get($variable) {
 		if (isset($this->$variable)) {
 			return $this->$variable;

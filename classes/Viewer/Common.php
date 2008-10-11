@@ -38,8 +38,8 @@ abstract class Viewer_Common extends Object {
 	 *
 	 * @param object $model Object for the model we're loading
 	 */
-	public function __construct() {
-		parent::__construct();
+	public function __construct(Config $config) {
+		parent::__construct($config);
 
 		/**
 		 * @todo This may need to be flipped on only for Smarty and PHP templates
