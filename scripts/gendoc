@@ -1,3 +1,0 @@
-#!/bin/bash
-
-phpdoc -d /var/www/josh/pickles/ -t /var/www/josh/pickles/docs -ct usage -ti "PHP with PICKLES Documentation" -dn Uncategorized -po PICKLES

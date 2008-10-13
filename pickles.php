@@ -12,12 +12,12 @@
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * PICKLES is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with PICKLES.  If not, see
  * <http://www.gnu.org/licenses/>.
@@ -42,10 +42,8 @@ if (ini_get('date.timezone') == '') {
 define('SITE_PATH',    getcwd() . '/');
 define('PICKLES_PATH', dirname(__FILE__) . '/');
 define('VAR_PATH',     PICKLES_PATH . 'var/' . $_SERVER['SERVER_NAME'] . '/');
+define('LOG_PATH',     VAR_PATH . 'logs/');
 define('SMARTY_PATH',  VAR_PATH . 'smarty/');
-
-// Loads the appropriately named configuration file
-Config::load(SITE_PATH . '../config.xml');
 
 /**
  * Magic function to automatically load classes
