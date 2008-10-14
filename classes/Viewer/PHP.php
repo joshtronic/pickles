@@ -27,59 +27,69 @@
 /**
  * PHP Viewer
  *
- * Displays the associated PHP templates for the Model.  This is for all you
- * folks that would prefer not to user the Smarty templating engine.  Your
- * PHP templates are just PHP code, plain and simple.
+ * Displays the associated PHP templates for the Model.  This is
+ * very similar to the Smarty viewer, but less overhead since it's
+ * straight PHP.  The PHP viewer also utilizes a different caching
+ * system than Smarty.  The general rules around the caching will
+ * be the same though.
  */
 class Viewer_PHP extends Viewer_Common {
 
+	private $template        = null;
+	private $shared_template = null;
+
 	/**
-	 * Displays the Smarty generated pages
+	 * Displays the PHP templated pages
 	 */
 	public function display() {
 
-		$smarty->template_dir = '../templates/';
+		// Establishes the template names
+		$this->template        = SITE_PATH . '../templates/' . $this->model_name . '.php';
+		$this->shared_template = PICKLES_PATH . 'templates/' . $this->shared_name . '.php';		
 
 		/**
-		 * @todo Resurrect my buffer clean up code
+		 * @todo There's a bug with the store home page since it's a redirect, maybe
 		 */
-		$smarty->load_filter('output','trimwhitespace');
+		if (!file_exists($this->template)) {
+			if (file_exists($this->shared_template)) {
+				$this->template = $this->shared_template;
+			}
+		}
 
-		// Pass all of our controller values to Smarty
-		$smarty->assign('section',    $this->model->section);
-		$smarty->assign('model',      $this->model->name);
-		$smarty->assign('template',   $template);
+		// Brings these variables to scope
+		/**
+		 * @todo Section or model needs to go, having both seems dumb.
+		 */
+		$section  = $this->model->section;
+		$model    = $this->model->name;
+		$template = $template;
 
 		// Loads the data from the config
-		$data = $this->config->getViewerData();
-
-		if (isset($data) && is_array($data)) {
-			$smarty->assign('config', $data);
-		}
+		$config = $this->config->getPublicData();
 
 		// Loads the data from the model
 		$data = $this->model->getData();
 
-		if (isset($data) && is_array($data)) {
-			foreach ($data as $variable => $value) {
-				$smarty->assign($variable, $value);
-			}
+		// If there's data set, this brings it into scope
+		if (isset($this->data) && is_array($this->data)) {
+			extract($this->data);
 		}
 
-		// Load it up!
-		header('Content-type: text/html; charset=UTF-8');
-
-		// If the index.tpl file is present, load it, else load the template directly
+		// If the index.php file is present, load it, else load the template directly
 		/**
 		 * @todo Should there be additional logic to allow the model or the
 		 *       template to determine whether or not the index should be loaded?
 		 */
-		if ($smarty->template_exists('index.tpl')) {
-			$smarty->display('index.tpl');
+		if (file_exists(SITE_PATH . '../templates/index.php')) {
+			require_once SITE_PATH . '../templates/index.php';
 		}
-		else {
-			$smarty->display($template);
+		else if (file_exists{$this->template)) {
+			require_once $this->template;
 		}
+
+		/**
+		 * @todo Resurrect my buffer clean up code
+		 */
 	}
 }
 

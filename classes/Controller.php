@@ -42,19 +42,45 @@ class Controller extends Object {
 	 * To make life a bit easier when using PICKLES, the Controller logic is
 	 * executed automatically via use of a constructor.
 	 *
-	 * @param object Config object
+	 * @param mixed Config object or filename (optional)
 	 */
-	public function __construct(Config $config = null) {
+	public function __construct($config = null) {
 		parent::__construct();
-
-		// If no Config object is passed, create a new one from assumptions
-		if ($config == null) {
-			$config = new Config();
-		}
-
-		// Creates all the other core objects we need to pass around.
+		
+		// Creates the core objects that don't need a Config object
 		$logger = new Logger();
 		$error  = new Error($logger);
+
+		// Check the passed config variables object type
+		if (is_object($config)) {
+			if ($config instanceof Config === false) {
+				$error->setWarning('Passed object is not an instance of Config');
+				$config = null;
+			}
+		}
+		
+		// Config filename to be loaded
+		$filename = null;
+
+		// Checks if the config value is a filename
+		if (is_string($config)) {
+			if (file_exists($config)) {
+				$filename = $config;
+			}
+			else {
+				$error->setWarning('Passed config filename does not exist');
+				$config = null;
+			}
+		}
+
+		// If no Config object is passed (or it's cleared), create a new one from assumptions
+		if ($config == null) {
+			$config = new Config($filename);
+		}
+
+		unset($filename);
+
+		// Creates all the other core objects we need to pass around
 		$db     = new DB($config, $logger, $error);
 		$mailer = new Mailer($config, $error);
 
@@ -153,8 +179,14 @@ class Controller extends Object {
 				}
 
 				// Creates a new viewer object
-				$viewer_class = 'Viewer_' . $model->getViewer();
-				$viewer = new $viewer_class($config, $error);
+				$viewer_name = $model->getViewer();
+				if (in_array($viewer_name, array('JSON', 'PHP', 'RSS', 'Smarty'))) {
+					$viewer_class = 'Viewer_' . $viewer_name;
+					$viewer = new $viewer_class($config, $error);
+				}
+				else {
+					$error->setError('Invalid viewer specified (' . $viewer_name . ')');
+				}
 
 				// Sets the viewers properties
 				$viewer->model_name  = $model_name;
@@ -164,6 +196,14 @@ class Controller extends Object {
 
 				// Runs the requested viewer's display function
 				$viewer->display();
+
+				// Do some cleanup
+				if (isset($security)) {
+					unset($security);
+				}
+
+				unset($model, $viewer);
+				unset($db, $mailer, $config, $error, $logger)
 			}
 		}
 	}

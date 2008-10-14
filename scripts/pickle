@@ -81,7 +81,7 @@ XML;
 	// public/.htaccess
 	$htaccess = <<<CONF
 # Alias the static libraries
-#Alias /static/ {$pickles_path}static/
+Alias /static/ {$pickles_path}static/
 
 # Set the PHP include path
 php_value include_path \".:{$pickles_path}\"
@@ -121,8 +121,7 @@ ini_set('include_path', ini_get('include_path') . ':{$pickles_path}');
 
 require_once 'pickles.php';
 
-\$config = new Config('../config.xml');
-new Controller(\$config);
+new Controller();
 
 ?>
 PHP;
@@ -145,7 +144,7 @@ class home extends Model {
 		// \$this->db->getRow('SELECT ...');
 		// \$this->db->getArray('SELECT ...');
 
-		\$this->data['message'] = "You have successfully set up a site <a href='http://phpwithpickles.org/'>with PICKLES!</a>";
+		\$this->message = "You have successfully set up a site <a href='http://phpwithpickles.org/'>with PICKLES!</a>";
 	}
 }
 

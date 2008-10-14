@@ -45,6 +45,12 @@ define('VAR_PATH',     PICKLES_PATH . 'var/' . $_SERVER['SERVER_NAME'] . '/');
 define('LOG_PATH',     VAR_PATH . 'logs/');
 define('SMARTY_PATH',  VAR_PATH . 'smarty/');
 
+// Sets up constants for the Viewer names
+define('VIEWER_JSON',   'JSON');
+define('VIEWER_PHP',    'PHP');
+define('VIEWER_RSS',    'RSS');
+define('VIEWER_SMARTY', 'Smarty');
+
 /**
  * Magic function to automatically load classes
  *

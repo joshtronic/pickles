@@ -60,6 +60,43 @@ abstract class Viewer_Common extends Object {
 		ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
 
 		header('Content-type: text/html; charset=UTF-8');
+
+		if ($this->config->getDebug() === true) {
+			$superglobals = array($GLOBALS, $_SERVER, $_GET, $_POST, $_FILES, $_COOKIE, $_SESSION, $_REQUEST, $_ENV);
+			?>
+			<div class="debug" style="border: 2px solid black; padding: 5px; margin: 10px;">
+				<h1>PICKLES Debug Console</h1>
+				<?php
+				/*
+				foreach ($superglobals as $superglobal => $array) {
+					?>
+					<h2><h2>
+					<?php
+				}
+				*/
+				?>
+				<h2>$_REQUEST</h2>
+				<pre><?php var_dump($_REQUEST); ?></pre>
+				<h2>$_SESSION</h2>
+				<pre><?php var_dump($_SESSION); ?></pre>
+				<h2>$_SERVER</h2>
+				<pre><?php var_dump($_SERVER); ?></pre>
+			</div>
+			<?php
+
+			/*
+			function display_buffer() {
+				$buffer = str_replace(
+					array('    ', "\r\n", "\n", "\t"),
+					null,
+					ob_get_contents()
+				);
+				ob_end_clean();
+				exit($buffer);
+			}
+			*/
+
+		}
 	}
 
 	/**
