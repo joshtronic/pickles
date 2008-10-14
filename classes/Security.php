@@ -37,6 +37,15 @@
  */
 class Security extends Object {
 
+	private $config;
+	private $db;
+
+	public function __construct(Config $config, DB $db) {
+		parent::__construct();
+		$this->config = $config;
+		$this->db     = $db;
+	}
+
 	/**
 	 * Authenticates the user
 	 *

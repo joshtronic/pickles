@@ -41,9 +41,13 @@ class Config extends Object {
 
 	/**
 	 * Constructor
+	 *
+	 * Calls the parent constructor and loads the pass file
+	 *
+	 * @param string $file Filename of the config file (optional)
 	 */
 	public function __construct($file = '../config.xml') {
-		parent::__construct($this);
+		parent::__construct();
 
 		$this->load($file);
 	}

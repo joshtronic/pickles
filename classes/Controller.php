@@ -44,12 +44,18 @@ class Controller extends Object {
 	 *
 	 * @param object Config object
 	 */
-	public function __construct(Config $config) {
-		parent::__construct($config);
+	public function __construct(Config $config = null) {
+		parent::__construct();
 
+		// If no Config object is passed, create a new one from assumptions
+		if ($config == null) {
+			$config = new Config();
+		}
+
+		// Creates all the other core objects we need to pass around.
 		$logger = new Logger();
-		$error  = new Error($config, $logger);
-		$db     = new DB($config, $error);
+		$error  = new Error($logger);
+		$db     = new DB($config, $logger, $error);
 		$mailer = new Mailer($config, $error);
 
 		// Generate a generic "site down" message

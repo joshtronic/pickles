@@ -50,6 +50,7 @@ class DB extends Object {
 	private $database;
 
 	private $error;
+	protected $logger;
 
 	/**
 	 * Private MySQL resources
@@ -57,10 +58,11 @@ class DB extends Object {
 	private $connection;
 	private $results;
 
-	public function __construct(Config $config, Error $error = null) {
-		parent::__construct($config);
+	public function __construct(Config $config, Logger $logger, Error $error) {
+		parent::__construct();
 
-		$this->error = isset($error) ? $error : new Error($config);
+		$this->logger = $logger;
+		$this->error  = $error;
 
 		$this->hostname = $config->database->hostname;
 		$this->username = $config->database->username;
@@ -139,6 +141,7 @@ class DB extends Object {
 		$this->open();
 
 		if (trim($sql) != '') {
+			$this->logger->write('sql', trim(str_replace(array("\t", "\n"), array('', ' '), $sql)));
 			$this->results = mysql_query($sql, $this->connection);
 			if (empty($this->results)) {
 				$this->error->addError('There was an error executing the SQL');

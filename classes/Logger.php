@@ -29,7 +29,9 @@
  */
 class Logger extends Object {
 
-	public function __construct() { }
+	public function __construct() {
+		parent::__construct();
+	}
 
 	public function write($type, $message) {
 		if (!file_exists(LOG_PATH)) { mkdir(LOG_PATH, 0777, true); }

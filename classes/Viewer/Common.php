@@ -39,9 +39,10 @@ abstract class Viewer_Common extends Object {
 	 * @param object $model Object for the model we're loading
 	 */
 	public function __construct(Config $config, Error $error) {
-		parent::__construct($config);
+		parent::__construct();
 
-		$this->error = $error;
+		$this->config = $config;
+		$this->error  = $error;
 
 		/**
 		 * @todo This may need to be flipped on only for Smarty and PHP templates

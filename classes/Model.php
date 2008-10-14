@@ -69,13 +69,12 @@ class Model extends Object {
 	 * Handles calling the parent constructor and sets up the model's
 	 * internal config and database object
 	 */
-	public function __construct(Config $config, DB $db, Mailer $mailer = null) {
-		parent::__construct($config);
+	public function __construct(Config $config, DB $db, Mailer $mailer) {
+		parent::__construct();
 
 		$this->config = $config;
 		$this->db     = $db;
-
-		$this->mailer = isset($mailer) ? $mailer : new Mailer($config);
+		$this->mailer = $mailer;
 	}
 
 	/**

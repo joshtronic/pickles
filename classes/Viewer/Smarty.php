@@ -52,6 +52,14 @@ class Viewer_Smarty extends Viewer_Common {
 		$smarty->cache_dir   = $cache_dir ;
 		$smarty->compile_dir = $compile_dir;
 
+		/**
+		 * @todo move this to the config
+		 */
+		// Enables caching
+		//$smarty->caching        = 1;
+		//$smarty->compile_check  = true;
+		//$smarty->cache_lifetime = 3600;
+
 		// Loads the trim whitespace filter
 		$smarty->load_filter('output','trimwhitespace');
 

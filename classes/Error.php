@@ -46,8 +46,8 @@ class Error extends Object {
 	/**
 	 * Constructor
 	 */
-	public function __construct(Config $config, Logger $logger = null) {
-		$this->logger = isset($logger) ? $logger : new Logger();
+	public function __construct(Logger $logger) {
+		$this->logger = $logger;
 	}
 
 	/**

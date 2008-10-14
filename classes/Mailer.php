@@ -37,7 +37,7 @@
 class Mailer extends Object {
 
 	public function __construct(Config $config, Error $error) {
-		parent::__construct($config);
+		parent::__construct();
 		$this->config = $config;
 		$this->error  = $error;
 	}
