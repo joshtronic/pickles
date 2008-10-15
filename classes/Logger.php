@@ -33,10 +33,10 @@ class Logger extends Object {
 		parent::__construct();
 	}
 
-	public function write($type, $message) {
+	public function write($type, $message, $class = null) {
 		if (!file_exists(LOG_PATH)) { mkdir(LOG_PATH, 0777, true); }
 
-		$message = '[' . date('r') . '] [client ' . $_SERVER['REMOTE_ADDR'] . '] [uri ' . $_SERVER['REQUEST_URI'] . '] [script ' . $_SERVER['SCRIPT_NAME'] . (isset($$_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '') . '] ' . $message;
+		$message = '[' . date('r') . '] [client ' . $_SERVER['REMOTE_ADDR'] . '] [uri ' . $_SERVER['REQUEST_URI'] . '] [script ' . $_SERVER['SCRIPT_NAME'] . '] ' . $message;
 
 		file_put_contents(LOG_PATH . $type . '.log', $message . "\n", FILE_APPEND);
 	}

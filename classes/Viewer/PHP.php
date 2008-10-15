@@ -60,15 +60,15 @@ class Viewer_PHP extends Viewer_Common {
 		/**
 		 * @todo Section or model needs to go, having both seems dumb.
 		 */
-		$section  = $this->model->section;
-		$model    = $this->model->name;
-		$template = $template;
+		$section  = $this->section;
+		$model    = $this->model_name;
+		$template = $this->template;
 
 		// Loads the data from the config
 		$config = $this->config->getPublicData();
 
 		// Loads the data from the model
-		$data = $this->model->getData();
+		$data = $this->data;
 
 		// If there's data set, this brings it into scope
 		if (isset($this->data) && is_array($this->data)) {
@@ -83,7 +83,7 @@ class Viewer_PHP extends Viewer_Common {
 		if (file_exists(SITE_PATH . '../templates/index.php')) {
 			require_once SITE_PATH . '../templates/index.php';
 		}
-		else if (file_exists{$this->template)) {
+		else if (file_exists($this->template)) {
 			require_once $this->template;
 		}
 

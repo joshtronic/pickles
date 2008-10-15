@@ -54,7 +54,7 @@ class Controller extends Object {
 		// Check the passed config variables object type
 		if (is_object($config)) {
 			if ($config instanceof Config === false) {
-				$error->setWarning('Passed object is not an instance of Config');
+				$error->addWarning('Passed object is not an instance of Config');
 				$config = null;
 			}
 		}
@@ -68,13 +68,18 @@ class Controller extends Object {
 				$filename = $config;
 			}
 			else {
-				$error->setWarning('Passed config filename does not exist');
-				$config = null;
+				$error->addWarning('Passed config filename does not exist');
 			}
+		}
+		else {
+			$config = null;
 		}
 
 		// If no Config object is passed (or it's cleared), create a new one from assumptions
 		if ($config == null) {
+			$config = new Config();
+		}
+		else {
 			$config = new Config($filename);
 		}
 
@@ -185,7 +190,7 @@ class Controller extends Object {
 					$viewer = new $viewer_class($config, $error);
 				}
 				else {
-					$error->setError('Invalid viewer specified (' . $viewer_name . ')');
+					$error->addError('Invalid viewer specified (' . $viewer_name . ')');
 				}
 
 				// Sets the viewers properties
@@ -203,7 +208,7 @@ class Controller extends Object {
 				}
 
 				unset($model, $viewer);
-				unset($db, $mailer, $config, $error, $logger)
+				unset($db, $mailer, $config, $error, $logger);
 			}
 		}
 	}

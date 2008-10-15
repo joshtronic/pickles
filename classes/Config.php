@@ -104,6 +104,19 @@ class Config extends Object {
 	}
 
 	/**
+	 * Gets the authentication value
+	 *
+	 * @return boolean The model's authentication setting or false
+	 */
+	public function getDebug() {
+		if (isset($this->models->debug) && $this->models->debug == 'true') {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Alias for $config->models->default with string cast
 	 *
 	 * @return Returns the default model set or null

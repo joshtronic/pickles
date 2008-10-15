@@ -136,6 +136,7 @@ class DB extends Object {
 	 *
 	 * @param  string $sql SQL statement to be executed
 	 * @return boolean Returns the status of the execution
+	 * @todo   The code to break apart the SQL is very primitive, needs some lovin'
 	 */
 	public function execute($sql) {
 		$this->open();
@@ -148,6 +149,16 @@ class DB extends Object {
 				$this->error->addError(mysql_error());
 			}
 			else {
+				// Grabs the table name
+				$explain = mysql_query('EXPLAIN ' . $sql, $this->connection);
+				$results = mysql_fetch_array($explain, MYSQL_ASSOC);
+
+				// Grabs the model's name that made the call
+				$backtrace  = debug_backtrace();
+				$model_name = $backtrace[2]['class'];
+
+				//var_dump($results['table'], $model_name);
+
 				return true;
 			}
 		}
