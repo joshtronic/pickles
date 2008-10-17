@@ -74,7 +74,7 @@ class Mailer extends Object {
 		$prefix = isset($this->prefix) ? $this->prefix : (isset($defaults->prefix) && $defaults->prefix != '' ? $defaults->prefix : null);
 
 		// Assembles the subject line with prefix
-		$subject = str_replace("\n", '', (isset($prefix) ? '[' . $prefix . '] ' : ''));
+		$subject = strtr((isset($prefix) ? '[' . $prefix . '] ' : ''), "\n", '');
 
 		// Tacks on the subject
 		if (isset($this->subject)) {

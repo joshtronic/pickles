@@ -95,7 +95,7 @@ class Controller extends Object {
 		}
 
 		// Grab the passed in model or use the default
-		$model_name = isset($_REQUEST['model']) ? str_replace('-', '_', $_REQUEST['model']) : $config->getDefaultModel();
+		$model_name = isset($_REQUEST['model']) ? strtr($_REQUEST['model'], '-', '_') : $config->getDefaultModel();
 
 		/**
 		 * @todo Maybe the logout shouldn't be an internal thing, what if the
@@ -120,7 +120,7 @@ class Controller extends Object {
 				$event   = null;
 			}
 			else {
-				$class = str_replace('/', '_', $model_name);
+				$class = strtr($model_name, '/', '_');
 				list($section, $event) = split('/', $model_name);
 			}
 
@@ -142,7 +142,7 @@ class Controller extends Object {
 					$class = $shared_model_name;
 				}
 				else {
-					$class = str_replace('/', '_', $shared_model_name);
+					$class = strtr($shared_model_name, '/', '_');
 				}
 
 				if (class_exists($class)) {
