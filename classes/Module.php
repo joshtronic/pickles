@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Model Class File for PICKLES
+ * Module Class File for PICKLES
  *
  * PICKLES is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -25,14 +25,14 @@
  */
 
 /**
- * Model Class
+ * Module Class
  *
- * Every model in PICKLES at both the core and site levels need to extend
- * this class. It handles the getting of common model variables (auth, data
- * and view) as well as making sure that every model has a database object
- * available.
+ * Every module (page) in PICKLES at both the core and site levels should
+ * extend this class. It handles the getting of common module variables
+ * (auth, data and view) as well as making sure that every module has a
+ * database object available.
  */
-class Model extends Object {
+class Module extends Object {
 
 	/**
 	 * Data array used by the viewer
@@ -50,7 +50,7 @@ class Model extends Object {
 	protected $db = null;
 
 	/**
-	 * Name of the model
+	 * Name of the module
 	 */
 	protected $name = null;
 
@@ -59,14 +59,14 @@ class Model extends Object {
 	 */
 	protected $mailer = null;
 
-	protected $authentication = null;
-	protected $viewer         = null;
-	protected $session        = null;
+	protected $authentication = false;
+	protected $viewer         = DISPLAY_PHP;
+	protected $session        = false;
 
 	/**
 	 * Constructor
 	 *
-	 * Handles calling the parent constructor and sets up the model's
+	 * Handles calling the parent constructor and sets up the module's
 	 * internal config and database object
 	 */
 	public function __construct(Config $config, DB $db, Mailer $mailer) {
@@ -80,9 +80,9 @@ class Model extends Object {
 	/**
 	 * Gets the authenticate value
 	 *
-	 * Order of precedence: Model, Config, Guess (guess is always false)
+	 * Order of precedence: Module, Config, Guess (guess is always false)
 	 *
-	 * @return boolean Whether or not the model requires user authentication
+	 * @return boolean Whether or not the module requires user authentication
 	 */
 	public function getAuthentication() {
 		if ($this->authentication != null) {
@@ -98,7 +98,7 @@ class Model extends Object {
 	/**
 	 * Gets the session value
 	 *
-	 * Order of precedence: Auth On, Model, Config, Guess (guess is always false)
+	 * Order of precedence: Auth On, Module, Config, Guess (guess is always false)
 	 *
 	 * @return boolean Whether or not the session needs to be started
 	 */
@@ -117,27 +117,27 @@ class Model extends Object {
 	}
 
 	/**
-	 * Gets the requested Viewer
+	 * Gets the requested Display
 	 *
-	 * Order of precedence: Model, Config, Guess (guess is always Smarty)
+	 * Order of precedence: Module, Config, Guess (guess is always Smarty)
 	 *
-	 * @return string The viewer that the model has requested to be used
+	 * @return string The viewer that the module has requested to be used
 	 * @todo   Guess shouldn't be Smarty, it should be the dummy PHP template.
 	 * @todo   Use the config override value to help determine.
 	 */
-	public function getViewer() {
-		if ($this->viewer == null) {
+	public function getDisplay() {
+		if ($this->display == null) {
 			return isset($argv) ? 'CLI' : 'Smarty';
 		}
 		else {
-			return $this->viewer;
+			return $this->display;
 		}
 	}
 
 	/**
-	 * Alias for $model->data
+	 * Alias for $module->data
 	 *
-	 * @return array Associative array of data that was set by the model
+	 * @return array Associative array of data that was set by the module
 	 */
 	public function getData() {
 		if (isset($this->data)) {
@@ -163,9 +163,9 @@ class Model extends Object {
 	/**
 	 * Default function
 	 *
-	 * This function is overloaded by the model.  The __default() function
+	 * This function is overloaded by the module.  The __default() function
 	 * is where any code that needs to be executed at run time needs to be
-	 * placed.  It's not in the constructor as the model needs to be
+	 * placed.  It's not in the constructor as the module needs to be
 	 * instantiated first so that the authorization requirements can be
 	 * checked without running code it's potentially not supposed to have
 	 * been executed.

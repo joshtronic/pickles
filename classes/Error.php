@@ -41,15 +41,6 @@ class Error extends Object {
 	private $errors   = null;
 	private $warnings = null;
 
-	protected $logger;
-
-	/**
-	 * Constructor
-	 */
-	public function __construct(Logger $logger) {
-		$this->logger = $logger;
-	}
-
 	/**
 	 * Adds an error message
 	 *
@@ -58,7 +49,7 @@ class Error extends Object {
 	 */
 	public function addError($message) {
 		$this->errors[] = $message;
-		$this->logger->write('error', '[error] ' . $message);
+		Logger::write('error', '[error] ' . $message);
 		return true;
 	}
 
@@ -70,7 +61,7 @@ class Error extends Object {
 	 */
 	public function addWarning($message) {
 		$this->warnings[] = $message;
-		$this->logger->write('error', '[warning] ' . $message);
+		Logger::write('error', '[warning] ' . $message);
 		return true;
 	}
 

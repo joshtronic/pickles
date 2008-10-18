@@ -93,10 +93,10 @@ class Config extends Object {
 	/**
 	 * Gets the authentication value
 	 *
-	 * @return boolean The model's authentication setting or false
+	 * @return boolean The module's authentication setting or false
 	 */
 	public function getAuthentication() {
-		if (isset($this->models->authentication) && $this->models->authentication == 'true') {
+		if (isset($this->modules->authentication) && $this->modules->authentication == 'true') {
 			return true;
 		}
 
@@ -106,10 +106,10 @@ class Config extends Object {
 	/**
 	 * Gets the authentication value
 	 *
-	 * @return boolean The model's authentication setting or false
+	 * @return boolean The module's authentication setting or false
 	 */
 	public function getDebug() {
-		if (isset($this->models->debug) && $this->models->debug == 'true') {
+		if (isset($this->modules->debug) && $this->modules->debug == 'true') {
 			return true;
 		}
 
@@ -117,13 +117,13 @@ class Config extends Object {
 	}
 
 	/**
-	 * Alias for $config->models->default with string cast
+	 * Alias for $config->modules->default with string cast
 	 *
-	 * @return Returns the default model set or null
+	 * @return Returns the default module set or null
 	 */
-	public function getDefaultModel() {
-		if (isset($this->models->default)) {
-			return (string)$this->models->default;
+	public function getDefaultModule() {
+		if (isset($this->modules->default)) {
+			return (string)$this->modules->default;
 		}
 
 		return 'home';
@@ -135,7 +135,7 @@ class Config extends Object {
 	 * @return boolean The site's disabled setting or false
 	 */
 	public function getDisabled() {
-		if (isset($this->models->disabled) && $this->models->disabled == 'true') {
+		if (isset($this->modules->disabled) && $this->modules->disabled == 'true') {
 			return true;
 		}
 
@@ -158,10 +158,10 @@ class Config extends Object {
 	/**
 	 * Gets the session value
 	 *
-	 * @return boolean The model's session setting or false
+	 * @return boolean The module's session setting or false
 	 */
 	public function getSession() {
-		if (isset($this->models->session) && $this->models->session == 'true') {
+		if (isset($this->modules->session) && $this->modules->session == 'true') {
 			return true;
 		}
 
@@ -169,30 +169,30 @@ class Config extends Object {
 	}
 
 	/**
-	 * Gets the shared model
+	 * Gets the shared module
 	 *
-	 * @param  string $requested_model The model being requested
-	 * @return string The name of the shared model or null
+	 * @param  string $requested_module The module being requested
+	 * @return string The name of the shared module or null
 	 */
-	public function getSharedModel($requested_model) {
+	public function getSharedModule($requested_module) {
 
 		$additional = null;
 
-		if (strpos($requested_model, '/') !== false) {
-			list($requested_model, $additional) = split('/', $requested_model, 2);
+		if (strpos($requested_module, '/') !== false) {
+			list($requested_module, $additional) = split('/', $requested_module, 2);
 			$additional = '/' . $additional;
 		}
 
-		if (isset($this->models->shared->model)) {
-			foreach ($this->models->shared->model as $shared_model) {
-				if (isset($shared_model->alias)) {
-					if ($requested_model == $shared_model->alias) {
-						return (string)$shared_model->name . $additional;
+		if (isset($this->modules->shared->module)) {
+			foreach ($this->modules->shared->module as $shared_module) {
+				if (isset($shared_module->alias)) {
+					if ($requested_module == $shared_module->alias) {
+						return (string)$shared_module->name . $additional;
 					}
 				}
 				else {
-					if ($requested_model == $shared_model->name) {
-						return (string)$shared_model->name . $additional;
+					if ($requested_module == $shared_module->name) {
+						return (string)$shared_module->name . $additional;
 					}
 				}
 			}
@@ -233,10 +233,10 @@ class Config extends Object {
 	/**
 	 * Gets the viewer value
 	 *
-	 * @return boolean The model's viewer setting or false
+	 * @return boolean The module's viewer setting or false
 	 */
 	public function getViewer() {
-		if (isset($this->models->viewer) && $this->models->viewer == 'true') {
+		if (isset($this->modules->viewer) && $this->modules->viewer == 'true') {
 			return true;
 		}
 
