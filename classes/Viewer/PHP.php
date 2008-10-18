@@ -47,6 +47,10 @@ class Viewer_PHP extends Viewer_Common {
 		$this->template        = SITE_PATH . '../templates/' . $this->model_name . '.php';
 		$this->shared_template = PICKLES_PATH . 'templates/' . $this->shared_name . '.php';		
 
+		//if (filemtime($this->template)) {
+		//	readfile('/var/www/josh/pickles/var/joshtronic.localhost/smarty/cache/home.html');
+		//}
+
 		/**
 		 * @todo There's a bug with the store home page since it's a redirect, maybe
 		 */

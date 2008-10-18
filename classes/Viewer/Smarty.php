@@ -56,9 +56,11 @@ class Viewer_Smarty extends Viewer_Common {
 		 * @todo move this to the config
 		 */
 		// Enables caching
-		//$smarty->caching        = 1;
-		//$smarty->compile_check  = true;
-		//$smarty->cache_lifetime = 3600;
+		$smarty->caching        = 1;
+		$smarty->compile_check  = true;
+		$smarty->cache_lifetime = 3600;
+		
+		var_dump($smarty->is_cached('index.tpl', $this->model_name));
 
 		// Loads the trim whitespace filter
 		$smarty->load_filter('output','trimwhitespace');
@@ -133,7 +135,7 @@ class Viewer_Smarty extends Viewer_Common {
 		 *       template to determine whether or not the index should be loaded?
 		 */
 		if ($smarty->template_exists('index.tpl')) {
-			$smarty->display('index.tpl');
+			$smarty->display('index.tpl', $this->model_name);
 		}
 		else {
 			$smarty->display($template);
