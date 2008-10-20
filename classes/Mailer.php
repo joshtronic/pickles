@@ -55,7 +55,7 @@ class Mailer extends Object {
 		$defaults = $this->config->contact;
 
 		// Pulls the recipients from the config
-		if (!isset($this->recipients) && isset($defaules->recipients->recipient)) {
+		if (!isset($this->recipients)) { // && isset($defaules->recipients->recipient)) {
 			$this->recipients = $defaults->recipients->recipient;
 		}
 
