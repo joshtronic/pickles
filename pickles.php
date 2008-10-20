@@ -45,17 +45,17 @@ define('VAR_PATH',     PICKLES_PATH . 'var/' . $_SERVER['SERVER_NAME'] . '/');
 define('LOG_PATH',     VAR_PATH . 'logs/');
 define('SMARTY_PATH',  VAR_PATH . 'smarty/');
 
-// Sets up constants for the Viewer names
-define('VIEWER_JSON',   'JSON');
-define('VIEWER_PHP',    'PHP');
-define('VIEWER_RSS',    'RSS');
-define('VIEWER_SMARTY', 'Smarty');
+// Sets up constants for the Display names
+define('DISPLAY_JSON',   'JSON');
+define('DISPLAY_PHP',    'PHP');
+define('DISPLAY_RSS',    'RSS');
+define('DISPLAY_SMARTY', 'Smarty');
 
 /**
  * Magic function to automatically load classes
  *
  * Determines if the system needs to load a PICKLES core class or
- * a PICKLES shared model (not to be confused with site level models).
+ * a PICKLES shared module (not to be confused with site level modules).
  *
  * @param  string $class Name of the class to be loaded
  * @return boolean Return value of require_once() or false (default)
@@ -63,16 +63,16 @@ define('VIEWER_SMARTY', 'Smarty');
 function __autoload($class) {
 	$filename = str_replace('_', '/', $class) . '.php';
 
-	$class_file = PICKLES_PATH . 'classes/' . $filename;
-	$model_file = PICKLES_PATH . 'models/' . $filename;
+	$class_file  = PICKLES_PATH . 'classes/' . $filename;
+	$module_file = PICKLES_PATH . 'modules/' . $filename;
 
 	// Loads the class file
 	if (file_exists($class_file)) {
 		return require_once $class_file;
 	}
-	// Loads the shared model
-	else if (file_exists($model_file)) {
-		return require_once $model_file;
+	// Loads the shared module
+	else if (file_exists($module_file)) {
+		return require_once $module_file;
 	}
 	// Loads Smarty
 	else if ($class == 'Smarty') {

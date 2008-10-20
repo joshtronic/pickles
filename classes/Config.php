@@ -104,6 +104,27 @@ class Config extends Object {
 	}
 
 	/**
+	 * Gets the caching value
+	 *
+	 * @return mixed The module's cache life span setting or true or false
+	 */
+	public function getCaching() {
+		if (isset($this->modules->caching)) {
+			if ($this->modules->caching == 'true') {
+				return true;
+			}
+			else if ($this->modules->caching == 'false') {
+				return false;
+			}
+			else {
+				return (int)$this->modules->caching;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Gets the authentication value
 	 *
 	 * @return boolean The module's authentication setting or false

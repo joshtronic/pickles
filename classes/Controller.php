@@ -132,7 +132,7 @@ class Controller extends Object {
 				require_once $module_file;
 
 				if (class_exists($class)) {
-					$module = new $class($config, $db, $mailer);
+					$module = new $class($config, $db, $mailer, $error);
 				}
 			}
 			// Tries to load the shared module
@@ -145,12 +145,12 @@ class Controller extends Object {
 				}
 
 				if (class_exists($class)) {
-					$module = new $class($config, $db, $mailer);
+					$module = new $class($config, $db, $mailer, $error);
 				}
 			}
 			// Loads the stock module
 			else {
-				$module = new Module($config, $db, $mailer);
+				$module = new Module($config, $db, $mailer, $error);
 			}
 
 			// Checks if we loaded a module file and no class was present
@@ -171,9 +171,35 @@ class Controller extends Object {
 					$security->authenticate();
 				}
 
+				// Creates a new viewer object
+				$display_type  = $module->getDisplay();
+				$display_class = 'Display_' . $display_type;
+				$display = new $display_class($config, $error);
+
+				// Sets the display's properties
+				$display->module_name = $module_name;
+				$display->shared_name = $shared_module_name;
+				$display->section     = $section;
+
+				// Potentially establishes caching
+				$caching = $module->getCaching();
+				if ($caching) {
+					$display->caching = $caching;
+
+					if ($display_type == DISPLAY_SMARTY) {
+						$module->setSmartyObject($display->getSmartyObject());
+					}
+				}
+
+				$display->prepare();
+
 				// Potentially executes the module's logic
 				if (method_exists($module, '__default')) {
 					$module->__default();
+
+					if ($module->getCacheID()) {
+						$display->cache_id = $module->getCacheID();
+					}
 
 					if (isset($mailer->message)) {
 						$status = $mailer->send();
@@ -182,21 +208,11 @@ class Controller extends Object {
 					}
 				}
 
-				// Creates a new viewer object
-				$display_name = $module->getDisplay();
-				if (in_array($display_name, array('JSON', 'PHP', 'RSS', 'Smarty'))) {
-					$display_class = 'Display_' . $display_name;
-					$display = new $display_class($config, $error);
-				}
-				else {
-					$error->addError('Invalid display specified (' . $viewer_name . ')');
-				}
-
-				// Sets the displays properties
-				$display->module_name = $module_name;
-				$display->shared_name = $shared_module_name;
-				$display->section     = $section;
-				$display->data        = $module->getData();
+				// Loads the module data into the display to be rendered
+				/**
+				 * @todo perhaps make this a passed variable
+				 */
+				$display->data = $module->getData();
 
 				// Runs the requested rendering function
 				$display->render();

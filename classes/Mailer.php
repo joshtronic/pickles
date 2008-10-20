@@ -55,7 +55,7 @@ class Mailer extends Object {
 		$defaults = $this->config->contact;
 
 		// Pulls the recipients from the config
-		if (!isset($this->recipients)) {
+		if (!isset($this->recipients) && isset($defaules->recipients->recipient)) {
 			$this->recipients = $defaults->recipients->recipient;
 		}
 
@@ -101,6 +101,8 @@ class Mailer extends Object {
 			$type    = 'error';
 			$message = 'An unexpected error has occurred';
 		}
+
+		Logger::write('mailer', '[' . $type . ']');
 
 		// Builds the status array to be returned
 		$return = array(

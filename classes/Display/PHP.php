@@ -35,18 +35,35 @@
  */
 class Display_PHP extends Display_Common {
 
+	private $template_path   = null;
 	private $template        = null;
 	private $shared_template = null;
+
+	public function __construct(Config $config, Error $error) {
+		parent::__construct($config, $error);
+
+		// Establishes the template path
+		$this->template_path   = SITE_PATH . '../templates/';
+	}
+
+	public function prepare() {
+		
+		// Enables caching
+		if ($this->caching == true) {
+			if (is_numeric($this->caching)) {
+				//$this->smarty->cache_lifetime = $this->caching;
+			}
+		}
+		
+		$this->template        = $this->template_path . $this->module_name . '.php';
+		$this->shared_template = PICKLES_PATH . 'templates/' . $this->shared_name . '.php';		
+	}
 
 	/**
 	 * Renders the PHP templated pages
 	 */
 	public function render() {
-
-		// Establishes the template names
-		$this->template        = SITE_PATH . '../templates/' . $this->module_name . '.php';
-		$this->shared_template = PICKLES_PATH . 'templates/' . $this->shared_name . '.php';		
-
+		
 		//if (filemtime($this->template)) {
 		//	readfile('/var/www/josh/pickles/var/joshtronic.localhost/smarty/cache/home.html');
 		//}
@@ -84,8 +101,8 @@ class Display_PHP extends Display_Common {
 		 * @todo Should there be additional logic to allow the module or the
 		 *       template to determine whether or not the index should be loaded?
 		 */
-		if (file_exists(SITE_PATH . '../templates/index.php')) {
-			require_once SITE_PATH . '../templates/index.php';
+		if (file_exists($this->template_path . 'index.php')) {
+			require_once $this->template_path . 'index.php';
 		}
 		else if (file_exists($this->template)) {
 			require_once $this->template;

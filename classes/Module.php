@@ -35,54 +35,60 @@
 class Module extends Object {
 
 	/**
-	 * Data array used by the viewer
+	 * Data array used by the display 
 	 */
 	protected $data = array();
 
 	/**
-	 * Config object
+	 * Passed objects
 	 */
 	protected $config = null;
-
-	/**
-	 * Database object
-	 */
-	protected $db = null;
+	protected $db     = null;
+	protected $mailer = null;
+	protected $error  = null;
 
 	/**
 	 * Name of the module
 	 */
 	protected $name = null;
-
+	
 	/**
-	 * Mailer object
+	 * Module defaults
 	 */
-	protected $mailer = null;
-
 	protected $authentication = false;
-	protected $viewer         = DISPLAY_PHP;
+	protected $caching        = false;
+	protected $display        = false;
 	protected $session        = false;
+
+	private $smarty;
+	private $cache_id;
 
 	/**
 	 * Constructor
 	 *
 	 * Handles calling the parent constructor and sets up the module's
 	 * internal config and database object
+	 *
+	 * @param object $config Instance of the Config class
+	 * @param object $db Instance of the DB class
+	 * @param object $mailer Instance of the Mailer class
 	 */
-	public function __construct(Config $config, DB $db, Mailer $mailer) {
+	public function __construct(Config $config, DB $db, Mailer $mailer, Error $error) {
 		parent::__construct();
 
 		$this->config = $config;
 		$this->db     = $db;
 		$this->mailer = $mailer;
+		$this->error  = $error;
 	}
 
 	/**
-	 * Gets the authenticate value
+	 * Gets the authentication value
 	 *
-	 * Order of precedence: Module, Config, Guess (guess is always false)
+	 * Order of precedence:
+	 * Module, Config, Guess (guess is always false)
 	 *
-	 * @return boolean Whether or not the module requires user authentication
+	 * @return boolean Whether or not user authentication is required
 	 */
 	public function getAuthentication() {
 		if ($this->authentication != null) {
@@ -94,11 +100,36 @@ class Module extends Object {
 
 		return false;
 	}
+	
+	/**
+	 * Gets the caching value
+	 *
+	 * Order of precedence:
+	 * POSTed, Module, Config, Guess (guess is always false)
+	 *
+	 * @return boolean Whether or not user authentication is required
+	 */
+	public function getCaching() {
+		/*
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			return false;
+		}
+		*/
+		if ($this->caching != null) {
+			return $this->caching;
+		}
+		else if ($this->config->getCaching()) {
+			return $this->config->getCaching();
+		}
+
+		return false;
+	}
 
 	/**
 	 * Gets the session value
 	 *
-	 * Order of precedence: Auth On, Module, Config, Guess (guess is always false)
+	 * Order of precedence:
+	 * Auth On, Module, Config, Guess (guess is always false)
 	 *
 	 * @return boolean Whether or not the session needs to be started
 	 */
@@ -119,18 +150,22 @@ class Module extends Object {
 	/**
 	 * Gets the requested Display
 	 *
-	 * Order of precedence: Module, Config, Guess (guess is always Smarty)
+	 * Order of precedence:
+	 * Module, Config, Guess (guess is always Smarty)
 	 *
-	 * @return string The viewer that the module has requested to be used
-	 * @todo   Guess shouldn't be Smarty, it should be the dummy PHP template.
-	 * @todo   Use the config override value to help determine.
+	 * @return string The display that the module has requested to be used
 	 */
 	public function getDisplay() {
-		if ($this->display == null) {
-			return isset($argv) ? 'CLI' : 'Smarty';
+
+		if (in_array($this->display, array(DISPLAY_JSON, DISPLAY_PHP, DISPLAY_RSS, DISPLAY_SMARTY))) {
+			return $this->display;
+		}
+		else if (isset($this->config->modules->display)) {
+			return (string)$this->config->modules->display;
 		}
 		else {
-			return $this->display;
+			$this->error->addWarning('Invalid display specified, DISPLAY_PHP used by default (' . $this->display . ')');
+			return DISPLAY_PHP;
 		}
 	}
 
@@ -147,17 +182,54 @@ class Module extends Object {
 		return null;
 	}
 
+	/**
+	 * Sets the variable in the data array
+	 *
+	 * Overrides the built-in functionality to set an object's property with
+	 * logic to place that data inside the data array for easier interaction
+	 * later on.
+	 *
+	 * @param string $variable Name of the variable to be set
+	 * @param mixed $value Data to be set
+	 */
 	public function __set($variable, $value) {
-		$this->data[$variable] = $value;
+		if ($variable != 'cache_id') {
+			$this->data[$variable] = $value;
+		}
 	}
 
-	/**
-	 * Destructor
-	 *
-	 * Handles calling the parent's constructor, nothing else.
-	 */
-	public function __destruct() {
-		parent::__destruct();
+	public function setSmartyObject(Smarty $smarty) {
+		$this->smarty = $smarty;
+	}
+
+	public function isCached($id = null) {
+		if ($id == null) {
+			$id = get_class($this);
+		}
+
+		switch ($this->getDisplay()) {
+			case DISPLAY_PHP:
+				break;
+
+			case DISPLAY_SMARTY:
+				if ($this->smarty->template_exists('index.tpl')) {
+					return $this->smarty->is_cached('index.tpl', $id);
+				}
+				else {
+					return $this->smarty->is_cached($template, $id);
+				}
+				break;
+		}
+
+		return false;
+	}
+
+	public function setCacheID($id) {
+		$this->cache_id = $id;
+	}
+
+	public function getCacheID() {
+		return $this->cache_id;
 	}
 
 	/**
@@ -170,7 +242,9 @@ class Module extends Object {
 	 * checked without running code it's potentially not supposed to have
 	 * been executed.
 	 */
-	public function __default() { }
+	public function __default() {
+	
+	}
 }
 
 ?>

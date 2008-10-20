@@ -149,8 +149,8 @@ class DB extends Object {
 			}
 			else {
 				// Grabs the table name
-				$explain = mysql_query('EXPLAIN ' . $sql, $this->connection);
-				$results = mysql_fetch_array($explain, MYSQL_ASSOC);
+				//$explain = mysql_query('EXPLAIN ' . $sql, $this->connection);
+				//$results = mysql_fetch_array($explain, MYSQL_ASSOC);
 
 				// Grabs the model's name that made the call
 				$backtrace  = debug_backtrace();
@@ -359,7 +359,7 @@ class DB extends Object {
 
 				if (is_array($conditions)) {
 					foreach ($conditions as $key => $value) {
-						$where = ($where == null) ? 'WHERE ' : ' AND ';
+						$where = ($where == null) ? ' WHERE ' : ' AND ';
 
 						if ($value == null) {
 							$where .= $key . ' IS NULL';

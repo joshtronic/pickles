@@ -60,25 +60,30 @@ abstract class Display_Common extends Object {
 		header('Content-type: text/html; charset=UTF-8');
 
 		if ($this->config->getDebug() === true) {
-			$superglobals = array($GLOBALS, $_SERVER, $_GET, $_POST, $_FILES, $_COOKIE, $_SESSION, $_REQUEST, $_ENV);
 			?>
-			<div class="debug" style="border: 2px solid black; padding: 5px; margin: 10px;">
-				<h1>PICKLES Debug Console</h1>
-				<?php
-				/*
-				foreach ($superglobals as $superglobal => $array) {
-					?>
-					<h2><h2>
-					<?php
+			<style>
+				div.debug {
+					border: 2px solid #000;
+					padding: 5px;
+					margin: 10px;
+					background-color: #FFF;
+					color: #000;
 				}
-				*/
+			</style>
+			<div class="debug">
+				<h1>PICKLES Debug Console</h1><br />
+				<?php
+				foreach ($GLOBALS as $name => $array) {
+					if (count($array) > 0 && $name != 'GLOBALS') {
+						?>
+						<h2>$<?=$name;?></h2>
+						<?php
+						var_dump($array);
+						
+						echo '<br />';
+					}
+				}
 				?>
-				<h2>$_REQUEST</h2>
-				<pre><?php var_dump($_REQUEST); ?></pre>
-				<h2>$_SESSION</h2>
-				<pre><?php var_dump($_SESSION); ?></pre>
-				<h2>$_SERVER</h2>
-				<pre><?php var_dump($_SERVER); ?></pre>
 			</div>
 			<?php
 
@@ -100,7 +105,9 @@ abstract class Display_Common extends Object {
 	/**
 	 * Abstract rendering function that is overloaded within the loaded viewer
 	 */
-	abstract public function render();
+	public abstract function render();
+
+	public function prepare() { }
 }
 
 ?>
