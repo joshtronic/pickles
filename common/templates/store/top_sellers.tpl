@@ -1,4 +1,4 @@
-<div id="store-top-sellers">
+<div class="store-top-sellers">
 	<h1>Top Sellers</h1>
 	<div class="float-left" style="width: 175px;">
 		{section name=product loop=$top_sellers start=0 loop=5 step=1}

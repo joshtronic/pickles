@@ -1,11 +1,12 @@
 <?php
 
-class store extends Model {
+class store extends Module {
 
+	protected $display = DISPLAY_SMARTY;
 	protected $session = true;
 
-	public function __construct() {
-		parent::__construct();
+	public function __construct(Config $config, DB $db, Mailer $mailer, Error $error) {
+		parent::__construct($config, $db, $mailer, $error);
 
 		// Loads up the cart in case we need it
 		if (!isset($_SESSION['cart'])) {
@@ -24,11 +25,10 @@ class store extends Model {
 			$_SESSION['cart']['count'] = $count;
 		}
 
-		$this->data['cart'] = $_SESSION['cart'];
+		$this->cart = $_SESSION['cart'];
 
 		// Loads the navigation
-		$config = Config::getInstance();
-		$this->data['subnav'] = $config->store->sections;
+		$this->subnav = $config->store->sections;
 
 		// Loads the categories
 		$categories = $this->db->getArray('SELECT id, name, permalink FROM categories WHERE parent_id IS NULL AND visible = "Y" ORDER BY weight;');
@@ -44,18 +44,17 @@ class store extends Model {
 			}
 		}
 
-		$this->data['categories'] = $categories;
+		$this->categories = $categories;
 	}
 
 	public function __default() {
 		// Forces store/home as the first page you get when only /store is called
-		$object = new store_home();
+		$object = new store_home($this->config, $this->db, $this->mailer, $this->error);
 		$object->__default();
 
 		$this->data = $object->data;
-		$this->set('name', 'store/home');
+		$this->name = 'store/home';
 	}
-
 }
 
 ?>

@@ -56,7 +56,7 @@ class Display_Smarty extends Display_Common {
 	public function prepare() {
 		
 		// Enables caching
-		if ($this->caching == true) {
+		if ($this->caching === true) {
 			$this->smarty->caching       = 1;
 			$this->smarty->compile_check = true;
 
@@ -83,38 +83,41 @@ class Display_Smarty extends Display_Common {
 				closedir($handle);
 			}
 		}
-
-		// Establishes the template names
-		$template        = SITE_PATH . '../templates/' . $this->module_name . '.tpl';
-		$shared_template = PICKLES_PATH . 'templates/' . $this->shared_name . '.tpl';
-
-		/**
-		 * @todo There's a bug with the store home page since it's a redirect
-		 */
-		if (!file_exists($template)) {
-			if (file_exists($shared_template)) {
-				$template = $shared_template;
-			}
-		}
-
-		$this->template = $template;
 	}
 
 	/**
 	 * Render the Smarty generated pages
 	 */
 	public function render() {
+
+		// Establishes the template names
+		$template = SITE_PATH . '../templates/' . $this->module_filename . '.tpl';
+
+		if (!file_exists($template)) {
+			$shared_template = PICKLES_PATH . 'common/templates/' . ($this->shared_filname == false ? $this->module_filename : $this->shared_filename) . '.tpl';
+
+			if (file_exists($shared_template)) {
+				$template = $shared_template;
+			}
+		}
+
+		$this->template = $template;
 		
-		$cache_id = isset($this->cache_id) ? $this->cache_id : $this->module_name;
+		$cache_id = isset($this->cache_id) ? $this->cache_id : $this->module_filename;
 		
 		$template = $this->smarty->template_exists('index.tpl') ? 'index.tpl' : $this->template;
 
 		if (!$this->smarty->is_cached($template, $cache_id)) {
 
-			// Pass all of our controller values to Smarty
-			$this->smarty->assign('section',  $this->section);
-			$this->smarty->assign('module',   $this->module_name);
-			$this->smarty->assign('template', $this->template);
+			// Build the combined module name array and assign it
+			$module = $this->module_name;
+			array_unshift($module, $this->module_filename);
+			$this->smarty->assign('module', $module);
+
+			// Only assign the template if it's not the index, this avoids an infinite loop.
+			if ($this->template != 'index.tpl') {
+				$this->smarty->assign('template', $this->template);
+			}
 
 			// Loads the data from the config
 			$data = $this->config->getPublicData();

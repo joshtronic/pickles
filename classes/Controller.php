@@ -107,45 +107,31 @@ class Controller extends Object {
 		}
 		else {
 			// Loads the requested module's information
-			$module_file = '../modules/' . $module_name . '.php';
-
-			/**
-			 * @todo Rename "section" to something like "current" or "selected"
-			 * @todo Figure out WTF "event" is being used for
-			 */
-			if (strpos($module_name, '/') === false) {
-				$class   = $module_name;
-				$section = $module_name;
-				$event   = null;
-			}
-			else {
-				$class = strtr($module_name, '/', '_');
-				list($section, $event) = split('/', $module_name);
-			}
+			$module_filename = $module_name;
+			$module_file     = '../modules/' . $module_filename . '.php';
+			$module_class    = strtr($module_filename, '/', '_');
+			$module_name     = split('_', $module_class);
 
 			// Establishes the shared module information
-			$shared_module_name = $config->getSharedModule($module_name);
-			$shared_module_file = PICKLES_PATH . 'modules/' . $shared_module_name . '.php';
+			$shared_module_filename = $config->getSharedModule($module_class);
+			$shared_module_file     = PICKLES_PATH . 'common/modules/' . $shared_module_filename . '.php';
+			$shared_module_class    = strtr($shared_module_filename, '/', '_');
+			$shared_module_name     = split('_', $shared_module_class);
 
 			// Tries to load the site level module
 			if (file_exists($module_file)) {
 				require_once $module_file;
 
-				if (class_exists($class)) {
-					$module = new $class($config, $db, $mailer, $error);
+				if (class_exists($module_class)) {
+					$module = new $module_class($config, $db, $mailer, $error);
 				}
 			}
 			// Tries to load the shared module
 			else if (file_exists($shared_module_file) && $shared_module_name != false) {
-				if (strpos($shared_module_name, '/') === false) {
-					$class = $shared_module_name;
-				}
-				else {
-					$class = strtr($shared_module_name, '/', '_');
-				}
+				require_once $shared_module_file;
 
-				if (class_exists($class)) {
-					$module = new $class($config, $db, $mailer, $error);
+				if (class_exists($shared_module_class)) {
+					$module = new $shared_module_class($config, $db, $mailer, $error);
 				}
 			}
 			// Loads the stock module
@@ -176,11 +162,6 @@ class Controller extends Object {
 				$display_class = 'Display_' . $display_type;
 				$display = new $display_class($config, $error);
 
-				// Sets the display's properties
-				$display->module_name = $module_name;
-				$display->shared_name = $shared_module_name;
-				$display->section     = $section;
-
 				// Potentially establishes caching
 				$caching = $module->getCaching();
 				if ($caching) {
@@ -207,6 +188,20 @@ class Controller extends Object {
 						$module->message = $status['message'];
 					}
 				}
+
+				// If the loaded module has a name, use it to override
+				if ($module->name != null && $module_filename != $module->name) {
+					$module_filename = $module->name;
+					$module_file     = '../modules/' . $module_filename . '.php';
+					$module_class    = strtr($module_filename, '/', '_');
+					$module_name     = split('_', $module_class);
+				}
+
+				// Sets the display's properties
+				$display->module_filename        = $module_filename;
+				$display->module_name            = $module_name;
+				$display->shared_module_filename = $shared_module_filename;
+				$display->shared_module_name     = $shared_module_name;
 
 				// Loads the module data into the display to be rendered
 				/**

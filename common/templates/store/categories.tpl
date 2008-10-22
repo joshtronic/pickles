@@ -1,6 +1,6 @@
-<div id="store-categories">
+<div class="store-categories">
 	{foreach from=$categories item=parent_category}
-		<div id="{$parent_category.permalink}">
+		<div class="{$parent_category.permalink}">
 			<h1>{$parent_category.name}</h1>
 		</div>
 		<ul>

@@ -64,7 +64,7 @@ function __autoload($class) {
 	$filename = str_replace('_', '/', $class) . '.php';
 
 	$class_file  = PICKLES_PATH . 'classes/' . $filename;
-	$module_file = PICKLES_PATH . 'modules/' . $filename;
+	$module_file = PICKLES_PATH . 'common/modules/' . $filename;
 
 	// Loads the class file
 	if (file_exists($class_file)) {

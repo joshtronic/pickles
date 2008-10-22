@@ -1,6 +1,8 @@
 <?php
 
 class store_category extends store {
+	
+	protected $display = DISPLAY_SMARTY;
 
 	public function __default() {
 		$category = $this->db->getRow('
@@ -9,7 +11,7 @@ class store_category extends store {
 			WHERE permalink = "' . $_REQUEST['permalink'] . '";
 		');
 
-		$this->data['category'] = $category;
+		$this->category = $category;
 	}
 }
 

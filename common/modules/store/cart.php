@@ -15,8 +15,10 @@
 
 class store_cart extends store {
 
+	protected $display = DISPLAY_SMARTY;
+
 	public function __default() {
-		$this->data['cart'] = $_SESSION['cart'];
+		$this->cart = $_SESSION['cart'];
 	}
 }
 

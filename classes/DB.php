@@ -62,10 +62,12 @@ class DB extends Object {
 
 		$this->error = $error;
 
-		$this->hostname = $config->database->hostname;
-		$this->username = $config->database->username;
-		$this->password = $config->database->password;
-		$this->database = $config->database->database;
+		if (isset($config->database)) {
+			$this->hostname = $config->database->hostname;
+			$this->username = $config->database->username;
+			$this->password = $config->database->password;
+			$this->database = $config->database->database;
+		}
 	}
 
 	/**

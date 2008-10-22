@@ -1,6 +1,6 @@
 <div class="content-left">
-	{include file="../../pickles/templates/store/navigation.tpl"}<br /><br />
-	{include file="../../pickles/templates/store/categories.tpl"}
+	{include file="../../pickles/common/templates/store/navigation.tpl"}<br /><br />
+	{include file="../../pickles/common/templates/store/categories.tpl"}
 </div>
 <div class="content-right store-cart">
 	<div class="your-cart">
