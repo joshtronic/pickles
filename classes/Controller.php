@@ -57,7 +57,7 @@ class Controller extends Object {
 				$config = null;
 			}
 		}
-		
+
 		// Config filename to be loaded
 		$filename = null;
 
@@ -113,9 +113,9 @@ class Controller extends Object {
 			$module_name     = split('_', $module_class);
 
 			// Establishes the shared module information
-			$shared_module_filename = $config->getSharedModule($module_class);
+			$shared_module_class    = $config->getSharedModule($module_class);
+			$shared_module_filename = strtr($shared_module_class, '_', '/');
 			$shared_module_file     = PICKLES_PATH . 'common/modules/' . $shared_module_filename . '.php';
-			$shared_module_class    = strtr($shared_module_filename, '/', '_');
 			$shared_module_name     = split('_', $shared_module_class);
 
 			// Tries to load the site level module
@@ -202,6 +202,7 @@ class Controller extends Object {
 				$display->module_name            = $module_name;
 				$display->shared_module_filename = $shared_module_filename;
 				$display->shared_module_name     = $shared_module_name;
+
 
 				// Loads the module data into the display to be rendered
 				/**
