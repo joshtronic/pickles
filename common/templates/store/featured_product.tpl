@@ -1,4 +1,4 @@
-<img src="/images/products/{$featured.id}/medium.{$featured.image}" class="float-right" style="padding-right: 20px; height: 155px;" />
+<img src="/images/products/{$featured.id}/featured.jpg" class="float-right" style="padding-right: 20px" />
 <div class="store-featured-product">
 	<h1>Featured Product</h1>
 	<h2>{$featured.name}</h2><br />

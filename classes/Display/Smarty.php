@@ -102,7 +102,7 @@ class Display_Smarty extends Display_Common {
 		}
 
 		$this->template = $template;
-		
+
 		$cache_id = isset($this->cache_id) ? $this->cache_id : $this->module_filename;
 		
 		$template = $this->smarty->template_exists('index.tpl') ? 'index.tpl' : $this->template;
@@ -116,7 +116,7 @@ class Display_Smarty extends Display_Common {
 
 			// Only assign the template if it's not the index, this avoids an infinite loop.
 			if ($this->template != 'index.tpl') {
-				$this->smarty->assign('template', $this->template);
+				$this->smarty->assign('template', strtr($this->template, '-', '_'));
 			}
 
 			// Loads the data from the config

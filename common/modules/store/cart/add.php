@@ -13,14 +13,12 @@
 
 class store_cart_add extends store {
 
-	/**
-	 * @todo Add handling for an invalid product
-	 */
 	public function __default() {
-		var_dump($_SESSION);
 
 		if ($this->db->getField('SELECT COUNT(id) FROM products WHERE id = "' . $_REQUEST['id'] . '";') != 1) {
-			
+			/**
+			 * @todo Add handling for an invalid product
+			 */	
 		}
 		else {
 			// References the product in the cart
@@ -37,7 +35,7 @@ class store_cart_add extends store {
 
 			// Increment the quantity and update the total
 			$product['quantity']++;
-			$product['total'] = number_format($product['price'] * $product['quantity'], 2);
+			$product['total'] = round($product['price'] * $product['quantity'], 2);
 			unset($product);
 
 			// References the cart as a whole
@@ -52,7 +50,7 @@ class store_cart_add extends store {
 			}
 
 			// Set the subtotal in the cart
-			$cart['subtotal'] = $subtotal;
+			$cart['subtotal'] = round($subtotal, 2);
 			unset($cart);
 
 			// Redirect to the cart
@@ -60,7 +58,6 @@ class store_cart_add extends store {
 			exit();
 		}
 	}
-
 }
 
 ?>

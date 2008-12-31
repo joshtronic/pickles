@@ -9,7 +9,7 @@ class store extends Module {
 		parent::__construct($config, $db, $mailer, $error);
 
 		// Loads up the cart in case we need it
-		if (!isset($_SESSION['cart'])) {
+		if (!isset($_SESSION['cart'], $_SESSION['cart']['count'], $_SESSION['cart']['products'])) {
 			$_SESSION['cart'] = array();
 			$_SESSION['cart'] = array('count' => 0, 'products' => null);
 		}

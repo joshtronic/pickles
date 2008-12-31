@@ -94,7 +94,8 @@ class Controller extends Object {
 		}
 
 		// Grab the passed in module or use the default
-		$module_name = isset($_REQUEST['module']) ? strtr($_REQUEST['module'], '-', '_') : $config->getDefaultModule();
+		#$module_name = isset($_REQUEST['module']) ? strtr($_REQUEST['module'], '-', '_') : $config->getDefaultModule();
+		$module_name = isset($_REQUEST['module']) ? $_REQUEST['module'] : $config->getDefaultModule();
 
 		/**
 		 * @todo Maybe the logout shouldn't be an internal thing, what if the

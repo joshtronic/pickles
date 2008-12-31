@@ -57,7 +57,7 @@ abstract class Display_Common extends Object {
 		ini_set('arg_separator.output', '&amp;');
 		ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
 
-		header('Content-type: text/html; charset=UTF-8');
+		//header('Content-type: text/html; charset=UTF-8');
 
 		if ($this->config->getDebug() === true) {
 			?>

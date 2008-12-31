@@ -10,6 +10,21 @@
 		{$category.description}
 	</div>
 	<div class="breadcrumbs">
-		<a href="/store">Store Home</a> > <a href="/store/category/{$category.permalink}">{$category.name}</a>
+		<a href="/store">Shopping Home</a> &gt; <a href="/store/category/{$category.permalink}">{$category.name}</a>
+	</div>
+	<div>
+		{foreach from=$products item=product name=products}
+			<div class="float-left" style="width: 200px; margin: 3px">
+				<img src="/images/products/{$product.id}/small.jpg" class="float-left" style="padding-right: 5px" />
+				<div class="float-left" style="width: 120px">
+					<a href="/store/product/{$product.id}">{$product.name}</a><br /><br />
+					{$product.teaser}<br /><br />
+					<b>${$product.price}</b><br /><br />
+					<ul><li><a href="/store/cart/add/{$product.id}" class="add-to-cart"><span>Add to Cart</span></a></li></ul>
+					<br /><br />
+				</div>
+			</div>
+			{if $smarty.foreach.products.iteration % 3 == 0}<br class="clear" />{/if}
+		{/foreach}
 	</div>
 </div>

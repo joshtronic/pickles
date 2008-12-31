@@ -54,7 +54,7 @@ class Display_PHP extends Display_Common {
 				//$this->smarty->cache_lifetime = $this->caching;
 			}
 		}
-		
+
 		$this->template        = $this->template_path . $this->module_name . '.php';
 		$this->shared_template = PICKLES_PATH . 'templates/' . $this->shared_name . '.php';		
 	}
