@@ -111,6 +111,7 @@ class Display_Smarty extends Display_Common {
 
 			// Build the combined module name array and assign it
 			$module = $this->module_name;
+			$module[0] = strtr($module[0], '_', '-');
 			array_unshift($module, $this->module_filename);
 			$this->smarty->assign('module', $module);
 

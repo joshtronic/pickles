@@ -108,10 +108,11 @@ class Controller extends Object {
 		}
 		else {
 			// Loads the requested module's information
-			$module_filename = $module_name;
+			$module_filename = strtr($module_name, '-', '_');
 			$module_file     = '../modules/' . $module_filename . '.php';
 			$module_class    = strtr($module_filename, '/', '_');
-			$module_name     = split('_', $module_class);
+			
+			$module_name = split('_', strtr($module_name, '/', '_'));
 
 			// Establishes the shared module information
 			$shared_module_class    = $config->getSharedModule($module_class);
