@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Store
+ *
+ * @package    PICKLES
+ * @subpackage store
+ * @author     Joshua Sherman <josh@phpwithpickles.org>
+ * @copyright  2007-2009 Joshua Sherman
+ */
+
 class store extends Module {
 
 	protected $display = DISPLAY_SMARTY;
@@ -28,7 +37,9 @@ class store extends Module {
 		$this->cart = $_SESSION['cart'];
 
 		// Loads the navigation
-		$this->subnav = $config->store->sections;
+		if (isset($config->store->sections)) {
+			$this->subnav = $config->store->sections;
+		}
 
 		// Loads the categories
 		$categories = $this->db->getArray('SELECT id, name, permalink FROM categories WHERE parent_id IS NULL AND visible = "Y" ORDER BY weight;');

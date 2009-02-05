@@ -8,7 +8,7 @@
  * @package    PICKLES
  * @subpackage store
  * @author     Joshua Sherman <josh@phpwithpickles.org>
- * @copyright  2007-2008 Joshua Sherman
+ * @copyright  2007-2009 Joshua Sherman
  */
 
 class store_cart_add extends store {
@@ -34,8 +34,9 @@ class store_cart_add extends store {
 			}
 
 			// Increment the quantity and update the total
-			$product['quantity']++;
-			$product['total'] = round($product['price'] * $product['quantity'], 2);
+			$increment            = preg_match('/^[0-9]+$/', $_REQUEST['quantity']) && trim($_REQUEST['quantity']) != '' ? $_REQUEST['quantity'] : 1;
+			$product['quantity'] += $increment;
+			$product['total']     = round($product['price'] * $product['quantity'], 2);
 			unset($product);
 
 			// References the cart as a whole
