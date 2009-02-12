@@ -27,33 +27,40 @@ class store_cart_update extends store {
 					// References the product in the cart
 					$product = $_SESSION['cart']['products'][$id];
 
-					if ($quantity == 0) {
+					if ($quantity <= 0) {
 						unset($_SESSION['cart']['products'][$id]);
 					}
 					else {
+						if ($product['limit_per_customer'] != 0 && $quantity > $product['limit_per_customer']) {
+							$quantity = $product['limit_per_customer'];
+						}
+
 						$product['quantity'] = $quantity;
 						$product['total']    = round($product['price'] * $product['quantity'], 2);
 						$_SESSION['cart']['products'][$id] = $product;
 					}
 				}
 
-				if (count($_SESSION['cart']['products']) == 0) {
+				if (count($_SESSION['cart']['products']) <= 0) {
 					unset($_SESSION['cart']['products']);
 				}
 
 				// References the cart as a whole
 				$cart     =& $_SESSION['cart'];
 				$subtotal =  0;
+				$shipping =  0;
 
 				// Loops through the products and totals them up
 				if (is_array($cart['products'])) {
 					foreach ($cart['products'] as $product) {
 						$subtotal += $product['total'];
+						$shipping += $product['shipping'];
 					}
 				}
 
 				// Set the subtotal in the cart
 				$cart['subtotal'] = round($subtotal, 2);
+				$cart['shipping'] = round($shipping, 2);
 				unset($cart);
 			}
 		}

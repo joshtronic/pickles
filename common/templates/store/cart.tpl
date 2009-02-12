@@ -56,7 +56,7 @@
 					<td class="right">
 						${$cart.subtotal|number_format:2}<br />
 						$4.99<br />
-						${$cart.subtotal+4.99|number_format:2}
+						${$cart.subtotal+4.99|number_format:2}<br />
 					</td>
 				</tr>
 				<tr>

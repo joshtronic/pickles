@@ -32,16 +32,19 @@ class store_cart_remove extends store {
 			// References the cart as a whole
 			$cart     =& $_SESSION['cart'];
 			$subtotal =  0;
+			$shipping =  0;
 
 			// Loops through the products and totals them up
 			if (is_array($cart['products'])) {
 				foreach ($cart['products'] as $product) {
 					$subtotal += $product['total'];
+					$shipping += $product['shipping'];
 				}
 			}
 
 			// Set the subtotal in the cart
 			$cart['subtotal'] = $subtotal;
+			$cart['shipping'] = $shipping;
 			unset($cart);
 
 			// Redirect to the cart
