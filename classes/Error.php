@@ -18,7 +18,7 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author    Joshua John Sherman <josh@phpwithpickles.org>
- * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @copyright Copyright 2007, 2008, 2009 Joshua John Sherman
  * @link      http://phpwithpickles.org
  * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
@@ -72,6 +72,16 @@ class Error extends Object {
 	 */
 	public function getErrors() {
 		return $this->errors;
+	}
+	
+	/**
+	 * Resets the stored errors
+	 *
+	 * @return boolean true
+	 */
+	public function resetErrors() {
+		$this->errors = null;
+		return true;
 	}
 
 	/**
