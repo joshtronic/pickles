@@ -27,11 +27,13 @@ class store_checkout extends store {
 		}
 		else {
 			$shipping_address_id = $this->db->insert('addresses', $shipping_address);
+			$shipping_address    = $this->db->getRow("SELECT * FROM addresses WHERE address_id = '{$shipping_address_id}';");
 		}
 
 		// Adds the billing information into the database
-		if ($_REQUEST['billing_same_as_shipping'] == 'on') {
+		if (isset($_REQUEST['billing_same_as_shipping']) && $_REQUEST['billing_same_as_shipping'] == 'on') {
 			$billing_address_id = $shipping_address_id;
+			$billing_address    = $shipping_address;
 		}
 		else {
 			$billing_address = array(
@@ -56,6 +58,7 @@ class store_checkout extends store {
 			}
 			else {
 				$billing_address_id = $this->db->insert('addresses', $billing_address);
+				$billing_address    = $this->db->getRow("SELECT * FROM addresses WHERE address_id = '{$billing_address_id}';");
 			}
 		}
 
@@ -78,59 +81,60 @@ class store_checkout extends store {
 			exit("There was an error - @todo make a more formal error for when the customer account cannot be created");
 		}
 		else {
-			// Once the user is customer and their addresses are added, perform the authenticate.net logic
-			$debugging     = 1; // Display additional information to track down problems
-			$testing	   = 1; // Set the testing flag so that transactions are not live
-			$error_retries = 2; // Number of transactions to post if soft errors occur
+			$gateway = new Gateway_AuthorizeNet_AIM($this->config, $this->error);
 
-			$auth_net_login_id = "CHANGE THIS";
-			$auth_net_tran_key = "CHANGE THIS";
-			$auth_net_url      = "https://test.authorize.net/gateway/transact.dll";
-			// Uncomment the line ABOVE for test accounts or BELOW for live merchant accounts
-			// $auth_net_url      = "https://secure.authorize.net/gateway/transact.dll";
+			$cart         = $_SESSION['cart'];
+			$total_amount = $cart['subtotal'] + $cart['shipping'];
 
-			$authnet_values = array(
-				'x_login'            => $auth_net_login_id,
-				'x_version'          => '3.1',
-				'x_delim_char'       => '|',
-				'x_delim_data'       => 'TRUE',
-				'x_type'             => 'AUTH_CAPTURE',
-				'x_method'           => 'CC',
-				'x_tran_key'         => $auth_net_tran_key,
-				'x_relay_response'   => 'FALSE',
-				'x_card_num'         => '4242424242424242',
-				'x_exp_date'         => '1209',
-				'x_description'      => 'Recycled Toner Cartridges',
-				'x_amount'           => '12.23',
-				'x_first_name'       => 'Charles D.',
-				'x_last_name'        => 'Gaulle',
-				'x_address'          => '342 N. Main Street #150',
-				'x_city'             => 'Ft. Worth',
-				'x_state'            => 'TX',
-				'x_zip'              => '12345',
-				'CustomerBirthMonth' => 'Customer Birth Month: 12',
-				'CustomerBirthDay'   => 'Customer Birth Day: 1',
-				'CustomerBirthYear'  => 'Customer Birth Year: 1959',
-				'SpecialCode'        => 'Promotion: Spring Sale',
-			);
+			if ($total_amount > 0) {
 
-			$fields = '';
-			foreach ($authnet_values as $key => $value) {
-				$fields .= "{$key}=" . urlencode($value) . '&';
+				// Payment information
+				$gateway->total_amount     = $total_amount;
+				//$gateway->card_type        = '',
+				$gateway->card_number      = $_REQUEST['cc_number'];
+				$gateway->expiration_month = $_REQUEST['cc_expiration']['month'];
+				$gateway->expiration_year  = $_REQUEST['cc_expiration']['year'];
+
+				if (isset($_REQUEST['ccv2'])) {
+					$gateway->cvv2            = $_REQUEST['ccv2'];
+				}
+
+				// Billing information
+				$gateway->billing_company    = $billing_address['company'];
+				$gateway->billing_first_name = $billing_address['first_name'];
+				$gateway->billing_last_name  = $billing_address['last_name'];
+				$gateway->billing_address1   = $billing_address['address1'];
+				$gateway->billing_address2   = $billing_address['address2'];
+				$gateway->billing_city       = $billing_address['city'];
+				$gateway->billing_state      = $billing_address['state'];
+				$gateway->billing_zip_code   = $billing_address['zip_code'];
+				$gateway->billing_country    = $billing_address['country'];
+				$gateway->billing_email      = $billing_address['email'];
+				$gateway->billing_phone      = $billing_address['phone'];
+				$gateway->billing_fax        = $billing_address['fax'];
+				
+				$gateway->shipping_company    = $shipping_address['company'];
+				$gateway->shipping_first_name = $shipping_address['first_name'];
+				$gateway->shipping_last_name  = $shipping_address['last_name'];
+				$gateway->shipping_address1   = $shipping_address['address1'];
+				$gateway->shipping_address2   = $shipping_address['address2'];
+				$gateway->shipping_city       = $shipping_address['city'];
+				$gateway->shipping_state      = $shipping_address['state'];
+				$gateway->shipping_zip_code   = $shipping_address['zip_code'];
+				$gateway->shipping_country    = $shipping_address['country'];
+				$gateway->shipping_email      = $shipping_address['email'];
+				$gateway->shipping_phone      = $shipping_address['phone'];
+				$gateway->shipping_fax        = $shipping_address['fax'];
+
+				/*
+				$gateway->tax            = '';
+				$gateway->freight        = '';
+				$gateway->order_number   = '';
+				$gateway->session_number = '';
+				*/
+
+				$gateway->process();
 			}
-
-			// Post the transaction to Authorize.net
-			$ch = curl_init("https://test.authorize.net/gateway/transact.dll"); 
-			// Uncomment the line ABOVE for test accounts or BELOW for live merchant accounts
-			// $ch = curl_init("https://secure.authorize.net/gateway/transact.dll"); 
-			curl_setopt($ch, CURLOPT_HEADER, 0); // set to 0 to eliminate header info from response
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // Returns response data instead of TRUE(1)
-			curl_setopt($ch, CURLOPT_POSTFIELDS, rtrim( $fields, "& " )); // use HTTP POST to send form data
-			// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); // uncomment this line if you get no gateway response. ###
-			$resp = curl_exec($ch); //execute post and get results
-			curl_close ($ch);
-
-			echo $resp;
 		}
 	}
 }

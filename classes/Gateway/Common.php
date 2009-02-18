@@ -30,7 +30,23 @@
  * This is the class that each gateway class should be extending from.
  */
 abstract class Gateway_Common extends Object {
+	
+	/**
+	 * Constructor
+	 *
+	 * Runs the parent's constructor and adds the module to the object.
+	 */
+	public function __construct(Config $config, Error $error) {
+		parent::__construct();
 
+		$this->config = $config;
+		$this->error  = $error;
+	}
+
+	/**
+	 * Abstract processing function that is overloaded within the loaded gateway
+	 */
+	public abstract function process();
 }
 
 ?>

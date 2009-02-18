@@ -61,7 +61,9 @@ define('DISPLAY_SMARTY', 'Smarty');
  * @return boolean Return value of require_once() or false (default)
  */
 function __autoload($class) {
-	$filename = str_replace('_', '/', $class) . '.php';
+
+	// @todo Not sure this will come up, but right now core classes can only be nested a single directory deep (e.g. /classes/Display/Smarty.php)
+	$filename = preg_replace('/_/', '/', $class, 1) . '.php';
 
 	$class_file  = PICKLES_PATH . 'classes/' . $filename;
 	$module_file = PICKLES_PATH . 'common/modules/' . $filename;
