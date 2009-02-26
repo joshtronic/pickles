@@ -27,7 +27,7 @@
 /**
  * Authorize.Net Advanced Integrated Method (AIM) Web Service
  */
-class WebService_AuthorizeNet_AdvancedIntegratedMethod extends WebService_Common {
+class WebService_AuthorizeNet_AIM extends WebService_Common {
 	
 	public function process() {
 
