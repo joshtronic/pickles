@@ -38,12 +38,13 @@
  */
 function smarty_function_html_select_state($params, &$smarty) {
 
-	// Sets up the prefix (optionally passed in)
+	// Sets up the prefix and title (optionally passed in)
 	$prefix = (isset($params['prefix']) ? $params['prefix'] : null) . 'state';
+	$title  = (isset($params['title'])  ? $params['title']  : null);
 
 	// Puts together the dropdown
 	$select = '
-		<select id="' . $prefix . '" name="' . $prefix . '">
+		<select id="' . $prefix . '" name="' . $prefix . '" title="' . $title . '">
 			<option value="">-- Select a State --</option>
 			<option value="AK">Alaska</option>
 			<option value="AL">Alabama</option>

@@ -1,6 +1,10 @@
-<b>Transaction Successful!</b><br />
- (Small paragraph with emailed receipt. Also notice that one their order has been shipped they will receive the shipping tracking info via email as well.)<br /><br />
- -- or --<br /><br />
-<b>Transaction Failed.</b><br />
-(Small paragraph about returning to previous page to make sure all input info was correct and if they continue to have problems to call (800)895-4415 to resolve the issue and/or order by phone.)
-
+{if $status == 'Approved'}
+	<h1>Transaction Successful!</h1><br />
+	Thank you for your order, a receipt should arrive via email shortly.  Once your order has been shipped you will receive the shipment tracking information via email as well.
+{else}
+	<h1>Transaction {$status}.</h1><br />
+	There was an error processing your order:<br /><br />
+	<div style="padding-left: 40px; font-weight: bold;">{$message}</div><br />
+	Please return to the previous page and make sure all of the information is correct.  Should you continue to have problems, please call (800) 895-4415 for futher assistance.
+{/if}
+<div style="height: 900px"></div>

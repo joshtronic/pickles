@@ -42,6 +42,7 @@ class store extends Module {
 		}
 
 		// Loads the categories
+		/*
 		$categories = $this->db->getArray('SELECT id, name, permalink FROM categories WHERE parent_id IS NULL AND visible = "Y" ORDER BY weight;');
 		if (is_array($categories)) {
 			foreach ($categories as $key => $category) {
@@ -56,6 +57,7 @@ class store extends Module {
 		}
 
 		$this->categories = $categories;
+		*/
 	}
 
 	public function __default() {

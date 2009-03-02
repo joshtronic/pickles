@@ -12,22 +12,25 @@ function getForm(form) {
 			case 'password':
 			case 'text':
 			case 'textarea':
-				// Check if it's required
-				if (element.title == 'required' && trim(element.value) == '') {
-					alert('Error: The ' + element.name.replace('_', ' ') + ' field is required.');
-					element.focus();
-					return false;
-				}
-				// If the field is named email, check it's validity
-				else if (element.name == 'email') {
-					if (element.value.match(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i) == null) {
-						alert('Error: The email address entered is not valid.');
+				// Checks if the field is visible
+				if (element.style.display != 'none') {
+					// Checks if it's required
+					if (element.title == 'required' && trim(element.value) == '') {
+						alert('Error: The ' + element.name.replace('_', ' ') + ' field is required.');
 						element.focus();
 						return false;
 					}
-				}
+					// If the field is named email, check it's validity
+					else if (element.name == 'email') {
+						if (element.value.match(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i) == null) {
+							alert('Error: The email address entered is not valid.');
+							element.focus();
+							return false;
+						}
+					}
 
-				params += '&' + element.name + '=' + encodeURI(element.value);
+					params += '&' + element.name + '=' + encodeURI(element.value);
+				}
 				break;
 
 			case 'checkbox':
@@ -67,7 +70,7 @@ function createRequest() {
 }
 
 function ajaxRequest(htmlElement, customHandler, placement, url) {
-	var params = '';
+	var params        = '';
 	var return_status = '';
 	var customHandler = (customHandler == null) ? null     : customHandler;
 	var placement     = (placement     == null) ? 'before' : placement;
@@ -160,6 +163,10 @@ function ajaxRequest(htmlElement, customHandler, placement, url) {
 		}
 
 		request.send(params);
+	}
+	else if (customHandler) {
+		responseElement = window[customHandler]();
+		return false;
 	}
 }
 
