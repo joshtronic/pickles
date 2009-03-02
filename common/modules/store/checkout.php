@@ -297,7 +297,7 @@ class store_checkout extends store {
 					if ($response['response_code'] == 'Approved') {
 						$this->db->execute("
 							UPDATE orders
-							SET	transaction_id = '{$response['transaction_id']}', time_placed = NOW()
+							SET transaction_id = '{$response['transaction_id']}', time_placed = NOW()
 							WHERE id = '{$response['invoice_number']}';
 						");
 

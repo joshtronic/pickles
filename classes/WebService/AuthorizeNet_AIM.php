@@ -138,7 +138,7 @@ class WebService_AuthorizeNet_AIM extends WebService_Common {
 			// 'x_footer_email_receipt' => '',
 
 			// @todo Debugging / testing information
-			'x_email'                => 'joshsherman@gmail.com',
+			//'x_email'                => 'joshsherman@gmail.com',
 			'x_card_num'             => '4242424242424242',
 		);
 
