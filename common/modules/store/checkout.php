@@ -1,6 +1,5 @@
 <?php
 
-// @todo store the address_id's in the cart instance to allow for an even easier look up of the data, maybe
 // @todo Add more error checking, basically against all queries
 
 class store_checkout extends store {
@@ -121,7 +120,13 @@ class store_checkout extends store {
 		$this->error->resetErrors();
 
 		$cart =& $_SESSION['cart'];
-			
+		
+		// Adds the addresses to the cart
+		$cart['shipping_address']       = $shipping_address;
+		$cart['shipping_address']['id'] = $shipping_address_id;
+		$cart['billing_address']        = $billing_address;
+		$cart['billing_address']['id']  = $billing_address_id;
+
 		// Adds the customer's email into the email database
 		$email = $_REQUEST['shipping_email'];
 
