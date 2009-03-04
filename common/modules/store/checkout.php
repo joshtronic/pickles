@@ -138,13 +138,18 @@ class store_checkout extends store {
 		}
 
 		// Adds the customer's reference into the database
-		$referrer = strtolower($_REQUEST['referred_by']) == 'other' ? $_REQUEST['other_source'] : $_REQUEST['referred_by'];
+		if (isset($_REQUEST['referred_by'])) {
+			$referrer = strtolower($_REQUEST['referred_by']) == 'other' ? $_REQUEST['other_source'] : $_REQUEST['referred_by'];
 
-		if ($this->db->getField("SELECT COUNT(*) FROM referrers WHERE referrer = '{$referrer}';") == 0) {
-			$referrer_id = $this->db->insert('referrers', array('referrer' => $referrer));
+			if ($this->db->getField("SELECT COUNT(*) FROM referrers WHERE referrer = '{$referrer}';") == 0) {
+				$referrer_id = $this->db->insert('referrers', array('referrer' => $referrer));
+			}
+			else {
+				$referrer_id = $this->db->getField("SELECT id FROM referrers WHERE referrer = '{$referrer}';");
+			}
 		}
 		else {
-			$referrer_id = $this->db->getField("SELECT id FROM referrers WHERE referrer = '{$referrer}';");
+			$referrer_id = null;
 		}
 
 		// If a password exists, try to create a customer account
