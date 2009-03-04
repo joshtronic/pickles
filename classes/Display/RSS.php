@@ -18,7 +18,7 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author    Joshua John Sherman <josh@phpwithpickles.org>
- * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @copyright Copyright 2007, 2008, 2009 Joshua John Sherman
  * @link      http://phpwithpickles.org
  * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
@@ -66,11 +66,23 @@ class Display_RSS extends Display_Common {
 		?>
 		<rss version="2.0">
 			<channel>
-				<title><?=$channel['title'];?></title>
+				<title><?=$channel->title;?></title>
 				<link>http://<?=$_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];?></link>
-				<description><?=$channel['description'];?></description>
-				<category><?=$channel['category'];?></category>
-				<language><?=$channel['language'] ? $channel['language'] : 'en-us';?></language>
+				<description><?=$channel->description;?></description>
+				<?php
+				if (isset($channel->image)) {
+					?>
+					<image>
+						<url><?=$channel->image;?></url>
+						<title><?=$channel->title;?></title>
+						<link>http://<?=$_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];?></link>
+					</image>
+					<?php
+				}
+				?>
+				<category><?=$channel->category;?></category>
+				<language><?=isset($channel->language) ? $channel->language : 'en-us';?></language>
+				<generator version="pre-beta 0.0.0">PICKLES (http://phpwithpickles.org)</generator>
 				<?php
 				if (is_array($items)) {
 					foreach ($items as $key => $item) {
