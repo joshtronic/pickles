@@ -13,6 +13,10 @@ function getForm(form) {
 			case 'text':
 			case 'textarea':
 				// Checks if the field is visible
+				if (element.name == 'referred_by') {
+					alert(element.name);
+					alert(element.style.display);
+				}
 				if (element.style.display != 'none') {
 					// Checks if it's required
 					if (element.title == 'required' && trim(element.value) == '') {
@@ -112,14 +116,16 @@ function ajaxRequest(htmlElement, customHandler, placement, url) {
 
 		request.onreadystatechange = function() {
 			if (request.readyState == 4 && request.status == 200) {
-				var responseElement = document.createElement('div');
-				responseElement.id  = 'ajaxResponse';
+				var responseElement  = document.createElement('div');
+				responseElement.id   = 'ajaxResponse';
 
 				if (request.responseText.substring(0, 1) == '{' && request.responseText.substring(request.responseText.length - 1) == '}') {
-					var responseObject  = eval( "(" + request.responseText + ")" );
-					
+					var responseObject = eval( "(" + request.responseText + ")" );
+
 					if (document.getElementById(responseElement.id) != null) {
-						formElement.removeChild(document.getElementById(responseElement.id));
+						//formElement.removeChild(document.getElementById(responseElement.id));
+						// @todo
+						document.getElementById('ajaxResponse').parentNode.removeChild(document.getElementById('ajaxResponse'));
 					}
 
 					if (customHandler) {

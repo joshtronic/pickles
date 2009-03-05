@@ -8,7 +8,7 @@
  * @package    PICKLES
  * @subpackage store
  * @author     Joshua Sherman <josh@phpwithpickles.org>
- * @copyright  2007-2009 Joshua Sherman
+ * @copyright  2007, 2008, 2009 Joshua Sherman
  */
 
 class store_cart_add extends store {
@@ -27,13 +27,14 @@ class store_cart_add extends store {
 			// If the data is not set then grab it and set it
 			if (!isset($product['name'], $product['sku'], $product['price'])) {
 				$data = $this->db->getRow('
-					SELECT name, sku, price, limit_per_customer
+					SELECT sku, name, description, price, limit_per_customer
 					FROM products
 					WHERE id ="' . $_REQUEST['id'] . '";
 				');
 
-				$product['name']               = $data['name'];
 				$product['sku']                = $data['sku'];
+				$product['name']               = $data['name'] . ' ' . $data['description'];
+				$product['description']        = $data['description'];
 				$product['price']              = $data['price'];
 				$product['limit_per_customer'] = $data['limit_per_customer'];
 

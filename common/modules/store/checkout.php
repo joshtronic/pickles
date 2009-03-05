@@ -49,6 +49,7 @@ class store_checkout extends store {
 			}
 		}
 
+		// Checks that the password and confirmation are the same
 		if (isset($_REQUEST['password']) && trim($_REQUEST['password']) != '') {
 			if ($_REQUEST['password'] != $_REQUEST['confirm_password']) {
 				$this->message = 'Error: The password and confirm password fields must match.';
@@ -119,6 +120,7 @@ class store_checkout extends store {
 		// @todo Remove this when I figure out how I want to control certain code inside the common modules
 		$this->error->resetErrors();
 
+		// Gets a reference to the cart in the session
 		$cart =& $_SESSION['cart'];
 		
 		// Adds the addresses to the cart
@@ -168,7 +170,59 @@ class store_checkout extends store {
 					$cart['customer_id'] = $this->db->insert('customers', $customer);
 
 					// Contacts the user to advise them of their sign up
-					mail($email, 'Welcome to Menopause Solutions', '<< @todo >>');
+					// @todo This is as MenoSol specific as it gets
+					mail($email, 'Welcome to Menopause Solutions', "
+Menopause Solutions
+-------------------------------------------------------------------
+
+Dear {$shipping_address['first_name']} {$shipping_address['last_name']},
+
+You have been registered
+
+Your profile:
+---------------------
+Personal information:
+---------------------
+Username:     {$email}
+Password:     {$_REQUEST['password']}
+First Name:   {$shipping_address['first_name']}
+Last Name:    {$shipping_address['last_name']}
+Company:      {$shipping_address['company']}
+
+Billing Address:
+----------------
+First Name:   {$shipping_address['first_name']}
+Last Name:    {$shipping_address['last_name']}
+Address:      {$shipping_address['address1']}
+City:         {$shipping_address['city']}
+State:        {$shipping_address['state']}
+Country:      {$shipping_address['country']}
+Postal Code:  {$shipping_address['zip_code']}
+
+Shipping Address:
+-----------------
+First Name:   {$billing_address['first_name']} 
+Last Name:    {$billing_address['last_name']}
+Address:      {$billing_address['address1']}
+City:         {$billing_address['city']}
+State:        {$billing_address['state']}
+Country:      {$billing_address['country']}
+Postal Code:  {$billing_address['zip_code']}   
+
+Phone:        {$shipping_address['phone']}
+Fax:          {$shipping_address['fax']} 
+E-Mail:       {$email}
+URL:          n/a
+
+------------------
+
+Thank you for your interest in Menopause Solutions.
+
+Menopause Solutions
+Phone: 1-800-895-4415
+Fax:   813-925-1066
+URL:   http://menopausesolutions.net
+					");
 				}
 				else {
 					// @todo Change this out for a confirmation box and re-submit
@@ -189,8 +243,10 @@ class store_checkout extends store {
 			return false;
 		}
 		else {
+			// Totals the subtotal and shipping cost (the grand total)
 			$total_amount =  $cart['subtotal'] + $cart['shipping'];
 
+			// Determines what sort of cross reference we need to use
 			if (isset($cart['customer_id'])) {
 				$xref_id   = $cart['customer_id'];
 				$xref_type = 'CUSTOMER';
@@ -249,9 +305,9 @@ class store_checkout extends store {
 					$gateway = new WebService_AuthorizeNet_AIM($this->config, $this->error);
 
 					// Customer and order information
-					$gateway->order_id         = $cart['order_id'];
-					$gateway->customer_id      = isset($cart['customer_id']) ? $cart['customer_id'] : 'N/A';
-					$gateway->customer_ip      = $_SERVER['REMOTE_ADDR'];
+					$gateway->order_id    = $cart['order_id'];
+					$gateway->customer_id = isset($cart['customer_id']) ? $cart['customer_id'] : 'N/A';
+					$gateway->customer_ip = $_SERVER['REMOTE_ADDR'];
 
 					// Payment information
 					$gateway->total_amount     = $total_amount;
@@ -313,6 +369,8 @@ class store_checkout extends store {
 
 						// Does some clean up to avoid duplicate transactions
 						unset($_SESSION['cart']);
+
+						// Emails the shipping department
 					}
 
 					$this->status  = $response['response_code'];
@@ -320,9 +378,6 @@ class store_checkout extends store {
 				}
 				// Free order (no payment processing necessary)
 				else {
-					// Email the user a receipt
-					// Email the shipping department the request
-
 					$this->status = 'Approved';
 						
 					$this->db->execute("
@@ -333,6 +388,10 @@ class store_checkout extends store {
 
 					// Does some clean up to avoid duplicate transactions
 					unset($_SESSION['cart']);
+					
+					// @todo Emails the user a receipt
+					// @todo Emails the shipping department
+
 				}
 			}
 			else {

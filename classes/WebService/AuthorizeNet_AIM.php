@@ -78,6 +78,7 @@ class WebService_AuthorizeNet_AIM extends WebService_Common {
 
 	public function process() {
 
+		// Assembles an array of all our transaction variables and values
 		$post_variables = array(
 			'x_test_request'         => 'TRUE',
 			'x_invoice_num'          => $this->order_id,
@@ -138,7 +139,7 @@ class WebService_AuthorizeNet_AIM extends WebService_Common {
 			// 'x_footer_email_receipt' => '',
 
 			// @todo Debugging / testing information
-			//'x_email'                => 'joshsherman@gmail.com',
+			'x_email'                => 'joshsherman@gmail.com',
 			'x_card_num'             => '4242424242424242',
 		);
 
@@ -151,7 +152,8 @@ class WebService_AuthorizeNet_AIM extends WebService_Common {
 		// Tacks the line items to the end of the assemble POST fields
 		if (is_array($this->products)) {
 			foreach ($this->products as $product_id => $product) {
-				$fields .= 'x_line_item=' . $product['sku'] . '<|>' . substr($product['name'], 0, 31) . '<|>' . substr($product['name'], 0, 255) . '<|>' . $product['quantity'] . '<|>' . $product['price'] . '<|>N&';
+				//$fields .= 'x_line_item=' . $product['sku'] . '<|>' . substr($product['name'], 0, 31) . '<|>' . substr($product['name'], 0, 255) . '<|>' . $product['quantity'] . '<|>' . $product['price'] . '<|>N&';
+				$fields .= 'x_line_item=' . $product['sku'] . '<|>><|>' . substr($product['name'], 0, 255) . '<|>' . $product['quantity'] . '<|>' . $product['price'] . '<|>N&';
 			}
 		}
 
