@@ -37,6 +37,9 @@ class store_customer_login extends store {
 				// Pulls the customer and address IDs
 				$customer = $this->db->getRow("SELECT id, shipping_address_id, billing_address_id {$sql}");
 
+				// Pulls the email
+				$email = $this->db->getField("SELECT email FROM emails WHERE id = '{$email_id}';");
+
 				// Pulls the shipping address
 				$shipping_address = $this->db->getRow("SELECT * FROM addresses WHERE id = '{$customer['shipping_address_id']}';"); 
 
@@ -50,6 +53,7 @@ class store_customer_login extends store {
 
 				// Adds the customer ID to the session
 				$_SESSION['cart']['customer_id']      = $customer['id'];
+				$_SESSION['cart']['email']            = $email;
 				$_SESSION['cart']['shipping_address'] = $shipping_address;
 				$_SESSION['cart']['billing_address']  = $billing_address;
 

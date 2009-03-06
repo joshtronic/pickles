@@ -35,7 +35,8 @@ class store_cart_update extends store {
 							$quantity = $product['limit_per_customer'];
 						}
 
-						$product['quantity'] = $quantity;
+						// The ceil() is to force up any fractions
+						$product['quantity'] = ceil($quantity);
 						$product['total']    = round($product['price'] * $product['quantity'], 2);
 						$_SESSION['cart']['products'][$id] = $product;
 					}

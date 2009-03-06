@@ -49,7 +49,7 @@ class store_cart_add extends store {
 
 				// @todo Should do a look up on the shipping table
 				// @todo Not sure how we want to handle flat rate shipping
-				$product['shipping'] = 4.95;
+				$product['shipping'] = 4.99;
 
 				if (is_array($product['discounts'])) {
 					foreach ($product['discounts'] as $discount) {

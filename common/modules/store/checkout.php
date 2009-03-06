@@ -10,24 +10,23 @@ class store_checkout extends store {
 
 		// Required fields
 		$required = array(
+			'email',
 			'shipping_first_name',
 			'shipping_last_name',
-			'shipping_email',
-			'shipping_phone',
 			'shipping_address1',
 			'shipping_city',
 			'shipping_state',
 			'shipping_zip_code',
+			'shipping_phone',
 			'referred_by',
 			'other_source',
 			'billing_first_name',
 			'billing_last_name',
-			'billing_email',
-			'billing_phone',
 			'billing_address1',
 			'billing_city',
 			'billing_state',
 			'billing_zip_code',
+			'billing_phone',
 			'cc_type',
 			'cc_number',
 			'cc_expiration'
@@ -58,29 +57,30 @@ class store_checkout extends store {
 		}
 
 		// Adds the shipping information into the database
-		$shipping_address = array(
-			'company'    => $_REQUEST['shipping_company'],
-			'first_name' => $_REQUEST['shipping_first_name'],
-			'last_name'  => $_REQUEST['shipping_last_name'],
-			'email'      => $_REQUEST['shipping_email'],
-			'phone'      => $_REQUEST['shipping_phone']['npa'] . $_REQUEST['shipping_phone']['nxx'] . $_REQUEST['shipping_phone']['station'],
-			'fax'        => $_REQUEST['shipping_fax']['npa'] . $_REQUEST['shipping_fax']['nxx'] . $_REQUEST['shipping_fax']['station'],
-			'address1'   => $_REQUEST['shipping_address1'],
-			'address2'   => $_REQUEST['shipping_address2'],
-			'city'       => $_REQUEST['shipping_city'],
-			'state'      => $_REQUEST['shipping_state'],
-			'zip_code'   => $_REQUEST['shipping_zip_code'],
-			'country'    => 'US'
-		);
+		if (isset($_REQUEST['shipping_address1']) && trim($_REQUEST['shipping_address1']) != '') {
+			$shipping_address = array(
+				'company'    => $_REQUEST['shipping_company'],
+				'first_name' => $_REQUEST['shipping_first_name'],
+				'last_name'  => $_REQUEST['shipping_last_name'],
+				'address1'   => $_REQUEST['shipping_address1'],
+				'address2'   => $_REQUEST['shipping_address2'],
+				'city'       => $_REQUEST['shipping_city'],
+				'state'      => $_REQUEST['shipping_state'],
+				'zip_code'   => $_REQUEST['shipping_zip_code'],
+				'country'    => 'US',
+				'phone'      => $_REQUEST['shipping_phone'],
+				'fax'        => $_REQUEST['shipping_fax']
+			);
 
-		$shipping_address['hash'] = md5(implode('', $shipping_address));
+			$shipping_address['hash'] = md5(implode('', $shipping_address));
 
-		if ($this->db->getField("SELECT COUNT(*) FROM addresses WHERE hash = '{$shipping_address['hash']}';") == 0) {
-			$shipping_address_id = $this->db->insert('addresses', $shipping_address);
-		}
-		else {
-			$shipping_address    = $this->db->getRow("SELECT * FROM addresses WHERE hash = '{$shipping_address['hash']}';");
-			$shipping_address_id = $shipping_address['id'];
+			if ($this->db->getField("SELECT COUNT(*) FROM addresses WHERE hash = '{$shipping_address['hash']}';") == 0) {
+				$shipping_address_id = $this->db->insert('addresses', $shipping_address);
+			}
+			else {
+				$shipping_address    = $this->db->getRow("SELECT * FROM addresses WHERE hash = '{$shipping_address['hash']}';");
+				$shipping_address_id = $shipping_address['id'];
+			}
 		}
 
 		// Adds the billing information into the database
@@ -90,20 +90,19 @@ class store_checkout extends store {
 			$billing_address_id = $shipping_address_id;
 			$billing_address    = $shipping_address;
 		}
-		else if (isset($_REQUEST['billing_address'])) {
+		else if (isset($_REQUEST['billing_address1']) && trim($_REQUEST['billing_address1']) != '') {
 			$billing_address = array(
 				'company'    => $_REQUEST['billing_company'],
 				'first_name' => $_REQUEST['billing_first_name'],
 				'last_name'  => $_REQUEST['billing_last_name'],
-				'email'      => $_REQUEST['billing_email'],
-				'phone'      => $_REQUEST['billing_phone']['npa'] . $_REQUEST['billing_phone']['nxx'] . $_REQUEST['billing_phone']['station'],
-				'fax'        => $_REQUEST['billing_fax']['npa'] . $_REQUEST['billing_fax']['nxx'] . $_REQUEST['billing_fax']['station'],
 				'address1'   => $_REQUEST['billing_address1'],
 				'address2'   => $_REQUEST['billing_address2'],
 				'city'       => $_REQUEST['billing_city'],
 				'state'      => $_REQUEST['billing_state'],
 				'zip_code'   => $_REQUEST['billing_zip_code'],
-				'country'    => 'US'
+				'country'    => 'US',
+				'phone'      => $_REQUEST['billing_phone'],
+				'fax'        => $_REQUEST['billing_fax']
 			);
 
 			$billing_address['hash'] = md5(implode('', $billing_address));
@@ -119,24 +118,34 @@ class store_checkout extends store {
 
 		// @todo Remove this when I figure out how I want to control certain code inside the common modules
 		$this->error->resetErrors();
-
+		
 		// Gets a reference to the cart in the session
 		$cart =& $_SESSION['cart'];
 		
 		// Adds the addresses to the cart
-		$cart['shipping_address']       = $shipping_address;
-		$cart['shipping_address']['id'] = $shipping_address_id;
-		$cart['billing_address']        = $billing_address;
-		$cart['billing_address']['id']  = $billing_address_id;
+		if (isset($shipping_address, $shipping_address_id)) {
+			$cart['shipping_address']       = $shipping_address;
+			$cart['shipping_address']['id'] = $shipping_address_id;
+		}
+
+		if (isset($billing_address, $billing_address_id)) {
+			$cart['billing_address']        = $billing_address;
+			$cart['billing_address']['id']  = $billing_address_id;
+		}
 
 		// Adds the customer's email into the email database
-		$email = $_REQUEST['shipping_email'];
+		if (isset($_REQUEST['email']) && trim($_REQUEST['email']) != '') {
+			$email = $_REQUEST['email'];
 
-		if ($this->db->getField("SELECT COUNT(*) FROM emails WHERE email = '{$email}';") == 0) {
-			$email_id = $this->db->insert('emails', array('email' => $email));
+			if ($this->db->getField("SELECT COUNT(*) FROM emails WHERE email = '{$email}';") == 0) {
+				$email_id = $this->db->insert('emails', array('email' => $email));
+			}
+			else {
+				$email_id = $this->db->getField("SELECT id FROM emails WHERE email = '{$email}';");
+			}
 		}
-		else {
-			$email_id = $this->db->getField("SELECT id FROM emails WHERE email = '{$email}';");
+		else if (isset($cart['email'])) {
+			$email = $cart['email'];
 		}
 
 		// Adds the customer's reference into the database
@@ -168,6 +177,7 @@ class store_checkout extends store {
 				// Adds the customer account
 				if ($this->db->getField("SELECT COUNT(*) FROM customers WHERE email_id = '{$email_id}';") == 0) {
 					$cart['customer_id'] = $this->db->insert('customers', $customer);
+					$cart['email']       = $email;
 
 					// Contacts the user to advise them of their sign up
 					// @todo This is as MenoSol specific as it gets
@@ -181,38 +191,38 @@ You have been registered
 
 Your profile:
 ---------------------
-Personal information:
+Login Information:
 ---------------------
 Username:     {$email}
 Password:     {$_REQUEST['password']}
-First Name:   {$shipping_address['first_name']}
-Last Name:    {$shipping_address['last_name']}
-Company:      {$shipping_address['company']}
 
-Billing Address:
+" . (isset($billing_address) ? "Billing Address:
 ----------------
+Company:      {$billing_address['company']}
+First Name:   {$billing_address['first_name']}
+Last Name:    {$billing_address['last_name']}
+Address:      {$billing_address['address1']}
+Address2:     {$billing_address['address2']}
+City:         {$billing_address['city']}
+State:        {$billing_address['state']}
+Postal Code:  {$billing_address['zip_code']}   
+Country:      {$billing_address['country']}
+Phone:        {$billing_address['phone']}
+Fax:          {$billing_address['fax']}
+
+" : '') . "Shipping Address:
+-----------------
+Company:      {$shipping_address['company']}
 First Name:   {$shipping_address['first_name']}
 Last Name:    {$shipping_address['last_name']}
 Address:      {$shipping_address['address1']}
+Address2:     {$shipping_address['address2']}
 City:         {$shipping_address['city']}
 State:        {$shipping_address['state']}
-Country:      {$shipping_address['country']}
 Postal Code:  {$shipping_address['zip_code']}
-
-Shipping Address:
------------------
-First Name:   {$billing_address['first_name']} 
-Last Name:    {$billing_address['last_name']}
-Address:      {$billing_address['address1']}
-City:         {$billing_address['city']}
-State:        {$billing_address['state']}
-Country:      {$billing_address['country']}
-Postal Code:  {$billing_address['zip_code']}   
-
+Country:      {$shipping_address['country']}
 Phone:        {$shipping_address['phone']}
 Fax:          {$shipping_address['fax']} 
-E-Mail:       {$email}
-URL:          n/a
 
 ------------------
 
@@ -221,8 +231,8 @@ Thank you for your interest in Menopause Solutions.
 Menopause Solutions
 Phone: 1-800-895-4415
 Fax:   813-925-1066
-URL:   http://menopausesolutions.net
-					");
+URL:   http://www.menopausesolutions.net
+					", 'From: noreply@menopausesolutions.net');
 				}
 				else {
 					// @todo Change this out for a confirmation box and re-submit
@@ -286,9 +296,11 @@ URL:   http://menopausesolutions.net
 
 				// Cleans out the order_* tables
 				$this->db->execute("DELETE FROM order_products WHERE order_id = '{$cart['order_id']}';");
+				$this->db->execute("DELETE FROM order_discounts WHERE order_id = '{$cart['order_id']}';");
 			}
 
-			// Populates the order_* tables
+			// Populates the order_* tables and generates the line items for the receipt
+			$receipt_products = null;
 			foreach ($cart['products'] as $product_id => $product) {
 				$order_product = array(
 					'order_id'   => $cart['order_id'],
@@ -297,7 +309,63 @@ URL:   http://menopausesolutions.net
 					'quantity'   => $product['quantity']
 				);
 				$this->db->insert('order_products', $order_product);
+
+				if (isset($product['discounts']) && is_array($product['discounts'])) {
+					foreach ($product['discounts'] as $discount) {
+						$order_discount = array(
+							'order_id'   => $cart['order_id'],
+							'discount_id' => $discount['id'],
+							'sequence'   => '0'
+						);
+						$this->db->insert('order_discounts', $order_discount);
+					}
+				}
+
+				$receipt_products .= "
+Item : {$product['sku']}
+Description : >
+{$product['name']} {$product['description']}
+Quantity : {$product['quantity']}
+Unit Price : US \${$product['price']}
+				";
 			}
+
+			$receipt = "
+========= ORDER INFORMATION =========
+Invoice Number : {$cart['order_id']}
+Description : Menopause Solutions
+Total : US \${$total_amount}
+Shipping : US \${$cart['shipping']}
+
+{$receipt_products}
+
+" . (isset($billing_address) ? "==== BILLING INFORMATION ===
+Customer ID : " . (isset($cart['customer_id']) ? $cart['customer_id'] : 'N/A') . "
+First Name : {$billing_address['first_name']}
+Last Name : {$billing_address['last_name']}
+Company : {$billing_address['company']}
+Address : {$billing_address['address1']} 
+Address2 : {$billing_address['address2']} 
+City : {$billing_address['city']} 
+State/Province : {$billing_address['state']}
+Zip/Postal Code : {$billing_address['zip_code']}
+Country : {$billing_address['country']}
+Phone : {$billing_address['phone']}
+Fax : {$billing_address['fax']}
+Email : {$email}
+
+" : '') . "==== SHIPPING INFORMATION ===
+First Name : {$shipping_address['first_name']}
+Last Name : {$shipping_address['last_name']}
+Company : {$shipping_address['company']}
+Address : {$shipping_address['address1']} 
+Address2 : {$shipping_address['address2']} 
+City : {$shipping_address['city']} 
+State/Province : {$shipping_address['state']}
+Zip/Postal Code : {$shipping_address['zip_code']}
+Country : {$shipping_address['country']}
+Email : {$email}
+";
 
 			// Checks if the transaction ID exists for the order, if not, process the order
 			if ($this->db->getField("SELECT transaction_id FROM orders WHERE id = '{$cart['order_id']}';") == NULL) {
@@ -330,7 +398,7 @@ URL:   http://menopausesolutions.net
 					$gateway->billing_state      = $billing_address['state'];
 					$gateway->billing_zip_code   = $billing_address['zip_code'];
 					$gateway->billing_country    = $billing_address['country'];
-					$gateway->billing_email      = $billing_address['email'];
+					$gateway->billing_email      = $email;
 					$gateway->billing_phone      = $billing_address['phone'];
 					$gateway->billing_fax        = $billing_address['fax'];
 				
@@ -344,7 +412,7 @@ URL:   http://menopausesolutions.net
 					$gateway->shipping_state      = $shipping_address['state'];
 					$gateway->shipping_zip_code   = $shipping_address['zip_code'];
 					$gateway->shipping_country    = $shipping_address['country'];
-					$gateway->shipping_email      = $shipping_address['email'];
+					$gateway->shipping_email      = $email;
 					$gateway->shipping_phone      = $shipping_address['phone'];
 					$gateway->shipping_fax        = $shipping_address['fax'];
 
@@ -371,6 +439,8 @@ URL:   http://menopausesolutions.net
 						unset($_SESSION['cart']);
 
 						// Emails the shipping department
+						// @todo
+						mail('joshsherman@gmail.com', 'Menopause Solutions Order Notification', $receipt, 'From: noreply@menopausesolutions.net');
 					}
 
 					$this->status  = $response['response_code'];
@@ -389,9 +459,12 @@ URL:   http://menopausesolutions.net
 					// Does some clean up to avoid duplicate transactions
 					unset($_SESSION['cart']);
 					
-					// @todo Emails the user a receipt
-					// @todo Emails the shipping department
+					// Emails the user a receipt
+					mail($email, 'Menopause Solutions Customer Receipt', $receipt, 'From: noreply@menopausesolutions.net');
 
+					// Emails the shipping department
+					// @todo
+					mail('joshsherman@gmail.com', 'Menopause Solutions Order Notification', $receipt, 'From: noreply@menopausesolutions.net');
 				}
 			}
 			else {
