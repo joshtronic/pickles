@@ -86,7 +86,6 @@ class WebService_AuthorizeNet_AIM extends WebService_Common {
 			$login           = $this->config->webservices->authorizenet_aim->login;
 			$transaction_key = $this->config->webservices->authorizenet_aim->transaction_key;
 			$test_request    = 'FALSE';
-			$test_request    = 'TRUE';
 		}
 		else {
 			$url             = $this->test_url;
