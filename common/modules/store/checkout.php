@@ -170,7 +170,7 @@ class store_checkout extends store {
 				'password'            => md5($_REQUEST['password']),
 				'billing_address_id'  => $billing_address_id,
 				'shipping_address_id' => $shipping_address_id,
-				'created_at'          => datE('Y-m-d H:i:s')
+				'created_at'          => date('Y-m-d H:i:s')
 			);
 		
 			if (!isset($cart['customer_id']) || $cart['customer_id'] == 0) {
@@ -241,10 +241,16 @@ URL:   http://www.menopausesolutions.net
 					return false;
 				}
 			}
-			// Updates the existing customer account
-			else {
-				$this->db->execute('customers', $customer, array('id' => $cart['customer_id']));
-			}
+		}
+		// Updates the existing customer account
+		else if (isset($cart['customer_id']) && $cart['customer_id'] != 0) {
+			$customer = array(
+				'billing_address_id'  => $billing_address_id,
+				'shipping_address_id' => $shipping_address_id,
+				'updated_at'          => date('Y-m-d H:i:s')
+			);
+
+			$this->db->update('customers', $customer, array('id' => $cart['customer_id']));
 		}
 
 		if ($this->error->getErrors()) {
@@ -324,7 +330,7 @@ URL:   http://www.menopausesolutions.net
 				$receipt_products .= "
 Item : {$product['sku']}
 Description : >
-{$product['name']} {$product['description']}
+{$product['name']}
 Quantity : {$product['quantity']}
 Unit Price : US \${$product['price']}
 				";

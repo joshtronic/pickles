@@ -29,8 +29,11 @@
  */
 class WebService_AuthorizeNet_AIM extends WebService_Common {
 
-	private $url = 'https://test.authorize.net/gateway/transact.dll';
-	// $auth_net_url      = "https://secure.authorize.net/gateway/transact.dll";
+	private $test_url = 'https://test.authorize.net/gateway/transact.dll';
+	private $prod_url = 'https://secure.authorize.net/gateway/transact.dll';
+
+	private $test_login           = '7wYB5c6R';
+	private $test_transaction_key = '4px54kx6ZZ7489Gq';
 
 	private $response_variables = array(
 		'response_code',
@@ -78,20 +81,33 @@ class WebService_AuthorizeNet_AIM extends WebService_Common {
 
 	public function process() {
 
+		if (preg_match("/{$this->config->webservices->authorizenet_aim->domain}/", $_SERVER['HTTP_HOST'])) {
+			$url             = $this->prod_url;
+			$login           = $this->config->webservices->authorizenet_aim->login;
+			$transaction_key = $this->config->webservices->authorizenet_aim->transaction_key;
+			$test_request    = 'FALSE';
+		}
+		else {
+			$url             = $this->test_url;
+			$login           = $this->test_login;
+			$transaction_key = $this->test_transaction_key;
+			$test_request    = 'TRUE';
+		}
+
 		// Assembles an array of all our transaction variables and values
 		$post_variables = array(
-			'x_test_request'         => 'TRUE',
+			'x_test_request'         => $test_request,
 			'x_invoice_num'          => $this->order_id,
 			'x_cust_id'              => trim($this->customer_id) != '' ? $this->customer_id : 'N/A',
 			'x_cust_up'              => $this->customer_ip,
 			'x_description'          => 'Menopause Solutions',
-			'x_login'                => $this->config->gateway->authorizenet_aim->test->login,
+			'x_login'                => $login,
 			'x_version'              => '3.1',
 			'x_delim_char'           => '|',
 			'x_delim_data'           => 'TRUE',
 			'x_type'                 => 'AUTH_CAPTURE', // @todo let the user pass this in for more functionality
 			'x_method'               => 'CC',
-			'x_tran_key'             => $this->config->gateway->authorizenet_aim->test->transaction_key,
+			'x_tran_key'             => $transaction_key,
 			'x_relay_response'       => 'FALSE',
 
 			// Payment information
@@ -158,7 +174,7 @@ class WebService_AuthorizeNet_AIM extends WebService_Common {
 		}
 
 		// POSTs the transaction to Authorize.Net
-		$curl = curl_init($this->url);
+		$curl = curl_init($url);
 		curl_setopt($curl, CURLOPT_HEADER,         0);                    // set to 0 to eliminate header info from response
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);                    // Returns response data instead of TRUE(1)
 		curl_setopt($curl, CURLOPT_POSTFIELDS,     rtrim($fields, '& ')); // use HTTP POST to send form data
