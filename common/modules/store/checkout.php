@@ -446,7 +446,7 @@ Email : {$email}
 
 						// Emails the shipping department
 						// @todo
-						mail('joshsherman@gmail.com', 'Menopause Solutions Order Notification', $receipt, 'From: noreply@menopausesolutions.net');
+						mail('weborders@menopausesolutions.net, joshsherman@gmail.com', 'Menopause Solutions Order Notification', $receipt, 'From: noreply@menopausesolutions.net');
 					}
 
 					$this->status  = $response['response_code'];
@@ -470,7 +470,7 @@ Email : {$email}
 
 					// Emails the shipping department
 					// @todo
-					mail('joshsherman@gmail.com', 'Menopause Solutions Order Notification', $receipt, 'From: noreply@menopausesolutions.net');
+					mail('weborders@menopausesolutions.net, joshsherman@gmail.com', 'Menopause Solutions Order Notification', $receipt, 'From: noreply@menopausesolutions.net');
 				}
 			}
 			else {
