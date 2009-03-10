@@ -361,6 +361,7 @@ Fax : {$billing_address['fax']}
 Email : {$email}
 
 " : '') . "==== SHIPPING INFORMATION ===
+Customer ID : " . (isset($cart['customer_id']) ? $cart['customer_id'] : 'N/A') . "
 First Name : {$shipping_address['first_name']}
 Last Name : {$shipping_address['last_name']}
 Company : {$shipping_address['company']}
@@ -370,6 +371,8 @@ City : {$shipping_address['city']}
 State/Province : {$shipping_address['state']}
 Zip/Postal Code : {$shipping_address['zip_code']}
 Country : {$shipping_address['country']}
+Phone : {$shipping_address['phone']}
+Fax : {$shipping_address['fax']}
 Email : {$email}
 ";
 
