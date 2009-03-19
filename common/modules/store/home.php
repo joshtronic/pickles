@@ -17,8 +17,8 @@ class store_home extends store {
 			}
 		}
 
-		$this->featured    = $featured;
-		$this->top_sellers = $this->db->getArray('SELECT id, name FROM products ORDER BY RAND() LIMIT 10;');
+		$this->setPublic('featured',    $featured);
+		$this->setPublic('top_sellers', $this->db->getArray('SELECT id, name FROM products ORDER BY RAND() LIMIT 10;'));
 	}
 }
 

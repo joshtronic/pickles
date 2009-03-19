@@ -20,7 +20,7 @@ class store_cart extends store {
 	public function __default() {
 
 		if (isset($_SESSION['cart'])) {
-			$this->cart = $_SESSION['cart'];
+			$this->setPublic('cart', $_SESSION['cart']);
 		}
 
 		$discounts = null;
@@ -83,7 +83,7 @@ class store_cart extends store {
 			}
 		}
 
-		$this->discounts = $discounts;
+		$this->setPublic('discounts', $discounts);
 
 		//var_dump($_SESSION['cart']);
 		//var_dump($_SESSION['cart']['discounts']['inPink']);

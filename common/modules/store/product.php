@@ -6,11 +6,12 @@ class store_product extends store {
 
 	public function __default() {
 
-		$this->product = $this->db->getArray("
+		$sql = "
 			SELECT *
 			FROM products
 			WHERE product_id = '{$_REQUEST['id']}';
-		");
+		";
+		$this->setPublic('product', $this->db->getArray($sql));
 	}
 }
 

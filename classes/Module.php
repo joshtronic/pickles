@@ -18,7 +18,7 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author    Joshua John Sherman <josh@phpwithpickles.org>
- * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @copyright Copyright 2007, 2008, 2009 Joshua John Sherman
  * @link      http://phpwithpickles.org
  * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
@@ -37,7 +37,13 @@ class Module extends Object {
 	/**
 	 * Data array used by the display 
 	 */
-	protected $data = array();
+	// @todo REMOVE THIS
+	//protected $data = array();
+
+	/**
+	 * Array of public variables to be available by the display
+	 */
+	protected $public = array();
 
 	/**
 	 * Passed objects
@@ -48,9 +54,10 @@ class Module extends Object {
 	protected $error  = null;
 
 	/**
-	 * Name of the module
+	 * Template file for the module
 	 */
-	protected $name = null;
+	protected $template = null;
+	protected $name     = null;
 	
 	/**
 	 * Module defaults
@@ -157,10 +164,23 @@ class Module extends Object {
 	 */
 	public function getDisplay() {
 
-		if (in_array($this->display, array(DISPLAY_JSON, DISPLAY_PHP, DISPLAY_RSS, DISPLAY_SMARTY))) {
-			return $this->display;
+		// Checks if the module has a display tyoe
+		if (isset($this->display)) {
+			// Checks if multiple display types are supported
+			if (is_array($this->display)) {
+				$display = $this->display[0];
+			}
+			else {
+				$display = $this->display;
+			}
+
+			if (in_array($display, array(DISPLAY_JSON, DISPLAY_PHP, DISPLAY_RSS, DISPLAY_SMARTY))) {
+				return $display;
+			}
 		}
-		else if (isset($this->config->modules->display)) {
+
+		// Checks for a display type in the config
+		if (isset($this->config->modules->display)) {
 			return (string)$this->config->modules->display;
 		}
 		else {
@@ -191,10 +211,27 @@ class Module extends Object {
 	 *
 	 * @param string $variable Name of the variable to be set
 	 * @param mixed $value Data to be set
+	 * @todo  REMOVE ME!
 	 */
+	/*
 	public function __set($variable, $value) {
 		if ($variable != 'cache_id') {
 			$this->data[$variable] = $value;
+		}
+	}
+	*/
+
+	public function setPublic($variable, $value) {
+		$this->public[$variable] = $value;
+		return true;
+	}
+
+	public function getPublic($variable) {
+		if (isset($this->public[$variable])) {
+			return $this->public[$variable];
+		}
+		else {
+			return null;
 		}
 	}
 
@@ -212,11 +249,13 @@ class Module extends Object {
 				break;
 
 			case DISPLAY_SMARTY:
-				if ($this->smarty->template_exists('index.tpl')) {
-					return $this->smarty->is_cached('index.tpl', $id);
-				}
-				else {
-					return $this->smarty->is_cached($template, $id);
+				if (is_object($this->smarty)) {
+					if ($this->smarty->template_exists('index.tpl')) {
+						return $this->smarty->is_cached('index.tpl', $id);
+					}
+					else {
+						return $this->smarty->is_cached($template, $id);
+					}
 				}
 				break;
 		}

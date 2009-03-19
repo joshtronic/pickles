@@ -23,7 +23,7 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author    Joshua John Sherman <josh@phpwithpickles.org>
- * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @copyright Copyright 2007, 2008, 2009 Joshua John Sherman
  * @link      http://phpwithpickles.org
  * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
@@ -50,6 +50,7 @@ define('DISPLAY_JSON',   'JSON');
 define('DISPLAY_PHP',    'PHP');
 define('DISPLAY_RSS',    'RSS');
 define('DISPLAY_SMARTY', 'Smarty');
+define('DISPLAY_XML',    'XML');
 
 /**
  * Magic function to automatically load classes
@@ -62,8 +63,7 @@ define('DISPLAY_SMARTY', 'Smarty');
  */
 function __autoload($class) {
 
-	// @todo Not sure this will come up, but right now core classes can only be nested a single directory deep (e.g. /classes/Display/Smarty.php)
-	$filename = preg_replace('/_/', '/', $class, 1) . '.php';
+	$filename = preg_replace('/_/', '/', $class) . '.php';
 
 	$class_file  = PICKLES_PATH . 'classes/' . $filename;
 	$module_file = PICKLES_PATH . 'common/modules/' . $filename;

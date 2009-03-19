@@ -14,7 +14,8 @@ function smarty_function_var_dump($params, &$smarty) {
 		}
 	}
 
-	require_once 'contrib/dBug/dBug.php';
+	// @todo
+	require_once '/home/josh/3rd-party-stuff/dBug-1.2/dBug.php';
 
 	echo "
 		<style>

@@ -12,14 +12,17 @@ class store_category extends store {
 			WHERE permalink = '{$_REQUEST['permalink']}';
 		");
 
-		$this->category = $category;
-		$this->products = $this->db->getArray("
+		$this->setPublic('category', $category);
+
+		$sql = "
 			SELECT p.*
 			FROM products AS p
 			INNER JOIN category_xref as c
 			ON p.id = c.product_id
 			WHERE c.category_id = '{$category['id']}';
-		");
+		";
+
+		$this->setPublic('products', $this->db->getArray($sql));
 	}
 }
 

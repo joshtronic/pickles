@@ -40,7 +40,7 @@ class store_checkout extends store {
 
 					foreach ($values as $value) {
 						if (trim($value) == '') {
-							$this->message = 'Error: The ' . strtr($key, '_', ' ') . ' field is required.';
+							$this->setPublic('message', 'Error: The ' . strtr($key, '_', ' ') . ' field is required.');
 							return false;
 						}
 					}
@@ -51,7 +51,7 @@ class store_checkout extends store {
 		// Checks that the password and confirmation are the same
 		if (isset($_REQUEST['password']) && trim($_REQUEST['password']) != '') {
 			if ($_REQUEST['password'] != $_REQUEST['confirm_password']) {
-				$this->message = 'Error: The password and confirm password fields must match.';
+				$this->setPublic('message', 'Error: The password and confirm password fields must match.');
 				return false;
 			}
 		}
@@ -181,6 +181,7 @@ class store_checkout extends store {
 
 					// Contacts the user to advise them of their sign up
 					// @todo This is as MenoSol specific as it gets
+					// @todo Swap out for the mailer class as well, then I can trap the sends and override for testing.
 					mail($email, 'Welcome to Menopause Solutions', "
 Menopause Solutions
 -------------------------------------------------------------------
@@ -237,7 +238,7 @@ URL:   http://www.menopausesolutions.net
 				else {
 					// @todo Change this out for a confirmation box and re-submit
 					// $this->status  = 'ExistingCustomer';
-					$this->message = 'Error: The email address you supplied is already in use.  There is an existing customer login form on the right-hand side of the page.  If you wish to continue without logging in, please provide a different email address or delete the contents of the password box (this will skip the process of creating a new account).';
+					$this->setPublic('message', 'Error: The email address you supplied is already in use.  There is an existing customer login form on the right-hand side of the page.  If you wish to continue without logging in, please provide a different email address or delete the contents of the password box (this will skip the process of creating a new account).');
 					return false;
 				}
 			}
@@ -254,8 +255,8 @@ URL:   http://www.menopausesolutions.net
 		}
 
 		if ($this->error->getErrors()) {
-			$this->status  = 'Error';
-			$this->message = 'There was an error adding the customer account (' . implode('. ', $this->error->getErrors()) . '.)';
+			$this->setPublic('status',  'Error');
+			$this->setPublic('message', 'There was an error adding the customer account (' . implode('. ', $this->error->getErrors()) . '.)');
 			return false;
 		}
 		else {
@@ -272,8 +273,8 @@ URL:   http://www.menopausesolutions.net
 				$xref_type = 'EMAIL';
 			}
 			else {
-				$this->status  = 'Error';
-				$this->message = 'There was an internal error.';
+				$this->setPublic('status',  'Error');
+				$this->setPublic('message', 'There was an internal error.');
 				return false;
 			}
 
@@ -452,12 +453,12 @@ Email : {$email}
 						mail('weborders@menopausesolutions.net, tom@epuresolutions.com, joshsherman@gmail.com', 'Menopause Solutions Order Notification', $receipt, 'From: noreply@menopausesolutions.net');
 					}
 
-					$this->status  = $response['response_code'];
-					$this->message = $response['response_reason_text'];
+					$this->setPublic('status',  $response['response_code']);
+					$this->setPublic('message', $response['response_reason_text']);
 				}
 				// Free order (no payment processing necessary)
 				else {
-					$this->status = 'Approved';
+					$this->setPublic('status', 'Approved');
 						
 					$this->db->execute("
 						UPDATE orders
@@ -477,8 +478,8 @@ Email : {$email}
 				}
 			}
 			else {
-				$this->status  = 'Error';
-				$this->message = 'A duplicate transaction has been submitted.';
+				$this->setPublic('status',  'Error');
+				$this->setPublic('message', 'A duplicate transaction has been submitted.');
 			}
 
 			// Unsets the cart variable

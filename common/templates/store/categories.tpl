@@ -1,5 +1,5 @@
 <div class="store-categories">
-	{foreach from=$categories item=parent_category}
+	{foreach from=$module.categories item=parent_category}
 		<div class="{$parent_category.permalink}">
 			<h1>{$parent_category.name}</h1>
 		</div>

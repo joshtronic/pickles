@@ -30,8 +30,8 @@ class store_customer_login extends store {
 			$password = md5($_REQUEST['password']);
 			$sql = "FROM customers WHERE email_id = '{$email_id}' AND password = '{$password}';";
 			if ($this->db->getField("SELECT COUNT(id) {$sql}") == 0) {
-				$this->status  = 'error';
-				$this->message = 'Invalid logon credentials, please try again.';
+				$this->setPublic('status',  'error');
+				$this->setPublic('message', 'Invalid logon credentials, please try again.');
 			}
 			else {
 				// Pulls the customer and address IDs
@@ -58,17 +58,17 @@ class store_customer_login extends store {
 				$_SESSION['cart']['billing_address']  = $billing_address;
 
 				// Sets up our variables to be returned in the JSON object
-				$this->status           = 'success';
-				$this->customer_id      = $customer['id'];
-				$this->shipping_address = $shipping_address;
-				$this->billing_address  = $billing_address;
+				$this->setPublic('status',           'success');
+				$this->setPublic('customer_id',      $customer['id']);
+				$this->setPublic('shipping_address', $shipping_address);
+				$this->setPublic('billing_address',  $billing_address);
 
 				$this->billing_same_as_shipping = $shipping_address == $billing_address;
 			}
 		}
 		else {
-			$this->status  = 'error';
-			$this->message = 'There is no customer account associated with that email address.';
+			$this->setPublic('status',  'error');
+			$this->setPublic('message', 'There is no customer account associated with that email address.');
 		}
 	}
 }

@@ -18,7 +18,7 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author    Joshua John Sherman <josh@phpwithpickles.org>
- * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @copyright Copyright 2007, 2008, 2009 Joshua John Sherman
  * @link      http://phpwithpickles.org
  * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
@@ -95,125 +95,149 @@ class Controller extends Object {
 
 		// Grab the passed in module or use the default
 		#$module_name = isset($_REQUEST['module']) ? strtr($_REQUEST['module'], '-', '_') : $config->getDefaultModule();
-		$module_name = isset($_REQUEST['module']) ? $_REQUEST['module'] : $config->getDefaultModule();
+		$module['requested']['name'] = isset($_REQUEST['module']) ? $_REQUEST['module'] : $config->getDefaultModule();
+
+		// Checks if we have a display type passed in
+		if (strpos($module['requested']['name'], '.') !== false) {
+			list($module['requested']['name'], $display_type) = explode('.', $module['requested']['name']);
+
+			// Checks for validity, only JSON, RSS and XML can be passed in
+			switch (strtolower($display_type)) {
+				case 'json':
+				case 'rss':
+				case 'xml':
+					$display_type = strtoupper($display_type);
+					break;
+
+				default:
+					unset($display_type);
+					break;
+			}
+		}
 
 		/**
 		 * @todo Maybe the logout shouldn't be an internal thing, what if the
 		 *       user wanted to call the logout page something else? or better
 		 *       yet, they want to next it, like /users/logout?
+		 * @todo May want to make it work from /store/admin/logout and not just from /
 		 */
-		if ($module_name == 'logout') {
+		if ($module['requested']['name'] == 'logout') {
 			$security = new Security($config, $db);
 			$security->logout();
 		}
 		else {
 			// Loads the requested module's information
-			$module_filename = strtr($module_name, '-', '_');
-			$module_file     = '../modules/' . $module_filename . '.php';
-			$module_class    = strtr($module_filename, '/', '_');
-			
-			$module_name = split('_', strtr($module_name, '/', '_'));
+			$module['requested']['filename']   = strtr($module['requested']['name'], '-', '_');
+			$module['requested']['php_file']   = '../modules/' . $module['requested']['filename'] . '.php';
+			$module['requested']['class_name'] = strtr($module['requested']['filename'], '/', '_');
 
 			// Establishes the shared module information
-			$shared_module_class    = $config->getSharedModule($module_class);
-			$shared_module_filename = strtr($shared_module_class, '_', '/');
-			$shared_module_file     = PICKLES_PATH . 'common/modules/' . $shared_module_filename . '.php';
-			$shared_module_name     = split('_', $shared_module_class);
+			// @todo Bug with requested modules with a dash in the name (store-locator == shared module 'store')
+			$module['shared']['class_name'] = $config->getSharedModule($module['requested']['class_name']);
+			$module['shared']['filename']   = strtr($module['shared']['class_name'], '_', '/');
+			$module['shared']['php_file']   = PICKLES_PATH . 'common/modules/' . $module['shared']['filename'] . '.php';
+			$module['shared']['name']       = $module['shared']['filename'];
 
 			// Tries to load the site level module
-			if (file_exists($module_file)) {
-				require_once $module_file;
+			if (file_exists($module['requested']['php_file'])) {
+				require_once $module['requested']['php_file'];
 
-				if (class_exists($module_class)) {
-					$module = new $module_class($config, $db, $mailer, $error);
+				if (class_exists($module['requested']['class_name'])) {
+					$module['object'] = new $module['requested']['class_name']($config, $db, $mailer, $error);
 				}
 			}
 			// Tries to load the shared module
-			else if (file_exists($shared_module_file) && $shared_module_name != false) {
-				require_once $shared_module_file;
+			else if (file_exists($module['shared']['php_file']) && $module['shared']['name'] != false) {
+				require_once $module['shared']['php_file'];
 
-				if (class_exists($shared_module_class)) {
-					$module = new $shared_module_class($config, $db, $mailer, $error);
+				if (class_exists($module['shared']['class_name'])) {
+					$module['object'] = new $module['shared']['class_name']($config, $db, $mailer, $error);
 				}
 			}
 			// Loads the stock module
 			else {
-				$module = new Module($config, $db, $mailer, $error);
+				$module['object'] = new Module($config, $db, $mailer, $error);
 			}
 
 			// Checks if we loaded a module file and no class was present
-			if ($module != null) {
+			if ($module['object'] != null) {
 
 				// Potentially starts the session if it's not started already
-				if ($module->getSession() === true) {
+				if ($module['object']->getSession() === true) {
 					if (ini_get('session.auto_start') == 0) {
 						session_start();
 					}
 				}
 
 				// Potentially requests use authentication
-				if ($module->getAuthentication() === true) {
+				if ($module['object']->getAuthentication() === true) {
 					if (!isset($security)) {
 						$security = new Security($config, $db);
 					}
 					$security->authenticate();
 				}
 
+				// Checks if the display type was passed in
+				if (!isset($display_type)) {
+					$display_type = $module['object']->getDisplay();
+				}
+
+				//var_dump($display_type);
+
 				// Creates a new viewer object
-				$display_type  = $module->getDisplay();
 				$display_class = 'Display_' . $display_type;
-				$display = new $display_class($config, $error);
+				$display       = new $display_class($config, $error);
 
 				// Potentially establishes caching
-				$caching = $module->getCaching();
+				$caching = $module['object']->getCaching();
 				if ($caching) {
 					$display->caching = $caching;
-
 					if ($display_type == DISPLAY_SMARTY) {
-						$module->setSmartyObject($display->getSmartyObject());
+						$module['object']->setSmartyObject($display->getSmartyObject());
 					}
 				}
 
 				$display->prepare();
 
 				// Potentially executes the module's logic
-				if (method_exists($module, '__default')) {
-					$module->__default();
+				if (method_exists($module['object'], '__default')) {
+					$module['object']->__default();
 
-					if ($module->getCacheID()) {
-						$display->cache_id = $module->getCacheID();
+					if ($module['object']->getCacheID()) {
+						$display->cache_id = $module['object']->getCacheID();
 					}
 
 					if (isset($mailer->message)) {
 						$status = $mailer->send();
-						$module->type    = $status['type'];
-						$module->message = $status['message'];
+						$module['object']->setPublic('type',    $status['type']);
+						$module['object']->setPublic('message', $status['message']);
 					}
 				}
 
 				// If the loaded module has a name, use it to override
-				if ($module->name != null && $module_filename != $module->name) {
-					$module_filename = $module->name;
-					$module_file     = '../modules/' . $module_filename . '.php';
-					$module_class    = strtr($module_filename, '/', '_');
-					$module_name     = split('_', $module_class);
+				if ($module['object']->name != null && $module['requested']['filename'] != $module['object']->name) {
+					$module['requested']['filename'] = $module['object']->name;
+					$module['requested']['name']     = $module['object']->name;
+				}
+
+				if ($module['object']->template != null) {
+					$module['requested']['filename'] = $module['object']->template;
 				}
 
 				// Sets the display's properties
-				$display->module_filename        = $module_filename;
-				$display->module_name            = $module_name;
-				$display->shared_module_filename = $shared_module_filename;
-				$display->shared_module_name     = $shared_module_name;
-
+				$display->module_name            = $module['requested']['name'];
+				$display->module_filename        = $module['requested']['filename'];
+				$display->shared_module_name     = $module['shared']['name'];
+				$display->shared_module_filename = $module['shared']['filename'];
 
 				// Loads the module data into the display to be rendered
 				/**
 				 * @todo perhaps make this a passed variable
 				 */
-				$display->data = $module->getData();
+				$display->data = $module['object']->public;
 
 				// Runs the requested rendering function
-				$display->render();
+				$display->render($module);
 
 				// Do some cleanup
 				if (isset($security)) {

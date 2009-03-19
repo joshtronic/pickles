@@ -18,7 +18,7 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author    Joshua John Sherman <josh@phpwithpickles.org>
- * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @copyright Copyright 2007, 2008, 2009 Joshua John Sherman
  * @link      http://phpwithpickles.org
  * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
@@ -64,29 +64,38 @@ class Config extends Object {
 	 */
 	public function load($file) {
 
-		if (file_exists($file)) {
-			/**
-			 * @todo LIBXML_NOCDATA is 5.1+ and I want PICKLES to
-			 *       be 5.0+ compatible.  Potential fix is to read
-			 *       the file in as a string, and if it has CDATA,
-			 *       throw an internal warning.
-			 */
-			$data = simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOCDATA);
+		// Makes sure the file is legit on the surface
+		if (file_exists($file) && is_file($file) && is_readable($file)) {
 
-			// Loops through the top level nodes to find public nodes
-			$variables = get_object_vars($data);
+			// Pulls the contents of the file to allow for validation
+			$contents = trim(file_get_contents($file));
 
-			if (is_array($variables)) {
-				foreach ($variables as $key => $value) {
-					if (is_object($value) && isset($value->attributes()->public) && $value->attributes()->public == true) {
-						$this->_public[$key] = $value;
+			// Checks that the file contents isn't empty and that the config node is present
+			if ($contents != '' && substr($contents, 0, 8) == '<config>' && substr($contents, -9) == '</config>') {
+
+				/**
+				 * @todo LIBXML_NOCDATA is 5.1+ and I want PICKLES to
+				 *       be 5.0+ compatible.  Potential fix is to read
+				 *       the file in as a string, and if it has CDATA,
+				 *       throw an internal warning.
+				 */
+				$data = simplexml_load_string($contents, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+				// Loops through the top level nodes to find public nodes
+				$variables = get_object_vars($data);
+
+				if (is_array($variables)) {
+					foreach ($variables as $key => $value) {
+						if (is_object($value) && isset($value->attributes()->public) && $value->attributes()->public == true) {
+							$this->_public[$key] = $value;
+						}
+
+						$this->$key = $value;
 					}
-
-					$this->$key = $value;
 				}
-			}
 
-			return true;
+				return true;
+			}
 		}
 	}
 

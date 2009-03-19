@@ -6,7 +6,7 @@
 	<div class="your-cart">
 		<h1>Your Cart</h1>
 	</div>
-	{if is_array($cart.products) && count($cart.products) > 0}
+	{if is_array($module.cart.products) && count($module.cart.products) > 0}
 		<form method="POST" action="/store/cart/" name="cart">
 			<table class="product-list">
 				<tr>
@@ -16,7 +16,7 @@
 					<th class="product-price">Price</th>
 					<th class="product-total">Total</th>
 				</tr>
-				{foreach from=$cart.products key=id item=product}
+				{foreach from=$module.cart.products key=id item=product}
 					<tr>
 						<td class="product-quantity">
 							<input type="text" class="product-quantity" value="{$product.quantity}" name="quantity[{$id}]" /><br />
@@ -26,17 +26,17 @@
 						<td class="product-description">{$product.name}</td>
 						<td class="product-price">
 							${$product.price|number_format:2}
-							{if is_array($discounts) && array_key_exists($id, $discounts)}
+							{if is_array($module.discounts) && array_key_exists($id, $module.discounts)}
 								<div style="color: #090">
-									-${$discounts.$id.price|number_format:2}
+									-${$module.discounts.$id.price|number_format:2}
 								</div>
 							{/if}
 						</td>
 						<td class="product-total">
 							${$product.total|number_format:2}
-							{if is_array($discounts) && array_key_exists($id, $discounts)}
+							{if is_array($module.discounts) && array_key_exists($id, $module.discounts)}
 								<div style="color: #090">
-									-${$discounts.$id.total|number_format:2}
+									-${$module.discounts.$id.total|number_format:2}
 								</div>
 							{/if}
 						</td>
@@ -49,14 +49,14 @@
 					</td>
 					<td class="right">
 						<b>Subtotal:</b><br />
-						{if $cart.discount}{/if}
+						{if $module.cart.discount}{/if}
 						<b>Shipping:</b><br />
 						<b>Total:</b>
 					</td>
 					<td class="right">
-						${$cart.subtotal|number_format:2}<br />
+						${$module.cart.subtotal|number_format:2}<br />
 						$4.99<br />
-						${$cart.subtotal+4.99|number_format:2}<br />
+						${$module.cart.subtotal+4.99|number_format:2}<br />
 					</td>
 				</tr>
 				<tr>

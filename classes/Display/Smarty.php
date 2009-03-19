@@ -18,7 +18,7 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author    Joshua John Sherman <josh@phpwithpickles.org>
- * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @copyright Copyright 2007, 2008, 2009 Joshua John Sherman
  * @link      http://phpwithpickles.org
  * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
@@ -110,10 +110,9 @@ class Display_Smarty extends Display_Common {
 		if (!$this->smarty->is_cached($template, $cache_id)) {
 
 			// Build the combined module name array and assign it
-			$module = $this->module_name;
-			$module[0] = strtr($module[0], '_', '-');
-			array_unshift($module, $this->module_filename);
-			$this->smarty->assign('module', $module);
+			$module_name = split('/', $this->module_name);
+			array_unshift($module_name, $this->module_name);
+			$this->smarty->assign('module_name', $module_name);
 
 			// Only assign the template if it's not the index, this avoids an infinite loop.
 			if ($this->template != 'index.tpl') {
@@ -128,10 +127,17 @@ class Display_Smarty extends Display_Common {
 			}
 
 			// Loads the module's data
+			// @todo remove me!
+			// if (isset($this->data) && is_array($this->data)) {
+			// 	foreach ($this->data as $variable => $value) {
+			// 		$this->smarty->assign($variable, $value);
+			// 	}
+			// }
+
+			// Loads the module's public data
+			// @todo For refactoring, need to change the name from data
 			if (isset($this->data) && is_array($this->data)) {
-				foreach ($this->data as $variable => $value) {
-					$this->smarty->assign($variable, $value);
-				}
+				$this->smarty->assign('module', $this->data);
 			}
 		}
 

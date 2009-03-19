@@ -34,11 +34,11 @@ class store extends Module {
 			$_SESSION['cart']['count'] = $count;
 		}
 
-		$this->cart = $_SESSION['cart'];
+		$this->setPublic('cart', $_SESSION['cart']);
 
 		// Loads the navigation
 		if (isset($config->store->sections)) {
-			$this->subnav = $config->store->sections;
+			$this->setPublic('subnav', $config->store->sections);
 		}
 
 		// Loads the categories
@@ -56,7 +56,7 @@ class store extends Module {
 			}
 		}
 
-		$this->categories = $categories;
+		$this->setPublic('categories', $categories);
 		*/
 	}
 
@@ -65,8 +65,8 @@ class store extends Module {
 		$object = new store_home($this->config, $this->db, $this->mailer, $this->error);
 		$object->__default();
 
-		$this->data = $object->data;
-		$this->name = 'store/home';
+		$this->public = $object->public;
+		$this->name   = 'store/home';
 	}
 }
 

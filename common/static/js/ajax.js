@@ -102,8 +102,12 @@ function ajaxRequest(htmlElement, customHandler, placement, url) {
 		method = 'POST';
 		action = url;
 	
-		// @todo this may eventually need to be a loop that keeps going up until it's at a form tag?
-		var formElement = htmlElement.parentNode;
+		// Loops up through the parents until it reaches the form element
+		while (htmlElement.nodeName != 'FORM') {
+			htmlElement = htmlElement.parentNode;
+		}
+
+		var formElement = htmlElement;
 	}
 
 	if (params) {

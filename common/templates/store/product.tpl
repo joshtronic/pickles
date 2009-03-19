@@ -3,17 +3,17 @@
 	{include file="../../pickles/common/templates/store/categories.tpl"}
 </div>
 <div class="content-right store-category">
-	<div class="{$category.permalink}">
-		<h1>{$category.name}</h1>
+	<div class="{$module.category.permalink}">
+		<h1>{$module.category.name}</h1>
 	</div>
 	<div class="center">
-		{$category.description}
+		{$module.category.description}
 	</div>
 	<div class="breadcrumbs">
-		<a href="/store">Shopping Home</a> &gt; <a href="/store/category/{$category.permalink}">{$category.name}</a>
+		<a href="/store">Shopping Home</a> &gt; <a href="/store/category/{$module.category.permalink}">{$module.category.name}</a>
 	</div>
 	<div>
-		{foreach from=$products item=product name=products}
+		{foreach from=$module.products item=product name=products}
 			<div class="float-left" style="width: 200px; margin: 3px">
 				<img src="/images/products/{$product.id}/small.jpg" class="float-left" style="padding-right: 5px" />
 				<div class="float-left" style="width: 120px">
