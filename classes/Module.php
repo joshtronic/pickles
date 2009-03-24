@@ -35,12 +35,6 @@
 class Module extends Object {
 
 	/**
-	 * Data array used by the display 
-	 */
-	// @todo REMOVE THIS
-	//protected $data = array();
-
-	/**
 	 * Array of public variables to be available by the display
 	 */
 	protected $public = array();
@@ -201,25 +195,6 @@ class Module extends Object {
 
 		return null;
 	}
-
-	/**
-	 * Sets the variable in the data array
-	 *
-	 * Overrides the built-in functionality to set an object's property with
-	 * logic to place that data inside the data array for easier interaction
-	 * later on.
-	 *
-	 * @param string $variable Name of the variable to be set
-	 * @param mixed $value Data to be set
-	 * @todo  REMOVE ME!
-	 */
-	/*
-	public function __set($variable, $value) {
-		if ($variable != 'cache_id') {
-			$this->data[$variable] = $value;
-		}
-	}
-	*/
 
 	public function setPublic($variable, $value) {
 		$this->public[$variable] = $value;

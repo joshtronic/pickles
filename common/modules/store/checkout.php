@@ -180,10 +180,8 @@ class store_checkout extends store {
 					$cart['email']       = $email;
 
 					// Contacts the user to advise them of their sign up
-					// @todo This is as MenoSol specific as it gets
-					// @todo Swap out for the mailer class as well, then I can trap the sends and override for testing.
-					mail($email, 'Welcome to Menopause Solutions', "
-Menopause Solutions
+					$registration_message = "
+{$this->config->store->title}
 -------------------------------------------------------------------
 
 Dear {$shipping_address['first_name']} {$shipping_address['last_name']},
@@ -227,13 +225,24 @@ Fax:          {$shipping_address['fax']}
 
 ------------------
 
-Thank you for your interest in Menopause Solutions.
+Thank you for your interest in {$this->config->store->title}.
 
-Menopause Solutions
-Phone: 1-800-895-4415
-Fax:   813-925-1066
-URL:   http://www.menopausesolutions.net
-					", 'From: noreply@menopausesolutions.net');
+{$this->config->store->title}
+Phone: {$this->config->store->phone}
+Fax:   {$this->config->store->fax}
+URL:   {$this->config->store->url}
+";
+					
+					// @todo
+					mail($email, 'Welcome to ' . $this->config->store->title, $registration_message, 'From: ' . $this->config->store->return_email);
+					/*
+					$status = $this->mailer->send(
+						$email,
+						$this->config->store->return_email,
+						'Welcome to ' . $this->config->store->title,
+						$registration_message
+					);
+					*/
 				}
 				else {
 					// @todo Change this out for a confirmation box and re-submit
@@ -277,6 +286,14 @@ URL:   http://www.menopausesolutions.net
 				$this->setPublic('message', 'There was an internal error.');
 				return false;
 			}
+			
+			$affiliate_id = null;
+			if (isset($cart['affiliate'])) {
+				if ($this->db->getField("SELECT COUNT(id) FROM affiliates WHERE MD5(id) = '{$cart['affiliate']}';") == 1) {
+					$affiliate    = $this->db->getRow("SELECT id, commission_rate FROM affiliates WHERE MD5(id) = '{$cart['affiliate']}';");
+					$affiliate_id = $affiliate['id'];
+				}
+			}
 
 			// Assembles the order array
 			$order = array(
@@ -285,7 +302,7 @@ URL:   http://www.menopausesolutions.net
 				'shipping_address_id' => $shipping_address_id,
 				'billing_address_id'  => $billing_address_id,
 				'referrer_id'         => $referrer_id,
-				'affiliate_id'        => isset($cart['affiliate']) ? $cart['affiliate'] : null,
+				'affiliate_id'        => $affiliate_id,
 				'cc_type'             => isset($_REQUEST['cc_type']) ? $_REQUEST['cc_type'] : null,
 				'cc_last4'            => isset($_REQUEST['cc_number']) ? substr($_REQUEST['cc_number'], -4) : null,
 				'cc_expiration'       => isset($_REQUEST['cc_expiration']) ? '20' . $_REQUEST['cc_expiration']['year'] . '-' . $_REQUEST['cc_expiration']['month'] . '-01' : null,
@@ -445,12 +462,34 @@ Email : {$email}
 							WHERE id = '{$response['invoice_number']}';
 						");
 
+						// Updates the affiliates profile
+						if ($affiliate_id != null) {
+							$commission = round($cart['subtotal'] * ($affiliate['commission_rate'] / 100), 2);
+
+							$this->db->execute("
+								UPDATE affiliates
+								SET
+									order_count       = order_count + 1,
+									commission_earned = commission_earned + {$commission},
+									unpaid_balance    = unpaid_balance + {$commission}
+								WHERE id = '{$affiliate_id}';
+							");
+						}
+
 						// Does some clean up to avoid duplicate transactions
 						unset($_SESSION['cart']);
 
 						// Emails the shipping department
 						// @todo
-						mail('weborders@menopausesolutions.net, tom@epuresolutions.com, joshsherman@gmail.com', 'Menopause Solutions Order Notification', $receipt, 'From: noreply@menopausesolutions.net');
+						mail($this->config->store->order_notification->recipient, $this->config->store->title . ' Order Notification', $receipt, 'From: ' . $this->config->store->return_email);
+						/*
+						$this->mailer->send(
+							$this->config->store->order_notification->recipient,
+							$this->config->store->return_email,
+							$this->config->store->title . ' Order Notification',
+							$receipt
+						);
+						*/
 					}
 
 					$this->setPublic('status',  $response['response_code']);
@@ -470,11 +509,29 @@ Email : {$email}
 					unset($_SESSION['cart']);
 					
 					// Emails the user a receipt
-					mail($email, 'Menopause Solutions Customer Receipt', $receipt, 'From: noreply@menopausesolutions.net');
+					// @todo
+					mail($email, $this->config->store->title . ' Customer Receipt', $receipt, 'From: ' . $this->config->store->return_email);
+					/*
+					$this->mailer->send(
+						$email,
+						$this->config->store->return_email,
+						$this->config->store->title . ' Customer Receipt',
+						$receipt,
+						false
+					);
+					*/
 
 					// Emails the shipping department
 					// @todo
-					mail('weborders@menopausesolutions.net, tom@epuresolutions.com, joshsherman@gmail.com', 'Menopause Solutions Order Notification', $receipt, 'From: noreply@menopausesolutions.net');
+					mail($this->config->store->order_notification->recipient, $this->config->store->title . ' Order Notification', $receipt, 'From: ' . $this->config->store->return_email);
+					/*
+					$this->mailer->send(
+						$this->config->store->order_notification->recipient,
+						$this->config->store->return_email,
+						$this->config->store->title . ' Order Notification',
+						$receipt
+					);
+					*/
 				}
 			}
 			else {

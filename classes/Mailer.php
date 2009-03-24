@@ -18,7 +18,7 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author    Joshua John Sherman <josh@phpwithpickles.org>
- * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @copyright Copyright 2007, 2008, 2009 Joshua John Sherman
  * @link      http://phpwithpickles.org
  * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
@@ -27,75 +27,40 @@
 /**
  * Mailer Class
  *
- * Handles mailing messages from within PICKLES.  Mailer data is
- * loaded into the object (each model has one) and after everything
- * is done loading, it will automatically send out the email.
+ * Handles mailing messages from within PICKLES.  Modules interact with the
+ * Mailer object directly (each module has an instance) to send mail.
  *
- * @todo Logic needs to be cleaned up a bit (it's just sloppy since
- *       the conversion from Mail();
+ * @todo Add a Pickles config to allow for overrides (i.e. email goes to a
+ *       developer's email account instead of the actual account passed in)
  */
 class Mailer extends Object {
-
-	public function __construct(Config $config, Error $error) {
-		parent::__construct();
-		$this->config = $config;
-		$this->error  = $error;
-	}
 
 	/**
 	 * Sends an email message
 	 *
-	 * @param  array $recipients An array of recipients (optional)
-	 * @param  string $prefix Prefix to use on the subject line (optional)
+	 * @param  mixed $to String, object or array representing the recipient(s)
+	 * @param  mixed $from String object or array representing the sender
+	 * @param  string $subject Subject line for the email
+	 * @param  string $message The body of the email
 	 * @return array An associative array with a status type and message
 	 */
-	public function send() {
+	public function send($to, $from, $subject, $message) {
 
-		// Gets the values (is any) set in the config
-		$defaults = $this->config->contact;
+		// Converts the recipients into a usable string format 
+		if (is_object($to)) { $this->object2array($to); }
+		if (is_array($to))  { $this->array2string($to); }
+		
+		// Converts the from variable into a usable string format 
+		if (is_object($from)) { $this->object2array($from); }
+		if (is_array($from))  { $this->array2string($from); }
 
-		// Pulls the recipients from the config
-		if (!isset($this->recipients)) { // && isset($defaules->recipients->recipient)) {
-			$this->recipients = $defaults->recipients->recipient;
-		}
-
-		// Loads up the "to" value
-		if (is_object($this->recipients)) {
-			$to = null;
-			foreach ($this->recipients as $recipient) {
-				$to .= (isset($to) ? ',' : '') . (string)$recipient;
-			}
-		}
-		else {
-			$to = $this->recipients;
-		}
-
-		// Loads the subject line prefix
-		$prefix = isset($this->prefix) ? $this->prefix : (isset($defaults->prefix) && $defaults->prefix != '' ? $defaults->prefix : null);
-
-		// Assembles the subject line with prefix
-		$subject = strtr((isset($prefix) ? '[' . $prefix . '] ' : ''), "\n", '');
-
-		// Tacks on the subject
-		if (isset($this->subject)) {
-			$subject .= $this->subject;
-		}
-		else if (isset($defaults->subjec)) {
-			$subject .= $defaults->subject;
-		}
-
-		// Puts together the sender's contact info in name <email> format
-		if (isset($this->name)) {
-			$from = $this->name . ' <' . $this->email . '>';
-		}
-		else {
-			$from = $this->email;
-		}
+		// Constructs the header
+		$additional_headers = "MIME-Version: 1.0\r\nContent-type: text/html; charset=iso-8859-1\r\nFrom: {$from}\r\nX-Mailer: PHP with PICKLES\r\n";
 
 		// Sends the mail
-		if (mail($to, $subject, stripslashes($this->message), "From: {$from}\r\nX-Mailer: PHP with PICKLES\r\n")) {
+		if (mail($to, stripslashes(trim($subject)), stripslashes(trim($message)), $additional_headers)) {
 			$type    = 'success';
-			$message = isset($defaults['response']) ? $defaults['response'] : 'Message sent successfully';
+			$message = 'Message sent successfully';
 		}
 		else {
 			$type    = 'error';
@@ -104,13 +69,63 @@ class Mailer extends Object {
 
 		Logger::write('mailer', '[' . $type . ']');
 
-		// Builds the status array to be returned
-		$return = array(
+		// Returns the status array
+		return array(
 			'type'    => $type,
 			'message' => $message
 		);
+	}
 
-		return $return;
+	/**
+	 * Converts an object to an array
+	 *
+	 * This function assumes that the object is formatted in a certain way,
+	 * with a name and email member variable.
+	 *
+	 * @param  object $object Object to be converted
+	 * @return array The resulting array
+	 */
+	private function object2array(&$object) {
+		$array = array();
+
+		foreach ($object as $key => $node) {
+			if (isset($node->name, $node->email)) {
+				$array[trim((string)$node->name)] = trim((string)$node->email);
+			}
+			else if (isset($node->email)) {
+				$array[] = trim((string)$node->email);
+			}
+			else {
+				$array[] = trim((string)$node);
+			}
+		}
+
+		$object = $array;
+	}
+
+
+	/**
+	 * Converts an array to a string
+	 *
+	 * This function assumes that the array is formatted in a certain way,
+	 * with the name as the key and the email as the value.
+	 *
+	 * @param  array $array Array to be converted
+	 * @return string The resulting string
+	 */
+	private function array2string(&$array) {
+		$temp = array();
+
+		foreach ($array as $name => $email) {
+			if (is_string($name)) {
+				$temp[$name] = "{$name} <{$email}>";
+			}
+			else {
+				$temp[] = $email;
+			}
+		}
+
+		$array = implode(', ', $temp);
 	}
 }
 

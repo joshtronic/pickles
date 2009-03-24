@@ -207,11 +207,13 @@ class Controller extends Object {
 						$display->cache_id = $module['object']->getCacheID();
 					}
 
+					/*
 					if (isset($mailer->message)) {
 						$status = $mailer->send();
 						$module['object']->setPublic('type',    $status['type']);
 						$module['object']->setPublic('message', $status['message']);
 					}
+					*/
 				}
 
 				// If the loaded module has a name, use it to override

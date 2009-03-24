@@ -1,3 +1,5 @@
+// @todo Document this file better, it's a mess.
+
 var request = null;
 
 function getForm(form) {
@@ -13,10 +15,10 @@ function getForm(form) {
 			case 'text':
 			case 'textarea':
 				// Checks if the field is visible
-				if (element.name == 'referred_by') {
-					alert(element.name);
-					alert(element.style.display);
-				}
+				// if (element.name == 'referred_by') {
+				// 	alert(element.name);
+				// 	alert(element.style.display);
+				// }
 				if (element.style.display != 'none') {
 					// Checks if it's required
 					if (element.title == 'required' && trim(element.value) == '') {
@@ -79,13 +81,23 @@ function ajaxRequest(htmlElement, customHandler, placement, url) {
 	var customHandler = (customHandler == null) ? null     : customHandler;
 	var placement     = (placement     == null) ? 'before' : placement;
 	var url           = (url           == null) ? null     : url;
+	var return_json   = false;
 
+	// If .value is undefined, assumes it's a FORM element
 	if (typeof htmlElement.value == 'undefined') {
-		params = getForm(htmlElement);
-		method = htmlElement.method;
-		action = htmlElement.action;
 
-		var formElement = htmlElement
+		if (typeof htmlElement == 'string') {
+			method      = 'POST';
+			action      = htmlElement;
+			return_json = true;
+		}
+		else {
+			params = getForm(htmlElement);
+			method = htmlElement.method;
+			action = htmlElement.action;
+
+			var formElement = htmlElement;
+		}
 	}
 	else {
 		if (htmlElement.id != '') {
@@ -110,6 +122,8 @@ function ajaxRequest(htmlElement, customHandler, placement, url) {
 		var formElement = htmlElement;
 	}
 
+	// @todo need to decide on a way to request a page w/o any params.
+	// if (true) {
 	if (params) {
 		createRequest();
 		request.open(method, action, true);
@@ -174,6 +188,7 @@ function ajaxRequest(htmlElement, customHandler, placement, url) {
 
 		request.send(params);
 	}
+	// @todo need to remember why this is here.
 	else if (customHandler) {
 		responseElement = window[customHandler]();
 		return false;
