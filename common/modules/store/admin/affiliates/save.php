@@ -134,6 +134,10 @@ Your custom URL:
 ---------------------
 {$this->config->store->url}/referral/" . md5($affiliate_id) . "
 
+Your commission rate:
+---------------------
+{$_REQUEST['commission_rate']}%
+
 ------------------
 
 Thank you for your interest in the {$this->config->store->title} Affiliate Program.
