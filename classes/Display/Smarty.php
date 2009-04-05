@@ -104,44 +104,68 @@ class Display_Smarty extends Display_Common {
 		$this->template = $template;
 
 		$cache_id = isset($this->cache_id) ? $this->cache_id : $this->module_filename;
-		
-		$template = $this->smarty->template_exists('index.tpl') ? 'index.tpl' : $this->template;
 
-		if (!$this->smarty->is_cached($template, $cache_id)) {
+		$template_found = false;
 
-			// Build the combined module name array and assign it
-			$module_name = split('/', $this->module_name);
-			array_unshift($module_name, $this->module_name);
-			$this->smarty->assign('module_name', $module_name);
-
-			// Only assign the template if it's not the index, this avoids an infinite loop.
-			if ($this->template != 'index.tpl') {
-				$this->smarty->assign('template', strtr($this->template, '-', '_'));
+		// Checks that the passed in main template is for real
+		if (isset($this->config->templates->main)) {
+			// If there's no .tpl at the end, appends it
+			if (strstr('\.tpl', $this->config->templates['main'])) {
+				$this->config->templates->main .= '.tpl';
 			}
 
-			// Loads the data from the config
-			$data = $this->config->getPublicData();
-
-			if (isset($data) && is_array($data)) {
-				$this->smarty->assign('config', $data);
+			// Checks that the template exists
+			if ($this->smarty->template_exists($this->config->templates->main)) {
+				$template = $this->config->templates->main;
+				$template_found = true;
 			}
-
-			// Loads the module's data
-			// @todo remove me!
-			// if (isset($this->data) && is_array($this->data)) {
-			// 	foreach ($this->data as $variable => $value) {
-			// 		$this->smarty->assign($variable, $value);
-			// 	}
-			// }
-
-			// Loads the module's public data
-			// @todo For refactoring, need to change the name from data
-			if (isset($this->data) && is_array($this->data)) {
-				$this->smarty->assign('module', $this->data);
+			else {
+				$this->error->addError('The specified main template file (' . $this->config->templates->main . ') could not be found');
 			}
 		}
 
-		$this->smarty->display($template, $cache_id);
+		// If no main template was found, try to load the module template
+		if ($template_found == false) {
+			if ($this->smarty->template_exists($this->template) == true) {
+				$template = $this->template;
+				$template_found = true;
+			}
+		}
+
+		// If no module template is found, error out.
+		if ($template_found == false) {
+			$this->error->addError('No valid template file could be found');
+		}
+		else {
+			
+			if (!$this->smarty->is_cached($template, $cache_id)) {
+
+				// Build the combined module name array and assign it
+				$module_name = split('/', $this->module_name);
+				array_unshift($module_name, $this->module_name);
+				$this->smarty->assign('module_name', $module_name);
+
+				// Only assign the template if it's not the index, this avoids an infinite loop.
+				if ($this->template != 'index.tpl') {
+					$this->smarty->assign('template', strtr($this->template, '-', '_'));
+				}
+
+				// Loads the data from the config
+				$data = $this->config->getPublicData();
+
+				if (isset($data) && is_array($data)) {
+					$this->smarty->assign('config', $data);
+				}
+
+				// Loads the module's public data
+				// @todo For refactoring, need to change the name from data
+				if (isset($this->data) && is_array($this->data)) {
+					$this->smarty->assign('module', $this->data);
+				}
+			}
+
+			$this->smarty->display($template, $cache_id);
+		}
 	}
 
 	public function getSmartyObject() {

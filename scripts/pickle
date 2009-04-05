@@ -2,7 +2,7 @@
 <?php
 
 /**
- * PICKLES Scaffolding Generator (to pickle)
+ * PICKLES Scaffolding Generator (verb: to pickle)
  *
  * This is the file that you include on the page you're instantiating the
  * controller from (typically index.php).  The path to the PICKLES code base
@@ -24,7 +24,7 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author    Joshua John Sherman <josh@phpwithpickles.org>
- * @copyright Copyright 2007, 2008 Joshua John Sherman
+ * @copyright Copyright 2007, 2008, 2009 Joshua John Sherman
  * @link      http://phpwithpickles.org
  * @license   http://www.gnu.org/copyleft/lesser.html
  * @package   PICKLES
@@ -135,7 +135,7 @@ class home extends Model {
 
 	// The follow are set to the default values, so they are optional
 	protected \$authorization = false;
-	protected \$viewer        = 'Smarty'; 
+	protected \$display       = 'Smarty'; 
 	protected \$session       = false;
 
 	public function __default() {
