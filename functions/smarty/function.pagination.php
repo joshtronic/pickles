@@ -15,6 +15,19 @@ function smarty_function_pagination($params, &$smarty) {
 		$total   =& $params['total'];
 		$section =& $params['section'];
 
+		$start = 1;
+		$end   = $total;
+
+		if ($total > 10) {
+			if ($current - 5 >= 0) {
+				$start = $current - 5;
+			}
+
+			if ($current + 5 <= $total) {
+				$end = $current + 5;
+			}
+		}
+
 		$pagination = null;
 
 		// &laquo  = double
@@ -32,13 +45,13 @@ function smarty_function_pagination($params, &$smarty) {
 		$pagination .= '</span>';
 		*/
 
-		$pagination .= $current != 1 ? '<a href="/' . $section . '/page/' . ($current - 1) . '">' . $prev . '</a>' : '<span class="prev">' . $prev . '</span>';
+		$pagination .= $current != 1 ? '<a href="/' . $section . '/' . ($current - 1) . '">' . $prev . '</a>' : '<span class="prev">' . $prev . '</span>';
 
-		for ($i = 1; $i <= $total; $i++) {
-			$pagination .= $i != $current ? '<a href="/' . $section . '/page/' . $i . '">' . $i . '</a>' : '<span class="current">' . $i . '</span>';
+		for ($i = $start; $i <= $end; $i++) {
+			$pagination .= $i != $current ? '<a href="/' . $section . '/' . $i . '">' . $i . '</a>' : '<span class="current">' . $i . '</span>';
 		}
 
-		$pagination .= $current != $total ? '<a href="/' . $section . '/page/' . ($current + 1) . '">' . $next . '</a>' : '<span class="next">' . $next . '</span>';
+		$pagination .= $current != $total ? '<a href="/' . $section . '/' . ($current + 1) . '">' . $next . '</a>' : '<span class="next">' . $next . '</span>';
 
 		/*
 		$pagination .= ' <span class="pagination">';
@@ -46,7 +59,7 @@ function smarty_function_pagination($params, &$smarty) {
 		$pagination .= '</span> ';
 		*/
 
-		return '<div id="pagination">' . $pagination . '</pagination>';
+		return '<div id="pagination">' . $pagination . '</div>';
 	}
 }
 
