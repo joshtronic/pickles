@@ -56,6 +56,52 @@
 				document.getElementById('payee_fax').disabled        = false; 
 			}
 		}
+
+		function clearForm(responseObject, responseElement) {
+			if (responseObject != null) {
+				switch (responseObject.status) {
+					case 'Success':
+						document.getElementById('contact_company').value    = '';
+						document.getElementById('contact_first_name').value = '';
+						document.getElementById('contact_last_name').value  = '';
+						document.getElementById('contact_address1').value   = '';
+						document.getElementById('contact_address2').value   = '';
+						document.getElementById('contact_city').value       = '';
+						document.getElementById('contact_state').value      = '';
+						document.getElementById('contact_zip_code').value   = '';
+						document.getElementById('contact_phone').value      = '';
+						document.getElementById('contact_fax').value        = '';
+
+						document.getElementById('payee_company').value      = '';
+						document.getElementById('payee_first_name').value   = '';
+						document.getElementById('payee_last_name').value    = '';
+						document.getElementById('payee_address1').value     = '';
+						document.getElementById('payee_address2').value     = '';
+						document.getElementById('payee_city').value         = '';
+						document.getElementById('payee_state').value        = '';
+						document.getElementById('payee_zip_code').value     = '';
+						document.getElementById('payee_phone').value        = '';
+						document.getElementById('payee_fax').value          = '';
+
+						document.getElementById('email').value              = '';
+						document.getElementById('tax_id').value             = '';
+						document.getElementById('tax_class').value          = '';
+						document.getElementById('commission_rate').value    = '';
+						
+						break;
+
+					default:
+						//alert(responseObject.message);
+						break;
+				}
+			}
+
+			var responseMessage = document.createTextNode(responseObject.message);
+			responseElement.className = responseObject.type;
+			responseElement.appendChild(responseMessage);
+
+			return responseElement;
+		}
 	</script>
 	<style>
 		form div {
@@ -100,7 +146,7 @@
 			<dt><span class="pink">*</span>Address:</dt>
 			<dd>
 				<input type='text' name='contact_address1' id='contact_address1' title="required" maxlength="64" value="{$module.affiliate.contact_address1}" /><br />
-				<input type='text' name='contact_address2' id='contact_address2' maxlength="64" value="{$module.affiliate.contact_address1}" />
+				<input type='text' name='contact_address2' id='contact_address2' maxlength="64" value="{$module.affiliate.contact_address2}" />
 			</dd>
 			<dt><span class="pink">*</span>City:</dt>
 			<dd><input type='text' name='contact_city' id='contact_city' title="required" maxlength="64" value="{$module.affiliate.contact_city}" /></dd>
@@ -131,7 +177,7 @@
 			<dt><span class="pink">*</span>Address:</dt>
 			<dd>
 				<input type='text' name='payee_address1' id='payee_address1' title="required" maxlength="64" value="{$module.affiliate.payee_address1}" /><br />
-				<input type='text' name='payee_address2' id='payee_address2' maxlength="64" value="{$module.affiliate.payee_address1}" />
+				<input type='text' name='payee_address2' id='payee_address2' maxlength="64" value="{$module.affiliate.payee_address2}" />
 			</dd>
 			<dt><span class="pink">*</span>City:</dt>
 			<dd><input type='text' name='payee_city' id='payee_city' title="required" maxlength="64" value="{$module.affiliate.payee_city}" /></dd>
@@ -172,7 +218,7 @@
 	<br class="clear-left" />
 	<div class="center">
 		{if isset($module.affiliate.id)}<input type="hidden" name="id" value="{$module.affiliate.id}" />{/if}
-		<input type="reset" value="Reset Form" /><input type="button" value="Store Information" onclick="ajaxRequest(this.parentNode.parentNode); return false;" />
+		<input type="reset" value="Reset Form" /><input type="button" value="Store Information" onclick="ajaxRequest(this.parentNode.parentNode{if !isset($module.affiliate.id)}, 'clearForm'{/if}); return false;" />
 	</div>
 </form>
 <script type="text/javascript">

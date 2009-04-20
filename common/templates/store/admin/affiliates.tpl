@@ -1,6 +1,6 @@
 <h3>Affiliates</h3>
 <div class="float-right">
-	<img src="/static/contrib/silk/icons/user_add.png" style="margin: 0 5px -4px 0;"/><a href="/store/admin/affiliates/edit">Add New Affiliate</a>
+	<img src="/static/contrib/silk/icons/add.png" style="margin: 0 5px -4px 0;"/><a href="/store/admin/affiliates/edit">Add New Affiliate</a>
 </div>
 {if is_array($module.affiliates)}
 	<table style="width: 100%">
@@ -11,7 +11,7 @@
 			<th>Commission</th>
 			<th>Orders</th>
 			<th>Balance</th>
-			<th>Options</th>
+			<th></th>
 		</tr>
 		{foreach from=$module.affiliates item=affiliate}
 			<tr class="center">
@@ -22,9 +22,9 @@
 				<td>{$affiliate.order_count}</td>
 				<td>${$affiliate.unpaid_balance}</td>
 				<td>
-					<a href="/store/admin/affiliates/edit/{$affiliate.id}"><img src="/static/contrib/silk/icons/user_edit.png" alt="Edit Affiliate" title="Edit Affiliate" /></a>
-					<a href=""><img src="/static/contrib/silk/icons/money.png" alt="Pay Affiliate" title="Pay Affiliate" /></a>
-					<a href=""><img src="/static/contrib/silk/icons/user_delete.png" alt="Delete Affiliate" title="Delete Affiliate" /></a>
+					<a href="/store/admin/affiliates/edit/{$affiliate.id}"><img src="/static/contrib/silk/icons/pencil.png" alt="Edit Affiliate" title="Edit Affiliate" /></a>
+					<a href="/store/admin/affiliates/pay/{$affiliate.id}"><img src="/static/contrib/silk/icons/money.png" alt="Pay Affiliate" title="Pay Affiliate" /></a>
+					<a href="/store/admin/affiliates/delete/{$affiliate.id}" onclick="return confirm('Are you sure you want to delete {$affiliate.first_name} {$affiliate.last_name}?')"><img src="/static/contrib/silk/icons/cross.png" alt="Delete Affiliate" title="Delete Affiliate" /></a>
 				</td>
 			</tr>
 		{/foreach}
