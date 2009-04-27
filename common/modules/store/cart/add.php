@@ -117,7 +117,7 @@ class store_cart_add extends store {
 
 			// Redirect to the cart
 			header('Location: /store/cart');
-			exit();
+			//exit();
 		}
 	}
 }
