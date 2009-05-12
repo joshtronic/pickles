@@ -13,10 +13,10 @@ class store_admin extends Module {
 			'customers',
 			'products', 
 			'categories',
-			'coupons',
+			'discounts',
 			'affiliates',
-			'vendors',
-			'gift certs',
+			// 'vendors', 
+			'gift certificates',
 			'reports',
 			'settings'
 		);
