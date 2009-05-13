@@ -50,7 +50,7 @@
 			<b>Email:</b> {mailto address=$order.email}
 		</div>
 	{/if}
-	<div class="float-left" style="padding-left: 50px">
+	<div class="float-left" {if $order.total_amount > 0}style="padding-left: 50px"{/if}>
 		<b>Ship To:</b><br />
 		{if $order.shipping_company}{$order.shipping_company}<br />{/if}
 		{$order.shipping_first_name} {$order.shipping_last_name}<br />
@@ -126,17 +126,29 @@
 			<dt>Tracking Number:</dt>
 			<dd><input type="text" name="tracking_number" id="tracking_number" value="{$order.tracking_number}" /></dd>
 			<dt>Note:</dt>
-			<dd><textarea id="shipping_note" name="shipping_note" style="width: 350px">{$order.shipping_note}</textarea></dd>
+			<dd><textarea id="shipping_note" name="shipping_note" style="width: 350px"></textarea></dd>
 		</dl>
+		<br class="clear-left" />
+		<br class="clear-right" />
+		<div class="center" style="width: 500px">
+			<input type="hidden" name="id" value="{$order.order_id}" />
+			<input type="button" value="Save &amp; Return to List" onclick="ajaxRequest(this.parentNode.parentNode, 'returnToList'); return false;" />
+			<input type="button" value="Save &amp; Print Packing Slip" onclick="alert('almost'); return false; ajaxRequest(this.parentNode.parentNode); /*, 'print');*/ return false;" />
+		</div>
 	</div>
 	<div class="float-right">
-		<b>Resend Receipt to:</b> <input type="text" name="email" id="email" value="{$order.email}" /> <input type="button" value="Send" onclick="alert('not yet');"/><br /><br /><br />
+		<b>Resend Receipt to:</b> <input type="text" name="email" id="email" value="{$order.email}" /> <input type="button" value="Send" onclick="alert('not yet');"/><br /><br />
+		<b>Updates:</b>
+		<table>
+			{foreach from=$order.updates item="update"}
+				<tr>
+					<td>{$module.statuses[$update.status_id]}</td>
+					<td>{$update.note}</td>
+					<td>{$update.update_time|date_format:'%m/%d/%Y'}</td>
+				</tr>
+			{/foreach}
+		</table>
 	</div>
 	<br class="clear-left" />
 	<br class="clear-right" />
-	<div class="center" style="width: 500px">
-		<input type="hidden" name="id" value="{$order.order_id}" />
-		<input type="button" value="Save &amp; Return to List" onclick="ajaxRequest(this.parentNode.parentNode, 'returnToList'); return false;" />
-		<input type="button" value="Save &amp; Print Packing Slip" onclick="alert('almost'); return false; ajaxRequest(this.parentNode.parentNode); /*, 'print');*/ return false;" />
-	</div>
 </form>

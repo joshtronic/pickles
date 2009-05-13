@@ -10,7 +10,6 @@ class store_admin_orders_save extends store_admin {
 			UPDATE orders
 			SET
 				shipping_id     = "' . $_REQUEST['shipping_method'] . '",
-				shipping_note   = "' . $_REQUEST['shipping_note'] . '",
 				tracking_number = "' . $_REQUEST['tracking_number'] . '"
 			WHERE id = "' . $_REQUEST['id'] . '";
 		');
@@ -18,11 +17,12 @@ class store_admin_orders_save extends store_admin {
 		// Insert a record into the order status updates table
 		$this->db->execute('
 			INSERT INTO order_status_updates (
-				order_id, user_id, status_id, update_time
+				order_id, user_id, status_id, note, update_time
 			) VALUES (
 				"' . $_REQUEST['id'] . '",
 				"' . $_SESSION['user_id'] . '",
 				"' . $_REQUEST['status'] . '",
+				"' . $_REQUEST['shipping_note'] . '",
 				NOW()
 			);
 		');

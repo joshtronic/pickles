@@ -10,7 +10,7 @@
 			<th nowrap="nowrap">Last Update</th>
 			<th nowrap="nowrap">Shipping Method</th>
 			<th>Weight</th>
-			<th>Transaction #</th>
+			<th nowrap="nowrap">Transaction #</th>
 		</tr>
 		{foreach from=$module.orders item=order}
 			<tr class="center">
@@ -21,7 +21,7 @@
 				</td>
 				<td class="left">{$order.order_time}</td>
 				<td class="left">${$order.total_amount}</td>
-				<td>{if $order.status != ''}{$order.status}{else}<em>Unknown</em>{/if}</td>
+				<td nowrap="nowrap">{if $order.status != ''}{$order.status}{else}<em>Unknown</em>{/if}</td>
 				<td>{if $order.last_update != ''}{$order.last_update|date_format:'%m/%d/%Y'}{else}<em>Unknown</em>{/if}</td>
 				<td>{$order.shipping_method}</td>
 				<td>{$order.weight|number_format:2} lbs</td>

@@ -25,7 +25,6 @@ class store_admin_orders_edit extends store_admin {
 					o.cc_last4,
 					o.cc_expiration,
 					o.shipping_amount,
-					o.shipping_note,
 					o.tracking_number,
 
 					e.email,
@@ -87,19 +86,18 @@ class store_admin_orders_edit extends store_admin {
 			$order = $this->db->getRow($sql);
 
 			$sql = '
-				SELECT
-					op.quantity,
-					p.*
-
+				SELECT op.quantity, p.*
 				FROM order_products AS op
-
-				INNER JOIN products AS p
-					ON p.id = op.product_id
-
+				INNER JOIN products AS p ON p.id = op.product_id
 				WHERE op.order_id = "' . $_REQUEST['id'] . '"
 			';
 
 			$order['products'] = $this->db->getArray($sql);
+
+			$sql = '
+				SELECT * FROM order_status_updates WHERE order_id = "' . $_REQUEST['id'] . '" ORDER BY update_time DESC;';
+
+			$order['updates'] = $this->db->getArray($sql);
 
 			$this->setPublic('order', $order);
 
