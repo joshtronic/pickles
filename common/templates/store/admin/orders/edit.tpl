@@ -132,8 +132,8 @@
 		<br class="clear-right" />
 		<div class="center" style="width: 500px">
 			<input type="hidden" name="id" value="{$order.order_id}" />
-			<input type="button" value="Save &amp; Return to List" onclick="ajaxRequest(this.parentNode.parentNode, 'returnToList'); return false;" />
-			<input type="button" value="Save &amp; Print Packing Slip" onclick="alert('almost'); return false; ajaxRequest(this.parentNode.parentNode); /*, 'print');*/ return false;" />
+			<input type="button" value="Save &amp; Return to List" onclick="ajaxRequest(this.parentNode.parentNode.parentNode, 'returnToList'); return false;" />
+			<input type="button" value="Save &amp; Print Packing Slip" onclick="alert('almost'); return false; ajaxRequest(this.parentNode.parentNode.parentNode); /*, 'print');*/ return false;" />
 		</div>
 	</div>
 	<div class="float-right">
