@@ -97,9 +97,10 @@ class Error extends Object {
 	 * Determines if there are any stored errors or warnings
 	 *
 	 * @return boolean Whether or not there are any errors or warnings.
+	 * @todo Rename this to something like hasError()... not sure why I called it isError()
 	 */
 	public function isError() {
-		if (isset($this->errors, $this->warnings)) {
+		if (isset($this->errors) || isset($this->warnings)) {
 			return true;
 		}
 

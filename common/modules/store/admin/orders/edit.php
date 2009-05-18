@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @todo Add discounts to the order view
+ * @todo Collapse the updates to the latest 3-5 and then have a "more" option
+ */
 class store_admin_orders_edit extends store_admin {
 
 	protected $display = array(DISPLAY_SMARTY, DISPLAY_JSON);
@@ -13,10 +17,11 @@ class store_admin_orders_edit extends store_admin {
 					c.id AS customer_id,
 					DATE_FORMAT(o.time_placed, "%m/%d/%Y") AS order_time,
 					o.total_amount,
-					os.id AS status_id,
+					CONCAT(os.id, "|", os.name) AS status_id,
+					osu.note AS shipping_note, 
 					osu.update_time AS last_update,
 					o.transaction_id,
-					s.name AS shipping_method,
+					CONCAT(s.id, "|", s.name) AS shipping_method,
 					o.weight,
 					"This would be the shipping notes" AS memo,
 					os.name AS status,
@@ -94,24 +99,28 @@ class store_admin_orders_edit extends store_admin {
 
 			$order['products'] = $this->db->getArray($sql);
 
-			$sql = '
-				SELECT * FROM order_status_updates WHERE order_id = "' . $_REQUEST['id'] . '" ORDER BY update_time DESC;';
+			$sql = 'SELECT * FROM order_status_updates WHERE order_id = "' . $_REQUEST['id'] . '" ORDER BY update_time DESC;';
 
 			$order['updates'] = $this->db->getArray($sql);
 
-			$this->setPublic('order', $order);
+			$this->setPublic('order',            $order);
+			$this->setPublic('serialized_order', serialize($order));
 
 			foreach ($this->db->getArray('SELECT * FROM order_statuses;') as $status) {
-				$statuses[$status['id']] = $status['name'];
+				$statuses[$status['id']]                               = $status['name'];
+				$status_options[$status['id'] . '|' . $status['name']] = $status['name'];
 			}
 
-			$this->setPublic('statuses', $statuses);
+			$this->setPublic('statuses',       $statuses);
+			$this->setPublic('status_options', $status_options);
 
-			foreach ($this->db->getArray('SELECT * FROM shipping;') as $status) {
-				$shipping_methods[$status['id']] = $status['name'];
+			foreach ($this->db->getArray('SELECT * FROM shipping;') as $shipping_method) {
+				$shipping_methods[$status['id']]                                                  = $status['name'];
+				$shipping_method_options[$shipping_method['id'] . '|' . $shipping_method['name']] = $shipping_method['name'];
 			}
 
-			$this->setPublic('shipping_methods', $shipping_methods);
+			$this->setPublic('shipping_methods',        $shipping_methods);
+			$this->setPublic('shipping_method_options', $shipping_method_options);
 		}
 	}
 }

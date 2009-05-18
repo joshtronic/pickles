@@ -5,11 +5,18 @@ class store_admin_orders_save extends store_admin {
 	protected $display = DISPLAY_JSON;
 
 	public function __default() {
+
+		// Breaks apart the status into the ID and text
+		list($status_id, $status) = split('\|', $_REQUEST['status']);
+		
+		// Breaks apart the shipping method into the ID and text
+		list($shipping_id, $shipping_method) = split('\|', $_REQUEST['shipping_method']);
+
 		// Update orders.shipping_id, orders.shipping_note, orders.tracking_number
 		$this->db->execute('
 			UPDATE orders
 			SET
-				shipping_id     = "' . $_REQUEST['shipping_method'] . '",
+				shipping_id     = "' . $shipping_id . '",
 				tracking_number = "' . $_REQUEST['tracking_number'] . '"
 			WHERE id = "' . $_REQUEST['id'] . '";
 		');
@@ -21,42 +28,19 @@ class store_admin_orders_save extends store_admin {
 			) VALUES (
 				"' . $_REQUEST['id'] . '",
 				"' . $_SESSION['user_id'] . '",
-				"' . $_REQUEST['status'] . '",
+				"' . $status_id . '",
 				"' . $_REQUEST['shipping_note'] . '",
 				NOW()
 			);
 		');
 
+		// Sends the message to the customer
+		if ($_REQUEST['email_customer'] == 'on') {
+			$sender = new store_admin_orders_send($this->config, $this->db, $this->mailer, $this->error);
+			$sender->send($status_id, $status, $shipping_id, $shipping_method, $_REQUEST['shipping_note']);
 
-				/*
-				$affiliate_message = "
-{$this->config->store->title} Affiliate Program
--------------------------------------------------------------------
-
-Dear {$contact_address['first_name']} {$contact_address['last_name']},
-
-You have been registered
-
-Your custom URL:
----------------------
-{$this->config->store->url}/referral/" . md5($affiliate_id) . "
-
-Your commission rate:
----------------------
-{$_REQUEST['commission_rate']}%
-
-------------------
-
-Thank you for your interest in the {$this->config->store->title} Affiliate Program.
-
-{$this->config->store->title}
-Phone: {$this->config->store->phone}
-Fax:   {$this->config->store->fax}
-URL:   {$this->config->store->url}
-";
-
-				mail($_REQUEST['email'], 'Welcome to the ' . $this->config->store->title . ' Affiliate Program', $affiliate_message, 'From: ' . $this->config->store->return_email);
-				*/
+			$this->packing_slip = $sender->packing_slip;
+		}
 
 		$this->setPublic('status',  'Success');
 		$this->setPublic('message', 'The order has been updated successfully.');

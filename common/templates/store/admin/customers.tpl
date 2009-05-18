@@ -6,7 +6,6 @@
 	<table style="width: 100%">
 		<tr>
 			<th class="left">Name</th>
-			<th class="left">Company</th>
 			<th class="left">Phone</th>
 			<th class="left">Email</th>
 			<th>Orders</th>
@@ -14,13 +13,11 @@
 		</tr>
 		{foreach from=$module.customers item=customer}
 			<tr class="center">
-				<td class="left">{$customer.billing_last_name}, {$customer.billing_first_name}</td>
-				<td class="left">{$customer.billing_company}</td>
+				<td class="left"><a href="/store/admin/customers/view/{$customer.id}">{$customer.billing_last_name}, {$customer.billing_first_name}</a></td>
 				<td class="left">{$customer.billing_phone}</td>
-				<td class="left">{$customer.email}</td>
+				<td class="left">{mailto address=$customer.email}</td>
 				<td>{$customer.order_count}</td>
 				<td>
-					<a href="/store/admin/customers/view/{$customer.id}"><img src="/static/contrib/silk/icons/information.png" alt="View Customer" title="View Customer" /></a>
 					<a href="/store/admin/customers/edit/{$customer.id}"><img src="/static/contrib/silk/icons/pencil.png" alt="Edit Customer" title="Edit Customer" /></a>
 					<a href="/store/admin/customers/delete/{$customer.id}" onclick="return confirm('Are you sure you want to delete {$customer.first_name} {$customer.last_name}?')"><img src="/static/contrib/silk/icons/cross.png" alt="Delete Customer" title="Delete Customer" /></a>
 				</td>
