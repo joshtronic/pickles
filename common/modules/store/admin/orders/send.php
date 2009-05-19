@@ -113,7 +113,7 @@ Fax:   {$this->config->store->fax}
 URL:   {$this->config->store->url}
 ";
 
-		mail($_REQUEST['email'], $this->config->store-title . ' - Order #' . $_REQUEST['id'] . ' - ' . $status, $affiliate_message, 'From: ' . $this->config->store->return_email);
+		mail($_REQUEST['email'], $this->config->store->title . ' - Order #' . $_REQUEST['id'] . ' - ' . $status, $message, 'From: ' . $this->config->store->return_email);
 		//mail('josh.sherman@gmail.com, dekin@ribbonnutrition.com', $this->config->store->title . ' - Order #' . $_REQUEST['id'] . ' - ' . $status, $message, 'From: ' . $this->config->store->return_email);
 
 		$this->packing_slip = $message;
