@@ -10,14 +10,14 @@
 <div style="float: left; padding-right: 80px;">
 	<img src="/static/contrib/silk/icons/package.png" style="float: left; padding-right: 10px" />
 	<ol style="float: left">
-		<li><h3><a href="/admin/orders">Orders</a></h3></li>
-		<li>&nbsp; <a href="/admin/orders/pending">Pending</a></li>
-		<li>&nbsp; <a href="/admin/orders/approved">Approved</a></li>
-		<li>&nbsp; <a href="/admin/orders/partially-shipped">Partially Shipped</a></li>
-		<li>&nbsp; <a href="/admin/orders/completed">Shipped/Completed</a></li>
-		<li>&nbsp; <a href="/admin/orders/backorder">Backorder</a></li>
-		<li>&nbsp; <a href="/admin/orders/declined">Declined</a></li>
-		<li>&nbsp; <a href="/admin/orders/void">Void</a></li>
+		<li><h3><a href="/store/admin/orders">Orders</a></h3></li>
+		<li>&nbsp; <a href="/store/admin/orders/pending">Pending</a></li>
+		<li>&nbsp; <a href="/store/admin/orders/approved">Approved</a></li>
+		<li>&nbsp; <a href="/store/admin/orders/partially-shipped">Partially Shipped</a></li>
+		<li>&nbsp; <a href="/store/admin/orders/completed">Shipped/Completed</a></li>
+		<li>&nbsp; <a href="/store/admin/orders/backorder">Backorder</a></li>
+		<li>&nbsp; <a href="/store/admin/orders/declined">Declined</a></li>
+		<li>&nbsp; <a href="/store/admin/orders/void">Void</a></li>
 	</ol>
 </div>
 <div style="float: left">
