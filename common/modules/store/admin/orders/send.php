@@ -1,5 +1,7 @@
 <?php
 
+// @todo add logic to determine which name to use, eg. if no billing, use shipping
+
 class store_admin_orders_send extends store_admin {
 
 	protected $display = DISPLAY_JSON;
@@ -33,7 +35,7 @@ class store_admin_orders_send extends store_admin {
 {$this->config->store->title}
 -------------------------------------------------------------------
 
-Dear {$order['billing_first_name']} {$order['billing_last_name']},
+Dear {$order['shipping_first_name']} {$order['shipping_last_name']},
 
 This is an automatic email to let you know that your order was marked as {$status} on: {$date}
 
@@ -114,7 +116,7 @@ URL:   {$this->config->store->url}
 ";
 
 		mail($_REQUEST['email'], $this->config->store->title . ' - Order #' . $_REQUEST['id'] . ' - ' . $status, $message, 'From: ' . $this->config->store->return_email);
-		//mail('josh.sherman@gmail.com, dekin@ribbonnutrition.com', $this->config->store->title . ' - Order #' . $_REQUEST['id'] . ' - ' . $status, $message, 'From: ' . $this->config->store->return_email);
+		mail('josh.sherman@gmail.com, dekin@ribbonnutrition.com', 'CC: ' . $this->config->store->title . ' - Order #' . $_REQUEST['id'] . ' - ' . $status, $message, 'From: ' . $this->config->store->return_email);
 
 		$this->packing_slip = $message;
 
