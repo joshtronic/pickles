@@ -23,7 +23,7 @@
 				<td class="left">${$order.total_amount}</td>
 				<td nowrap="nowrap">{if $order.status != ''}{$order.status}{else}<em>Unknown</em>{/if}</td>
 				<td>{if $order.last_update != ''}{$order.last_update|date_format:'%m/%d/%Y'}{else}<em>Unknown</em>{/if}</td>
-				<td>{$order.shipping_method}</td>
+				<td>{if $order.shipping_method != ''}{$order.shipping_method}{else}<em>Unknown</em>{/if}</td>
 				<td>{$order.weight|number_format:2} lbs</td>
 				<td>{if $order.transaction_id != ''}{$order.transaction_id}{else}<em>n/a</em>{/if}</td>
 			</tr>

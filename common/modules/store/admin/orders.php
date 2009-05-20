@@ -30,7 +30,7 @@ class store_admin_orders extends store_admin {
 			INNER JOIN addresses AS a
 				ON a.id = o.shipping_address_id
 
-			INNER JOIN shipping AS s
+			LEFT JOIN shipping AS s
 				ON s.id = o.shipping_id
 
 			LEFT JOIN order_status_updates AS osu
