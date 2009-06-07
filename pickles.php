@@ -67,6 +67,7 @@ function __autoload($class) {
 
 	$class_file  = PICKLES_PATH . 'classes/' . $filename;
 	$module_file = PICKLES_PATH . 'common/modules/' . $filename;
+	$local_file  = $_SERVER['DOCUMENT_ROOT'] . '/../modules/' . $filename;
 
 	// Loads the class file
 	if (file_exists($class_file)) {
@@ -75,6 +76,10 @@ function __autoload($class) {
 	// Loads the shared module
 	else if (file_exists($module_file)) {
 		return require_once $module_file;
+	}
+	// Loads the local module
+	else if (file_exists($local_file)) {
+		return require_once $local_file;
 	}
 	// Loads Smarty
 	else if ($class == 'Smarty') {

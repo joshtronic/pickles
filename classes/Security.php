@@ -60,31 +60,48 @@ class Security extends Object {
 	 *       landing page in the configuration as well.
 	 */
 	public function authenticate() {
-		$table = array(
-			'name'   => 'users',
-			'fields' => array(
-				'id'       => 'id',
-				'username' => 'username',
-				'password' => 'password'
-			)
-		);
 
-		$table = $this->config->getTableMapping('users', $table);
+		if (isset($this->config->admin, $this->config->admin->username, $this->config->admin->password)) {
 
-		if (isset($_SERVER['PHP_AUTH_USER'])) {
-			$from = '
-				FROM ' . $table['name'] . '
-				WHERE ' . $table['fields']['username'] . ' = "' . $_SERVER['PHP_AUTH_USER'] . '"
-				AND ' . $table['fields']['password'] . ' = "' . md5($_SERVER['PHP_AUTH_PW']) . '";
-			';
-
-			$this->db->execute('SELECT COUNT(' . $table['fields']['id'] . ') ' . $from);
-			if ($this->db->getField() != 0) {
-				$this->db->execute('SELECT ' . $table['fields']['id'] . ' ' . $from);
-				$_SESSION['user_id'] = $this->db->getField();
+			$_SESSION['user_id'] = null;
+			
+			if (isset($_SERVER['PHP_AUTH_USER'])) {
+				if (
+					$_SERVER['PHP_AUTH_USER'] == $this->config->admin->username
+					&& $this->encrypt($this->config->admin->salt, $_SERVER['PHP_AUTH_PW']) == $this->config->admin->password
+				) {
+					$_SESSION['user_id'] = 1;
+				}
 			}
-			else {
-				$_SESSION['user_id'] = null;
+		}
+		else {
+
+			$table = array(
+				'name'   => 'users',
+				'fields' => array(
+					'id'       => 'id',
+					'username' => 'username',
+					'password' => 'password'
+				)
+			);
+
+			$table = $this->config->getTableMapping('users', $table);
+
+			if (isset($_SERVER['PHP_AUTH_USER'])) {
+				$from = '
+					FROM ' . $table['name'] . '
+					WHERE ' . $table['fields']['username'] . ' = "' . $_SERVER['PHP_AUTH_USER'] . '"
+					AND ' . $table['fields']['password'] . ' = "' . md5($_SERVER['PHP_AUTH_PW']) . '";
+				';
+
+				$this->db->execute('SELECT COUNT(' . $table['fields']['id'] . ') ' . $from);
+				if ($this->db->getField() != 0) {
+					$this->db->execute('SELECT ' . $table['fields']['id'] . ' ' . $from);
+					$_SESSION['user_id'] = $this->db->getField();
+				}
+				else {
+					$_SESSION['user_id'] = null;
+				}
 			}
 		}
 
@@ -110,6 +127,10 @@ class Security extends Object {
 	public function logout() {
 		session_destroy();
 		header('Location: /');
+	}
+
+	public function encrypt($salt, $string) {
+		return md5($salt . md5($salt . $string));
 	}
 }
 
