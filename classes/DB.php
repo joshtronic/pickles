@@ -371,7 +371,7 @@ class DB extends Object {
 						}
 					}
 
-					$sql = 'UPDATE ' . $table . ' SET ' . $fields . $where;
+					$sql = 'UPDATE ' . $table . ' SET ' . $fields . $where . ';';
 					if ($this->execute($sql)) {
 						return true;
 					}
@@ -399,15 +399,44 @@ class DB extends Object {
 	 *
 	 * @access private
 	 * @params string $table Name of the table you want to insert to
-	 * @params array $columnValues Associative array of name value pairs
-	 *         (Corresponds with the column names for the table)
 	 * @params array $conditions Associative array of name value pairs that
 	 *         will be used to create a WHERE clause in the SQL.
 	 * @return boolean Returns the status of the execution
-	 * @todo   This function doesn't exist yet
+	 * @todo   Check that the table exists, and possibly check that the
+	 *         columns exist and conditional columns exist as well
 	 */
-	public function delete($table, $values, $conditions) {
+	public function delete($table, $conditions) {
+		$this->open();
 
+		if (trim($table) != '') {
+			$where = null;
+			if (is_array($conditions)) {
+				foreach ($conditions as $key => $value) {
+					$where = ($where == null) ? ' WHERE ' : ' AND ';
+
+					if ($value == null) {
+						$where .= $key . ' IS NULL';
+					}
+					else {
+						$where .= $key . " = '" . mysql_real_escape_string(stripslashes($value), $this->connection) . "'";
+					}
+				}
+
+				$sql = 'DELETE FROM ' . $table . $where . ';';
+
+				if ($this->execute($sql)) {
+					return true;
+				}
+			}
+			else {
+				$this->error->addError('No conditions were specified');
+			}
+		}
+		else {
+			$this->error->addError('No database table was specified');
+		}
+
+		return false;
 	}
 }
 

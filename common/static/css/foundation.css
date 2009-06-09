@@ -11,5 +11,6 @@
 .clear-left { clear: left }
 .clear-right { clear: right }
 .underline { text-decoration: underline }
+.strike { text-decoration: line-through }
 .float-left { float: left }
 .float-right { float: right }
