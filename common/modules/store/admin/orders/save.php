@@ -34,13 +34,13 @@ class store_admin_orders_save extends store_admin {
 			);
 		');
 
-		// Sends the message to the customer
-		if ($_REQUEST['email_customer'] == 'on') {
-			$sender = new store_admin_orders_send($this->config, $this->db, $this->mailer, $this->error);
-			$sender->send($status_id, $status, $shipping_id, $shipping_method, $_REQUEST['shipping_note']);
+		// Generates the email to the customer and the packing slip
+		$sender = new store_admin_orders_send($this->config, $this->db, $this->mailer, $this->error);
 
-			$this->packing_slip = $sender->packing_slip;
-		}
+		// Sends the message to the customer
+		$sender->send($status_id, $status, $shipping_id, $shipping_method, $_REQUEST['shipping_note']);
+
+		$this->packing_slip = $sender->packing_slip;
 
 		$this->setPublic('status',  'Success');
 		$this->setPublic('message', 'The order has been updated successfully.');
