@@ -3,6 +3,14 @@
 class store_admin_orders extends store_admin {
 
 	public function __default() {
+
+		if (isset($_REQUEST['filter'])) {
+			$where = 'WHERE LOWER(os.name) = LOWER("' . str_replace('-', ' ', $_REQUEST['filter']) . '")';
+		}
+		else {
+			$where = null;
+		}
+
 		$sql = '
 			SELECT
 				o.id AS order_id,
@@ -39,6 +47,8 @@ class store_admin_orders extends store_admin {
 
 			LEFT JOIN order_statuses AS os
 				ON os.id = osu.status_id
+
+			' . $where . '
 
 			ORDER BY o.id DESC;
 		';

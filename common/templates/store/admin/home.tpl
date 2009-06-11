@@ -14,7 +14,7 @@
 		<li>&nbsp; <a href="/store/admin/orders/pending">Pending</a></li>
 		<li>&nbsp; <a href="/store/admin/orders/approved">Approved</a></li>
 		<li>&nbsp; <a href="/store/admin/orders/partially-shipped">Partially Shipped</a></li>
-		<li>&nbsp; <a href="/store/admin/orders/completed">Shipped/Completed</a></li>
+		<li>&nbsp; <a href="/store/admin/orders/shipped/completed">Shipped/Completed</a></li>
 		<li>&nbsp; <a href="/store/admin/orders/backorder">Backorder</a></li>
 		<li>&nbsp; <a href="/store/admin/orders/declined">Declined</a></li>
 		<li>&nbsp; <a href="/store/admin/orders/void">Void</a></li>

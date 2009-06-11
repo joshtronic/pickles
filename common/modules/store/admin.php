@@ -15,7 +15,6 @@ class store_admin extends Module {
 			'categories',
 			'discounts',
 			'affiliates',
-			// 'vendors', 
 			'gift certificates',
 			'reports',
 			'settings'
