@@ -119,6 +119,17 @@ FCKConfig.ToolbarSets["Basic"] = [
 	['Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','About']
 ] ;
 
+FCKConfig.ToolbarSets["ThatGirlJen"] = [
+	['Source','NewPage','Preview',],
+	['Cut','Copy','Paste','PasteText','-','Print','SpellCheck'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	'/',
+	['Bold','Italic','Underline','StrikeThrough'],
+	['OrderedList','UnorderedList','-','Outdent','Indent'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	['Link','Unlink','Image','Smiley','SpecialChar','FitWindow']
+] ;
+
 FCKConfig.EnterMode = 'p' ;			// p | div | br
 FCKConfig.ShiftEnterMode = 'br' ;	// p | div | br
 

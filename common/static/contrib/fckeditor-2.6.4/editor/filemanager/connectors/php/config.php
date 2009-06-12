@@ -27,17 +27,18 @@ global $Config ;
 // SECURITY: You must explicitly enable this "connector". (Set it to "true").
 // WARNING: don't just set "$Config['Enabled'] = true ;", you must be sure that only
 //		authenticated users can access this file or use some kind of session checking.
-$Config['Enabled'] = false ;
+$Config['Enabled'] = true ;
 
 
 // Path to user files relative to the document root.
-$Config['UserFilesPath'] = '/userfiles/' ;
+$Config['UserFilesPath'] = '/images/uploads/' ;
 
 // Fill the following value it you prefer to specify the absolute path for the
 // user files directory. Useful if you are using a virtual directory, symbolic
 // link or alias. Examples: 'C:\\MySite\\userfiles\\' or '/root/mysite/userfiles/'.
 // Attention: The above 'UserFilesPath' must point to the same directory.
-$Config['UserFilesAbsolutePath'] = '' ;
+// @todo This can't work if I have other sites that want to use the upload
+$Config['UserFilesAbsolutePath'] = '/var/www/josh/thatgirljen.com/public/images/uploads/' ;
 
 // Due to security issues with Apache modules, it is recommended to leave the
 // following setting enabled.
