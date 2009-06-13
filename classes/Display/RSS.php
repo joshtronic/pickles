@@ -46,9 +46,12 @@ class Display_RSS extends Display_Common {
 	 * @todo Error handling is non-existant.
 	 */
 	public function render() {
-		if (isset($this->data->channel)) {
+		if (isset($this->data->channel) || is_object($this->data['channel'])) {
 			$channel = $this->data['channel'];
-			$channel = $this->config->rss->$channel;
+			
+			if (!is_object($this->data['channel'])) {
+				$channel = $this->config->rss->$channel;
+			}
 
 			if (isset($this->data->items)) {
 				$items = $this->data['items'];
