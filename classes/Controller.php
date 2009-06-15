@@ -182,8 +182,6 @@ class Controller extends Object {
 					$display_type = $module['object']->getDisplay();
 				}
 
-				//var_dump($display_type);
-
 				// Creates a new viewer object
 				$display_class = 'Display_' . $display_type;
 				$display       = new $display_class($config, $error);
@@ -206,14 +204,6 @@ class Controller extends Object {
 					if ($module['object']->getCacheID()) {
 						$display->cache_id = $module['object']->getCacheID();
 					}
-
-					/*
-					if (isset($mailer->message)) {
-						$status = $mailer->send();
-						$module['object']->setPublic('type',    $status['type']);
-						$module['object']->setPublic('message', $status['message']);
-					}
-					*/
 				}
 
 				// If the loaded module has a name, use it to override

@@ -3,12 +3,18 @@
 class store_admin_orders extends store_admin {
 
 	public function __default() {
+			
+		$where = null;
 
 		if (isset($_REQUEST['filter'])) {
-			$where = 'WHERE LOWER(os.name) = LOWER("' . str_replace('-', ' ', $_REQUEST['filter']) . '")';
-		}
-		else {
-			$where = null;
+			// Validates the filter
+			$status = $this->db->getRow('SELECT id, name FROM order_statuses WHERE LOWER(name) = LOWER("' . str_replace('-', ' ', $_REQUEST['filter']) . '")');
+
+			if ($status != null) {
+				$where = 'WHERE osu.status_id = "' . $status['id'] . '"';
+
+				$this->setPublic('filter', $status['name']);
+			}
 		}
 
 		$sql = '

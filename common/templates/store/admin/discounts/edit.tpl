@@ -3,59 +3,6 @@
 {literal}
 	<script type="text/javascript">
 		// @todo Move this to an external file so that logic isn't in the template
-		function copyAddress(that) {
-			if (that.checked == true) {
-				// Copy the values
-				document.getElementById('payee_company').value    = document.getElementById('contact_company').value;
-				document.getElementById('payee_first_name').value = document.getElementById('contact_first_name').value;
-				document.getElementById('payee_last_name').value  = document.getElementById('contact_last_name').value;
-				document.getElementById('payee_address1').value   = document.getElementById('contact_address1').value;
-				document.getElementById('payee_address2').value   = document.getElementById('contact_address2').value;
-				document.getElementById('payee_city').value       = document.getElementById('contact_city').value;
-				document.getElementById('payee_state').value      = document.getElementById('contact_state').value;
-				document.getElementById('payee_zip_code').value   = document.getElementById('contact_zip_code').value;
-				document.getElementById('payee_phone').value      = document.getElementById('contact_phone').value;
-				document.getElementById('payee_fax').value        = document.getElementById('contact_fax').value;
-				
-				// Disable the fields
-				document.getElementById('payee_company').disabled    = true; 
-				document.getElementById('payee_first_name').disabled = true; 
-				document.getElementById('payee_last_name').disabled  = true; 
-				document.getElementById('payee_address1').disabled   = true; 
-				document.getElementById('payee_address2').disabled   = true; 
-				document.getElementById('payee_city').disabled       = true; 
-				document.getElementById('payee_state').disabled      = true; 
-				document.getElementById('payee_zip_code').disabled   = true; 
-				document.getElementById('payee_phone').disabled      = true; 
-				document.getElementById('payee_fax').disabled        = true; 
-			}
-			else {
-				// Clear the values
-				document.getElementById('payee_company').value    = '';
-				document.getElementById('payee_first_name').value = '';
-				document.getElementById('payee_last_name').value  = '';
-				document.getElementById('payee_address1').value   = '';
-				document.getElementById('payee_address2').value   = '';
-				document.getElementById('payee_city').value       = '';
-				document.getElementById('payee_state').value      = '';
-				document.getElementById('payee_zip_code').value   = '';
-				document.getElementById('payee_phone').value      = '';
-				document.getElementById('payee_fax').value        = '';
-				
-				// Enable the fields
-				document.getElementById('payee_company').disabled    = false; 
-				document.getElementById('payee_first_name').disabled = false; 
-				document.getElementById('payee_last_name').disabled  = false; 
-				document.getElementById('payee_address1').disabled   = false; 
-				document.getElementById('payee_address2').disabled   = false; 
-				document.getElementById('payee_city').disabled       = false; 
-				document.getElementById('payee_state').disabled      = false; 
-				document.getElementById('payee_zip_code').disabled   = false; 
-				document.getElementById('payee_phone').disabled      = false; 
-				document.getElementById('payee_fax').disabled        = false; 
-			}
-		}
-
 		function clearForm(responseObject, responseElement) {
 			if (responseObject != null) {
 				switch (responseObject.status) {
@@ -108,7 +55,7 @@
 		}
 		dl {
 			margin-top: 5px;
-			width: 400px;
+			width: 650px;
 		}
 		dl dt {
 			float: left;
@@ -118,22 +65,43 @@
 		}
 		dl dd {
 			float: left;
-			width: 240px;
+			width: 510px;
+			padding: 2px;
 		}
 		dl dd input {
-			margin: 2px;
 			width: 250px;
 		}
-
+		dl dd textarea {
+			width: 500px;
+			height: 50px;
+		}
 	</style>
 {/literal}
 <h3>{if isset($module.discount.id)}Update{else}Add{/if} Discount</h3>
 <form method="post" action="/store/admin/discounts/save">
-	<div class="right" style="margin-bottom: -10px;">
-		Same as contact information?
-		<input id="payee_same_as_contact" type="checkbox" onclick="copyAddress(this);" name="payee_same_as_contact" style="margin-top: -2px" />
-	</div>
 	<div class="float-left">
+		<dl>
+			<dt><span class="pink">*</span>Name:</dt>
+			<dd>
+				<input type="text" name="name" id="name" style="margin-right: 53px" />
+				Coupon Code:
+				<input type="text" name="name" id="name" style="width: 100px;" />
+			</dd>
+			<dt>Description:</dt>
+			<dd><textarea name="description" id="description"></textarea></dd>
+			<dt>Valid From:</dt>
+			<dd>
+				{html_select_date prefix='valid_from_'}
+				to
+				{html_select_date prefix='valid_to_'}
+			</dd>
+		</dl>
+	</div>
+	<br style="clear: left" />
+	<!--div>
+
+
+
 		<b>Contact Information:</b>
 		<dl>
 			<dt>Company:</dt>
@@ -218,7 +186,7 @@
 	<div class="center">
 		{if isset($module.discount.id)}<input type="hidden" name="id" value="{$module.discount.id}" />{/if}
 		<input type="reset" value="Reset Form" /><input type="button" value="Store Information" onclick="ajaxRequest(this.parentNode.parentNode{if !isset($module.discount.id)}, 'clearForm'{/if}); return false;" />
-	</div>
+	</div-->
 </form>
 <script type="text/javascript">
 	document.getElementById('contact_state').value = "{$module.discount.contact_state}";

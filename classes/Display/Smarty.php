@@ -94,7 +94,7 @@ class Display_Smarty extends Display_Common {
 		$template = SITE_PATH . '../templates/' . $this->module_filename . '.tpl';
 
 		if (!file_exists($template)) {
-			$shared_template = PICKLES_PATH . 'common/templates/' . ($this->shared_filname == false ? $this->module_filename : $this->shared_filename) . '.tpl';
+			$shared_template = PICKLES_PATH . 'common/templates/' . ($this->shared_module_filename == false ? $this->module_filename : $this->shared_module_filename) . '.tpl';
 
 			if (file_exists($shared_template)) {
 				$template = $shared_template;

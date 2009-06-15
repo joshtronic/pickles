@@ -24,7 +24,7 @@
 				<td>
 					<a href="/store/admin/affiliates/edit/{$affiliate.id}"><img src="/static/contrib/silk/icons/pencil.png" alt="Edit Affiliate" title="Edit Affiliate" /></a>
 					<a href="/store/admin/affiliates/pay/{$affiliate.id}"><img src="/static/contrib/silk/icons/money.png" alt="Pay Affiliate" title="Pay Affiliate" /></a>
-					<a href="/store/admin/affiliates/delete/{$affiliate.id}" onclick="return confirm('Are you sure you want to delete {$affiliate.first_name} {$affiliate.last_name}?')"><img src="/static/contrib/silk/icons/cross.png" alt="Delete Affiliate" title="Delete Affiliate" /></a>
+					<a href="/store/admin/affiliates/delete/{$affiliate.id}" onclick="return confirm('Are you sure you want to delete {$affiliate.first_name} {$affiliate.last_name}?')"><img src="/static/contrib/silk/icons/delete.png" alt="Delete Affiliate" title="Delete Affiliate" /></a>
 				</td>
 			</tr>
 		{/foreach}

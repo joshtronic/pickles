@@ -1,4 +1,4 @@
-<h3>Orders</h3>
+<h3>{if $module.filter}{$module.filter} {/if}Orders</h3>
 {if is_array($module.orders)}
 	<table style="width: 100%">
 		<tr>
