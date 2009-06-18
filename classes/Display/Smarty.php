@@ -95,9 +95,10 @@ class Display_Smarty extends Display_Common {
 
 		if (!file_exists($template)) {
 			$shared_template = PICKLES_PATH . 'common/templates/' . ($this->shared_module_filename == false ? $this->module_filename : $this->shared_module_filename) . '.tpl';
-			
+			// $shared_template = PICKLES_PATH . 'common/templates/' . ($this->shared_filname == false ? $this->module_filename : $this->shared_filename) . '.tpl';
+
 			// @todo SUPER HACKINSHIT
-			if ($this->module_filename == 'store/admin') {
+			if (strstr($this->module_filename, 'store/admin')) {
 				$shared_template = PICKLES_PATH . 'common/templates/store/admin.tpl';
 			}
 

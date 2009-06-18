@@ -95,6 +95,9 @@
 				to
 				{html_select_date prefix='valid_to_'}
 			</dd>
+			<dt>
+				
+			</dt>
 		</dl>
 	</div>
 	<br style="clear: left" />
