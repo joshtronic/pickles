@@ -27,7 +27,7 @@
 /**
  * Smarty Display
  *
- * Displays the associated Smarty templates for the Model.
+ * Displays the associated Smarty templates for the Module.
  *
  * @link http://smarty.net/
  */
@@ -94,13 +94,8 @@ class Display_Smarty extends Display_Common {
 		$template = SITE_PATH . '../templates/' . $this->module_filename . '.tpl';
 
 		if (!file_exists($template)) {
-			$shared_template = PICKLES_PATH . 'common/templates/' . ($this->shared_module_filename == false ? $this->module_filename : $this->shared_module_filename) . '.tpl';
-			// $shared_template = PICKLES_PATH . 'common/templates/' . ($this->shared_filname == false ? $this->module_filename : $this->shared_filename) . '.tpl';
-
-			// @todo SUPER HACKINSHIT
-			if (strstr($this->module_filename, 'store/admin')) {
-				$shared_template = PICKLES_PATH . 'common/templates/store/admin.tpl';
-			}
+			
+			$shared_template = PICKLES_PATH . 'common/templates/' . ($this->shared_module_filename == false || $this->template_override == true ? $this->module_filename : $this->shared_module_filename) . '.tpl';
 
 			if (file_exists($shared_template)) {
 				$template = $shared_template;

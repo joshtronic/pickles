@@ -310,7 +310,21 @@ class DB extends Object {
 		if (trim($table) != '') {
 			if (is_array($values)) {
 				foreach ($values as $key => $value) {
-					$values[$key] = $value == null ? 'NULL' : "'" . mysql_real_escape_string(stripslashes($value), $this->connection) . "'";
+					switch ($value) {
+						case null:
+							$value = 'NULL';
+							break;
+
+						case 'NOW()':
+							$value = 'NOW()';
+							break;
+
+						default:
+							$value = "'" . mysql_real_escape_string(stripslashes($value), $this->connection) . "'";
+							break;
+					}
+
+					$values[$key] = $value;
 				}
 
 				$this->execute("

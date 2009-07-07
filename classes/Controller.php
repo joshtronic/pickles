@@ -29,7 +29,7 @@
  *
  * The heavy lifter of PICKLES, makes the calls to get the session and
  * configuration loaded.  Loads modules, serves up user authentication when
- * the module asks for it, and loads the viewer that the module has requested.
+ * the module asks for it, and loads the viewer that the module requested.
  * Default values are present to make things easier on the user.
  *
  * @usage <code>new Controller($config);</code>
@@ -46,7 +46,7 @@ class Controller extends Object {
 	 */
 	public function __construct($config = null) {
 		parent::__construct();
-		
+
 		// Creates the core objects that don't need a Config object
 		$error = new Error();
 
@@ -93,9 +93,15 @@ class Controller extends Object {
 			exit("<h2><em>{$_SERVER['SERVER_NAME']} is currently down for maintenance</em></h2>");
 		}
 
-		// Grab the passed in module or use the default
-		#$module_name = isset($_REQUEST['module']) ? strtr($_REQUEST['module'], '-', '_') : $config->getDefaultModule();
-		$module['requested']['name'] = isset($_REQUEST['module']) ? $_REQUEST['module'] : $config->getDefaultModule();
+		// Loads the default module
+		$module['requested']['name'] = $config->getDefaultModule();
+
+		// Attempts to override the default module
+		if (isset($_REQUEST['module'])) {
+			if (strpos($config->templates->main, $_REQUEST['module']) !== 0) {
+				$module['requested']['name'] = $_REQUEST['module'];
+			}
+		}
 
 		// Checks if we have a display type passed in
 		if (strpos($module['requested']['name'], '.') !== false) {
@@ -116,10 +122,11 @@ class Controller extends Object {
 		}
 
 		/**
-		 * @todo Maybe the logout shouldn't be an internal thing, what if the
-		 *       user wanted to call the logout page something else? or better
-		 *       yet, they want to next it, like /users/logout?
-		 * @todo May want to make it work from /store/admin/logout and not just from /
+		 * @todo Maybe the logout shouldn't be an internal thing, what if
+		 *       the user wanted to call the logout page something else? or
+		 *       better yet, they want to next it, like /users/logout?
+		 * @todo May want to make it work from /store/admin/logout and not
+		 *       just from /
 		 */
 		if ($module['requested']['name'] == 'logout') {
 			$security = new Security($config, $db);
@@ -206,14 +213,23 @@ class Controller extends Object {
 					}
 				}
 
-				// If the loaded module has a name, use it to override
+				// Overrides the name and filename with the passed name
 				if ($module['object']->name != null && $module['requested']['filename'] != $module['object']->name) {
 					$module['requested']['filename'] = $module['object']->name;
 					$module['requested']['name']     = $module['object']->name;
 				}
 
+				// Overrides the filename with the passed template
 				if ($module['object']->template != null) {
 					$module['requested']['filename'] = $module['object']->template;
+				}
+
+				// Overrides the shared template information with the passed shared template
+				if ($module['object']->shared_template != null) {
+					$module['shared']['class_name'] = $module['object']->shared_template;
+					$module['shared']['filename']   = strtr($module['shared']['class_name'], '_', '/');
+					$module['shared']['php_file']   = PICKLES_PATH . 'common/modules/' . $module['shared']['filename'] . '.php';
+					$module['shared']['name']       = $module['shared']['filename'];
 				}
 
 				// Sets the display's properties
