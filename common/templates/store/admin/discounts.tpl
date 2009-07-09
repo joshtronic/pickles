@@ -25,7 +25,7 @@
 				<td>{if $discount.valid_through == null}<em>Never</em>{else}{$discount.valid_through}{/if}</td>
 				<td>
 					<a href="/store/admin/discounts/edit/{$discount.id}"><img src="/static/contrib/silk/icons/pencil.png" alt="Edit Discount" title="Edit Discount" /></a>
-					<a href="/store/admin/discounts/delete/{$discount.id}" onclick="return confirm('Are you sure you want to delete {$discount.first_name} {$discount.last_name}?')"><img src="/static/contrib/silk/icons/delete.png" alt="Delete Discount" title="Delete Discount" /></a>
+					<a href="/store/admin/discounts/delete/{$discount.id}" onclick="alert('This function is not yet implemented'); return false; return confirm('Are you sure you want to delete {$discount.first_name} {$discount.last_name}?')"><img src="/static/contrib/silk/icons/delete.png" alt="Delete Discount" title="Delete Discount" /></a>
 				</td>
 			</tr>
 		{/foreach}

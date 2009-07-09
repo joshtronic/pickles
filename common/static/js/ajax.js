@@ -47,7 +47,21 @@ function getForm(form) {
 				break;
 
 			case 'select-one':
-				params += '&' + element.name + "=" +  element.options[element.selectedIndex].value;
+				params += '&' + element.name + '=' +  element.options[element.selectedIndex].value;
+				break;
+
+			case 'select-multiple':
+				var option_count = element.options.length;
+
+				for (var j = 0; j < option_count; j++) {
+					if (element.options[j].selected == true) {
+						params += '&' + element.name + '[]=' + element.options[j].value;
+					}
+				}
+				break;
+
+			default:
+				//alert(element.type);
 				break;
 		}
 	}

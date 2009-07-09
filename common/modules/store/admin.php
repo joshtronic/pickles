@@ -21,7 +21,7 @@ class store_admin extends Module {
 		);
 		$this->setPublic('options', $options);
 		
-		$this->template = 'store/admin';
+		$this->shared_template = 'store/admin';
 	}
 
 	public function __default() {

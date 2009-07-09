@@ -208,9 +208,9 @@ class Config extends Object {
 
 		$additional = null;
 
-		if (strpos($requested_module, '_') !== false) {
-			list($requested_module, $additional) = split('_', $requested_module, 2);
-			$additional = '_' . $additional;
+		if (strpos($requested_module, '/') !== false) {
+			list($requested_module, $additional) = split('/', $requested_module, 2);
+			$additional = '/' . $additional;
 		}
 
 		if (isset($this->modules->shared->module)) {

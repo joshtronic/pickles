@@ -142,6 +142,7 @@ class Display_Smarty extends Display_Common {
 			if (!$this->smarty->is_cached($template, $cache_id)) {
 
 				// Build the combined module name array and assign it
+				$this->module_name = str_replace('-', '_', $this->module_name);
 				$module_name = split('/', $this->module_name);
 				array_unshift($module_name, $this->module_name);
 				$this->smarty->assign('module_name', $module_name);

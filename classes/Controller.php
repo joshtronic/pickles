@@ -36,6 +36,8 @@
  */
 class Controller extends Object {
 
+	private $execute_tests = false;
+
 	/**
 	 * Constructor
 	 *
@@ -116,6 +118,11 @@ class Controller extends Object {
 					break;
 
 				default:
+					// @todo Add conditional for the environment
+					if ($display_type == 'test') {
+						$this->execute_tests = true;
+					}
+
 					unset($display_type);
 					break;
 			}
@@ -139,11 +146,10 @@ class Controller extends Object {
 			$module['requested']['class_name'] = strtr($module['requested']['filename'], '/', '_');
 
 			// Establishes the shared module information
-			// @todo Bug with requested modules with a dash in the name (store-locator == shared module 'store')
-			$module['shared']['class_name'] = $config->getSharedModule($module['requested']['class_name']);
-			$module['shared']['filename']   = strtr($module['shared']['class_name'], '_', '/');
+			$module['shared']['name']       = $config->getSharedModule($module['requested']['name']);
+			$module['shared']['filename']   = strtr($module['shared']['name'], '-', '_');
 			$module['shared']['php_file']   = PICKLES_PATH . 'common/modules/' . $module['shared']['filename'] . '.php';
-			$module['shared']['name']       = $module['shared']['filename'];
+			$module['shared']['class_name'] = strtr($module['shared']['filename'], '/', '_');
 
 			// Tries to load the site level module
 			if (file_exists($module['requested']['php_file'])) {
@@ -237,6 +243,11 @@ class Controller extends Object {
 				$display->module_filename        = $module['requested']['filename'];
 				$display->shared_module_name     = $module['shared']['name'];
 				$display->shared_module_filename = $module['shared']['filename'];
+
+				if ($this->execute_tests == true) {
+					var_dump($module);
+					exit('caught test');
+				}
 
 				// Loads the module data into the display to be rendered
 				/**

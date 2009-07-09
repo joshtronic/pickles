@@ -9,18 +9,6 @@ class store_admin_customers extends store_admin {
 
 				emails.email,
 
-				billing.company    AS billing_company,
-				billing.first_name AS billing_first_name,
-				billing.last_name  AS billing_last_name,
-				billing.address1   AS billing_address1,
-				billing.address2   AS billing_address2,
-				billing.city       AS billing_city,
-				billing.state      AS billing_state,
-				billing.zip_code   AS billing_zip_code,
-				billing.country    AS billing_country,
-				billing.phone      AS billing_phone,
-				billing.fax        AS billing_fax,
-
 				shipping.company    AS shipping_company,
 				shipping.first_name AS shipping_first_name,
 				shipping.last_name  AS shipping_last_name,
@@ -40,10 +28,7 @@ class store_admin_customers extends store_admin {
 			INNER JOIN emails
 			ON emails.id = customers.email_id
 
-			INNER JOIN addresses AS billing
-			ON billing.id = customers.billing_address_id
-
-			INNER JOIN addresses AS shipping
+			LEFT JOIN addresses AS shipping
 			ON shipping.id = customers.shipping_address_id
 
 			LEFT JOIN orders
@@ -51,6 +36,8 @@ class store_admin_customers extends store_admin {
 			AND xref_type = "CUSTOMER"
 
 			GROUP BY customers.id
+
+			ORDER BY shipping.last_name, shipping.first_name
 
 			;
 		';

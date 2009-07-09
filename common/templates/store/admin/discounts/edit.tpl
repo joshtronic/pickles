@@ -7,6 +7,7 @@
 			if (responseObject != null) {
 				switch (responseObject.status) {
 					case 'Success':
+						/*
 						document.getElementById('contact_company').value    = '';
 						document.getElementById('contact_first_name').value = '';
 						document.getElementById('contact_last_name').value  = '';
@@ -33,6 +34,7 @@
 						document.getElementById('tax_id').value             = '';
 						document.getElementById('tax_class').value          = '';
 						document.getElementById('commission_rate').value    = '';
+						*/
 						
 						break;
 
@@ -75,6 +77,13 @@
 			width: 500px;
 			height: 50px;
 		}
+
+		table#applicable, table#rules { 
+			margin-top: 0px
+		}
+		table#applicable td, table#rules td {
+			padding: 0px;
+		}
 	</style>
 {/literal}
 <h3>{if isset($module.discount.id)}Update{else}Add{/if} Discount</h3>
@@ -83,115 +92,117 @@
 		<dl>
 			<dt><span class="pink">*</span>Name:</dt>
 			<dd>
-				<input type="text" name="name" id="name" style="margin-right: 53px" />
+				<input type="text" name="name" id="name" style="margin-right: 53px" value="{$module.discount.name}" title="required" />
 				Coupon Code:
-				<input type="text" name="name" id="name" style="width: 100px;" />
+				<input type="text" name="coupon" id="coupon" style="width: 100px;" value="{$module.discount.coupon}" /> 
 			</dd>
 			<dt>Description:</dt>
-			<dd><textarea name="description" id="description"></textarea></dd>
-			<dt>Valid From:</dt>
+			<dd><textarea name="description" id="description" style="height: 100px">{$module.discount.description}</textarea></dd>
+			<dt><span class="pink">*</span>Valid From:</dt>
 			<dd>
 				{html_select_date prefix='valid_from_'}
 				to
-				{html_select_date prefix='valid_to_'}
+				{html_select_date prefix='valid_through_'}
 			</dd>
-			<dt>
-				
-			</dt>
-		</dl>
-	</div>
-	<br style="clear: left" />
-	<!--div>
-
-
-
-		<b>Contact Information:</b>
-		<dl>
-			<dt>Company:</dt>
-			<dd><input type='text' name='contact_company' id='contact_company' maxlength="64" value="{$module.discount.contact_company}" /></dd>
-			<dt><span class="pink">*</span>First Name:</dt>
-			<dd><input type='text' name='contact_first_name' id='contact_first_name' title="required" maxlength="50" value="{$module.discount.contact_first_name}" /></dd>
-			<dt><span class="pink">*</span>Last Name:</dt>
-			<dd><input type='text' name='contact_last_name' id='contact_last_name' title="required" maxlength="50" value="{$module.discount.contact_last_name}" /></dd>
-			<dt><span class="pink">*</span>Address:</dt>
+			<dt><span class="pink">*</span>Applicable:</dt>
 			<dd>
-				<input type='text' name='contact_address1' id='contact_address1' title="required" maxlength="64" value="{$module.discount.contact_address1}" /><br />
-				<input type='text' name='contact_address2' id='contact_address2' maxlength="64" value="{$module.discount.contact_address2}" />
+				<table cellspacing="0" cellpadding="0" id="applicable">
+					<tr>
+						<td><input type="checkbox" checked="checked" style="" disabled="disabled" /> All Customers</td>
+						<!--td><input type="checkbox" checked="checked" style="" disabled="disabled" /> All Categories</td-->
+						<td><input type="checkbox" checked="checked" style="" disabled="disabled" /> All Products</td>
+					</tr>
+					<tr>
+						<td>(CTRL + click to select multiple)</td>
+						<!--td>(CTRL + click to select multiple)</td-->
+						<td>(CTRL + click to select multiple)</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top; padding-right: 10px;">
+							<select multiple="multiple" id="customers" name="customers" style="height: 200px; width: 250px;" disabled="disabled">
+								{html_options options=$module.customers}
+							</select>
+						</td>
+						<!--td style="vertical-align: top; padding-right: 10px;">
+							<select multiple="multiple" id="categories" name="categories" style="height: 200px; width: 230px;" disabled="disabled">
+								{html_options options=$module.categories|truncate:32}
+							</select>
+						</td-->
+						<td style="vertical-align: top;">
+							<select multiple="multiple" id="products" name="products" style="height: 200px; width: 450px;">
+								{html_options options=$module.products}
+							</select>
+						</td>
+					</tr>
+				</table>
 			</dd>
-			<dt><span class="pink">*</span>City:</dt>
-			<dd><input type='text' name='contact_city' id='contact_city' title="required" maxlength="64" value="{$module.discount.contact_city}" /></dd>
-			<dt><span class="pink">*</span>State:</dt>
-			<dd>{html_select_state prefix="contact_" title="required"}</dd>
-			<dt><span class="pink">*</span>ZIP Code:</dt>
-			<dd><input type='text' name='contact_zip_code' id='contact_zip_code' style="width: 50px;" title="required" maxlength="5" value="{$module.discount.contact_zip_code}" /></dd>
-			<dt><span class="pink">*</span>Phone:</dt>
-			<dd><input type="text" name="contact_phone" id="contact_phone" style="width: 150px" maxlength="32" title="required" value="{$module.discount.contact_phone}" /></dd>
-			<dt>Fax:</dt>
-			<dd><input type="text" name="contact_fax" id="contact_fax" style="width: 150px" maxlength="32" value="{$module.discount.contact_fax}" /></dd>
-		</dl>
-		<br class="clear-left" /><br />
-		<dl>
-			<dt>Email:</dt>
-			<dd><input type="text" name="email" id="email" maxlength="255" value="{$module.discount.email}" /></dd>
-		</dl>
-	</div>
-	<div class="float-right">
-		<b>Payee Information:</b>
-		<dl>
-			<dt>Company:</dt>
-			<dd><input type='text' name='payee_company' id='payee_company' maxlength="64" value="{$module.discount.payee_company}" /></dd>
-			<dt><span class="pink">*</span>First Name:</dt>
-			<dd><input type='text' name='payee_first_name' id='payee_first_name' title="required" maxlength="50" value="{$module.discount.payee_first_name}" /></dd>
-			<dt><span class="pink">*</span>Last Name:</dt>
-			<dd><input type='text' name='payee_last_name' id='payee_last_name' title="required" maxlength="50" value="{$module.discount.payee_last_name}" /></dd>
-			<dt><span class="pink">*</span>Address:</dt>
+			<dt>Max Usage:</dt>
 			<dd>
-				<input type='text' name='payee_address1' id='payee_address1' title="required" maxlength="64" value="{$module.discount.payee_address1}" /><br />
-				<input type='text' name='payee_address2' id='payee_address2' maxlength="64" value="{$module.discount.payee_address2}" />
+				<input type="text" style="width: 40px" name="max_customer_usage" />
+				Per Customer
+				<input type="text" style="width: 40px" name="max_order_usage" />
+				Per Order
 			</dd>
-			<dt><span class="pink">*</span>City:</dt>
-			<dd><input type='text' name='payee_city' id='payee_city' title="required" maxlength="64" value="{$module.discount.payee_city}" /></dd>
-			<dt><span class="pink">*</span>State:</dt>
-			<dd>{html_select_state prefix="payee_" title="required"}</dd>
-			<dt><span class="pink">*</span>ZIP Code:</dt>
-			<dd><input type='text' name='payee_zip_code' id='payee_zip_code' style="width: 50px;" title="required" maxlength="5" value="{$module.discount.payee_zip_code}" /></dd>
-			<dt><span class="pink">*</span>Phone:</dt>
-			<dd><input type="text" name="payee_phone" id="payee_phone" style="width: 150px" maxlength="32" title="required" value="{$module.discount.payee_phone}" /></dd>
-			<dt>Fax:</dt>
-			<dd><input type="text" name="payee_fax" id="payee_fax" style="width: 150px" maxlength="32" value="{$module.discount.payee_fax}" /></dd>
-		</dl>
-	</div>
-	<br class="clear-left" /><br />
-	<div class="float-left">
-		<b>Tax Information:</b>
-		<dl>
-			<dt><span class="pink">*</span>Tax ID:</dt>
-			<dd><input type="input" id="tax_id" name="tax_id" title="required" maxlength="12" value="{$module.discount.tax_id}" /></dd>
-			<dt><span class="pink">*</span>Tax Class:</dt>
+			<dt><span class="pink">*</span>Remaining:</dt>
 			<dd>
-				<select name="tax_class" id="tax_class" title="required">
-					<option value="">-- Select a Class --</option>
-					<option value="I"{if $module.discount.tax_class == 'I'} selected{/if}>Individual</option>
-					<option value="C"{if $module.discount.tax_class == 'C'} selected{/if}>Corporation</option>
-					<option value="P"{if $module.discount.tax_class == 'P'} selected{/if}>Partnership</option>
-				</select>
+				<input type="radio" checked="checked" name="remaining_usages" value="unlimited" /> Unlimited <input type="radio" name="remaining_usages" value="other" /> Other <input type="text" style="width: 60px;" name="remaining_usages_count" /> Uses <span style="color: #666; margin-left: 20px;">Already Used {$module.discount.usage_count} times</span>
+				<input type="hidden" name="usage_count" value="{$module.discount.usage_count}" />
+			</dd>
+			<dt><span class="pink">*</span>Rules:</dt>
+			<dd>
+				<table id="rules" style="width: 700px">
+					<tr>
+						<th>Applied To</td>
+						<th>Amount</th>
+						<th>Min Subtotal</th>
+						<th>Min Items</th>
+						<th>Max Discount</th>
+						<th>
+							<img src="/static/contrib/silk/icons/add.png" onclick="alert('The ability to add more than one rule to the discount is currently unavailable');" />
+						</th>
+					</tr>
+					<tr>
+						<td class="center">
+							<select name="applied_to" id="applied_to">
+								{html_options options=$module.applied_to_options selected=$module.rules.0.applied_to}
+							</select>
+						</td>
+						<td class="center">
+							<select name="amount_type" id="amount_type">
+								{html_options options=$module.amount_type_options selected=$module.rules.0.amount_type}
+							</select>
+							<input type="text" name="amount" id="amount" style="width: 60px" value="{$module.rules.0.amount}" />
+						</td>
+						<td class="center">$<input type="text" name="min_subtotal" id="minimum_subtotal" style="width: 60px" value="{$module.rules.0.min_subtotal}" /></td>
+						<td class="center"><input type="text" name="min_items" id="minimum_items" style="width: 60px" value="{$module.rules.0.min_items}" /></td>
+						<td class="center">$<input type="text" name="max_discount" id="maximum_discount" style="width: 60px" value="{$module.rules.0.max_discount}" /></td>
+					</tr>
+				</table>
 			</dd>
 		</dl>
 	</div>
-	<div class="float-right">
-		<b>Commission:</b>
-		<dl>
-			<dt><span class="pink">*</span>Rate:</dt>
-			<dd><input type="input" id="commission_rate" name="commission_rate" title="required" style="width: 50px" value="{$module.discount.commission_rate}" />%</dd>
-		</dl>
-	</div>
-	<br class="clear-left" />
+	<br style="clear: left" /><br />
 	<div class="center">
-		{if isset($module.discount.id)}<input type="hidden" name="id" value="{$module.discount.id}" />{/if}
+		{if isset($module.discount.id)}
+			<input type="hidden" name="id" value="{$module.discount.id}" />
+			<input type="hidden" name="sequence" value="{$module.discount.sequence}" />
+		{/if}
 		<input type="reset" value="Reset Form" /><input type="button" value="Store Information" onclick="ajaxRequest(this.parentNode.parentNode{if !isset($module.discount.id)}, 'clearForm'{/if}); return false;" />
-	</div-->
+	</div>
 </form>
+{literal}
 <script type="text/javascript">
-	document.getElementById('contact_state').value = "{$module.discount.contact_state}";
-	document.getElementById('payee_state').value   = "{$module.discount.payee_state}";
+	var select_box   = document.getElementById('products');
+	var option_count = select_box.options.length;
+
+	for (var i = 0; i < option_count; i++) {
+		{/literal}
+		{foreach from=$module.xrefs.PRODUCT item=product_id}
+			if (select_box.options[i].value == {$product_id}) {literal}{{/literal}
+				select_box.options[i].selected = 'selected';
+			{literal}}{/literal}
+		{/foreach}
+		{literal}
+	}
 </script>
+{/literal}
