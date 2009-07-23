@@ -33,8 +33,8 @@
  * @todo Add a Pickles config to allow for overrides (i.e. email goes to a
  *       developer's email account instead of the actual account passed in)
  */
-class Mailer extends Object {
-
+class Mailer extends Object
+{
 	/**
 	 * Sends an email message
 	 *
@@ -44,8 +44,8 @@ class Mailer extends Object {
 	 * @param  string $message The body of the email
 	 * @return array An associative array with a status type and message
 	 */
-	public function send($to, $from, $subject, $message) {
-
+	public function send($to, $from, $subject, $message, $html = false)
+	{
 		// Converts the recipients into a usable string format 
 		if (is_object($to)) { $this->object2array($to); }
 		if (is_array($to))  { $this->array2string($to); }
@@ -55,14 +55,17 @@ class Mailer extends Object {
 		if (is_array($from))  { $this->array2string($from); }
 
 		// Constructs the header
-		$additional_headers = "MIME-Version: 1.0\r\nContent-type: text/html; charset=iso-8859-1\r\nFrom: {$from}\r\nX-Mailer: PHP with PICKLES\r\n";
+		$additional_headers = "MIME-Version: 1.0\r\nContent-type: text/html; charset=iso-8859-1\r\nFrom: {$from}\r\nX-Mailer: PICKLES (http://phpwithpickles.com)\r\n";
 
 		// Sends the mail
-		if (mail($to, stripslashes(trim($subject)), stripslashes(trim($message)), $additional_headers)) {
+		//if (mail($to, stripslashes(trim($subject)), stripslashes(trim($message)), $additional_headers))
+		if (mail($to, stripslashes(trim($subject)), trim($message), $additional_headers))
+		{
 			$type    = 'success';
 			$message = 'Message sent successfully';
 		}
-		else {
+		else
+		{
 			$type    = 'error';
 			$message = 'An unexpected error has occurred';
 		}
@@ -85,17 +88,22 @@ class Mailer extends Object {
 	 * @param  object $object Object to be converted
 	 * @return array The resulting array
 	 */
-	private function object2array(&$object) {
+	private function object2array(&$object)
+	{
 		$array = array();
 
-		foreach ($object as $key => $node) {
-			if (isset($node->name, $node->email)) {
+		foreach ($object as $key => $node)
+		{
+			if (isset($node->name, $node->email))
+			{
 				$array[trim((string)$node->name)] = trim((string)$node->email);
 			}
-			else if (isset($node->email)) {
+			else if (isset($node->email))
+			{
 				$array[] = trim((string)$node->email);
 			}
-			else {
+			else
+			{
 				$array[] = trim((string)$node);
 			}
 		}
@@ -113,14 +121,18 @@ class Mailer extends Object {
 	 * @param  array $array Array to be converted
 	 * @return string The resulting string
 	 */
-	private function array2string(&$array) {
+	private function array2string(&$array)
+	{
 		$temp = array();
 
-		foreach ($array as $name => $email) {
-			if (is_string($name)) {
+		foreach ($array as $name => $email)
+		{
+			if (is_string($name))
+			{
 				$temp[$name] = "{$name} <{$email}>";
 			}
-			else {
+			else
+			{
 				$temp[] = $email;
 			}
 		}
