@@ -43,6 +43,7 @@ class Mailer extends Object
 	 * @param  string $subject Subject line for the email
 	 * @param  string $message The body of the email
 	 * @return array An associative array with a status type and message
+	 * @todo   Implement the $html parameter
 	 */
 	public function send($to, $from, $subject, $message, $html = false)
 	{
@@ -58,8 +59,7 @@ class Mailer extends Object
 		$additional_headers = "MIME-Version: 1.0\r\nContent-type: text/html; charset=iso-8859-1\r\nFrom: {$from}\r\nX-Mailer: PICKLES (http://phpwithpickles.com)\r\n";
 
 		// Sends the mail
-		//if (mail($to, stripslashes(trim($subject)), stripslashes(trim($message)), $additional_headers))
-		if (mail($to, stripslashes(trim($subject)), trim($message), $additional_headers))
+		if (mail($to, stripslashes(trim($subject)), nl2br(stripslashes(trim($message))), $additional_headers))
 		{
 			$type    = 'success';
 			$message = 'Message sent successfully';
