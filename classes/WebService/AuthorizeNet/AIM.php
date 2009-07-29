@@ -190,6 +190,8 @@ class WebService_AuthorizeNet_AIM extends WebService_Common {
 		$response_values = explode('|', $response, 41);
 		$response = array_combine($this->response_variables, $response_values);
 
+		file_put_contents('/tmp/authnet.log', print_r($response, true), FILE_APPEND);
+
 		// Trims all of the variables up
 		// @todo Replace this with a user defined trim() and use array_walk()
 		foreach ($response as $key => $value) {

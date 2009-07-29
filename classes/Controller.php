@@ -128,144 +128,144 @@ class Controller extends Object {
 			}
 		}
 
-		/**
-		 * @todo Maybe the logout shouldn't be an internal thing, what if
-		 *       the user wanted to call the logout page something else? or
-		 *       better yet, they want to next it, like /users/logout?
-		 * @todo May want to make it work from /store/admin/logout and not
-		 *       just from /
-		 */
-		if ($module['requested']['name'] == 'logout') {
-			$security = new Security($config, $db);
-			$security->logout();
+		// Loads the requested module's information
+		$module['requested']['filename']   = strtr($module['requested']['name'], '-', '_');
+		$module['requested']['php_file']   = '../modules/' . $module['requested']['filename'] . '.php';
+		$module['requested']['class_name'] = strtr($module['requested']['filename'], '/', '_');
+
+		// Establishes the shared module information
+		$module['shared']['name']       = $config->getSharedModule($module['requested']['name']);
+		$module['shared']['filename']   = strtr($module['shared']['name'], '-', '_');
+		$module['shared']['php_file']   = PICKLES_PATH . 'common/modules/' . $module['shared']['filename'] . '.php';
+		$module['shared']['class_name'] = strtr($module['shared']['filename'], '/', '_');
+
+		// Tries to load the site level module
+		if (file_exists($module['requested']['php_file'])) {
+			require_once $module['requested']['php_file'];
+
+			if (class_exists($module['requested']['class_name'])) {
+				$module['object'] = new $module['requested']['class_name']($config, $db, $mailer, $error);
+			}
 		}
+		// Tries to load the shared module
+		else if (file_exists($module['shared']['php_file']) && $module['shared']['name'] != false) {
+			require_once $module['shared']['php_file'];
+
+			if (class_exists($module['shared']['class_name'])) {
+				$module['object'] = new $module['shared']['class_name']($config, $db, $mailer, $error);
+			}
+		}
+		// Loads the stock module
 		else {
-			// Loads the requested module's information
-			$module['requested']['filename']   = strtr($module['requested']['name'], '-', '_');
-			$module['requested']['php_file']   = '../modules/' . $module['requested']['filename'] . '.php';
-			$module['requested']['class_name'] = strtr($module['requested']['filename'], '/', '_');
+			$module['object'] = new Module($config, $db, $mailer, $error);
+		}
 
-			// Establishes the shared module information
-			$module['shared']['name']       = $config->getSharedModule($module['requested']['name']);
-			$module['shared']['filename']   = strtr($module['shared']['name'], '-', '_');
-			$module['shared']['php_file']   = PICKLES_PATH . 'common/modules/' . $module['shared']['filename'] . '.php';
-			$module['shared']['class_name'] = strtr($module['shared']['filename'], '/', '_');
+		// Checks if we loaded a module file and no class was present
+		if ($module['object'] != null) {
 
-			// Tries to load the site level module
-			if (file_exists($module['requested']['php_file'])) {
-				require_once $module['requested']['php_file'];
-
-				if (class_exists($module['requested']['class_name'])) {
-					$module['object'] = new $module['requested']['class_name']($config, $db, $mailer, $error);
+			// Potentially starts the session if it's not started already
+			if ($module['object']->getSession() === true) {
+				if (ini_get('session.auto_start') == 0) {
+					session_start();
 				}
-			}
-			// Tries to load the shared module
-			else if (file_exists($module['shared']['php_file']) && $module['shared']['name'] != false) {
-				require_once $module['shared']['php_file'];
-
-				if (class_exists($module['shared']['class_name'])) {
-					$module['object'] = new $module['shared']['class_name']($config, $db, $mailer, $error);
-				}
-			}
-			// Loads the stock module
-			else {
-				$module['object'] = new Module($config, $db, $mailer, $error);
-			}
-
-			// Checks if we loaded a module file and no class was present
-			if ($module['object'] != null) {
-
-				// Potentially starts the session if it's not started already
-				if ($module['object']->getSession() === true) {
-					if (ini_get('session.auto_start') == 0) {
-						session_start();
-					}
-				}
-
-				// Potentially requests use authentication
-				if ($module['object']->getAuthentication() === true) {
-					if (!isset($security)) {
-						$security = new Security($config, $db);
-					}
-					$security->authenticate();
-				}
-
-				// Checks if the display type was passed in
-				if (!isset($display_type)) {
-					$display_type = $module['object']->getDisplay();
-				}
-
-				// Creates a new viewer object
-				$display_class = 'Display_' . $display_type;
-				$display       = new $display_class($config, $error);
-
-				// Potentially establishes caching
-				$caching = $module['object']->getCaching();
-				if ($caching) {
-					$display->caching = $caching;
-					if ($display_type == DISPLAY_SMARTY) {
-						$module['object']->setSmartyObject($display->getSmartyObject());
-					}
-				}
-
-				$display->prepare();
-
-				// Potentially executes the module's logic
-				if (method_exists($module['object'], '__default')) {
-					$module['object']->__default();
-
-					if ($module['object']->getCacheID()) {
-						$display->cache_id = $module['object']->getCacheID();
-					}
-				}
-
-				// Overrides the name and filename with the passed name
-				if ($module['object']->name != null && $module['requested']['filename'] != $module['object']->name) {
-					$module['requested']['filename'] = $module['object']->name;
-					$module['requested']['name']     = $module['object']->name;
-				}
-
-				// Overrides the filename with the passed template
-				if ($module['object']->template != null) {
-					$module['requested']['filename'] = $module['object']->template;
-				}
-
-				// Overrides the shared template information with the passed shared template
-				if ($module['object']->shared_template != null) {
-					$module['shared']['class_name'] = $module['object']->shared_template;
-					$module['shared']['filename']   = strtr($module['shared']['class_name'], '_', '/');
-					$module['shared']['php_file']   = PICKLES_PATH . 'common/modules/' . $module['shared']['filename'] . '.php';
-					$module['shared']['name']       = $module['shared']['filename'];
-				}
-
-				// Sets the display's properties
-				$display->module_name            = $module['requested']['name'];
-				$display->module_filename        = $module['requested']['filename'];
-				$display->shared_module_name     = $module['shared']['name'];
-				$display->shared_module_filename = $module['shared']['filename'];
-
-				if ($this->execute_tests == true) {
-					var_dump($module);
-					exit('caught test');
-				}
-
-				// Loads the module data into the display to be rendered
+	
+				// Performs a logout if requested
 				/**
-				 * @todo perhaps make this a passed variable
+				 * @todo Maybe the logout shouldn't be an internal thing, what if
+				 *       the user wanted to call the logout page something else? or
+				 *       better yet, they want to next it, like /users/logout?
+				 * @todo May want to make it work from /store/admin/logout and not
+				 *       just from /
 				 */
-				$display->data = $module['object']->public;
-
-				// Runs the requested rendering function
-				$display->render($module);
-
-				// Do some cleanup
-				if (isset($security)) {
-					unset($security);
+				if ($module['requested']['name'] == 'logout') {
+					$security = new Security($config, $db);
+					$security->logout();
 				}
-
-				unset($module, $viewer);
-				unset($db, $mailer, $config, $error);
 			}
+
+			// Potentially requests use authentication
+			if ($module['object']->getAuthentication() === true) {
+				if (!isset($security)) {
+					$security = new Security($config, $db);
+				}
+				$security->authenticate();
+			}
+
+			// Checks if the display type was passed in
+			if (!isset($display_type)) {
+				$display_type = $module['object']->getDisplay();
+			}
+
+			// Creates a new viewer object
+			$display_class = 'Display_' . $display_type;
+			$display       = new $display_class($config, $error);
+
+			// Potentially establishes caching
+			$caching = $module['object']->getCaching();
+			if ($caching) {
+				$display->caching = $caching;
+				if ($display_type == DISPLAY_SMARTY) {
+					$module['object']->setSmartyObject($display->getSmartyObject());
+				}
+			}
+
+			$display->prepare();
+
+			// Potentially executes the module's logic
+			if (method_exists($module['object'], '__default')) {
+				$module['object']->__default();
+
+				if ($module['object']->getCacheID()) {
+					$display->cache_id = $module['object']->getCacheID();
+				}
+			}
+
+			// Overrides the name and filename with the passed name
+			if ($module['object']->name != null && $module['requested']['filename'] != $module['object']->name) {
+				$module['requested']['filename'] = $module['object']->name;
+				$module['requested']['name']     = $module['object']->name;
+			}
+
+			// Overrides the filename with the passed template
+			if ($module['object']->template != null) {
+				$module['requested']['filename'] = $module['object']->template;
+			}
+
+			// Overrides the shared template information with the passed shared template
+			if ($module['object']->shared_template != null) {
+				$module['shared']['class_name'] = $module['object']->shared_template;
+				$module['shared']['filename']   = strtr($module['shared']['class_name'], '_', '/');
+				$module['shared']['php_file']   = PICKLES_PATH . 'common/modules/' . $module['shared']['filename'] . '.php';
+				$module['shared']['name']       = $module['shared']['filename'];
+			}
+
+			// Sets the display's properties
+			$display->module_name            = $module['requested']['name'];
+			$display->module_filename        = $module['requested']['filename'];
+			$display->shared_module_name     = $module['shared']['name'];
+			$display->shared_module_filename = $module['shared']['filename'];
+
+			if ($this->execute_tests == true) {
+				var_dump($module);
+				exit('caught test');
+			}
+
+			// Loads the module data into the display to be rendered
+			/**
+			 * @todo perhaps make this a passed variable
+			 */
+			$display->data = $module['object']->public;
+
+			// Runs the requested rendering function
+			$display->render($module);
+
+			// Do some cleanup
+			if (isset($security)) {
+				unset($security);
+			}
+
+			unset($module, $viewer);
+			unset($db, $mailer, $config, $error);
 		}
 	}
 }

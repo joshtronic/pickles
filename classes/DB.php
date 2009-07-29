@@ -334,8 +334,13 @@ class DB extends Object {
 						" . implode($values, ", ") . "
 					);
 				");
-
-				return mysql_insert_id($this->connection);
+				
+				if ($this->error->isError()) {
+					return false;
+				}
+				else {
+					return mysql_insert_id($this->connection);
+				}
 			}
 			else {
 				$this->error->addError('No data was specified');
@@ -370,7 +375,21 @@ class DB extends Object {
 			$fields = $where = null;
 			if (is_array($values)) {
 				foreach ($values as $key => $value) {
-					$fields .= ($fields ? ', ' : null) . $key . " = '" . mysql_real_escape_string(stripslashes($value), $this->connection) . "'";
+					switch ($value) {
+						case null:
+							$value = 'NULL';
+							break;
+
+						case 'NOW()':
+							$value = 'NOW()';
+							break;
+
+						default:
+							$value = "'" . mysql_real_escape_string(stripslashes($value), $this->connection) . "'";
+							break;
+					}
+
+					$fields .= ($fields ? ', ' : null) . $key . " = " . $value;
 				}
 
 				if (is_array($conditions)) {

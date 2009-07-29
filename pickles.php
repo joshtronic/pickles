@@ -34,7 +34,8 @@
  * @todo Allow users to override the timezone from their configuration file.
  */
 // Sets the timezone to avoid Smarty warnings
-if (ini_get('date.timezone') == '') {
+if (ini_get('date.timezone') == '')
+{
 	ini_set('date.timezone', 'America/New_York');
 }
 
@@ -61,32 +62,43 @@ define('DISPLAY_XML',    'XML');
  * @param  string $class Name of the class to be loaded
  * @return boolean Return value of require_once() or false (default)
  */
-function __autoload($class) {
-
+function __autoload($class)
+{
 	$filename = preg_replace('/_/', '/', $class) . '.php';
 
 	$class_file  = PICKLES_PATH . 'classes/' . $filename;
 	$module_file = PICKLES_PATH . 'common/modules/' . $filename;
 	$local_file  = $_SERVER['DOCUMENT_ROOT'] . '/../modules/' . $filename;
+	$test_file   = $_SERVER['DOCUMENT_ROOT'] . '/../tests/'   . str_replace('Test', '', $filename);
 
 	// Loads the class file
-	if (file_exists($class_file)) {
+	if (file_exists($class_file))
+	{
 		return require_once $class_file;
 	}
 	// Loads the shared module
-	else if (file_exists($module_file)) {
+	elseif (file_exists($module_file))
+	{
 		return require_once $module_file;
 	}
 	// Loads the local module
-	else if (file_exists($local_file)) {
+	elseif (file_exists($local_file))
+	{
 		return require_once $local_file;
 	}
 	// Loads Smarty
-	else if ($class == 'Smarty') {
+	elseif ($class == 'Smarty')
+	{
 		return require_once 'contrib/smarty/libs/Smarty.class.php';
 	}
+	// Loads a test class 
+	elseif (preg_match('/Test$/', $class) && file_exists($test_file))
+	{
+		return require_once $test_file;
+	}
 	// Loads nothing
-	else {
+	else
+	{
 		return false;
 	}
 }
