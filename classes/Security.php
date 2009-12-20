@@ -152,7 +152,6 @@ class Security extends Object
 			$salt2 = $salt1;
 		}
 
-
 		return md5($salt2 . md5($salt1 . $string));
 	}
 }
