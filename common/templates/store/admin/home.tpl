@@ -27,7 +27,7 @@
 <table id="stats">
 	<tr><th colspan="2">Statistics</th></tr>
 	<tr>
-		<td>Today's Sales:</td>
+		<td>Sales Today:</td>
 		<td>${$module.statistics.sales_today|number_format:2}</td>
 	</tr>
 	<tr>
@@ -39,7 +39,7 @@
 		<td>${$module.statistics.sales_mtd|number_format:2}</td>
 	</tr>
 	<tr>
-		<td>Today Orders:</td>
+		<td>Orders Today:</td>
 		<td>{$module.statistics.orders_today}</td>
 	</tr>
 	<tr>
