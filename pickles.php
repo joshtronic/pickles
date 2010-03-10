@@ -73,7 +73,7 @@ function __autoload($class)
 	// Loads Smarty
 	elseif ($class == 'Smarty')
 	{
-		return require_once 'contrib/smarty/libs/Smarty.class.php';
+		return require_once 'vendors/smarty/libs/Smarty.class.php';
 	}
 	// Loads a test class 
 	elseif (preg_match('/Test$/', $class) && file_exists($test_file))
