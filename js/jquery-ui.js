@@ -1,1 +1,0 @@
-/home/josh/Sites/pickles/common/static/js/jquery-ui-1.7.2.custom.min.js
