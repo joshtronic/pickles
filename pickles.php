@@ -8,14 +8,19 @@
  * base is established as well as the path that Smarty will use to store
  * the compiled pages.
  *
+ * PHP version 5
+ *
+ * Licensed under the GNU General Public License Version 3
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @package   pickles
  * @author    Josh Sherman <josh@phpwithpickles.org>
  * @copyright Copyright 2007-2010, Gravity Boulevard, LLC
+ * @license   http://www.gnu.org/licenses/gpl.html GPL v3
  * @link      http://phpwithpickles.org
- * @license   http://www.gnu.org/licenses/gpl.html
- * @package   pickles
  * @usage     <code>require_once 'pickles.php';</code>;
  */
- 
+
 // @todo Allow users to override the timezone from their configuration file.
 // Sets the timezone to avoid Smarty warnings
 if (ini_get('date.timezone') == '')
@@ -75,7 +80,7 @@ function __autoload($class)
 	{
 		return require_once 'vendors/smarty/libs/Smarty.class.php';
 	}
-	// Loads a test class 
+	// Loads a test class
 	elseif (preg_match('/Test$/', $class) && file_exists($test_file))
 	{
 		return require_once $test_file;
