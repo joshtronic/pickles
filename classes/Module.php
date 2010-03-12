@@ -54,10 +54,9 @@ class Module extends Object
 	 *
 	 * Defaults to false which is everybody, even anonymous
 	 *
-	 * @access protected
-	 * @var    boolean
+	 * @var boolean
 	 */
-	protected $access = false;
+	public $access = false;
 
 	/**
 	 * Secure
@@ -65,10 +64,9 @@ class Module extends Object
 	 * Whether or not the page should be loaded via SSL.  Not currently
 	 * being used.  Defaults to false, non-SSL.
 	 *
-	 * @access protected
-	 * @var    boolean
+	 * @var boolean
 	 */
-	protected $secure = false;
+	public $secure = false;
 
 	/**
 	 * AJAX
@@ -76,15 +74,24 @@ class Module extends Object
 	 * Whether or not the page must be loaded via AJAX and if so, what
 	 * pages are allowed to access it and the request method.
 	 *
-	 * @access protected
-	 * @var    array
+	 * @var array
 	 */
-	protected $ajax = false;
+	public $ajax = false;
+
+	/**
+	 * Default display engine
+	 *
+	 * Defaults to PHP but could be set to Smarty, JSON, XML or RSS.
+	 *
+	 * @var string
+	 */
+	public $engine = DISPLAY_PHP;
 
 	/**
 	 * Default template
 	 *
-	 * Defaults to index.tpl but could be set to any valid template.
+	 * Defaults to 'index' but could be set to any valid template basename.
+	 * The display engine determines what the file extension should be.
 	 *
 	 * @var string
 	 */
