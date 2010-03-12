@@ -125,7 +125,24 @@ class Config
 	 */
 	public function disabled()
 	{
-		 return (isset($this->modules->site->disabled) && $this->modules->site->disabled == 'true');
+		 return (isset($this->site->disabled) && $this->site->disabled == 'true');
+	}
+
+	/**
+	 * Gets default module
+	 *
+	 * @return string default module or null
+	 */
+	public function module()
+	{
+		$module = null;
+
+		if (isset($this->site->module) && trim($this->site->module) != '')
+		{
+			$module = (string)$this->site->module;
+		}
+
+		return $module;
 	}
 }
 
