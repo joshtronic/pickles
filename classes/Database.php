@@ -31,7 +31,7 @@ class Database extends Object
 	 * @access private
 	 * @var    string
 	 */
-	private $hostname = null;
+	private $hostname = 'localhost';
 
 	/**
 	 * Username for the MySQL Server
@@ -112,10 +112,6 @@ class Database extends Object
 		{
 			$this->hostname = $config['hostname'];
 		}
-		else
-		{
-			$this->hostname = 'localhost';
-		}
 	}
 
 	/**
@@ -130,12 +126,6 @@ class Database extends Object
 	{
 		if ($this->connection === null)
 		{
-			// Sets the database server to localhost if the URL is local
-			if ($this->hostname == '' || (isset($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] == 'groupocity2.localhost' || $_SERVER['HTTP_HOST'] == 'groupocity2.desktop' || $_SERVER['HTTP_HOST'] == 'local2.groupocity.com')))
-			{
-				$this->hostname = 'localhost';
-			}
-
 			if (isset($this->username, $this->password, $this->database))
 			{
 				// Creates a new PDO database object (persistent)

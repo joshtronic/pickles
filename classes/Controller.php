@@ -26,76 +26,82 @@
  *
  * @usage <code>new Controller($config);</code>
  */
-class Controller extends Object {
-
-	private $execute_tests = false;
-
+class Controller extends Object
+{
 	/**
 	 * Constructor
 	 *
-	 * To make life a bit easier when using PICKLES, the Controller logici
+	 * To make life a bit easier when using PICKLES, the Controller logic
 	 * is executed automatically via use of a constructor.
-	 *
-	 * @param mixed Config object or filename (optional)
 	 */
-	public function __construct($config = null) {
+	public function __construct()
+	{
 		parent::__construct();
 
-		// Creates the core objects that don't need a Config object
-		$error = new Error();
-
-		// Check the passed config variables object type
-		if (is_object($config)) {
-			if ($config instanceof Config === false) {
-				$error->addWarning('Passed object is not an instance of Config');
-				$config = null;
-			}
-		}
-
-		// Config filename to be loaded
-		$filename = null;
-
-		// Checks if the config value is a filename
-		if (is_string($config)) {
-			if (file_exists($config)) {
-				$filename = $config;
-			}
-			else {
-				$error->addWarning('Passed config filename does not exist');
-			}
-		}
-		else {
-			$config = null;
-		}
-
-		// If no Config object is passed (or it's cleared), create a new one from assumptions
-		if ($config == null) {
-			$config = new Config();
-		}
-		else {
-			$config = new Config($filename);
-		}
-
-		unset($filename);
-
-		// Creates all the other core objects we need to pass around
-		$db     = new DB($config, $error);
-		$mailer = new Mailer($config, $error);
-
 		// Generate a generic "site down" message
-		if ($config->getDisabled()) {
+		if ($this->config->disabled()) {
 			exit("<h2><em>{$_SERVER['SERVER_NAME']} is currently down for maintenance</em></h2>");
 		}
 
-		// Loads the default module
-		$module['requested']['name'] = $config->getDefaultModule();
+		// Loads the default module information (if any)
+		$basename = $this->config->module();
 
-		// Attempts to override the default module
-		if (isset($_REQUEST['module'])) {
-			if (strpos($config->templates->main, $_REQUEST['module']) !== 0) {
-				$module['requested']['name'] = $_REQUEST['module'];
+		if ($basename != null)
+		{
+			$module_class    = strtr($basename, '/', '_');
+			$module_filename = '../modules/' . $basename . '.php';
+			$css_class       = strtr($basename, '_', '-');
+			$js_filename     = $basename;
+
+			unset($basename);
+		}
+		
+		// Attempts to override the defaults with passed information (if any)
+		if (isset($_REQUEST['module']) && trim($_REQUEST['module']) != '')
+		{
+			$new_basename        = strtr($_REQUEST['module'], '-', '_');
+			$new_module_class    = strtr($new_basename, '/', '_');
+			$new_module_filename = '../modules/' . $new_basename . '.php';
+			$new_css_class       = strtr($new_basename, '_', '-');
+			$new_js_filename     = $new_basename;
+
+			// File exists, proceed with override
+			if (file_exists($new_module_filename))
+			{
+				$module_class    = $new_module_class;
+				$module_filename = $new_module_filename;
+				$css_class       = $new_css_class;
+				$js_filename     = $new_js_filename;
+			}
+
+			unset($new_basename, $new_module_class, $new_module_filename, $new_css_class, $new_js_filename);
+		}
+
+		// Loads the module or errors out
+		if (isset($module_filename) && $module_filename != null && file_exists($module_filename))
+		{
+			require_once $module_filename;
+
+			// Checks that our class exists
+			if (class_exists($module_class))
+			{
+				$module = new $module_class;
+
+				// Checks that our default method exists
+				if (method_exists($module, '__default'))
+				{
+					var_dump($module->__default());
+				}
 			}
 		}
+		else
+		{
+			// @todo Error handling
+			// @todo Should we be creating a new generic Module?
+		}
+
+
+		exit('EOF');
 
 		// Checks if we have a display type passed in
 		if (strpos($module['requested']['name'], '.') !== false) {
@@ -120,37 +126,7 @@ class Controller extends Object {
 			}
 		}
 
-		// Loads the requested module's information
-		$module['requested']['filename']   = strtr($module['requested']['name'], '-', '_');
-		$module['requested']['php_file']   = '../modules/' . $module['requested']['filename'] . '.php';
-		$module['requested']['class_name'] = strtr($module['requested']['filename'], '/', '_');
 
-		// Establishes the shared module information
-		$module['shared']['name']       = $config->getSharedModule($module['requested']['name']);
-		$module['shared']['filename']   = strtr($module['shared']['name'], '-', '_');
-		$module['shared']['php_file']   = PICKLES_PATH . 'common/modules/' . $module['shared']['filename'] . '.php';
-		$module['shared']['class_name'] = strtr($module['shared']['filename'], '/', '_');
-
-		// Tries to load the site level module
-		if (file_exists($module['requested']['php_file'])) {
-			require_once $module['requested']['php_file'];
-
-			if (class_exists($module['requested']['class_name'])) {
-				$module['object'] = new $module['requested']['class_name']($config, $db, $mailer, $error);
-			}
-		}
-		// Tries to load the shared module
-		else if (file_exists($module['shared']['php_file']) && $module['shared']['name'] != false) {
-			require_once $module['shared']['php_file'];
-
-			if (class_exists($module['shared']['class_name'])) {
-				$module['object'] = new $module['shared']['class_name']($config, $db, $mailer, $error);
-			}
-		}
-		// Loads the stock module
-		else {
-			$module['object'] = new Module($config, $db, $mailer, $error);
-		}
 
 		// Checks if we loaded a module file and no class was present
 		if ($module['object'] != null) {
