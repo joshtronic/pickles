@@ -115,6 +115,18 @@ class Config
 
 		return self::$instance;
 	}
+
+	/**
+	 * Gets status of site
+	 *
+	 * Checks the site->disabled variable for truth.
+	 *
+	 * @return boolean whether or not the site is disabled
+	 */
+	public function disabled()
+	{
+		 return (isset($this->modules->site->disabled) && $this->modules->site->disabled == 'true');
+	}
 }
 
 ?>
