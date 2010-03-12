@@ -24,7 +24,7 @@
  *
  * @usage <code>$config = new Config($filename); // $filename is optional, default = ../config.xml</code>
  */
-class Config extends Object
+class Config
 {
 	/**
 	 * Instance of the Config object
@@ -44,8 +44,6 @@ class Config extends Object
 	 */
 	public function __construct($file = '../config.xml')
 	{
-		parent::__construct();
-
 		$this->load($file);
 	}
 
