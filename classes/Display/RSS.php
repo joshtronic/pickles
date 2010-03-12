@@ -3,25 +3,16 @@
 /**
  * RSS Display Class File for PICKLES
  *
- * PICKLES is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
+ * PHP version 5
  *
- * PICKLES is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * Licensed under the GNU General Public License Version 3
+ * Redistribution of these files must retain the above copyright notice.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with PICKLES.  If not, see
- * <http://www.gnu.org/licenses/>.
- *
- * @author    Joshua John Sherman <josh@phpwithpickles.org>
- * @copyright Copyright 2007, 2008, 2009 Joshua John Sherman
+ * @package   pickles
+ * @author    Josh Sherman <josh@phpwithpickles.org>
+ * @copyright Copyright 2007-2010, Gravity Boulevard, LLC
+ * @license   http://www.gnu.org/licenses/gpl.html GPL v3
  * @link      http://phpwithpickles.org
- * @license   http://www.gnu.org/copyleft/lesser.html
- * @package   PICKLES
  */
 
 /**
@@ -35,8 +26,8 @@
  *       Feed viewer that would take a parameter to determine which type of
  *       of feed to use).
  */
-class Display_RSS extends Display_Common {
-
+class Display_RSS extends Display_Common
+{
 	/**
 	 * Render the RSS feed data
 	 *
@@ -45,22 +36,28 @@ class Display_RSS extends Display_Common {
 	 *
 	 * @todo Error handling is non-existant.
 	 */
-	public function render() {
-		if (isset($this->data->channel) || is_object($this->data['channel'])) {
+	public function render()
+	{
+		if (isset($this->data->channel) || is_object($this->data['channel']))
+		{
 			$channel = $this->data['channel'];
 			
-			if (!is_object($this->data['channel'])) {
+			if (!is_object($this->data['channel']))
+			{
 				$channel = $this->config->rss->$channel;
 			}
 
-			if (isset($this->data->items)) {
+			if (isset($this->data->items))
+			{
 				$items = $this->data['items'];
 			}
-			else {
+			else
+			{
 				$this->error->addError('No items were provided');
 			}
 		}
-		else {
+		else
+		{
 			$this->error->addError('No channel was specified');
 		}
 
@@ -73,7 +70,8 @@ class Display_RSS extends Display_Common {
 				<link>http://<?=$_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];?></link>
 				<description><?=$channel->description;?></description>
 				<?php
-				if (isset($channel->image)) {
+				if (isset($channel->image))
+				{
 					?>
 					<image>
 						<url><?=$channel->image;?></url>
@@ -87,11 +85,14 @@ class Display_RSS extends Display_Common {
 				<language><?=isset($channel->language) ? $channel->language : 'en-us';?></language>
 				<generator version="pre-beta 0.0.0">PICKLES (http://phpwithpickles.org)</generator>
 				<?php
-				if (is_array($items)) {
-					foreach ($items as $key => $item) {
+				if (is_array($items))
+				{
+					foreach ($items as $key => $item)
+					{
 						$date = date('r', strtotime($item['date']));
 
-						if ($key == 0) {
+						if ($key == 0)
+						{
 							echo "<lastBuildDate>{$date}</lastBuildDate>";
 						}
 						?>
@@ -112,4 +113,5 @@ class Display_RSS extends Display_Common {
 		<?php
 	}
 }
+
 ?>

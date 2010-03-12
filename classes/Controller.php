@@ -13,7 +13,6 @@
  * @copyright Copyright 2007-2010, Gravity Boulevard, LLC
  * @license   http://www.gnu.org/licenses/gpl.html GPL v3
  * @link      http://phpwithpickles.org
- * @usage     <code>require_once 'pickles.php';</code>;
  */
 
 /**
@@ -77,6 +76,9 @@ class Controller extends Object
 			unset($new_basename, $new_module_class, $new_module_filename, $new_css_class, $new_js_filename);
 		}
 
+		// Defaults the module return variable
+		$module_return = null;
+
 		// Loads the module or errors out
 		if (isset($module_filename) && $module_filename != null && file_exists($module_filename))
 		{
@@ -90,7 +92,7 @@ class Controller extends Object
 				// Checks that our default method exists
 				if (method_exists($module, '__default'))
 				{
-					var_dump($module->__default());
+					$module_return = $module->__default();
 				}
 			}
 		}
@@ -99,7 +101,10 @@ class Controller extends Object
 			// @todo Error handling
 			// @todo Should we be creating a new generic Module?
 		}
-
+					
+		// Starts up the display engine
+		$display_class = 'Display_' . (isset($module->engine) ? $module->engine : DISPLAY_PHP);
+		$display       = new $display_class($module->template, $module_return);
 
 		exit('EOF');
 
@@ -135,19 +140,6 @@ class Controller extends Object
 			if ($module['object']->getSession() === true) {
 				if (ini_get('session.auto_start') == 0) {
 					session_start();
-				}
-	
-				// Performs a logout if requested
-				/**
-				 * @todo Maybe the logout shouldn't be an internal thing, what if
-				 *       the user wanted to call the logout page something else? or
-				 *       better yet, they want to next it, like /users/logout?
-				 * @todo May want to make it work from /store/admin/logout and not
-				 *       just from /
-				 */
-				if ($module['requested']['name'] == 'logout') {
-					$security = new Security($config, $db);
-					$security->logout();
 				}
 			}
 
