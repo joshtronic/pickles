@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title></title>
+			<link rel="stylesheet" href="media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+						<h1 align="center">README</h1>
+<pre>
+               ______ _____ _____  _   __ _      _____ _____
+               | ___ \_   _/  __ \| | / /| |    |  ___/  ___|
+               | |_/ / | | | /  \/| |/ / | |    | |__ \ `--.
+               |  __/  | | | |    |    \ | |    |  __| `--. \
+               | |    _| |_| \__/\| |\  \| |____| |___/\__/ /
+               \_|    \___/ \____/\_| \_/\_____/\____/\____/
+       
+       PHP Interface Collection of Killer Libraries to Enhance Stuff
+===========================================================================
+
+What is PICKLES?
+----------------
+
+The whole point behind PHP with PICKLES was for me (Josh Sherman) to take
+a decade of PHP experience and a dozen or so of my own websites (all
+running on different but similar custom systems of my own design) and build
+a new framework rapid development system that would be flexible enough to 
+run all of my sites off of a single shared codebase. PICKLES runs in such a
+way that the core files are completely separate from the site code it's 
+serving. So much so, that the core files should never really need to be 
+accessed after installation (unless you want to void your warranty and/or 
+make a global change to all of your sites), and each site you have running 
+will be nicely packaged in a directory all it's own. This keeps your sites 
+simple and tidy with no duplicated code for each site! In a site's 
+directory modules (pages) are kept seperate from templates and everything
+is ran through a single entry point controller. 
+
+Okay, but why?
+--------------
+
+Now I know you're wondering, &quot;why didn't you just use one of the
+pre-existing and already established PHP frameworks that are out there?&quot; I
+do have a handful of reasons for that, but those are personal gripes based
+on a limited number of experiences and I won't being going into detail 
+about them. The main reason for developing my own framework is that I am, 
+and also have been, a very do it yourself type when it comes to coding, and
+typically very proud of my coding accomplishments. Also, because all of the
+sites I had previously written shared a lot of the same concepts and in 
+some cases, the same bits of code, it made a heck of a lot more sense for 
+me to develop a new system based around some of the better concepts from 
+previous outings than to rebuild my sites inside of another framework. 
+
+Get the facts!
+--------------
+
+Please note that some of these may not be entirely accurate yet.
+
+ * PICKLES will only run on PHP 5.0.0 or greater. There are no plans to 
+   ever support PHP 4.x.y (or below) as those versions have reached end of 
+   life, so please don't ask.
+
+ * PICKLES is not Model-View-Controller (MVC). It was developed around 
+   concepts (as well as some naming conventions) of the MVC design pattern 
+   but does not entirely conform to my own understanding of MVC. I'm from 
+   the school of thought that there's not a single hammer for every nail, 
+   so there's no point in forcing PICKLES into the MVC box for the sake of 
+   it. PICKLES strives to provide a modular system for developing websites 
+   while keeping the display elements separated from any database calls and 
+   other logic. That isn't necessarily a bad thing, it just meants that 
+   PICKLES isn't all that trendy because it lacks a silly buzzword that's a 
+   bit overused at this point.
+
+ * PICKLES supports rendering Smarty template pages, returning JSON data 
+   and RSS feeds (currently only supports version 2.0) and is fully capable 
+   of running from the command line modes.
+
+* PICKLES is coded fairly closely to the PEAR coding standards (sorry, I 
+  like my fancy braces inline for class and function definitions) and is 
+  fully documented in DocBlock notation.
+
+* Included with PICKLES are shared CSS files (foundation classes and one to 
+  do a full CSS reset) and shared JavaScript files with includes a very 
+  trim AJAX library that handles a PICKLES-centric JSON object 
+  automatically. If your dataset does not fit into that format, custom 
+  handlers can be used instead.
+
+* Writing error free code is very important to me, so any PHP development I 
+  do is made to be E_STRICT compatible. This means that not only is PICKLES 
+  code free of any errors, it is free of warnings as well.
+
+* Depending on your server, any number of sites can be ran off of a single 
+  PICKLES install!
+
+</pre>
+	<p class="notes" id="credit">
+		Documentation generated on Sat, 13 Mar 2010 14:42:52 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
+	</p>
+	</body>
+</html>

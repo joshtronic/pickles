@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs for page pickles.php</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="file-name">/pickles.php</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+											<a href="#sec-constants">Constants</a>
+			|									<a href="#sec-functions">Functions</a>
+			</div>
+	<div class="info-box-body">	
+		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Core PICKLES Include File</p>
+<p class="description"><p>This is the file that you include on the page you're instantiating the  controller from (typically index.php).  The path to the PICKLES code  base is established as well as the path that Smarty will use to store  the compiled pages.</p><p>PHP version 5</p><p>Licensed under the GNU General Public License Version 3  Redistribution of these files must retain the above copyright notice.</p></p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Josh Sherman &lt;<a href="mailto:josh@phpwithpickles.org">josh@phpwithpickles.org</a>&gt;</li>
+				<li><span class="field">copyright:</span> Copyright 2007-2010, Gravity Boulevard, LLC</li>
+				<li><span class="field">link:</span> <a href="http://phpwithpickles.org">http://phpwithpickles.org</a></li>
+				<li><span class="field">usage:</span> <div class="src-code"><ol><li><div class="src-line"><span class="src-inc">require_once&nbsp;</span><span class="src-str">'pickles.php'</span><span class="src-sym">;</span></div></li>
+</ol></div></li>
+				<li><span class="field">license:</span> <a href="http://www.gnu.org/licenses/gpl.html">GPL v3</a></li>
+			</ul>
+		
+			</div>
+</div>
+		
+
+	
+	<a name="sec-constants"></a>	
+	<div class="info-box">
+		<div class="info-box-title">Constants</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+									<span class="disabled">Constants</span>
+			|										<a href="#sec-functions">Functions</a>
+					</div>
+		<div class="info-box-body">	
+			<a name="defineDISPLAY_JSON"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">DISPLAY_JSON</span> = 'JSON'
+			(line <span class="line-number">39</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="defineDISPLAY_PHP"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">DISPLAY_PHP</span> = 'PHP'
+			(line <span class="line-number">40</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="defineDISPLAY_RSS"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">DISPLAY_RSS</span> = 'RSS'
+			(line <span class="line-number">41</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="defineDISPLAY_SMARTY"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">DISPLAY_SMARTY</span> = 'Smarty'
+			(line <span class="line-number">42</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="defineDISPLAY_XML"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">DISPLAY_XML</span> = 'XML'
+			(line <span class="line-number">43</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="defineLOG_PATH"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">LOG_PATH</span> = VAR_PATH.'logs/'
+			(line <span class="line-number">35</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="definePICKLES_PATH"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">PICKLES_PATH</span> = dirname(__FILE__).'/'
+			(line <span class="line-number">33</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="defineSITE_PATH"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">SITE_PATH</span> = getcwd().'/'
+			(line <span class="line-number">32</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="defineSMARTY_PATH"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">SMARTY_PATH</span> = VAR_PATH.'smarty/'
+			(line <span class="line-number">36</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="defineVAR_PATH"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">VAR_PATH</span> = PICKLES_PATH.'var/'.$_SERVER['SERVER_NAME'].'/'
+			(line <span class="line-number">34</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+		</div>
+	</div>
+	
+	
+	<a name="sec-functions"></a>	
+	<div class="info-box">
+		<div class="info-box-title">Functions</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+													<a href="#sec-constants">Constants</a>
+				|									<span class="disabled">Functions</span>
+		</div>
+		<div class="info-box-body">	
+			<a name="function__autoload" id="function__autoload"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="method-title">__autoload</span> (line <span class="line-number">54</span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Magic function to automatically load classes</p>
+<p class="description"><p>Determines if the system needs to load a PICKLES core class or  a PICKLES shared module (not to be confused with site level modules).</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> Return value of require_once() or false (default)</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			__autoload
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$class</span>)
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$class</span><span class="var-description">: Name of the class to be loaded</span>			</li>
+				</ul>
+		
+	
+</div>
+		</div>
+	</div>
+	
+	<p class="notes" id="credit">
+		Documentation generated on Sat, 13 Mar 2010 14:42:53 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
+	</p>
+	</div></body>
+</html>
