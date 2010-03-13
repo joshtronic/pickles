@@ -8,7 +8,7 @@
  * Licensed under the GNU General Public License Version 3
  * Redistribution of these files must retain the above copyright notice.
  *
- * @package   pickles
+ * @package   PICKLES
  * @author    Josh Sherman <josh@phpwithpickles.org>
  * @copyright Copyright 2007-2010, Gravity Boulevard, LLC
  * @license   http://www.gnu.org/licenses/gpl.html GPL v3
