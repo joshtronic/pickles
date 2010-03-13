@@ -18,7 +18,7 @@
  * @copyright Copyright 2007-2010, Gravity Boulevard, LLC
  * @license   http://www.gnu.org/licenses/gpl.html GPL v3
  * @link      http://phpwithpickles.org
- * @usage     <code>require_once 'pickles.php';</code>;
+ * @usage     <code>require_once 'pickles.php';</code>
  */
 
 // @todo Allow users to override the timezone from their configuration file.
