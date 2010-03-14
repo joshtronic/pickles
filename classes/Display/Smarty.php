@@ -25,6 +25,7 @@
 class Display_Smarty extends Display_Common
 {
 	private $smarty = null;
+	protected $extension = 'tpl';
 
 	public function __construct(Config $config, Error $error) {
 		parent::__construct($config, $error);

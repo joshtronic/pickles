@@ -18,85 +18,53 @@
 /**
  * PHP Display
  *
- * Displays the associated PHP templates for the Model.  This is
- * very similar to the Smarty viewer, but less overhead since it's
- * straight PHP.  The PHP viewer also utilizes a different caching
- * system than Smarty.  The general rules around the caching will
- * be the same though.
+ * Displays the associated PHP templates for the Model.  This is very
+ * similar to the Smarty viewer, but less overhead since it's straight PHP.
+ * The PHP viewer also utilizes a different caching system than Smarty.
+ * The general rules around the caching will be the same though.
  */
 class Display_PHP extends Display_Common
 {
-	public function prepare()
-	{	
-		// Enables caching
-		if ($this->caching == true)
-		{
-			if (is_numeric($this->caching))
-			{
-				//$this->smarty->cache_lifetime = $this->caching;
-			}
-		}
-
-		$this->template        = $this->template_path . $this->module_name . '.php';
-		$this->shared_template = PICKLES_PATH . 'templates/' . $this->shared_name . '.php';		
-	}
+	/**
+	 * Template Extension
+	 *
+	 * I know there's some controversy amoungst my peers concerning the
+	 * usage of the .phtml extension for these PHP template files. If you
+	 * would prefer .php or .tpl extensions, feel free to void your
+	 * warranty and change it here.
+	 *
+	 * @access protected
+	 * @var    string $extension file extension for the template files
+	 */
+	protected $extension = 'phtml';
 
 	/**
 	 * Renders the PHP templated pages
 	 */
 	public function render()
-	{	
-		//if (filemtime($this->template)) {
-		//	readfile('/var/www/josh/pickles/var/joshtronic.localhost/smarty/cache/home.html');
-		//}
+	{
+		// Starts up the buffer
+		ob_start();
 
-		/**
-		 * @todo There's a bug with the store home page since it's a redirect, maybe
-		 */
-		if (!file_exists($this->template))
-		{
-			if (file_exists($this->shared_template))
-			{
-				$this->template = $this->shared_template;
-			}
-		}
+		// Puts the module return data in a local variable
+		$module = $this->module_return;
 
-		// Brings these variables to scope
-		/**
-		 * @todo Section or module needs to go, having both seems dumb.
-		 */
-		$section  = $this->section;
-		$module   = $this->module_name;
-		$template = $this->template;
-
-		// Loads the data from the config
-		$config = $this->config->getPublicData();
-
-		// Loads the data from the module
-		$data = $this->data;
-
-		// If there's data set, this brings it into scope
-		if (isset($this->data) && is_array($this->data)) {
-			extract($this->data);
-		}
-
-		// If the index.php file is present, load it, else load the template directly
-		/**
-		 * @todo Should there be additional logic to allow the module or the
-		 *       template to determine whether or not the index should be loaded?
-		 */
-		if (file_exists($this->template_path . 'index.php')) 
-		{
-			require_once $this->template_path . 'index.php';
-		}
-		elseif (file_exists($this->template))
+		// Loads the template
+		if ($this->template)
 		{
 			require_once $this->template;
 		}
 
-		/**
-		 * @todo Resurrect my buffer clean up code
-		 */
+		// Grabs the buffer contents and clears it out
+		$buffer = ob_get_clean();
+
+		// Minifies the output
+		// @todo Need to add logic to not minify blocks of CSS or Javascript
+		//$buffer = str_replace(array('    ', "\r\n", "\n", "\t"), null, $buffer);
+		$buffer = str_replace(array('    ', "\t"), null, $buffer);
+
+		// Spits out the minified buffer
+		echo $buffer;
 	}
 }
 

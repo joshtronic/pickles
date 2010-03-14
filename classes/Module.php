@@ -186,7 +186,22 @@ class Module extends Object
 			}
 			else
 			{
-				$this->$name = false;
+				switch ($name)
+				{
+					case 'engine':
+						$default = DISPLAY_PHP;
+						break;
+
+					case 'template':
+						$default = 'index';
+						break;
+
+					default:
+						$default = false;
+						break;
+				}
+
+				$this->$name = $default; 
 			}
 		}
 

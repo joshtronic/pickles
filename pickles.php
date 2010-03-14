@@ -34,11 +34,18 @@ if (ini_get('date.timezone') == '')
 }
 
 // Establishes our paths
-define('PICKLES_PATH', dirname(__FILE__) . '/');
-define('SITE_PATH',    getcwd() . '/../');
-define('PRIVATE_PATH', SITE_PATH . 'private/');
-define('LOG_PATH',     PRIVATE_PATH . 'logs/');
-define('SMARTY_PATH',  PRIVATE_PATH . 'smarty/');
+define('PICKLES_PATH',  dirname(__FILE__) . '/');
+define('SITE_PATH',     getcwd() . '/../');
+
+define('CLASS_PATH',    PICKLES_PATH . 'classes/');
+
+define('MODEL_PATH',    SITE_PATH . 'models/');
+define('MODULE_PATH',   SITE_PATH . 'modules/');
+define('TEMPLATE_PATH', SITE_PATH . 'templates/');
+
+define('PRIVATE_PATH',  SITE_PATH . 'private/');
+define('LOG_PATH',      PRIVATE_PATH . 'logs/');
+define('SMARTY_PATH',   PRIVATE_PATH . 'smarty/');
 
 // Sets up constants for the Display names
 define('DISPLAY_JSON',   'JSON');
@@ -69,11 +76,7 @@ function __autoload($class)
 	{
 		$filename = preg_replace('/_/', '/', $class) . '.php';
 
-		$paths = array(
-			PICKLES_PATH . 'classes/',
-			SITE_PATH . '/../models/',
-			SITE_PATH . '/../modules/'
-		);
+		$paths = array(CLASS_PATH, MODEL_PATH, MODULE_PATH);
 
 		foreach ($paths as $path)
 		{

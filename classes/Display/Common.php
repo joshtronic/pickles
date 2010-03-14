@@ -18,9 +18,8 @@
 /**
  * Common Display Class
  *
- * This is the class that each viewer class should be extending from.
- *
- * @abstract
+ * This is the parent class class that each display class should be
+ * extending and executing parent::render()
  */
 abstract class Display_Common extends Object
 {
@@ -31,6 +30,14 @@ abstract class Display_Common extends Object
 	 * @var    string
 	 */
 	protected $template = null;
+
+	/**
+	 * Template Extension
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $extension = false;
 
 	/**
 	 * Module Return Data
@@ -45,11 +52,10 @@ abstract class Display_Common extends Object
 	 *
 	 * Runs the parent's constructor and adds the module to the object.
 	 */
-	public function __construct($template, $module_return)
+	public function __construct($template)
 	{
 		parent::__construct();
 
-		// @todo This may need to be flipped on only for Smarty and PHP templates
 		// Obliterates any passed in PHPSESSID (thanks Google)
 		if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false)
 		{
@@ -58,32 +64,44 @@ abstract class Display_Common extends Object
 			header('Location: ' . $request_uri);
 			exit();
 		}
+		else
+		{
+			// XHTML compliancy stuff
+			ini_set('arg_separator.output', '&amp;');
+			ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
 
-		// XHTML compliancy stuff
-		ini_set('arg_separator.output', '&amp;');
-		ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
+			header('Content-type: text/html; charset=UTF-8');
 
-		// @todo Uncomment or remove
-		//header('Content-type: text/html; charset=UTF-8');
+			$template = TEMPLATE_PATH . $template . ($this->extension != false ? '.' . $this->extension : '');
 
-		$this->template      = $template;
+			if (file_exists($template) && is_file($template) && is_readable($template))
+			{
+				$this->template = $template;
+			}
+			else
+			{
+				// @todo Add in pretty error page.
+				exit('barf.');
+			}
+		}
+	}
+	 
+	/**
+	 * Preparation Method
+	 *
+	 * @param array $module_return data returned by the module
+	 */
+	public function prepare($module_return)
+	{
 		$this->module_return = $module_return;
 	}
 
 	/**
-	 * Abstract rendering function that is overloaded within the loaded viewer
+	 * Rendering Method
 	 *
 	 * @abstract
 	 */
-	public abstract function render();
-
-	/**
-	 * Preparation for display
-	 */
-	public function prepare()
-	{
-		
-	}
+	abstract public function render();
 }
 
 ?>
