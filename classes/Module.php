@@ -180,7 +180,7 @@ class Module extends Object
 	{
 		if ($this->$name == null)
 		{
-			if (isset($this->config->site[$name]))
+			if (isset($this->config->module[$name]))
 			{
 				$this->$name = $this->config->module[$name];
 			}
