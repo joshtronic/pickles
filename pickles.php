@@ -21,6 +21,11 @@
  * @usage     <code>require_once 'pickles.php';</code>
  */
 
+// @todo Add options to the config to set this, and/or have it only run
+//       E_STRICT display ON locally (perhaps by IP?)
+ini_set('display_errors', true);
+error_reporting(E_ALL | E_STRICT);
+
 // @todo Allow users to override the timezone from their configuration file.
 // Sets the timezone to avoid Smarty warnings
 if (ini_get('date.timezone') == '')
