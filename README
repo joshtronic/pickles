@@ -14,7 +14,7 @@ What is PICKLES?
 The whole point behind PHP with PICKLES was for me (Josh Sherman) to take
 a decade of PHP experience and a dozen or so of my own websites (all
 running on different but similar custom systems of my own design) and build
-a new framework rapid development system that would be flexible enough to 
+a new framework / rapid development system that would be flexible enough to 
 run all of my sites off of a single shared codebase. PICKLES runs in such a
 way that the core files are completely separate from the site code it's 
 serving. So much so, that the core files should never really need to be 
@@ -22,8 +22,9 @@ accessed after installation (unless you want to void your warranty and/or
 make a global change to all of your sites), and each site you have running 
 will be nicely packaged in a directory all it's own. This keeps your sites 
 simple and tidy with no duplicated code for each site! In a site's 
-directory modules (pages) are kept seperate from templates and everything
-is ran through a single entry point controller. 
+directory, models and modules (page logic) and templates are kept seperate
+from eachother and everything is ran through a single entry point 
+controller. 
 
 Okay, but why?
 --------------
@@ -43,36 +44,32 @@ previous outings than to rebuild my sites inside of another framework.
 Get the facts!
 --------------
 
-Please note that some of these may not be entirely accurate yet.
+* PICKLES will only run on PHP 5.0.0 or greater. There are no plans to 
+  ever support PHP 4.x.y (or below) as those versions have reached end of 
+  life, so please don't ask.
 
- * PICKLES will only run on PHP 5.0.0 or greater. There are no plans to 
-   ever support PHP 4.x.y (or below) as those versions have reached end of 
-   life, so please don't ask.
+* PICKLES is not Model-View-Controller (MVC). It was developed around 
+  concepts (as well as some naming conventions) of the MVC design pattern 
+  but does not entirely conform to my own understanding of MVC. I'm from 
+  the school of thought that there's not a single hammer for every nail, 
+  so there's no point in forcing PICKLES into the MVC box for the sake of 
+  it. PICKLES strives to provide a modular system for developing websites 
+  while keeping the display elements separated from any database calls and 
+  other logic. That isn't necessarily a bad thing, it just meants that 
+  PICKLES isn't all that trendy because it lacks a silly buzzword that's a 
+  bit overused at this point.
 
- * PICKLES is not Model-View-Controller (MVC). It was developed around 
-   concepts (as well as some naming conventions) of the MVC design pattern 
-   but does not entirely conform to my own understanding of MVC. I'm from 
-   the school of thought that there's not a single hammer for every nail, 
-   so there's no point in forcing PICKLES into the MVC box for the sake of 
-   it. PICKLES strives to provide a modular system for developing websites 
-   while keeping the display elements separated from any database calls and 
-   other logic. That isn't necessarily a bad thing, it just meants that 
-   PICKLES isn't all that trendy because it lacks a silly buzzword that's a 
-   bit overused at this point.
+* PICKLES supports rendering Smarty template pages, returning JSON data 
+  and RSS feeds (currently only supports version 2.0) and is fully capable 
+  of running from the command line modes.
 
- * PICKLES supports rendering Smarty template pages, returning JSON data 
-   and RSS feeds (currently only supports version 2.0) and is fully capable 
-   of running from the command line modes.
-
-* PICKLES is coded fairly closely to the PEAR coding standards (sorry, I 
-  like my fancy braces inline for class and function definitions) and is 
-  fully documented in DocBlock notation.
+* PICKLES is coded fairly close to the PEAR coding standards and is fully
+  documented in DocBlock notation.
 
 * Included with PICKLES are shared CSS files (foundation classes and one to 
-  do a full CSS reset) and shared JavaScript files with includes a very 
-  trim AJAX library that handles a PICKLES-centric JSON object 
-  automatically. If your dataset does not fit into that format, custom 
-  handlers can be used instead.
+  do a full CSS reset) and shared JavaScript files with includes jQuery
+  (and some plugins / add-ons) and a core JavaScript file which includes
+  automatic AJAXing of forms and some other niceties.
 
 * Writing error free code is very important to me, so any PHP development I 
   do is made to be E_STRICT compatible. This means that not only is PICKLES 
