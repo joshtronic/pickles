@@ -29,11 +29,11 @@ if (ini_get('date.timezone') == '')
 }
 
 // Establishes our paths
-define('SITE_PATH',    getcwd() . '/');
 define('PICKLES_PATH', dirname(__FILE__) . '/');
-define('VAR_PATH',     PICKLES_PATH . 'var/' . $_SERVER['SERVER_NAME'] . '/');
-define('LOG_PATH',     VAR_PATH . 'logs/');
-define('SMARTY_PATH',  VAR_PATH . 'smarty/');
+define('SITE_PATH',    getcwd() . '/../');
+define('PRIVATE_PATH', SITE_PATH . 'private/');
+define('LOG_PATH',     PRIVATE_PATH . 'logs/');
+define('SMARTY_PATH',  PRIVATE_PATH . 'smarty/');
 
 // Sets up constants for the Display names
 define('DISPLAY_JSON',   'JSON');
@@ -45,51 +45,41 @@ define('DISPLAY_XML',    'XML');
 /**
  * Magic function to automatically load classes
  *
- * Determines if the system needs to load a PICKLES core class or
- * a PICKLES shared module (not to be confused with site level modules).
+ * Attempts to load a core PICKLES class or a site level data model or 
+ * module class. If Smarty is being requested, will load the proper class
+ * from the vendors directory
  *
  * @param  string $class Name of the class to be loaded
  * @return boolean Return value of require_once() or false (default)
  */
 function __autoload($class)
 {
-	$filename = preg_replace('/_/', '/', $class) . '.php';
+	$loaded = false;
 
-	$class_file  = PICKLES_PATH . 'classes/' . $filename;
-	$module_file = PICKLES_PATH . 'common/modules/' . $filename;
-	$local_file  = $_SERVER['DOCUMENT_ROOT'] . '/../modules/' . $filename;
-	$test_file   = $_SERVER['DOCUMENT_ROOT'] . '/../tests/'   . str_replace('Test', '', $filename);
-
-	// Loads the class file
-	if (file_exists($class_file))
-	{
-		return require_once $class_file;
-	}
-	// Loads the shared module
-	elseif (file_exists($module_file))
-	{
-		return require_once $module_file;
-	}
-	// Loads the local module
-	elseif (file_exists($local_file))
-	{
-		return require_once $local_file;
-	}
-	// Loads Smarty
-	elseif ($class == 'Smarty')
+	if ($class == 'Smarty')
 	{
 		return require_once 'vendors/smarty/libs/Smarty.class.php';
 	}
-	// Loads a test class
-	elseif (preg_match('/Test$/', $class) && file_exists($test_file))
-	{
-		return require_once $test_file;
-	}
-	// Loads nothing
 	else
 	{
-		return false;
+		$filename = preg_replace('/_/', '/', $class) . '.php';
+
+		$paths = array(
+			PICKLES_PATH . 'classes/',
+			SITE_PATH . '/../models/',
+			SITE_PATH . '/../modules/'
+		);
+
+		foreach ($paths as $path)
+		{
+			if (file_exists($path . $filename))
+			{
+				$loaded = require_once $path . $filename;
+			}
+		}
 	}
+
+	return $loaded;
 }
 
 ?>
