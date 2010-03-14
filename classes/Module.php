@@ -32,57 +32,54 @@ class Module extends Object
 	 * Page title
 	 *
 	 * @access protected
-	 * @var    string, boolean false by default
+	 * @var    string, null by default 
 	 */
-	protected $title = false;
+	protected $title = null;
 
 	/**
 	 * Meta description
 	 *
 	 * @access protected
-	 * @var    string, boolean false by default
+	 * @var    string, null by default
 	 */
-	protected $description = false;
+	protected $description = null;
 
 	/**
 	 * Meta keywords (comma separated)
 	 *
 	 * @access protected
-	 * @var    string, boolean false by default
+	 * @var    string, null by default
 	 */
-	protected $keywords = false;
+	protected $keywords = null;
 
 	/**
 	 * Access level of the page
 	 *
-	 * Defaults to false which is everybody, even anonymous
-	 *
 	 * @access protected
-	 * @var    boolean
+	 * @var    boolean, null by default
 	 */
-	protected $access = false;
+	protected $access = null;
 
 	/**
 	 * Secure
 	 *
-	 * Whether or not the page should be loaded via SSL.  Not currently
-	 * being used.  Defaults to false, non-SSL.
+	 * Whether or not the page should be loaded via SSL.
 	 *
 	 * @access protected
-	 * @var    boolean
+	 * @var    boolean, null by default
+	 * @todo   Implement this functionality
 	 */
-	protected $secure = false;
+	protected $secure = null;
 
 	/**
 	 * Session
 	 *
-	 * Whether or not a session should be established when this page is
-	 * loaded.  Defaults to false, no session.
+	 * Whether or not a session should be established.
 	 *
 	 * @access protected
-	 * @var    boolean
+	 * @var    boolean, null by default
 	 */
-	protected $session = false;
+	protected $session = null;
 
 	/**
 	 * AJAX
@@ -91,9 +88,10 @@ class Module extends Object
 	 * pages are allowed to access it and the request method.
 	 *
 	 * @access protected
-	 * @var    boolean or array
+	 * @var    boolean or array, null by default
+	 * @todo   Implement this functionality
 	 */
-	protected $ajax = false;
+	protected $ajax = null;
 
 	/**
 	 * Default display engine
@@ -102,9 +100,9 @@ class Module extends Object
 	 * is overwritten by the config value if not set by the module.
 	 *
 	 * @access protected
-	 * @var    string, boolean false by default
+	 * @var    string, null by default
 	 */
-	protected $engine = false;
+	protected $engine = null;
 
 	/**
 	 * Default template
@@ -115,9 +113,9 @@ class Module extends Object
 	 * should be.
 	 *
 	 * @access protected
-	 * @var    string, boolean false by default
+	 * @var    string, null by default
 	 */
-	protected $template = false;
+	protected $template = null;
 
 	/**
 	 * Constructor
@@ -180,11 +178,15 @@ class Module extends Object
 	 */
 	public function __get($name)
 	{
-		if ($this->$name == false)
+		if ($this->$name == null)
 		{
 			if (isset($this->config->site[$name]))
 			{
-				$this->$name = $this->config->site[$name];
+				$this->$name = $this->config->module[$name];
+			}
+			else
+			{
+				$this->$name = false;
 			}
 		}
 
