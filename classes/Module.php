@@ -31,32 +31,36 @@ class Module extends Object
 	/**
 	 * Page title
 	 *
-	 * @var string
+	 * @access protected
+	 * @var    string, boolean false by default
 	 */
-	public $title;
+	protected $title = false;
 
 	/**
 	 * Meta description
 	 *
-	 * @var string
+	 * @access protected
+	 * @var    string, boolean false by default
 	 */
-	public $description;
+	protected $description = false;
 
 	/**
 	 * Meta keywords (comma separated)
 	 *
-	 * @var string
+	 * @access protected
+	 * @var    string, boolean false by default
 	 */
-	public $keywords;
+	protected $keywords = false;
 
 	/**
 	 * Access level of the page
 	 *
 	 * Defaults to false which is everybody, even anonymous
 	 *
-	 * @var boolean
+	 * @access protected
+	 * @var    boolean
 	 */
-	public $access = false;
+	protected $access = false;
 
 	/**
 	 * Secure
@@ -64,9 +68,21 @@ class Module extends Object
 	 * Whether or not the page should be loaded via SSL.  Not currently
 	 * being used.  Defaults to false, non-SSL.
 	 *
-	 * @var boolean
+	 * @access protected
+	 * @var    boolean
 	 */
-	public $secure = false;
+	protected $secure = false;
+
+	/**
+	 * Session
+	 *
+	 * Whether or not a session should be established when this page is
+	 * loaded.  Defaults to false, no session.
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $session = false;
 
 	/**
 	 * AJAX
@@ -74,28 +90,34 @@ class Module extends Object
 	 * Whether or not the page must be loaded via AJAX and if so, what
 	 * pages are allowed to access it and the request method.
 	 *
-	 * @var array
+	 * @access protected
+	 * @var    boolean or array
 	 */
-	public $ajax = false;
+	protected $ajax = false;
 
 	/**
 	 * Default display engine
 	 *
-	 * Defaults to PHP but could be set to Smarty, JSON, XML or RSS.
+	 * Defaults to null but could be set to Smarty, JSON, XML or RSS. Value
+	 * is overwritten by the config value if not set by the module.
 	 *
-	 * @var string
+	 * @access protected
+	 * @var    string, boolean false by default
 	 */
-	public $engine = DISPLAY_PHP;
+	protected $engine = false;
 
 	/**
 	 * Default template
 	 *
-	 * Defaults to 'index' but could be set to any valid template basename.
-	 * The display engine determines what the file extension should be.
+	 * Defaults to null but could be set to any valid template basename.
+	 * The value is overwritten by the config value if not set by the
+	 * module.  The display engine determines what the file extension
+	 * should be.
 	 *
-	 * @var string
+	 * @access protected
+	 * @var    string, boolean false by default
 	 */
-	public $template = 'index';
+	protected $template = false;
 
 	/**
 	 * Constructor
@@ -130,6 +152,43 @@ class Module extends Object
 	public function __default()
 	{
 
+	}
+
+	/**
+	 * Magic Setter Method
+	 *
+	 * Prohibits the direct modification of module variables.
+	 *
+	 * @param  string $name name of the variable to be set
+	 * @param  mixed $value value of the variable to be set
+	 * @return boolean false
+	 */
+	public function __set($name, $value)
+	{
+		trigger_error('Cannot set module variables directly', E_USER_ERROR);
+		return false;
+	}
+
+	/**
+	 * Magic Getter Method
+	 *
+	 * Attempts to load the module variable. If it's not set, will attempt
+	 * to load from the config.
+	 *
+	 * @param  string $name name of the variable requested
+	 * @return mixed value of the variable or boolean false
+	 */
+	public function __get($name)
+	{
+		if ($this->$name == false)
+		{
+			if (isset($this->config->site[$name]))
+			{
+				$this->$name = $this->config->site[$name];
+			}
+		}
+
+		return $this->$name;
 	}
 }
 
