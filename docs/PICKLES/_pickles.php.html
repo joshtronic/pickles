@@ -121,7 +121,7 @@
 	
 	<div>
 		<span class="const-title">
-			<span class="const-name">LOG_PATH</span> = VAR_PATH.'logs/'
+			<span class="const-name">LOG_PATH</span> = PRIVATE_PATH.'logs/'
 			(line <span class="line-number">35</span>)
 		</span>
 	</div>
@@ -136,20 +136,6 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">PICKLES_PATH</span> = dirname(__FILE__).'/'
-			(line <span class="line-number">33</span>)
-		</span>
-	</div>
-	
-	<!-- ========== Info from phpDoc block ========= -->
-	
-		
-</div>
-<a name="defineSITE_PATH"><!-- --></a>
-<div class="evenrow">
-	
-	<div>
-		<span class="const-title">
-			<span class="const-name">SITE_PATH</span> = getcwd().'/'
 			(line <span class="line-number">32</span>)
 		</span>
 	</div>
@@ -158,13 +144,13 @@
 	
 		
 </div>
-<a name="defineSMARTY_PATH"><!-- --></a>
-<div class="oddrow">
+<a name="definePRIVATE_PATH"><!-- --></a>
+<div class="evenrow">
 	
 	<div>
 		<span class="const-title">
-			<span class="const-name">SMARTY_PATH</span> = VAR_PATH.'smarty/'
-			(line <span class="line-number">36</span>)
+			<span class="const-name">PRIVATE_PATH</span> = SITE_PATH.'private/'
+			(line <span class="line-number">34</span>)
 		</span>
 	</div>
 	
@@ -172,13 +158,27 @@
 	
 		
 </div>
-<a name="defineVAR_PATH"><!-- --></a>
+<a name="defineSITE_PATH"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
+			<span class="const-name">SITE_PATH</span> = getcwd().'/../'
+			(line <span class="line-number">33</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="defineSMARTY_PATH"><!-- --></a>
 <div class="evenrow">
 	
 	<div>
 		<span class="const-title">
-			<span class="const-name">VAR_PATH</span> = PICKLES_PATH.'var/'.$_SERVER['SERVER_NAME'].'/'
-			(line <span class="line-number">34</span>)
+			<span class="const-name">SMARTY_PATH</span> = PRIVATE_PATH.'smarty/'
+			(line <span class="line-number">36</span>)
 		</span>
 	</div>
 	
@@ -203,12 +203,12 @@
 <div class="oddrow">
 	
 	<div>
-		<span class="method-title">__autoload</span> (line <span class="line-number">54</span>)
+		<span class="method-title">__autoload</span> (line <span class="line-number">55</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Magic function to automatically load classes</p>
-<p class="description"><p>Determines if the system needs to load a PICKLES core class or  a PICKLES shared module (not to be confused with site level modules).</p></p>
+<p class="description"><p>Attempts to load a core PICKLES class or a site level data model or  module class. If Smarty is being requested, will load the proper class  from the vendors directory</p></p>
 	<ul class="tags">
 				<li><span class="field">return:</span> Return value of require_once() or false (default)</li>
 			</ul>
@@ -233,7 +233,7 @@
 	</div>
 	
 	<p class="notes" id="credit">
-		Documentation generated on Sat, 13 Mar 2010 14:42:53 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
+		Documentation generated on Sun, 14 Mar 2010 11:11:27 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
 	</p>
 	</div></body>
 </html>
