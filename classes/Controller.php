@@ -58,46 +58,38 @@ class Controller extends Object
 			');
 		}
 
-		// Loads the default module information (if any)
-		$basename = $this->config->module['default'];
-
-		if ($basename != false)
-		{
-			$module_class    = strtr($basename, '/', '_');
-			$module_filename = '../modules/' . $basename . '.php';
-			$css_class       = strtr($basename, '_', '-');
-			$js_filename     = $basename;
-
-			unset($basename);
-		}
-		
-		// Attempts to override the defaults with passed information (if any)
+		// Loads the requested module's information
 		if (isset($_REQUEST['module']) && trim($_REQUEST['module']) != '')
 		{
-			$new_basename        = strtr($_REQUEST['module'], '-', '_');
-			$new_module_class    = strtr($new_basename, '/', '_');
-			$new_module_filename = '../modules/' . $new_basename . '.php';
-			$new_css_class       = strtr($new_basename, '_', '-');
-			$new_js_filename     = $new_basename;
-
-			// File exists, proceed with override
-			if (file_exists($new_module_filename))
-			{
-				$module_class    = $new_module_class;
-				$module_filename = $new_module_filename;
-				$css_class       = $new_css_class;
-				$js_filename     = $new_js_filename;
-			}
-
-			unset($new_basename, $new_module_class, $new_module_filename, $new_css_class, $new_js_filename);
+			$basename          = strtr($_REQUEST['module'], '-', '_');
+			$module_class      = strtr($basename, '/', '_');
+			$module_filename   = MODULE_PATH . $basename . '.php';
+			$template_basename = $basename;
+			$css_class         = strtr($basename, '_', '-');
+			$js_filename       = $basename;
+		}
+		// Loads the default module information (if any)
+		else
+		{
+			$basename          = $this->config->module['default'];
+			$module_class      = strtr($basename, '/', '_');
+			$module_filename   = MODULE_PATH . $basename . '.php';
+			$template_basename = $basename;
+			$css_class         = strtr($basename, '_', '-');
+			$js_filename       = $basename;
 		}
 
+		unset($basename);
+
+		$module_exists = (isset($module_filename) && $module_filename != null && file_exists($module_filename));
+
 		// Instantiates an instance of the module
-		if (isset($module_filename) && $module_filename != null && file_exists($module_filename))
+		if ($module_exists)
 		{
 			require_once $module_filename;
 
 			// Checks that our class exists
+			// @todo Probably should throw an error here?
 			if (class_exists($module_class))
 			{
 				$module = new $module_class;
@@ -122,8 +114,14 @@ class Controller extends Object
 
 		// Starts up the display engine
 		$display_class = 'Display_' . $module->engine;
-		$template      = $module->template;
-		$display       = new $display_class($template);
+		$display       = new $display_class($module->template, $template_basename);
+
+		// If there's no valid module or template redirect
+		// @todo can cause infinite loop...
+		if (!$module_exists && !$display->templateExists())
+		{
+			header('Location: /', 404);
+		}
 
 		// Attempts to execute the default method
 		if (method_exists($module, '__default'))

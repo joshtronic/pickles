@@ -24,12 +24,12 @@
 abstract class Display_Common extends Object
 {
 	/**
-	 * Template
+	 * Templates
 	 *
 	 * @access protected
 	 * @var    string
 	 */
-	protected $template = null;
+	protected $templates = null;
 
 	/**
 	 * Template Extension
@@ -52,7 +52,7 @@ abstract class Display_Common extends Object
 	 *
 	 * Runs the parent's constructor and adds the module to the object.
 	 */
-	public function __construct($template)
+	public function __construct()
 	{
 		parent::__construct();
 
@@ -72,18 +72,27 @@ abstract class Display_Common extends Object
 
 			header('Content-type: text/html; charset=UTF-8');
 
-			$template = TEMPLATE_PATH . $template . ($this->extension != false ? '.' . $this->extension : '');
+			// Loops through each passed template and variables it
+			foreach (func_get_args() as $template)
+			{
+				$template = TEMPLATE_PATH . $template . ($this->extension != false ? '.' . $this->extension : '');
 
-			if (file_exists($template) && is_file($template) && is_readable($template))
-			{
-				$this->template = $template;
-			}
-			else
-			{
-				// @todo Add in pretty error page.
-				exit('barf.');
+				if (file_exists($template) && is_file($template) && is_readable($template))
+				{
+					$this->templates[] = $template;
+				}
 			}
 		}
+	}
+
+	/**
+	 * Template Exists
+	 *
+	 * @return boolean whether or not we have any templates defined
+	 */
+	public function templateExists()
+	{
+		return (boolean)count($this->templates);
 	}
 	 
 	/**

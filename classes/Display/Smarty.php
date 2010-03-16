@@ -24,42 +24,53 @@
  */
 class Display_Smarty extends Display_Common
 {
+	/**
+	 * Instance of Smarty
+	 *
+	 * @access private
+	 * @var    object, defaults to null
+	 */
 	private $smarty = null;
+
+	/**
+	 * Template Extension
+	 *
+	 * @access protected
+	 * @var    string
+	 */
 	protected $extension = 'tpl';
 
-	public function __construct(Config $config, Error $error) {
-		parent::__construct($config, $error);
-
+	/**
+	 * Render the Smarty generated pages
+	 */
+	public function render()
+	{
 		$this->smarty = new Smarty();
 
 		// Establishes our paths
-		$this->smarty->template_dir = SITE_PATH . '../templates/';
+		$this->smarty->template_dir = TEMPLATE_PATH;
 
 		$cache_dir   = SMARTY_PATH . 'cache';
 		$compile_dir = SMARTY_PATH . 'compile';
 
-		if (!file_exists($cache_dir))   { mkdir($cache_dir,   0777, true); }
-		if (!file_exists($compile_dir)) { mkdir($compile_dir, 0777, true); }
+		if (!file_exists($cache_dir))
+		{
+			mkdir($cache_dir, 0777, true);
+		}
+
+		if (!file_exists($compile_dir))
+		{
+			mkdir($compile_dir, 0777, true);
+		}
 
 		$this->smarty->cache_dir   = $cache_dir ;
 		$this->smarty->compile_dir = $compile_dir;
-	}
-
-	public function prepare() {
-		
-		// Enables caching
-		if ($this->caching === true) {
-			$this->smarty->caching       = 1;
-			$this->smarty->compile_check = true;
-
-			if (is_numeric($this->caching)) {
-				$this->smarty->cache_lifetime = $this->caching;
-			}
-		}
 
 		// Loads the trim whitespace filter
 		$this->smarty->load_filter('output', 'trimwhitespace');
 
+		/*
+		// @todo No functions to load currently
 		// Includes the PICKLES custom Smarty functions
 		$directory = PICKLES_PATH . 'functions/smarty/';
 
@@ -75,95 +86,23 @@ class Display_Smarty extends Display_Common
 				closedir($handle);
 			}
 		}
-	}
+		*/
 
-	/**
-	 * Render the Smarty generated pages
-	 */
-	public function render() {
+		// Assigns the variables and loads the template
+		if (is_array($this->templates))
+		{
+			$this->smarty->assign('config', $this->config);
+			$this->smarty->assign('module', $this->module_return);
+			//$this->smarty->assign('template', strtr($this->template, '-', '_'));
 
-		// Establishes the template names
-		$template = SITE_PATH . '../templates/' . $this->module_filename . '.tpl';
-
-		if (!file_exists($template)) {
-			
-			$shared_template = PICKLES_PATH . 'common/templates/' . ($this->shared_module_filename == false || $this->template_override == true ? $this->module_filename : $this->shared_module_filename) . '.tpl';
-
-			if (file_exists($shared_template)) {
-				$template = $shared_template;
+			// Assigns the template variable if there's more than one template
+			if (isset($this->templates[1]))
+			{
+				$this->smarty->assign('template', $this->templates[1]);
 			}
+
+			$this->smarty->display($this->templates[0]);
 		}
-
-		$this->template = $template;
-
-		$cache_id = isset($this->cache_id) ? $this->cache_id : $this->module_filename;
-
-		$template_found = false;
-
-		// Checks that the passed in main template is for real
-		if (isset($this->config->templates->main)) {
-			// If there's no .tpl at the end, appends it
-			if (strstr('\.tpl', $this->config->templates['main'])) {
-				$this->config->templates->main .= '.tpl';
-			}
-
-			// Checks that the template exists
-			if ($this->smarty->template_exists($this->config->templates->main)) {
-				$template = $this->config->templates->main;
-				$template_found = true;
-			}
-			else {
-				$this->error->addError('The specified main template file (' . $this->config->templates->main . ') could not be found');
-			}
-		}
-
-		// If no main template was found, try to load the module template
-		if ($template_found == false) {
-			if ($this->smarty->template_exists($this->template) == true) {
-				$template = $this->template;
-				$template_found = true;
-			}
-		}
-
-		// If no module template is found, error out.
-		if ($template_found == false) {
-			$this->error->addError('No valid template file could be found');
-		}
-		else {
-			
-			if (!$this->smarty->is_cached($template, $cache_id)) {
-
-				// Build the combined module name array and assign it
-				$this->module_name = str_replace('-', '_', $this->module_name);
-				$module_name = split('/', $this->module_name);
-				array_unshift($module_name, $this->module_name);
-				$this->smarty->assign('module_name', $module_name);
-
-				// Only assign the template if it's not the index, this avoids an infinite loop.
-				if ($this->template != 'index.tpl') {
-					$this->smarty->assign('template', strtr($this->template, '-', '_'));
-				}
-
-				// Loads the data from the config
-				$data = $this->config->getPublicData();
-
-				if (isset($data) && is_array($data)) {
-					$this->smarty->assign('config', $data);
-				}
-
-				// Loads the module's public data
-				// @todo For refactoring, need to change the name from data
-				if (isset($this->data) && is_array($this->data)) {
-					$this->smarty->assign('module', $this->data);
-				}
-			}
-
-			$this->smarty->display($template, $cache_id);
-		}
-	}
-
-	public function getSmartyObject() {
-		return $this->smarty;
 	}
 }
 
