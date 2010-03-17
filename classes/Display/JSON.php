@@ -18,8 +18,10 @@
 /**
  * JSON Display
  *
- * Displays data in JavaScript Object Notation.  Requires PHP 5 >= 5.2.0 or
- * PECL json 1.2.0 or 1.2.1
+ * Displays data in JavaScript Object Notation.
+ *
+ * Requires PHP 5 >= 5.2.0 or PECL json >= 1.2.0
+ * Note: PECL json 1.2.1 is included /vendors
  *
  * @link http://json.org/
  * @link http://us.php.net/json_encode
