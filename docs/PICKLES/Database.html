@@ -51,7 +51,12 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																																																												
+																																																												<div class="method-definition">
+					static 						<span class="method-result">object self::$instance</span>
+										<a href="#getInstance" title="details" class="method-name">getInstance</a>
+										()
+									</div>
+																
 												<div class="method-definition">
 											<span class="method-result">Database</span>
 										<a href="#__construct" title="details" class="method-name">__construct</a>
@@ -82,7 +87,7 @@
 										<a href="#fetchColumn" title="details" class="method-name">fetchColumn</a>
 											([<span class="var-type">string</span>&nbsp;<span class="var-name">$sql</span> = <span class="var-default">null</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$input_parameters</span> = <span class="var-default">null</span>])
 									</div>
-																<div class="method-definition">
+																								<div class="method-definition">
 											<span class="method-result">boolean</span>
 										<a href="#open" title="details" class="method-name">open</a>
 										()
@@ -127,12 +132,39 @@
 		</div>
 		<div class="info-box-body">
 			<A NAME='method_detail'></A>
-
-<a name="method__construct" id="__construct"><!-- --></a>
+<a name="methodgetInstance" id="getInstance"><!-- --></a>
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">86</span>)
+		<span class="method-title">static method getInstance</span> (line <span class="line-number">139</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get instance of the object</p>
+<p class="description"><p>Instantiates a new object if one isn't already available, then  returns the instance.</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> instance of the Database</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+	    static
+		<span class="method-result">object self::$instance</span>
+		<span class="method-name">
+			getInstance
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">99</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -174,10 +206,10 @@
 			
 	</div>
 <a name="methodclose" id="close"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">close</span> (line <span class="line-number">163</span>)
+		<span class="method-title">close</span> (line <span class="line-number">195</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -200,10 +232,10 @@
 			
 	</div>
 <a name="methodexecute" id="execute"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">execute</span> (line <span class="line-number">180</span>)
+		<span class="method-title">execute</span> (line <span class="line-number">212</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -234,10 +266,10 @@
 			
 	</div>
 <a name="methodfetch" id="fetch"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">fetch</span> (line <span class="line-number">234</span>)
+		<span class="method-title">fetch</span> (line <span class="line-number">266</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -270,10 +302,10 @@
 			
 	</div>
 <a name="methodfetchAll" id="fetchAll"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">fetchAll</span> (line <span class="line-number">283</span>)
+		<span class="method-title">fetchAll</span> (line <span class="line-number">315</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -302,10 +334,10 @@
 			
 	</div>
 <a name="methodfetchColumn" id="fetchColumn"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">fetchColumn</span> (line <span class="line-number">271</span>)
+		<span class="method-title">fetchColumn</span> (line <span class="line-number">303</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -335,10 +367,10 @@
 			
 	</div>
 <a name="methodopen" id="open"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">open</span> (line <span class="line-number">125</span>)
+		<span class="method-title">open</span> (line <span class="line-number">157</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -373,7 +405,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 14 Mar 2010 11:11:26 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
+		Documentation generated on Tue, 16 Mar 2010 22:38:07 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
 	</p>
 	</div></body>
 </html>

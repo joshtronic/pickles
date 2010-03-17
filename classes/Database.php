@@ -26,6 +26,19 @@
 class Database extends Object
 {
 	/**
+	 * Instance of the Database object
+	 *
+	 * Within the PICKLES system, the database instance is shared, but the
+	 * Database constructor is not private, just in case someone wants to
+	 * create new Database objects.
+	 *
+	 * @static 
+	 * @access private
+	 * @var    object
+	 */
+	private static $instance;
+
+	/**
 	 * Hostname for the MySQL Server
 	 *
 	 * @access private
@@ -115,6 +128,25 @@ class Database extends Object
 	}
 
 	/**
+	 * Get instance of the object
+	 *
+	 * Instantiates a new object if one isn't already available, then
+	 * returns the instance.
+	 *
+	 * @static
+	 * @return object self::$instance instance of the Database 
+	 */
+	public static function getInstance()
+	{
+		if (!isset(self::$instance) || empty(self::$instance))
+		{
+			self::$instance = new Database();
+		}
+
+		return self::$instance;
+	}
+
+	/**
 	 * Opens database connection
 	 *
 	 * Establishes a connection to the MySQL database based on the
@@ -180,7 +212,7 @@ class Database extends Object
 	public function execute($sql, $input_parameters = null)
 	{
 		$this->open();
-
+		
 		Log::query($sql);
 
 		// Checks if the query is blank

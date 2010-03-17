@@ -29,6 +29,14 @@
 class Module extends Object
 {
 	/**
+	 * Database
+	 *
+	 * @access protected
+	 * @var    object
+	 */
+	protected $db = null;
+
+	/**
 	 * Page title
 	 *
 	 * @access protected
@@ -131,6 +139,8 @@ class Module extends Object
 	public function __construct($autorun = false)
 	{
 		parent::__construct();
+
+		$this->db = Database::getInstance();
 
 		if ($autorun === true)
 		{

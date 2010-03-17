@@ -24,12 +24,12 @@
 	<div class="info-box-body">
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Common Display Class</p>
-<p class="description"><p>This is the class that each viewer class should be extending from.</p></p>
+<p class="description"><p>This is the parent class class that each display class should be  extending and executing parent::render()</p></p>
 	<ul class="tags">
 				<li><span class="field">abstract:</span> </li>
 			</ul>
 		<p class="notes">
-			Located in <a class="field" href="_classes---Display---Common.php.html">/classes/Display/Common.php</a> (line <span class="field">25</span>)
+			Located in <a class="field" href="_classes---Display---Common.php.html">/classes/Display/Common.php</a> (line <span class="field">24</span>)
 		</p>
 		
 				
@@ -98,13 +98,17 @@
 								</div>
 		<div class="info-box-body">
 			<div class="var-summary">
-																																<div class="var-title">
+																																								<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$extension" title="details" class="var-name">$extension</a>
+				</div>
+																<div class="var-title">
 					<span class="var-type">array</span>
 					<a href="#$module_return" title="details" class="var-name">$module_return</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">string</span>
-					<a href="#$template" title="details" class="var-name">$template</a>
+					<a href="#$templates" title="details" class="var-name">$templates</a>
 				</div>
 											</div>
 		</div>
@@ -123,20 +127,25 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																												
+																																				
 												<div class="method-definition">
 											<span class="method-result">Display_Common</span>
 										<a href="#__construct" title="details" class="method-name">__construct</a>
-											(<span class="var-type"></span>&nbsp;<span class="var-name">$template</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$module_return</span>)
-									</div>
-																<div class="method-definition">
-											<span class="method-result">void</span>
-										<a href="#prepare" title="details" class="method-name">prepare</a>
 										()
 									</div>
 																<div class="method-definition">
 											<span class="method-result">void</span>
+										<a href="#prepare" title="details" class="method-name">prepare</a>
+											(<span class="var-type">array</span>&nbsp;<span class="var-name">$module_return</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
 										<a href="#render" title="details" class="method-name">render</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">boolean</span>
+										<a href="#templateExists" title="details" class="method-name">templateExists</a>
 										()
 									</div>
 								</div>
@@ -157,14 +166,48 @@
 							
 					</div>
 		<div class="info-box-body">
-			<a name="var$module_return" id="$module_return"><!-- --></A>
+			<a name="var$extension" id="$extension"><!-- --></A>
 <div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$extension</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">40</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Template Extension</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../PICKLES/Display_PHP.html#var$extension">Display_PHP::$extension</a>
+								: Template Extension
+							</li>
+					<li>
+				<a href="../PICKLES/Display_Smarty.html#var$extension">Display_Smarty::$extension</a>
+								: Template Extension
+							</li>
+				</ul>
+		
+
+</div>
+<a name="var$module_return" id="$module_return"><!-- --></A>
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$module_return</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">41</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">48</span>)
 		</span>
 	</div>
 
@@ -179,19 +222,19 @@
 		
 
 </div>
-<a name="var$template" id="$template"><!-- --></A>
-<div class="oddrow">
+<a name="var$templates" id="$templates"><!-- --></A>
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">string</span>
-			<span class="var-name">$template</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">33</span>)
+			<span class="var-name">$templates</span>
+			 = <span class="var-default"> null</span>			(line <span class="line-number">32</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Template</p>
+<p class="short-description">Templates</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> protected</li>
 			</ul>
@@ -227,10 +270,10 @@
 			<A NAME='method_detail'></A>
 
 <a name="method__construct" id="__construct"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">48</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">55</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -245,17 +288,9 @@
 		<span class="method-name">
 			__construct
 		</span>
-					(<span class="var-type"></span>&nbsp;<span class="var-name">$template</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$module_return</span>)
+				()
 			</div>
 	
-			<ul class="parameters">
-					<li>
-				<span class="var-type"></span>
-				<span class="var-name">$template</span>			</li>
-					<li>
-				<span class="var-type"></span>
-				<span class="var-name">$module_return</span>			</li>
-				</ul>
 		
 			<hr class="separator" />
 		<div class="notes">Redefinition of:</div>
@@ -264,23 +299,16 @@
 						<dd>Constructor</dd>
 					</dl>
 			
-			<hr class="separator" />
-		<div class="notes">Redefined in descendants as:</div>
-		<ul class="redefinitions">
-					<li>
-				<a href="../PICKLES/Display_Smarty.html#method__construct">Display_Smarty::__construct()</a>
-							</li>
-				</ul>
 	</div>
 <a name="methodprepare" id="prepare"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">prepare</span> (line <span class="line-number">83</span>)
+		<span class="method-title">prepare</span> (line <span class="line-number">103</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Preparation for display</p>
+<p class="short-description">Preparation Method</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -290,31 +318,26 @@
 		<span class="method-name">
 			prepare
 		</span>
-				()
+					(<span class="var-type">array</span>&nbsp;<span class="var-name">$module_return</span>)
 			</div>
 	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$module_return</span><span class="var-description">: data returned by the module</span>			</li>
+				</ul>
 		
 			
-			<hr class="separator" />
-		<div class="notes">Redefined in descendants as:</div>
-		<ul class="redefinitions">
-					<li>
-				<a href="../PICKLES/Display_PHP.html#methodprepare">Display_PHP::prepare()</a>
-							</li>
-					<li>
-				<a href="../PICKLES/Display_Smarty.html#methodprepare">Display_Smarty::prepare()</a>
-							</li>
-				</ul>
 	</div>
 <a name="methodrender" id="render"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">render</span> (line <span class="line-number">78</span>)
+		<span class="method-title">render</span> (line <span class="line-number">113</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Abstract rendering function that is overloaded within the loaded viewer</p>
+<p class="short-description">Rendering Method</p>
 	<ul class="tags">
 				<li><span class="field">abstract:</span> </li>
 				<li><span class="field">access:</span> public</li>
@@ -351,6 +374,31 @@
 							</li>
 				</ul>
 	</div>
+<a name="methodtemplateExists" id="templateExists"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">templateExists</span> (line <span class="line-number">93</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Template Exists</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> whether or not we have any templates defined</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			templateExists
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
 							<h4>Inherited Methods</h4>
 				<a name='inherited_methods'><!-- --></a>	
 									<!-- =========== Summary =========== -->
@@ -364,7 +412,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 14 Mar 2010 11:11:26 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
+		Documentation generated on Tue, 16 Mar 2010 22:38:07 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
 	</p>
 	</div></body>
 </html>

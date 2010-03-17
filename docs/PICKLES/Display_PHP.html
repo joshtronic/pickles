@@ -16,16 +16,16 @@
 	<div class="info-box-title">Description</div>
 	<div class="nav-bar">
 					<span class="disabled">Description</span> |
-													<a href="#sec-vars">Vars</a>
+													<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
 						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
 						
 					</div>
 	<div class="info-box-body">
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">PHP Display</p>
-<p class="description"><p>Displays the associated PHP templates for the Model.  This is  very similar to the Smarty viewer, but less overhead since it's  straight PHP.  The PHP viewer also utilizes a different caching  system than Smarty.  The general rules around the caching will  be the same though.</p></p>
+<p class="description"><p>Displays the associated PHP templates for the Model.  This is very  similar to the Smarty viewer, but less overhead since it's straight PHP.  The PHP viewer also utilizes a different caching system than Smarty.  The general rules around the caching will be the same though.</p></p>
 		<p class="notes">
-			Located in <a class="field" href="_classes---Display---PHP.php.html">/classes/Display/PHP.php</a> (line <span class="field">27</span>)
+			Located in <a class="field" href="_classes---Display---PHP.php.html">/classes/Display/PHP.php</a> (line <span class="field">26</span>)
 		</p>
 		
 				
@@ -40,26 +40,40 @@
 
 
 
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+																								<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$extension" title="details" class="var-name">$extension</a>
+				</div>
+											</div>
+		</div>
+	</div>
 
 	<a name="sec-method-summary"></a>
 	<div class="info-box">
 		<div class="info-box-title">Method Summary</span></div>
 		<div class="nav-bar">
 			<a href="#sec-description">Description</a> |
-																		<a href="#sec-vars">Vars</a>
+																		<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
 				 
 				|
 						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																				
+												
 												<div class="method-definition">
-											<span class="method-result">void</span>
-										<a href="#prepare" title="details" class="method-name">prepare</a>
-										()
-									</div>
-																<div class="method-definition">
 											<span class="method-result">void</span>
 										<a href="#render" title="details" class="method-name">render</a>
 										()
@@ -81,7 +95,37 @@
 							
 					</div>
 		<div class="info-box-body">
-										<h4>Inherited Variables</h4>
+			<a name="var$extension" id="$extension"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$extension</span>
+			 = <span class="var-default"> 'phtml'</span>			(line <span class="line-number">39</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Template Extension</p>
+<p class="description"><p>I know there's some controversy amoungst my peers concerning the  usage of the .phtml extension for these PHP template files. If you  would prefer .php or .tpl extensions, feel free to void your  warranty and change it here.</p></p>
+	<ul class="tags">
+				<li><span class="field">var:</span> file extension for the template files</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../PICKLES/Display_Common.html#var$extension">Display_Common::$extension</a></dt>
+						<dd>Template Extension</dd>
+					</dl>
+		
+		
+
+</div>
+							<h4>Inherited Variables</h4>
 				<A NAME='inherited_vars'><!-- --></A>
 									<p>Inherited from <span class="classname"><a href="../PICKLES/Display_Common.html">Display_Common</a></span></p>
 					<blockquote>
@@ -89,7 +133,7 @@
 								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$module_return">Display_Common::$module_return</a></span><br>
 							</span>
 													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$template">Display_Common::$template</a></span><br>
+								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$templates">Display_Common::$templates</a></span><br>
 							</span>
 											</blockquote> 
 									<p>Inherited from <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
@@ -107,47 +151,18 @@
 		<div class="info-box-title">Methods</div>
 		<div class="nav-bar">
 			<a href="#sec-description">Description</a> |
-															<a href="#sec-vars">Vars</a>
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
 																	<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
 						
 		</div>
 		<div class="info-box-body">
 			<A NAME='method_detail'></A>
 
-<a name="methodprepare" id="prepare"><!-- --></a>
+<a name="methodrender" id="render"><!-- --></a>
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">prepare</span> (line <span class="line-number">29</span>)
-	</div> 
-	
-	<!-- ========== Info from phpDoc block ========= -->
-	<ul class="tags">
-				<li><span class="field">access:</span> public</li>
-			</ul>
-	
-	<div class="method-signature">
-		<span class="method-result">void</span>
-		<span class="method-name">
-			prepare
-		</span>
-				()
-			</div>
-	
-		
-			<hr class="separator" />
-		<div class="notes">Redefinition of:</div>
-		<dl>
-			<dt><a href="../PICKLES/Display_Common.html#methodprepare">Display_Common::prepare()</a></dt>
-						<dd>Preparation for display</dd>
-					</dl>
-			
-	</div>
-<a name="methodrender" id="render"><!-- --></a>
-<div class="evenrow">
-	
-	<div class="method-header">
-		<span class="method-title">render</span> (line <span class="line-number">47</span>)
+		<span class="method-title">render</span> (line <span class="line-number">44</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -169,7 +184,7 @@
 		<div class="notes">Redefinition of:</div>
 		<dl>
 			<dt><a href="../PICKLES/Display_Common.html#methodrender">Display_Common::render()</a></dt>
-						<dd>Abstract rendering function that is overloaded within the loaded viewer</dd>
+						<dd>Rendering Method</dd>
 					</dl>
 			
 	</div>
@@ -181,6 +196,7 @@
 													<span class="method-name"><a href="../PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodprepare">Display_Common::prepare()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodrender">Display_Common::render()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodtemplateExists">Display_Common::templateExists()</a></span><br>
 											</blockquote>
 									<!-- =========== Summary =========== -->
 					<p>Inherited From <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
@@ -193,7 +209,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 14 Mar 2010 11:11:27 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
+		Documentation generated on Tue, 16 Mar 2010 22:38:07 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
 	</p>
 	</div></body>
 </html>

@@ -1,0 +1,155 @@
+<?php
+
+/**
+ * Logging System for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under the GNU General Public License Version 3
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @package   PICKLES
+ * @author    Josh Sherman <josh@phpwithpickles.org>
+ * @copyright Copyright 2007-2010, Gravity Boulevard, LLC
+ * @license   http://www.gnu.org/licenses/gpl.html GPL v3
+ * @link      http://phpwithpickles.org
+ */
+
+/**
+ * Log Class
+ *
+ * Standardized logging methods for ease of reporting.
+ */
+class Log extends Object
+{
+	/**
+	 * Log Information
+	 *
+	 * @static
+	 * @param  string $message message to log
+	 * @return boolean whether or not the write was successful
+	 */
+	public static function information($message)
+	{
+		return self::write('information', $message);
+	}
+
+	/**
+	 * Log Warning
+	 *
+	 * @static
+	 * @param  string $message message to log
+	 * @return boolean whether or not the write was successful
+	 */
+	public static function warning($message)
+	{
+		return self::write('warning', $message);
+	}
+
+	/**
+	 * Log Error
+	 *
+	 * @static
+	 * @param  string $message message to log
+	 * @return boolean whether or not the write was successful
+	 */
+	public static function error($message)
+	{
+		return self::write('error', $message);
+	}
+
+	/**
+	 * Log Slow Query
+	 *
+	 * @static
+	 * @param  string $message message to log
+	 * @return boolean whether or not the write was successful
+	 */
+	public static function slowQuery($message)
+	{
+		return self::write('slow_query', $message);
+	}
+
+	/**
+	 * Log Credit Card Transaction
+	 *
+	 * @static
+	 * @param  string $message message to log
+	 * @return boolean whether or not the write was successful
+	 */
+	public static function transaction($message)
+	{
+		return self::write('transaction', $message);
+	}
+
+	/**
+	 * Log PHP Error
+	 *
+	 * @static
+	 * @param  string $message message to log
+	 * @return boolean whether or not the write was successful
+	 */
+	public static function phpError($message, $time = false)
+	{
+		return self::write('php_error', $message, false, $time);
+	}
+
+	/**
+	 * Log SQL Query
+	 *
+	 * @static
+	 * @param  string $message message to log
+	 * @return boolean whether or not the write was successful
+	 */
+	public static function query($message)
+	{
+		return self::write('query', $message);
+	}
+
+	/**
+	 * Write Message to Log File
+	 *
+	 * @static
+	 * @access private
+	 * @param  string $message message to log
+	 * @return boolean whether or not the write was successful
+	 */
+	private static function write($log_type, $message, $format = true, $time = false)
+	{
+		$config   = Config::getInstance();
+		$log_path = $config->log_path . date('/Y/m/d/', ($time == false ? time() : $time));
+
+		if (!file_exists($log_path))
+		{
+			mkdir($log_path, 0777, true);
+		}
+
+		$log_file = $log_path . $log_type . '.log';
+
+		// @todo May want to go back to this old format, not sure yet
+		/*
+		$message = '[' . date('r') . '] '
+		         . (trim($_SERVER['REMOTE_ADDR']) != '' ? '[client ' . $_SERVER['REMOTE_ADDR'] . '] ' : null)
+		         . (trim($_SERVER['REQUEST_URI']) != '' ? '[uri ' . $_SERVER['REQUEST_URI'] . '] ' : null)
+				 . '[script ' . $_SERVER['SCRIPT_NAME'] . '] ' . $message;
+
+		*/
+
+		$message .= "\n";
+
+		if ($format == true)
+		{
+			$backtrace = debug_backtrace();
+			rsort($backtrace);
+			$frame = $backtrace[strpos($backtrace[0]['file'], 'index.php') === false ? 0 : 1];
+
+			return file_put_contents($log_file, date('H:i:s') . ' ' . str_replace(getcwd(), '', $frame['file']) . ':' . $frame['line'] . ' ' . $message, FILE_APPEND);
+		}
+		else
+		{
+			return file_put_contents($log_file, $message, FILE_APPEND);
+		}
+	}
+}
+
+?>
