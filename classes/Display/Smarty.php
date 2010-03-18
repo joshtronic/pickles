@@ -89,7 +89,7 @@ class Display_Smarty extends Display_Common
 		*/
 
 		// Assigns the variables and loads the template
-		if (is_array($this->templates))
+		if (is_array($this->templates) && isset($this->templates[0]))
 		{
 			$this->smarty->assign('config', $this->config);
 			$this->smarty->assign('module', $this->module_return);

@@ -43,28 +43,37 @@ class Display_PHP extends Display_Common
 	 */
 	public function render()
 	{
-		// Starts up the buffer
-		ob_start();
-
-		// Puts the module return data in a local variable
-		$module = $this->module_return;
-
-		// Loads the template
-		if ($this->template)
+		// Assigns the variables and loads the template
+		if (is_array($this->templates) && isset($this->templates[0]))
 		{
-			require_once $this->template;
+			// Starts up the buffer
+			ob_start();
+
+			// Puts the class variables in local scope for the template
+			$config = $this->config;
+			$module = $this->module_return;
+
+			// Assigns the template variable if there's more than one template
+			if (isset($this->templates[1]))
+			{
+				$template = $this->templates[1];
+			}
+
+			// Loads the template
+			require_once $this->templates[0];
+
+			// Grabs the buffer contents and clears it out
+			$buffer = ob_get_clean();
+
+			// Minifies the output
+			// @todo Need to add logic to not minify blocks of CSS or Javascript
+			//$buffer = str_replace(array('    ', "\r\n", "\n", "\t"), null, $buffer);
+			$buffer = str_replace(array('    ', "\t"), null, $buffer);
+
+			// Spits out the minified buffer
+			echo $buffer;
+
 		}
-
-		// Grabs the buffer contents and clears it out
-		$buffer = ob_get_clean();
-
-		// Minifies the output
-		// @todo Need to add logic to not minify blocks of CSS or Javascript
-		//$buffer = str_replace(array('    ', "\r\n", "\n", "\t"), null, $buffer);
-		$buffer = str_replace(array('    ', "\t"), null, $buffer);
-
-		// Spits out the minified buffer
-		echo $buffer;
 	}
 }
 
