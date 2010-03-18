@@ -131,7 +131,7 @@ class Model extends Object
 					{
 						$sql .= $column . ' IN ("' . implode($value, '", "') . '") ';
 					}
-					elseif (strpos($column, 'IS') === false && strpos($value, 'IS') === false)
+					elseif (strpos($column, ' IS') === false && strpos($value, 'IS ') === false)
 					{
 						$sql   .= $column . (preg_match('/(=|!=|<|>|LIKE)/', $column) ? ' ' : '= ') . ':';
 						$column = trim(str_replace(array('!', '=', '<', '>', 'LIKE'), '', $column));
