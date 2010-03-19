@@ -49,9 +49,9 @@ $(document).ready(function()
 					{
 						if (typeof(data.message) != 'undefined')
 						{
-							$('input',    form).val('');
-							$('select',   form).val('');
-							$('textarea', form).val('');
+							$('input[type=text]', form).val('');
+							$('select',           form).val('');
+							$('textarea',         form).val('');
 
 							alert(data.message);
 
