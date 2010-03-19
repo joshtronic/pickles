@@ -8,7 +8,7 @@ $(document).ready(function()
 
 		// Checks that it's valid
 		// @todo Check that the validation plugin is available
-		if ($(form).valid() == true)
+		if ($('form').valid() == true)
 		{
 			// Hides the buttons on the form
 			$('button, input', form).hide();
