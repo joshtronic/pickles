@@ -1,7 +1,7 @@
 $(document).ready(function()
 {
 	// Catches forms being submitted
-	$('form input[type=submit]').click(function()
+	$('form.ajax input[type=submit]').click(function()
 	{
 		// Grabs the form
 		var form = $(this).parents('form').get();
@@ -85,7 +85,7 @@ $(document).ready(function()
 	});
 
 	// Forces forms to return false on submit
-	$('form').submit(function(){ return false; });
+	$('form.ajax').submit(function(){ return false; });
 
 	// Automatically applies zebra stripes to tables
 	$('table tr:even td').addClass('even');
