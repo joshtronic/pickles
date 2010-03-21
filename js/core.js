@@ -11,7 +11,7 @@ $(document).ready(function()
 		if ($('form').valid() == true)
 		{
 			// Hides the buttons on the form
-			$('button, input', form).hide();
+			$('button, input', form).attr('readonly', 'readonly');
 
 			// @todo Hide the form and add a throbber
 
@@ -47,15 +47,13 @@ $(document).ready(function()
 					}
 					else if (data.status == 'success')
 					{
+						$('input[type=text]', form).val('');
+						$('select',           form).val('');
+						$('textarea',         form).val('');
+
 						if (typeof(data.message) != 'undefined')
 						{
-							$('input[type=text]', form).val('');
-							$('select',           form).val('');
-							$('textarea',         form).val('');
-
 							alert(data.message);
-
-							$('button, input', form).show();
 						}
 
 						if (typeof(data.url) != 'undefined')
@@ -66,14 +64,14 @@ $(document).ready(function()
 						if (typeof(data.callback) != 'undefined')
 						{
 							window[data.callback](data);
-							$('button', form).show();
 						}
 					}
 					else
 					{
 						alert('Error: ' + data);
-						$('button, input', form).show();
 					}
+
+					$('button, input', form).attr('readonly', '');
 				},
 
 				'error': function(XMLHttpRequest, textStatus, errorThrown)
