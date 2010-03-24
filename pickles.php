@@ -54,6 +54,9 @@ define('DISPLAY_RSS',    'RSS');
 define('DISPLAY_SMARTY', 'Smarty');
 define('DISPLAY_XML',    'XML');
 
+// Creates a constant as to whether or not we have JSON available
+define('JSON_AVAILABLE', function_exists('json_encode'));
+
 /**
  * Magic function to automatically load classes
  *
