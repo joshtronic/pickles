@@ -212,8 +212,15 @@ class Database extends Object
 	public function execute($sql, $input_parameters = null)
 	{
 		$this->open();
+	
+		$loggable_query = $sql;
 		
-		Log::query($sql);
+		if ($input_parameters != null)
+		{
+			$loggable_query .= ' -- ' . (JSON_AVAILABLE ? json_encode($input_parameters) : serialize($input_parameters));
+		}
+
+		Log::query($loggable_query);
 
 		// Checks if the query is blank
 		if (trim($sql) != '')
@@ -239,7 +246,7 @@ class Database extends Object
 
 				if ($duration >= 1)
 				{
-					Log::slowQuery("This query took {$duration} seconds to execute:\n\n{$sql}\n\n" . ($input_parameters != null ? print_r($input_parameters, true) : ''));
+					Log::slowQuery($duration . ' seconds: ' . $loggable_query);
 				}
 			}
 			catch (PDOException $e)
