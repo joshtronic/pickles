@@ -34,13 +34,13 @@ class Display_JSON extends Display_Common
 	 */
 	public function render()
 	{
-        if (!function_exists('json_encode'))
+        if (JSON_AVAILABLE)
 		{
-            echo '{ "type" : "error", "message" : "json_encode() not found" }';
+            echo json_encode($this->module_return);
         }
 		else
 		{
-            echo json_encode($this->module_return);
+            echo '{ "status": "error", "message": "json_encode() not found" }';
         }
 	}
 }
