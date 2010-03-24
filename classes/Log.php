@@ -117,7 +117,7 @@ class Log extends Object
 	private static function write($log_type, $message, $format = true, $time = false)
 	{
 		$config   = Config::getInstance();
-		$log_path = $config->log_path . date('/Y/m/d/', ($time == false ? time() : $time));
+		$log_path = LOG_PATH . date('/Y/m/d/', ($time == false ? time() : $time));
 
 		if (!file_exists($log_path))
 		{
@@ -127,6 +127,7 @@ class Log extends Object
 		$log_file = $log_path . $log_type . '.log';
 
 		// @todo May want to go back to this old format, not sure yet
+		//       I liked how the google apps migration logs looked, may borrow that format.
 		/*
 		$message = '[' . date('r') . '] '
 		         . (trim($_SERVER['REMOTE_ADDR']) != '' ? '[client ' . $_SERVER['REMOTE_ADDR'] . '] ' : null)
