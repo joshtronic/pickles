@@ -40,6 +40,22 @@ abstract class Display_Common extends Object
 	protected $extension = false;
 
 	/**
+	 * CSS Class Name
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $css_class = '';
+
+	/**
+	 * Javascript [Path and] Basename
+	 *
+	 * @access protected
+	 * @var    array
+	 */
+	protected $js_basename = '';
+
+	/**
 	 * Module Return Data
 	 *
 	 * @access protected
@@ -98,10 +114,14 @@ abstract class Display_Common extends Object
 	/**
 	 * Preparation Method
 	 *
+	 * @param array $css_class name of the CSS class name for this module
+	 * @param array $js_basename path and basename of the module's JS file
 	 * @param array $module_return data returned by the module
 	 */
-	public function prepare($module_return)
+	public function prepare($css_class, $js_basename, $module_return)
 	{
+		$this->css_class     = $css_class;
+		$this->js_basename   = $js_basename;
 		$this->module_return = $module_return;
 	}
 

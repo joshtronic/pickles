@@ -91,8 +91,12 @@ class Display_Smarty extends Display_Common
 		// Assigns the variables and loads the template
 		if (is_array($this->templates) && isset($this->templates[0]))
 		{
-			$this->smarty->assign('config', $this->config);
-			$this->smarty->assign('module', $this->module_return);
+			$this->smarty->assign('config',           $this->config);
+			$this->smarty->assign('module_css_class', $this->css_class);
+			$this->smarty->assign('module_js_file',   $this->js_basename);
+			$this->smarty->assign('module',           $this->module_return);
+
+			// @todo Can probably remove this at this point.
 			//$this->smarty->assign('template', strtr($this->template, '-', '_'));
 
 			// Assigns the template variable if there's more than one template

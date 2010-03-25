@@ -50,8 +50,10 @@ class Display_PHP extends Display_Common
 			ob_start();
 
 			// Puts the class variables in local scope for the template
-			$config = $this->config;
-			$module = $this->module_return;
+			$config           = $this->config;
+			$module_css_class = $this->css_class;
+			$module_js_file   = $this->js_basename;
+			$module           = $this->module_return;
 
 			// Assigns the template variable if there's more than one template
 			if (isset($this->templates[1]))

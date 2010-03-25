@@ -66,7 +66,7 @@ class Controller extends Object
 			$module_filename   = MODULE_PATH . $basename . '.php';
 			$template_basename = $basename;
 			$css_class         = strtr($basename, '_', '-');
-			$js_filename       = $basename;
+			$js_basename       = $basename;
 		}
 		// Loads the default module information (if any)
 		else
@@ -76,7 +76,7 @@ class Controller extends Object
 			$module_filename   = MODULE_PATH . $basename . '.php';
 			$template_basename = $basename;
 			$css_class         = strtr($basename, '_', '-');
-			$js_filename       = $basename;
+			$js_basename       = $basename;
 		}
 
 		unset($basename);
@@ -89,7 +89,7 @@ class Controller extends Object
 			require_once $module_filename;
 
 			// Checks that our class exists
-			// @todo Probably should throw an error here?
+			// @todo Probably should throw a warning here?
 			if (class_exists($module_class))
 			{
 				$module = new $module_class;
@@ -122,18 +122,23 @@ class Controller extends Object
 		{
 			header('Location: /', 404);
 		}
+			
+		$module_return = null;
 
 		// Attempts to execute the default method
 		if (method_exists($module, '__default'))
 		{
 			// @todo When building in caching will need to let the module know to use the cache, either passing in a variable or setting it on the object
-			$display->prepare($module->__default());
+			$module_return = $module->__default();
 		}
+			
+		$display->prepare($css_class, $js_basename, $module_return);
 
 		// Renders the content
 		$display->render();
 
 		/*
+		// @todo Get this logic uncommented
 		// Checks if we have a display type passed in
 		if (strpos($module['requested']['name'], '.') !== false) {
 			list($module['requested']['name'], $display_type) = explode('.', $module['requested']['name']);
