@@ -98,9 +98,17 @@
 								</div>
 		<div class="info-box-body">
 			<div class="var-summary">
-																																								<div class="var-title">
+																																																								<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$css_class" title="details" class="var-name">$css_class</a>
+				</div>
+																<div class="var-title">
 					<span class="var-type">string</span>
 					<a href="#$extension" title="details" class="var-name">$extension</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">array</span>
+					<a href="#$js_basename" title="details" class="var-name">$js_basename</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">array</span>
@@ -136,7 +144,7 @@
 																<div class="method-definition">
 											<span class="method-result">void</span>
 										<a href="#prepare" title="details" class="method-name">prepare</a>
-											(<span class="var-type">array</span>&nbsp;<span class="var-name">$module_return</span>)
+											(<span class="var-type">array</span>&nbsp;<span class="var-name">$css_class</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$js_basename</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$module_return</span>)
 									</div>
 																<div class="method-definition">
 											<span class="method-result">void</span>
@@ -166,8 +174,30 @@
 							
 					</div>
 		<div class="info-box-body">
-			<a name="var$extension" id="$extension"><!-- --></A>
+			<a name="var$css_class" id="$css_class"><!-- --></A>
 <div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$css_class</span>
+			 = <span class="var-default"> ''</span>			(line <span class="line-number">48</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CSS Class Name</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$extension" id="$extension"><!-- --></A>
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -200,6 +230,28 @@
 		
 
 </div>
+<a name="var$js_basename" id="$js_basename"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$js_basename</span>
+			 = <span class="var-default"> ''</span>			(line <span class="line-number">56</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Javascript [Path and] Basename</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
 <a name="var$module_return" id="$module_return"><!-- --></A>
 <div class="oddrow">
 
@@ -207,7 +259,7 @@
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$module_return</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">48</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">64</span>)
 		</span>
 	</div>
 
@@ -273,7 +325,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">55</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">71</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -304,7 +356,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">prepare</span> (line <span class="line-number">103</span>)
+		<span class="method-title">prepare</span> (line <span class="line-number">121</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -318,10 +370,16 @@
 		<span class="method-name">
 			prepare
 		</span>
-					(<span class="var-type">array</span>&nbsp;<span class="var-name">$module_return</span>)
+					(<span class="var-type">array</span>&nbsp;<span class="var-name">$css_class</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$js_basename</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$module_return</span>)
 			</div>
 	
 			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$css_class</span><span class="var-description">: name of the CSS class name for this module</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$js_basename</span><span class="var-description">: path and basename of the module's JS file</span>			</li>
 					<li>
 				<span class="var-type">array</span>
 				<span class="var-name">$module_return</span><span class="var-description">: data returned by the module</span>			</li>
@@ -333,7 +391,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">render</span> (line <span class="line-number">113</span>)
+		<span class="method-title">render</span> (line <span class="line-number">133</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -378,7 +436,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">templateExists</span> (line <span class="line-number">93</span>)
+		<span class="method-title">templateExists</span> (line <span class="line-number">109</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -412,7 +470,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Tue, 16 Mar 2010 22:38:07 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.2</a>
+		Documentation generated on Fri, 26 Mar 2010 17:35:36 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>
