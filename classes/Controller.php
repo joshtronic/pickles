@@ -39,7 +39,6 @@ class Controller extends Object
 
 		// Generate a generic "site down" message
 		if ($this->config->site['disabled']) {
-			// @todo migrate all the markup into an HTML class to easily generate these kinds of pages
 			exit('
 				<!DOCTYPE html>
 				<html>
@@ -59,14 +58,41 @@ class Controller extends Object
 		}
 
 		// Loads the requested module's information
-		if (isset($_REQUEST['module']) && trim($_REQUEST['module']) != '')
+		if (isset($_REQUEST['request']) && trim($_REQUEST['request']) != '')
 		{
-			$basename          = strtr($_REQUEST['module'], '-', '_');
+			$request   = explode('/', $_REQUEST['request']);
+			$last_part = end($request);
+
+			// Checks if a return type was passed in
+			if (strpos($last_part, '.') !== false)
+			{
+				list($last_part, $return_type) = explode('.', $last_part);
+			}
+
+			// Checks if an ID (integer) was passed in
+			if (preg_match('/^\d*$/', $last_part) == 1)
+			{
+				// @todo what variable should this be?
+				$_REQUEST['id'] = $last_part;
+				array_pop($request);
+			}
+			else
+			{
+				$request[key($request)] = $last_part;
+			}
+
+			unset($last_part);
+
+			$request = implode('/', $request);
+
+			$basename          = strtr($request, '-', '_');
 			$module_class      = strtr($basename, '/', '_');
 			$module_filename   = MODULE_PATH . $basename . '.php';
 			$template_basename = $basename;
 			$css_class         = strtr($basename, '_', '-');
 			$js_basename       = $basename;
+
+			unset($request);
 		}
 		// Loads the default module information (if any)
 		else
@@ -89,10 +115,13 @@ class Controller extends Object
 			require_once $module_filename;
 
 			// Checks that our class exists
-			// @todo Probably should throw a warning here?
 			if (class_exists($module_class))
 			{
 				$module = new $module_class;
+			}
+			else
+			{
+				Log::warning('Class named ' . $module_class . ' was not found in ' . $module_filename);
 			}
 		}
 
@@ -103,17 +132,37 @@ class Controller extends Object
 		}
 
 		// Establishes the session
-		// @todo If ->session == false and .auto_start == 1 should I 86 the sesson?
-		if ($module->session)
+		if (ini_get('session.auto_start') == 0)
 		{
-			if (ini_get('session.auto_start') == 0)
+			if ($module->session)
 			{
 				session_start();
 			}
+			else
+			{
+				session_write_close();
+			}
+		}
+
+		// Validates the rendering engine
+		if (isset($return_type))
+		{
+			if (in_array(strtolower($return_type), array('json', 'rss', 'xml')))
+			{
+				$engine = strtoupper($return_type);
+			}
+					
+			unset($return_type);
+		}
+
+		// Defaults the rendering engine
+		if (!isset($engine))
+		{
+			$engine = $module->engine;
 		}
 
 		// Starts up the display engine
-		$display_class = 'Display_' . $module->engine;
+		$display_class = 'Display_' . $engine;
 		$display       = new $display_class($module->template, $template_basename);
 
 		// If there's no valid module or template redirect
@@ -128,7 +177,11 @@ class Controller extends Object
 		// Attempts to execute the default method
 		if (method_exists($module, '__default'))
 		{
-			// @todo When building in caching will need to let the module know to use the cache, either passing in a variable or setting it on the object
+			/**
+			 * Note to Self: When building in caching will need to let the 
+			 * module know to use the cache, either passing in a variable
+			 * or setting it on the object
+			 */
 			$module_return = $module->__default();
 		}
 			
@@ -136,32 +189,6 @@ class Controller extends Object
 
 		// Renders the content
 		$display->render();
-
-		/*
-		// @todo Get this logic uncommented
-		// Checks if we have a display type passed in
-		if (strpos($module['requested']['name'], '.') !== false) {
-			list($module['requested']['name'], $display_type) = explode('.', $module['requested']['name']);
-
-			// Checks for validity, only JSON, RSS and XML can be passed in
-			switch (strtolower($display_type)) {
-				case 'json':
-				case 'rss':
-				case 'xml':
-					$display_type = strtoupper($display_type);
-					break;
-
-				default:
-					// @todo Add conditional for the environment
-					if ($display_type == 'test') {
-						$this->execute_tests = true;
-					}
-
-					unset($display_type);
-					break;
-			}
-		}
-		*/
 	}
 }
 
