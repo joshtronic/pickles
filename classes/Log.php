@@ -126,16 +126,6 @@ class Log extends Object
 
 		$log_file = $log_path . $log_type . '.log';
 
-		// @todo May want to go back to this old format, not sure yet
-		//       I liked how the google apps migration logs looked, may borrow that format.
-		/*
-		$message = '[' . date('r') . '] '
-		         . (trim($_SERVER['REMOTE_ADDR']) != '' ? '[client ' . $_SERVER['REMOTE_ADDR'] . '] ' : null)
-		         . (trim($_SERVER['REQUEST_URI']) != '' ? '[uri ' . $_SERVER['REQUEST_URI'] . '] ' : null)
-				 . '[script ' . $_SERVER['SCRIPT_NAME'] . '] ' . $message;
-
-		*/
-
 		$message .= "\n";
 
 		if ($format == true)
