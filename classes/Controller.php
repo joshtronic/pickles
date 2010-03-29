@@ -19,9 +19,9 @@
  * Controller Class
  *
  * The heavy lifter of PICKLES, makes the calls to get the session and
- * configuration loaded.  Loads modules, serves up user authentication when
- * the module asks for it, and loads the viewer that the module requested.
- * Default values are present to make things easier on the user.
+ * configuration loaded.  Loads modules, serves up user authentication when the
+ * module asks for it, and loads the viewer that the module requested. Default
+ * values are present to make things easier on the user.
  *
  * @usage <code>new Controller($config);</code>
  */
@@ -30,33 +30,24 @@ class Controller extends Object
 	/**
 	 * Constructor
 	 *
-	 * To make life a bit easier when using PICKLES, the Controller logic
-	 * is executed automatically via use of a constructor.
+	 * To make life a bit easier when using PICKLES, the Controller logic is
+	 * executed automatically via use of a constructor.
 	 */
 	public function __construct()
 	{
 		parent::__construct();
 
 		// Generate a generic "site down" message
-		if ($this->config->site['disabled']) {
-			exit('
-				<!DOCTYPE html>
-				<html>
-					<head>
-						<title>' . $_SERVER['SERVER_NAME'] . '</title>
-						<style>
-							html{background:#eee;font-family:Verdana;width:100%}
-							body{background:#fff;padding:20px;-moz-border-radius:20px;-webkit-border-radius:20px;width:550px;margin:0 auto;margin-top:100px;text-align:center}
-							h1{font-size:1.5em;color:#3a6422;text-shadow:#070d04 1px 1px 1px;margin:0}
-						</style>
-					</head>
-					<body>
-						<h1>' . $_SERVER['SERVER_NAME'] . ' is currently down for maintenance</h1>
-					</body>
-				</html>
-			');
+		if ($this->config->site['disabled'])
+		{
+			$this->fatalError($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
 		}
-
+		
+		// Ack, not sure what page to load, throw an error
+		if (!isset($_REQUEST['request']) && $this->config->module['default'] == null)
+		{
+			$this->fatalError('Unable complete this request because no URI was specified and there is no default module specified in config.ini');
+		}
 		// Loads the requested module's information
 		if (isset($_REQUEST['request']) && trim($_REQUEST['request']) != '')
 		{
@@ -72,8 +63,7 @@ class Controller extends Object
 			// Checks if an ID (integer) was passed in
 			if (preg_match('/^\d*$/', $last_part) == 1)
 			{
-				// @todo what variable should this be?
-				$_REQUEST['id'] = $last_part;
+				$requested_id = $last_part;
 				array_pop($request);
 			}
 			else
@@ -166,8 +156,8 @@ class Controller extends Object
 		$display       = new $display_class($module->template, $template_basename);
 
 		// If there's no valid module or template redirect
-		// @todo can cause infinite loop...
-		if (!$module_exists && !$display->templateExists())
+		// @todo The == 1 portion needs to be refactored as it's not mandatory to use a parent template
+		if (!$module_exists && (!$display->templateExists() || $display->templateExists() == 1))
 		{
 			header('Location: /', 404);
 		}
@@ -177,6 +167,11 @@ class Controller extends Object
 		// Attempts to execute the default method
 		if (method_exists($module, '__default'))
 		{
+			if (isset($requested_id))
+			{
+				$module->setRequest(array('id' => $requested_id));
+			}
+
 			/**
 			 * Note to Self: When building in caching will need to let the 
 			 * module know to use the cache, either passing in a variable
@@ -189,6 +184,36 @@ class Controller extends Object
 
 		// Renders the content
 		$display->render();
+	}
+
+	/**
+	 * Fatal Error
+	 *
+	 * Displays a friendly error to the user via HTML then exits.  This method
+	 * is used internally and not meant for use by site level code.
+	 *
+	 * @access private
+	 * @param  string $message the message to be displayed to the user
+	 */
+	private function fatalError($message)
+	{
+		?>
+		<!DOCTYPE html>
+		<html>
+			<head>
+				<title>Error - <?=$_SERVER['SERVER_NAME'];?></title>
+				<style>
+					html{background:#eee;font-family:Verdana;width:100%}
+					body{background:#ff9c9c;padding:20px;-moz-border-radius:20px;-webkit-border-radius:20px;width:550px;margin:0 auto;margin-top:100px;text-align:center;border:3px solid #890f0f}
+					h1{font-size:1.5em;color:#600;text-shadow:#a86767 2px 2px 2px;margin:0}
+				</style>
+			</head>
+			<body>
+				<h1><?=$message;?></h1>
+			</body>
+		</html>
+		<?php
+		exit;
 	}
 }
 

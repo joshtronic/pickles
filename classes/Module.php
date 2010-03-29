@@ -18,13 +18,12 @@
 /**
  * Module Class
  *
- * This is a parent class that all PICKLES modules should be extending. 
- * Each module can specify it's own meta data and whether or not a user
- * must be properly authenticated to view the page. Currently any pages
- * without a template are treated as pages being requested via AJAX and the
- * return will be JSON encoded. In the future this may need to be changed
- * out for logic that allows the requested module to specify what display
- * type(s) it can use.
+ * This is a parent class that all PICKLES modules should be extending. Each
+ * module can specify it's own meta data and whether or not a user must be 
+ * properly authenticated to view the page. Currently any pages without a 
+ * template are treated as pages being requested via AJAX and the return will 
+ * be JSON encoded. In the future this may need to be changed out for logic
+ * that allows the requested module to specify what display type(s) it can use.
  */
 class Module extends Object
 {
@@ -92,8 +91,8 @@ class Module extends Object
 	/**
 	 * AJAX
 	 *
-	 * Whether or not the page must be loaded via AJAX and if so, what
-	 * pages are allowed to access it and the request method.
+	 * Whether or not the page must be loaded via AJAX and if so, what pages
+	 * are allowed to access it and the request method.
 	 *
 	 * @access protected
 	 * @var    boolean or array, null by default
@@ -104,8 +103,8 @@ class Module extends Object
 	/**
 	 * Default display engine
 	 *
-	 * Defaults to null but could be set to Smarty, JSON, XML or RSS. Value
-	 * is overwritten by the config value if not set by the module.
+	 * Defaults to null but could be set to Smarty, JSON, XML or RSS. Value is
+	 * overwritten by the config value if not set by the module.
 	 *
 	 * @access protected
 	 * @var    string, null by default
@@ -115,10 +114,9 @@ class Module extends Object
 	/**
 	 * Default template
 	 *
-	 * Defaults to null but could be set to any valid template basename.
-	 * The value is overwritten by the config value if not set by the
-	 * module.  The display engine determines what the file extension
-	 * should be.
+	 * Defaults to null but could be set to any valid template basename. The
+	 * value is overwritten by the config value if not set by the module. The
+	 * display engine determines what the file extension should be.
 	 *
 	 * @access protected
 	 * @var    string, null by default
@@ -126,13 +124,25 @@ class Module extends Object
 	protected $template = null;
 
 	/**
+	 * Request Data
+	 *
+	 * Modules should not interact with $_REQUEST, $_POST or $_GET directly as
+	 * the contents could be unsafe. The Controller cleanses this data and sets
+	 * it into this variable for safe access by the module.
+	 *
+	 * @access protected
+	 * @var    array, null by default
+	 * @todo   Currently the super globals are not being cleared out
+	 */
+	protected $request = null;
+
+	/**
 	 * Constructor
 	 *
 	 * The constructor does nothing by default but can be passed a boolean
-	 * variable to tell it to automatically run the __default() method.
-	 * This is typically used when a module is called outside of the scope
-	 * of the controller (the registration page calls the login page in
-	 * this manner.
+	 * variable to tell it to automatically run the __default() method. This is
+	 * typically used when a module is called outside of the scope of the
+	 * controller (the registration page calls the login page in this manner.
 	 *
 	 * @param boolean $autorun optional flag to autorun __default()
 	 */
@@ -152,10 +162,10 @@ class Module extends Object
 	 * Default "Magic" Method
 	 *
 	 * This function is overloaded by the module. The __default() method is
-	 * where you want to place any code that needs to be executed at
-	 * runtime. The reason the code isn't in the constructor is because the
-	 * module must be instantiated before the code is executed so that the
-	 * controller script is aware of the authentication requirements.
+	 * where you want to place any code that needs to be executed at runtime.
+	 * The reason the code isn't in the constructor is because the module must 
+	 * be instantiated before the code is executed so that the controller 
+	 * script is aware of the authentication requirements.
 	 */
 	public function __default()
 	{
@@ -180,8 +190,8 @@ class Module extends Object
 	/**
 	 * Magic Getter Method
 	 *
-	 * Attempts to load the module variable. If it's not set, will attempt
-	 * to load from the config.
+	 * Attempts to load the module variable. If it's not set, will attempt to
+	 * load from the config.
 	 *
 	 * @param  string $name name of the variable requested
 	 * @return mixed value of the variable or boolean false
@@ -216,6 +226,28 @@ class Module extends Object
 		}
 
 		return $this->$name;
+	}
+
+	/**
+	 * Sets the Request
+	 *
+	 * @param  array $request data to be loaded into the request variable
+	 * @return boolean whether or not the assignment was successful
+	 */
+	public function setRequest($request)
+	{
+		$backtrace = debug_backtrace();
+
+		if ($backtrace[1]['class'] == 'Controller')
+		{
+			$this->request = $request;
+			return true;
+		}
+		else
+		{
+			trigger_error('Only Controller can perform setRequest()', E_USER_ERROR);
+			return false;
+		}
 	}
 }
 
