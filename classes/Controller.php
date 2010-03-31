@@ -40,13 +40,13 @@ class Controller extends Object
 		// Generate a generic "site down" message
 		if ($this->config->site['disabled'])
 		{
-			$this->fatalError($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
+			Error::fatal($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
 		}
 		
 		// Ack, not sure what page to load, throw an error
 		if (!isset($_REQUEST['request']) && $this->config->module['default'] == null)
 		{
-			$this->fatalError('Unable complete this request because no URI was specified and there is no default module specified in config.ini');
+			Error::fatal('Unable complete this request because no URI was specified and there is no default module specified in config.ini');
 		}
 		// Loads the requested module's information
 		if (isset($_REQUEST['request']) && trim($_REQUEST['request']) != '')
@@ -184,36 +184,6 @@ class Controller extends Object
 
 		// Renders the content
 		$display->render();
-	}
-
-	/**
-	 * Fatal Error
-	 *
-	 * Displays a friendly error to the user via HTML then exits.  This method
-	 * is used internally and not meant for use by site level code.
-	 *
-	 * @access private
-	 * @param  string $message the message to be displayed to the user
-	 */
-	private function fatalError($message)
-	{
-		?>
-		<!DOCTYPE html>
-		<html>
-			<head>
-				<title>Error - <?=$_SERVER['SERVER_NAME'];?></title>
-				<style>
-					html{background:#eee;font-family:Verdana;width:100%}
-					body{background:#ff9c9c;padding:20px;-moz-border-radius:20px;-webkit-border-radius:20px;width:550px;margin:0 auto;margin-top:100px;text-align:center;border:3px solid #890f0f}
-					h1{font-size:1.5em;color:#600;text-shadow:#a86767 2px 2px 2px;margin:0}
-				</style>
-			</head>
-			<body>
-				<h1><?=$message;?></h1>
-			</body>
-		</html>
-		<?php
-		exit;
 	}
 }
 

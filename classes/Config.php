@@ -72,6 +72,10 @@ class Config
 
 			return true;	
 		}
+		else
+		{
+			Error::fatal('config.ini is either missing or unreadable');			
+		}
 	}
 
 	/**

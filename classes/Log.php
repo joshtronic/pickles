@@ -116,8 +116,7 @@ class Log extends Object
 	 */
 	private static function write($log_type, $message, $format = true, $time = false)
 	{
-		$config   = Config::getInstance();
-		$log_path = LOG_PATH . date('/Y/m/d/', ($time == false ? time() : $time));
+		$log_path = LOG_PATH . date('Y/m/d/', ($time == false ? time() : $time));
 
 		if (!file_exists($log_path))
 		{
