@@ -104,11 +104,11 @@ abstract class Display_Common extends Object
 	/**
 	 * Template Exists
 	 *
-	 * @return boolean whether or not we have any templates defined
+	 * @return integer the number of templates defined
 	 */
 	public function templateExists()
 	{
-		return (boolean)count($this->templates);
+		return count($this->templates);
 	}
 	 
 	/**
