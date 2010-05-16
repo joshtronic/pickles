@@ -50,7 +50,7 @@
 								</div>
 		<div class="info-box-body">
 			<div class="var-summary">
-																																																																																<div class="var-title">
+																																																																																								<div class="var-title">
 					<span class="var-type">mixed</span>
 					<a href="#$columns" title="details" class="var-name">$columns</a>
 				</div>
@@ -65,6 +65,10 @@
 																<div class="var-title">
 					<span class="var-type">object</span>
 					<a href="#$db" title="details" class="var-name">$db</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$limit" title="details" class="var-name">$limit</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">mixed</span>
@@ -98,11 +102,11 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																																																																												
+																																																																																												
 												<div class="method-definition">
 											<span class="method-result">Model</span>
 										<a href="#__construct" title="details" class="method-name">__construct</a>
-											([<span class="var-type">array</span>&nbsp;<span class="var-name">$data</span> = <span class="var-default">null</span>], <span class="var-type">boolean</span>&nbsp;<span class="var-name">$return_data</span>)
+											([<span class="var-type">array</span>&nbsp;<span class="var-name">$conditions</span> = <span class="var-default">null</span>])
 									</div>
 																<div class="method-definition">
 											<span class="method-result">boolean</span>
@@ -117,6 +121,16 @@
 																<div class="method-definition">
 											<span class="method-result">boolean</span>
 										<a href="#delete" title="details" class="method-name">delete</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#first" title="details" class="method-name">first</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#last" title="details" class="method-name">last</a>
 										()
 									</div>
 																<div class="method-definition">
@@ -162,7 +176,7 @@
 					</div>
 		<div class="info-box-body">
 			<a name="var$columns" id="$columns"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -175,7 +189,7 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Column List</p>
 	<ul class="tags">
-				<li><span class="field">var:</span> string | array</li>
+				<li><span class="field">var:</span> string, array</li>
 				<li><span class="field">access:</span> protected</li>
 			</ul>
 	
@@ -185,13 +199,13 @@
 
 </div>
 <a name="var$count" id="$count"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">integer</span>
 			<span class="var-name">$count</span>
-			 = <span class="var-default"> 0</span>			(line <span class="line-number">89</span>)
+			 = <span class="var-default"> 0</span>			(line <span class="line-number">97</span>)
 		</span>
 	</div>
 
@@ -207,13 +221,13 @@
 
 </div>
 <a name="var$data" id="$data"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$data</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">65</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">73</span>)
 		</span>
 	</div>
 
@@ -229,7 +243,7 @@
 
 </div>
 <a name="var$db" id="$db"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -242,6 +256,29 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Database</p>
 	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$limit" id="$limit"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$limit</span>
+			 = <span class="var-default"> null</span>			(line <span class="line-number">65</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Limit Results</p>
+	<ul class="tags">
+				<li><span class="field">var:</span> integer, string or array</li>
 				<li><span class="field">access:</span> protected</li>
 			</ul>
 	
@@ -264,7 +301,7 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Order By Clause</p>
 	<ul class="tags">
-				<li><span class="field">var:</span> string | array</li>
+				<li><span class="field">var:</span> string, array</li>
 				<li><span class="field">access:</span> protected</li>
 			</ul>
 	
@@ -280,7 +317,7 @@
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$record</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">73</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">81</span>)
 		</span>
 	</div>
 
@@ -302,7 +339,7 @@
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$records</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">81</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">89</span>)
 		</span>
 	</div>
 
@@ -367,7 +404,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">101</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">108</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -382,16 +419,13 @@
 		<span class="method-name">
 			__construct
 		</span>
-					([<span class="var-type">array</span>&nbsp;<span class="var-name">$data</span> = <span class="var-default">null</span>], <span class="var-type">boolean</span>&nbsp;<span class="var-name">$return_data</span>)
+					([<span class="var-type">array</span>&nbsp;<span class="var-name">$conditions</span> = <span class="var-default">null</span>])
 			</div>
 	
 			<ul class="parameters">
 					<li>
 				<span class="var-type">array</span>
-				<span class="var-name">$data</span><span class="var-description">: optional key/values for the WHERE cause</span>			</li>
-					<li>
-				<span class="var-type">boolean</span>
-				<span class="var-name">$return_data</span><span class="var-description">: currently not in use</span>			</li>
+				<span class="var-name">$conditions</span><span class="var-description">: optional key/values for the WHERE cause</span>			</li>
 				</ul>
 		
 			<hr class="separator" />
@@ -406,7 +440,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">commit</span> (line <span class="line-number">340</span>)
+		<span class="method-title">commit</span> (line <span class="line-number">403</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -433,7 +467,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">commitRecord</span> (line <span class="line-number">233</span>)
+		<span class="method-title">commitRecord</span> (line <span class="line-number">296</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -460,7 +494,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">delete</span> (line <span class="line-number">275</span>)
+		<span class="method-title">delete</span> (line <span class="line-number">338</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -482,11 +516,61 @@
 		
 			
 	</div>
+<a name="methodfirst" id="first"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">first</span> (line <span class="line-number">272</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">First Record</p>
+<p class="description"><p>Set the pointer to the first element of the record set.</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			first
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodlast" id="last"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">last</span> (line <span class="line-number">282</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Last Record</p>
+<p class="description"><p>Set the pointer to the last element of the record set.</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			last
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
 <a name="methodnext" id="next"><!-- --></a>
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">next</span> (line <span class="line-number">209</span>)
+		<span class="method-title">next</span> (line <span class="line-number">252</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -511,7 +595,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">prev</span> (line <span class="line-number">219</span>)
+		<span class="method-title">prev</span> (line <span class="line-number">262</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -536,7 +620,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">unescape</span> (line <span class="line-number">384</span>)
+		<span class="method-title">unescape</span> (line <span class="line-number">447</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -567,7 +651,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">__get</span> (line <span class="line-number">293</span>)
+		<span class="method-title">__get</span> (line <span class="line-number">356</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -598,7 +682,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">__set</span> (line <span class="line-number">318</span>)
+		<span class="method-title">__set</span> (line <span class="line-number">381</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -640,7 +724,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sat, 27 Mar 2010 15:25:52 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sat, 15 May 2010 22:55:17 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

@@ -57,18 +57,6 @@
 					<th class="class-table-header">Description</th>
 				</tr>
 								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Display_JSON.html">Display_JSON</a></td>
-					<td>
-											JSON Display
-										</td>
-				</tr>
-								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Display_XML.html">Display_XML</a></td>
-					<td>
-											XML Display
-										</td>
-				</tr>
-								<tr>
 					<td style="padding-right: 2em"><a href="../PICKLES/Display_RSS.html">Display_RSS</a></td>
 					<td>
 											RSS Display
@@ -84,6 +72,18 @@
 					<td style="padding-right: 2em"><a href="../PICKLES/Display_Smarty.html">Display_Smarty</a></td>
 					<td>
 											Smarty Display
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Display_JSON.html">Display_JSON</a></td>
+					<td>
+											JSON Display
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Display_XML.html">Display_XML</a></td>
+					<td>
+											XML Display
 										</td>
 				</tr>
 							</table>
@@ -158,7 +158,7 @@
 										()
 									</div>
 																<div class="method-definition">
-											<span class="method-result">boolean</span>
+											<span class="method-result">integer</span>
 										<a href="#templateExists" title="details" class="method-name">templateExists</a>
 										()
 									</div>
@@ -421,14 +421,6 @@
 		<div class="notes">Redefined in descendants as:</div>
 		<ul class="redefinitions">
 					<li>
-				<a href="../PICKLES/Display_JSON.html#methodrender">Display_JSON::render()</a>
-								: Renders the data in JSON format
-							</li>
-					<li>
-				<a href="../PICKLES/Display_XML.html#methodrender">Display_XML::render()</a>
-								: Renders the data in XML format
-							</li>
-					<li>
 				<a href="../PICKLES/Display_RSS.html#methodrender">Display_RSS::render()</a>
 								: Render the RSS feed data
 							</li>
@@ -439,6 +431,14 @@
 					<li>
 				<a href="../PICKLES/Display_Smarty.html#methodrender">Display_Smarty::render()</a>
 								: Render the Smarty generated pages
+							</li>
+					<li>
+				<a href="../PICKLES/Display_JSON.html#methodrender">Display_JSON::render()</a>
+								: Renders the data in JSON format
+							</li>
+					<li>
+				<a href="../PICKLES/Display_XML.html#methodrender">Display_XML::render()</a>
+								: Renders the data in XML format
 							</li>
 				</ul>
 	</div>
@@ -452,12 +452,12 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Template Exists</p>
 	<ul class="tags">
-				<li><span class="field">return:</span> whether or not we have any templates defined</li>
+				<li><span class="field">return:</span> the number of templates defined</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">boolean</span>
+		<span class="method-result">integer</span>
 		<span class="method-name">
 			templateExists
 		</span>
@@ -480,7 +480,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sat, 27 Mar 2010 15:25:51 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sat, 15 May 2010 22:55:16 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

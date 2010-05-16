@@ -3,13 +3,13 @@
   <html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
 			<!-- template designed by Marco Von Ballmoos -->
-			<title>Docs For Class Display_JSON</title>
+			<title>Docs For Class Error</title>
 			<link rel="stylesheet" href="../media/stylesheet.css" />
 			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
 		</head>
 		<body>
 			<div class="page-body">			
-<h2 class="class-name">Class Display_JSON</h2>
+<h2 class="class-name">Class Error</h2>
 
 <a name="sec-description"></a>
 <div class="info-box">
@@ -22,23 +22,16 @@
 					</div>
 	<div class="info-box-body">
         		<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">JSON Display</p>
-<p class="description"><p>Displays data in JavaScript Object Notation.</p><p>Requires PHP 5 &gt;= 5.2.0 or PECL json &gt;= 1.2.0  Note: PECL json 1.2.1 is included /vendors</p></p>
-	<ul class="tags">
-				<li><span class="field">link:</span> <a href="http://pecl.php.net/package/json">http://pecl.php.net/package/json</a></li>
-				<li><span class="field">link:</span> <a href="http://us.php.net/json_encode">http://us.php.net/json_encode</a></li>
-				<li><span class="field">link:</span> <a href="http://json.org/">http://json.org/</a></li>
-			</ul>
+<p class="short-description">Error Class</p>
+<p class="description"><p>Standardized error reporting, mostly used to display fatal errors.</p></p>
 		<p class="notes">
-			Located in <a class="field" href="_classes---Display---JSON.php.html">/classes/Display/JSON.php</a> (line <span class="field">30</span>)
+			Located in <a class="field" href="_classes---Error.php.html">/classes/Error.php</a> (line <span class="field">23</span>)
 		</p>
 		
 				
 		<pre><a href="../PICKLES/Object.html">Object</a>
    |
-   --<a href="../PICKLES/Display_Common.html">Display_Common</a>
-      |
-      --Display_JSON</pre>
+   --Error</pre>
 	
 			</div>
 </div>
@@ -58,13 +51,13 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-												
 												<div class="method-definition">
-											<span class="method-result">void</span>
-										<a href="#render" title="details" class="method-name">render</a>
-										()
+					static 						<span class="method-result">void</span>
+										<a href="#fatal" title="details" class="method-name">fatal</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$message</span>)
 									</div>
-								</div>
+								
+												</div>
 		</div>
 	</div>		
 
@@ -83,24 +76,6 @@
 		<div class="info-box-body">
 										<h4>Inherited Variables</h4>
 				<A NAME='inherited_vars'><!-- --></A>
-									<p>Inherited from <span class="classname"><a href="../PICKLES/Display_Common.html">Display_Common</a></span></p>
-					<blockquote>
-													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$css_class">Display_Common::$css_class</a></span><br>
-							</span>
-													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$extension">Display_Common::$extension</a></span><br>
-							</span>
-													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$js_basename">Display_Common::$js_basename</a></span><br>
-							</span>
-													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$module_return">Display_Common::$module_return</a></span><br>
-							</span>
-													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$templates">Display_Common::$templates</a></span><br>
-							</span>
-											</blockquote> 
 									<p>Inherited from <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
 					<blockquote>
 													<span class="var-title">
@@ -122,47 +97,40 @@
 		</div>
 		<div class="info-box-body">
 			<A NAME='method_detail'></A>
-
-<a name="methodrender" id="render"><!-- --></a>
-<div class="evenrow">
+<a name="methodfatal" id="fatal"><!-- --></a>
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">render</span> (line <span class="line-number">35</span>)
+		<span class="method-title">static method fatal</span> (line <span class="line-number">33</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Renders the data in JSON format</p>
+<p class="short-description">Fatal Error</p>
+<p class="description"><p>Displays a friendly error to the user via HTML, logs it then exits.</p></p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
+	    static
 		<span class="method-result">void</span>
 		<span class="method-name">
-			render
+			fatal
 		</span>
-				()
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$message</span>)
 			</div>
 	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$message</span><span class="var-description">: the message to be displayed to the user</span>			</li>
+				</ul>
 		
-			<hr class="separator" />
-		<div class="notes">Redefinition of:</div>
-		<dl>
-			<dt><a href="../PICKLES/Display_Common.html#methodrender">Display_Common::render()</a></dt>
-						<dd>Rendering Method</dd>
-					</dl>
 			
 	</div>
+
 							<h4>Inherited Methods</h4>
 				<a name='inherited_methods'><!-- --></a>	
-									<!-- =========== Summary =========== -->
-					<p>Inherited From <span class="classname"><a href="../PICKLES/Display_Common.html">Display_Common</a></span></p>
-					<blockquote>
-													<span class="method-name"><a href="../PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a></span><br>
-													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodprepare">Display_Common::prepare()</a></span><br>
-													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodrender">Display_Common::render()</a></span><br>
-													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodtemplateExists">Display_Common::templateExists()</a></span><br>
-											</blockquote>
 									<!-- =========== Summary =========== -->
 					<p>Inherited From <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
 					<blockquote>
