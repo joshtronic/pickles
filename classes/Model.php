@@ -263,7 +263,7 @@ class Model extends Object
 	{
 		$this->record = prev($this->data);
 	}
-	
+
 	/**
 	 * First Record
 	 *

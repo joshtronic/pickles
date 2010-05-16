@@ -41,7 +41,7 @@ class Display_RSS extends Display_Common
 		if (isset($this->data->channel) || is_object($this->data['channel']))
 		{
 			$channel = $this->data['channel'];
-			
+
 			if (!is_object($this->data['channel']))
 			{
 				$channel = $this->config->rss->$channel;

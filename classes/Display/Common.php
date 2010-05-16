@@ -110,7 +110,7 @@ abstract class Display_Common extends Object
 	{
 		return count($this->templates);
 	}
-	 
+
 	/**
 	 * Preparation Method
 	 *

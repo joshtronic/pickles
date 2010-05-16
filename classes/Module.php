@@ -19,9 +19,9 @@
  * Module Class
  *
  * This is a parent class that all PICKLES modules should be extending. Each
- * module can specify it's own meta data and whether or not a user must be 
- * properly authenticated to view the page. Currently any pages without a 
- * template are treated as pages being requested via AJAX and the return will 
+ * module can specify it's own meta data and whether or not a user must be
+ * properly authenticated to view the page. Currently any pages without a
+ * template are treated as pages being requested via AJAX and the return will
  * be JSON encoded. In the future this may need to be changed out for logic
  * that allows the requested module to specify what display type(s) it can use.
  */
@@ -39,7 +39,7 @@ class Module extends Object
 	 * Page title
 	 *
 	 * @access protected
-	 * @var    string, null by default 
+	 * @var    string, null by default
 	 */
 	protected $title = null;
 
@@ -163,8 +163,8 @@ class Module extends Object
 	 *
 	 * This function is overloaded by the module. The __default() method is
 	 * where you want to place any code that needs to be executed at runtime.
-	 * The reason the code isn't in the constructor is because the module must 
-	 * be instantiated before the code is executed so that the controller 
+	 * The reason the code isn't in the constructor is because the module must
+	 * be instantiated before the code is executed so that the controller
 	 * script is aware of the authentication requirements.
 	 */
 	public function __default()
@@ -221,7 +221,7 @@ class Module extends Object
 						break;
 				}
 
-				$this->$name = $default; 
+				$this->$name = $default;
 			}
 		}
 

@@ -32,7 +32,7 @@ class Database extends Object
 	 * Database constructor is not private, just in case someone wants to
 	 * create new Database objects.
 	 *
-	 * @static 
+	 * @static
 	 * @access private
 	 * @var    object
 	 */
@@ -134,7 +134,7 @@ class Database extends Object
 	 * returns the instance.
 	 *
 	 * @static
-	 * @return object self::$instance instance of the Database 
+	 * @return object self::$instance instance of the Database
 	 */
 	public static function getInstance()
 	{
@@ -212,9 +212,9 @@ class Database extends Object
 	public function execute($sql, $input_parameters = null)
 	{
 		$this->open();
-	
+
 		$loggable_query = $sql;
-		
+
 		if ($input_parameters != null)
 		{
 			$loggable_query .= ' -- ' . (JSON_AVAILABLE ? json_encode($input_parameters) : serialize($input_parameters));

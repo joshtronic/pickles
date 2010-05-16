@@ -53,7 +53,7 @@ class Error extends Object
 
 		exit;
 	}
-	
+
 }
 
 ?>

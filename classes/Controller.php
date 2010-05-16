@@ -42,7 +42,7 @@ class Controller extends Object
 		{
 			Error::fatal($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
 		}
-		
+
 		// Ack, not sure what page to load, throw an error
 		if (!isset($_REQUEST['request']) && $this->config->module['default'] == null)
 		{
@@ -141,7 +141,7 @@ class Controller extends Object
 			{
 				$engine = strtoupper($return_type);
 			}
-					
+
 			unset($return_type);
 		}
 
@@ -161,7 +161,7 @@ class Controller extends Object
 		{
 			header('Location: /', 404);
 		}
-			
+
 		$module_return = null;
 
 		// Attempts to execute the default method
@@ -173,13 +173,13 @@ class Controller extends Object
 			}
 
 			/**
-			 * Note to Self: When building in caching will need to let the 
+			 * Note to Self: When building in caching will need to let the
 			 * module know to use the cache, either passing in a variable
 			 * or setting it on the object
 			 */
 			$module_return = $module->__default();
 		}
-			
+
 		$display->prepare($css_class, $js_basename, $module_return);
 
 		// Renders the content

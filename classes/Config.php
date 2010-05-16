@@ -27,7 +27,7 @@ class Config
 	/**
 	 * Instance of the Config object
 	 *
-	 * @static 
+	 * @static
 	 * @access private
 	 * @var    object
 	 */
@@ -70,11 +70,11 @@ class Config
 		{
 			$this->data = parse_ini_file($filename, true);
 
-			return true;	
+			return true;
 		}
 		else
 		{
-			Error::fatal('config.ini is either missing or unreadable');			
+			Error::fatal('config.ini is either missing or unreadable');
 		}
 	}
 
