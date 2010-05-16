@@ -44,7 +44,7 @@ class Model extends Object
 	 * Column List
 	 *
 	 * @access protected
-	 * @var    mixed string | array
+	 * @var    mixed string, array
 	 */
 	protected $columns = '*';
 
@@ -52,9 +52,17 @@ class Model extends Object
 	 * Order By Clause
 	 *
 	 * @access protected
-	 * @var    mixed string | array
+	 * @var    mixed string, array
 	 */
 	protected $order_by = null;
+
+	/**
+	 * Limit Results
+	 *
+	 * @access protected
+	 * @var    mixed integer, string or array
+	 */
+	protected $limit = null;
 
 	/**
 	 * Data
@@ -95,16 +103,15 @@ class Model extends Object
 	 * passed parameters.  The record and records arrays are populated as
 	 * well as the count variable.
 	 *
-	 * @param array $data optional key/values for the WHERE cause
-	 * @param boolean $return_data currently not in use
+	 * @param array $conditions optional key/values for the WHERE cause
 	 */
-	public function __construct($data = null)
+	public function __construct($conditions = null)
 	{
 		parent::__construct();
 
-		$this->db = Database::getInstance();
+		$this->db = new Database();
 
-		if (isset($data))
+		if (isset($conditions))
 		{
 			if (is_array($this->columns))
 			{
@@ -113,14 +120,30 @@ class Model extends Object
 
 			$sql = 'SELECT ' . $this->columns . ' FROM ' . $this->table;
 
-			if (is_array($data))
+			if (is_array($conditions))
 			{
 				$sql .= ' WHERE ';
 
 				$input_parameters = null;
 				$include_and      = false;
 
-				foreach ($data as $column => $value)
+				// Overrides the ORDER BY and LIMIT values
+				if (is_array($conditions))
+				{
+					if (isset($conditions['ORDER BY']))
+					{
+						$this->order_by = $conditions['ORDER BY'];
+						unset($conditions['ORDER BY']);
+					}
+
+					if (isset($conditions['LIMIT']))
+					{
+						$this->limit = $conditions['LIMIT'];
+						unset($conditions['LIMIT']);
+					}
+				}
+
+				foreach ($conditions as $column => $value)
 				{
 					if ($input_parameters != null || $include_and == true)
 					{
@@ -131,7 +154,7 @@ class Model extends Object
 					{
 						$sql .= $column . ' IN ("' . implode($value, '", "') . '") ';
 					}
-					elseif (strpos($column, ' IS') === false && strpos($value, 'IS ') === false)
+					elseif (strpos($column, 'IS') === false && strpos($value, 'IS ') === false)
 					{
 						$sql   .= $column . (preg_match('/(=|!=|<|>|LIKE)/', $column) ? ' ' : '= ') . ':';
 						$column = trim(str_replace(array('!', '=', '<', '>', 'LIKE'), '', $column));
@@ -142,7 +165,7 @@ class Model extends Object
 						$sql .= $column . ' ' . $value;
 					}
 
-					if (!is_array($value))
+					if (!is_array($value) && $value != 'NULL')
 					{
 						$input_parameters[':' . $column] = $value;
 					}
@@ -162,9 +185,19 @@ class Model extends Object
 					$sql .= ' ORDER BY ' . $this->order_by;
 				}
 
+				if ($this->limit != null)
+				{
+					if (is_array($this->limit))
+					{
+						$this->limit = implode(', ', $this->limit);
+					}
+
+					$sql .= ' LIMIT ' . $this->limit;
+				}
+
 				$this->data = $this->db->fetchAll($sql, $input_parameters);
 			}
-			elseif ($data === true)
+			elseif ($conditions === true)
 			{
 				if ($this->order_by != null)
 				{
@@ -176,11 +209,21 @@ class Model extends Object
 					$sql .= ' ORDER BY ' . $this->order_by;
 				}
 
+				if ($this->limit != null)
+				{
+					if (is_array($this->limit))
+					{
+						$this->limit = implode(', ', $this->limit);
+					}
+
+					$sql .= ' LIMIT ' . $this->limit;
+				}
+
 				$this->data = $this->db->fetchAll($sql);
 			}
-			else // if (is_int($data))
+			else
 			{
-				$this->data = $this->db->fetch($sql . ' WHERE id = "' . $data . '" LIMIT 1;');
+				$this->data = $this->db->fetch($sql . ' WHERE id = "' . $conditions . '" LIMIT 1;');
 			}
 
 			$this->records = $this->data;
@@ -220,6 +263,26 @@ class Model extends Object
 	{
 		$this->record = prev($this->data);
 	}
+	
+	/**
+	 * First Record
+	 *
+	 * Set the pointer to the first element of the record set.
+	 */
+	public function first()
+	{
+		$this->record = reset($this->data);
+	}
+
+	/**
+	 * Last Record
+	 *
+	 * Set the pointer to the last element of the record set.
+	 */
+	public function last()
+	{
+		$this->record = end($this->data);
+	}
 
 	/**
 	 * Commit Record
@@ -249,7 +312,7 @@ class Model extends Object
 					}
 
 					$sql .= $column . ' = :' . $column;
-					$input_parameters[':' . $column] = is_array($value) ? serialize($value) : $value;
+					$input_parameters[':' . $column] = is_array($value) ? json_encode($value) : $value;
 				}
 			}
 
@@ -356,7 +419,7 @@ class Model extends Object
 					}
 
 					$sql .= $column . ' = :' . $column;
-					$input_parameters[':' . $column] = is_array($value) ? serialize($value) : $value;
+					$input_parameters[':' . $column] = is_array($value) ? json_encode($value) : $value;
 				}
 			}
 
