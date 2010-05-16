@@ -91,7 +91,7 @@ abstract class Display_Common extends Object
 			// Loops through each passed template and variables it
 			foreach (func_get_args() as $template)
 			{
-				$template = TEMPLATE_PATH . $template . ($this->extension != false ? '.' . $this->extension : '');
+				$template = SITE_TEMPLATE_PATH . $template . ($this->extension != false ? '.' . $this->extension : '');
 
 				if (file_exists($template) && is_file($template) && is_readable($template))
 				{

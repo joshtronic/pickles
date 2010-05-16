@@ -77,7 +77,7 @@ class Controller extends Object
 
 			$basename          = strtr($request, '-', '_');
 			$module_class      = strtr($basename, '/', '_');
-			$module_filename   = MODULE_PATH . $basename . '.php';
+			$module_filename   = SITE_MODULE_PATH . $basename . '.php';
 			$template_basename = $basename;
 			$css_class         = strtr($basename, '_', '-');
 			$js_basename       = $basename;
@@ -89,7 +89,7 @@ class Controller extends Object
 		{
 			$basename          = $this->config->module['default'];
 			$module_class      = strtr($basename, '/', '_');
-			$module_filename   = MODULE_PATH . $basename . '.php';
+			$module_filename   = SITE_MODULE_PATH . $basename . '.php';
 			$template_basename = $basename;
 			$css_class         = strtr($basename, '_', '-');
 			$js_basename       = $basename;

@@ -33,15 +33,17 @@ if (ini_get('date.timezone') == '')
 	ini_set('date.timezone', 'America/New_York');
 }
 
-// Establishes our paths
-define('PICKLES_PATH',  dirname(__FILE__) . '/');
-define('SITE_PATH',     getcwd() . '/../');
+// Establishes our PICKLES paths
+define('PICKLES_PATH',       dirname(__FILE__) . '/');
+define('PICKLES_CLASS_PATH', PICKLES_PATH . 'classes/');
 
-define('CLASS_PATH',    PICKLES_PATH . 'classes/');
+// Establishes our site paths
+define('SITE_PATH', getcwd() . '/../');
 
-define('MODEL_PATH',    SITE_PATH . 'models/');
-define('MODULE_PATH',   SITE_PATH . 'modules/');
-define('TEMPLATE_PATH', SITE_PATH . 'templates/');
+define('SITE_CLASS_PATH',    SITE_PATH . 'classes/');
+define('SITE_MODEL_PATH',    SITE_PATH . 'models/');
+define('SITE_MODULE_PATH',   SITE_PATH . 'modules/');
+define('SITE_TEMPLATE_PATH', SITE_PATH . 'templates/');
 
 define('PRIVATE_PATH',  SITE_PATH . 'private/');
 define('LOG_PATH',      PRIVATE_PATH . 'logs/');
@@ -79,7 +81,7 @@ function __autoload($class)
 	{
 		$filename = preg_replace('/_/', '/', $class) . '.php';
 
-		$paths = array(CLASS_PATH, MODEL_PATH, MODULE_PATH);
+		$paths = array(PICKLES_CLASS_PATH, SITE_CLASS_PATH, SITE_MODEL_PATH, SITE_MODULE_PATH);
 
 		foreach ($paths as $path)
 		{

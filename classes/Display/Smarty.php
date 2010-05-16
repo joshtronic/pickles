@@ -48,7 +48,7 @@ class Display_Smarty extends Display_Common
 		$this->smarty = new Smarty();
 
 		// Establishes our paths
-		$this->smarty->template_dir = TEMPLATE_PATH;
+		$this->smarty->template_dir = SITE_TEMPLATE_PATH;
 
 		$cache_dir   = SMARTY_PATH . 'cache';
 		$compile_dir = SMARTY_PATH . 'compile';
