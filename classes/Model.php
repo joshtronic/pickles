@@ -33,6 +33,14 @@ class Model extends Object
 	protected $db = null;
 
 	/**
+	 * Reserved Variables
+	 *
+	 * @access protected
+	 * @var    array
+	 */
+	protected $reserved = array('SELECT', 'TABLE', 'ORDER BY', 'LIMIT');
+
+	/**
 	 * Table Name
 	 *
 	 * @access protected
@@ -41,12 +49,12 @@ class Model extends Object
 	protected $table = null;
 
 	/**
-	 * Column List
+	 * Select [Column] List
 	 *
 	 * @access protected
 	 * @var    mixed string, array
 	 */
-	protected $columns = '*';
+	protected $select = '*';
 
 	/**
 	 * Order By Clause
@@ -103,7 +111,7 @@ class Model extends Object
 	 * passed parameters.  The record and records arrays are populated as
 	 * well as the count variable.
 	 *
-	 * @param array $conditions optional key/values for the WHERE cause
+	 * @param mixed $conditions optional key/values for the WHERE cause
 	 */
 	public function __construct($conditions = null)
 	{
@@ -113,35 +121,34 @@ class Model extends Object
 
 		if (isset($conditions))
 		{
-			if (is_array($this->columns))
+			// Overrides with the "reserved" values
+			if (is_array($conditions) && is_array($this->reserved))
 			{
-				$this->columns = implode(', ', $this->columns);
+				foreach ($this->reserved as $reserved)
+				{
+					if (isset($conditions[$reserved]))
+					{
+						$variable = strtolower(strtr($reserved, ' ', '_'));
+
+						$this->$variable = $conditions[$reserved];
+						unset($conditions[$reserved]);
+					}
+				}
 			}
 
-			$sql = 'SELECT ' . $this->columns . ' FROM ' . $this->table;
+			if (is_array($this->select))
+			{
+				$this->select = implode(', ', $this->select);
+			}
 
-			if (is_array($conditions))
+			$sql = 'SELECT ' . $this->select . ' FROM ' . $this->table;
+
+			if (is_array($conditions) && count($conditions) > 0)
 			{
 				$sql .= ' WHERE ';
 
 				$input_parameters = null;
 				$include_and      = false;
-
-				// Overrides the ORDER BY and LIMIT values
-				if (is_array($conditions))
-				{
-					if (isset($conditions['ORDER BY']))
-					{
-						$this->order_by = $conditions['ORDER BY'];
-						unset($conditions['ORDER BY']);
-					}
-
-					if (isset($conditions['LIMIT']))
-					{
-						$this->limit = $conditions['LIMIT'];
-						unset($conditions['LIMIT']);
-					}
-				}
 
 				foreach ($conditions as $column => $value)
 				{
@@ -197,7 +204,7 @@ class Model extends Object
 
 				$this->data = $this->db->fetchAll($sql, $input_parameters);
 			}
-			elseif ($conditions === true)
+			elseif ($conditions === true || count($conditions) == 0)
 			{
 				if ($this->order_by != null)
 				{
