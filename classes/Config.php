@@ -61,7 +61,6 @@ class Config
 	 *
 	 * @param  string $filename filename of the config file
 	 * @return boolean Success of the load process
- 	 * @todo   Add the ability to load in multiple configuration files.
 	 */
 	public function load($filename)
 	{
