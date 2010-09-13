@@ -9,7 +9,6 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @package    PICKLES
- * @subpackage Sample Site
  * @author     Josh Sherman <josh@phpwithpickles.org>
  * @copyright  Copyright 2007-2010, Gravity Boulevard, LLC
  * @license    http://www.gnu.org/licenses/gpl.html GPL v3
