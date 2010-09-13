@@ -1,0 +1,23 @@
+<?php
+
+// This sanity check could have been in the module and different variables
+// passed to the template based of if there are any posts
+if (count($module['posts']) == 0)
+{
+	echo 'No posts to display';
+}
+else
+{
+	// Loops through the posts and displays them
+	foreach ($module['posts'] as $post)
+	{
+		// Nested templates are supported (since it's just PHP) so if you wanted
+		// to, you could abstract the next block into a another file
+		echo '<h3>' . $post['title'] . '</h3>';
+		echo $post['body'] . '<br /><br />';
+		echo 'Posted at ' . date('g:ia on m/d/Y');
+		echo '<hr />';
+	}
+}
+
+?>
