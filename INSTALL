@@ -20,4 +20,7 @@ Installation Guide
 
 		php_value include_path .:/usr/share/pickles
 
-3. Run the PICKLE site generation script (oh wait, there isn't one).
+3. Peep the sample-site directory, this contains a working site that should be
+   fairly easy to get up and running.
+
+4. If all else fails, get in touch!
