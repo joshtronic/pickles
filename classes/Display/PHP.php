@@ -18,10 +18,7 @@
 /**
  * PHP Display
  *
- * Displays the associated PHP templates for the Model.  This is very
- * similar to the Smarty viewer, but less overhead since it's straight PHP.
- * The PHP viewer also utilizes a different caching system than Smarty.
- * The general rules around the caching will be the same though.
+ * Displays the associated PHP templates for the Model.
  */
 class Display_PHP extends Display_Common
 {

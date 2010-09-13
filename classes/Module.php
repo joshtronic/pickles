@@ -103,13 +103,13 @@ class Module extends Object
 	/**
 	 * Default display engine
 	 *
-	 * Defaults to null but could be set to Smarty, JSON, XML or RSS. Value is
+	 * Defaults to PHP but could be set to JSON, XML or RSS. Value is
 	 * overwritten by the config value if not set by the module.
 	 *
 	 * @access protected
 	 * @var    string, null by default
 	 */
-	protected $engine = null;
+	protected $engine = DISPLAY_PHP;
 
 	/**
 	 * Default template
