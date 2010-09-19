@@ -79,7 +79,7 @@ class Controller extends Object
 			$module_class      = strtr($basename, '/', '_');
 			$module_filename   = SITE_MODULE_PATH . $basename . '.php';
 			$template_basename = $basename;
-			$css_class         = strtr($basename, '_', '-');
+			$css_class         = str_replace(array('_', '/', ' '), '-', $basename);
 			$js_basename       = $basename;
 
 			unset($request);
@@ -91,7 +91,7 @@ class Controller extends Object
 			$module_class      = strtr($basename, '/', '_');
 			$module_filename   = SITE_MODULE_PATH . $basename . '.php';
 			$template_basename = $basename;
-			$css_class         = strtr($basename, '_', '-');
+			$css_class         = str_replace(array('_', '/', ' '), '-', $basename);
 			$js_basename       = $basename;
 		}
 
