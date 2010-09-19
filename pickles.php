@@ -26,6 +26,9 @@
 ini_set('display_errors', true);
 error_reporting(E_ALL | E_STRICT);
 
+// Sets the error handler
+set_error_handler('__handleError');
+
 // @todo Allow users to override the timezone from their configuration file.
 // Sets the timezone to avoid Smarty warnings
 if (ini_get('date.timezone') == '')
@@ -93,6 +96,33 @@ function __autoload($class)
 	}
 
 	return $loaded;
+}
+
+/**
+ * Error handling function that thinks it's magical
+ *
+ * Catches errors (warnings and the like) and throws it back out as an
+ * ErrorException. This really helps trapping complex errors that need a ton of
+ * sanity checks, just try / catch and you're good. Also, this isn't a magic
+ * function, but I opted to use the __ prefix to help avoid a naming collision
+ * since namespace support is 5.3+ and PICKLES strives to be 5.0+ compatible.
+ *
+ * @param  integer        $number error number
+ * @param  string         $string error string (message)
+ * @param  string         $file name of the file with the error
+ * @param  integer        $line line number the error occurred on
+ * @param  array          $context variables that were in play
+ * @return ErrorException not really returned, but worth documenting
+ */
+function __handleError($number, $string, $file, $line, array $context)
+{
+	// Handle hacktastic @ error suppression. Seriously, don't ever use @
+	if (error_reporting() === 0)
+	{
+		return false;
+	}
+
+	throw new ErrorException($string, 0, $number, $file, $line);
 }
 
 ?>

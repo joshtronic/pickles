@@ -44,9 +44,9 @@ class Controller extends Object
 		}
 
 		// Ack, not sure what page to load, throw an error
-		if (!isset($_REQUEST['request']) && $this->config->module['default'] == null)
+		if (!isset($_REQUEST['request']) && (empty($this->config->module['default']) || $this->config->module['default'] == null))
 		{
-			Error::fatal('Unable complete this request because no URI was specified and there is no default module specified in config.ini');
+			Error::fatal('Unable complete this request because no URI was provided and there is no default module specified in config.ini');
 		}
 		// Loads the requested module's information
 		if (isset($_REQUEST['request']) && trim($_REQUEST['request']) != '')
