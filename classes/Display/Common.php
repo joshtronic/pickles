@@ -24,20 +24,28 @@
 abstract class Display_Common extends Object
 {
 	/**
-	 * Templates
-	 *
-	 * @access protected
-	 * @var    string
-	 */
-	protected $templates = null;
-
-	/**
 	 * Template Extension
 	 *
 	 * @access protected
+	 * @var    string $extension file extension for the template files
+	 */
+	protected $extension = null;
+
+	/**
+	 * Parent Template
+	 *
+	 * @access protected
 	 * @var    string
 	 */
-	protected $extension = false;
+	protected $parent_template = null;
+
+	/**
+	 * Child (sub) Template
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $child_template = null;
 
 	/**
 	 * CSS Class Name
@@ -66,7 +74,7 @@ abstract class Display_Common extends Object
 	/**
 	 * Constructor
 	 *
-	 * Runs the parent's constructor and adds the module to the object.
+	 * Gets those headers working 
 	 */
 	public function __construct()
 	{
@@ -75,10 +83,10 @@ abstract class Display_Common extends Object
 		// Obliterates any passed in PHPSESSID (thanks Google)
 		if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false)
 		{
-			list($request_uri, $phpsessid) = split('\?PHPSESSID=', $_SERVER['REQUEST_URI'], 2);
+			list($request_uri, $phpsessid) = explode('?PHPSESSID=', $_SERVER['REQUEST_URI'], 2);
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Location: ' . $request_uri);
-			exit();
+			exit;
 		}
 		else
 		{
@@ -87,42 +95,69 @@ abstract class Display_Common extends Object
 			ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
 
 			header('Content-type: text/html; charset=UTF-8');
-
-			// Loops through each passed template and variables it
-			foreach (func_get_args() as $template)
-			{
-				$template = SITE_TEMPLATE_PATH . $template . ($this->extension != false ? '.' . $this->extension : '');
-
-				if (file_exists($template) && is_file($template) && is_readable($template))
-				{
-					$this->templates[] = $template;
-				}
-			}
+		}
+	}
+	
+	/**
+	 * Set Template
+	 *
+	 * Sets the template file based on passed template type. Adds path and
+	 * extension if applicable.
+	 *
+	 * @param string $template template file's basename
+	 * @param string $type template file's type (either parent or child)
+	 */
+	private function setTemplate($template, $type)
+	{
+		if ($template != null)
+		{
+			$template_name = $type . '_template';
+			$this->$template_name = SITE_TEMPLATE_PATH . $template . ($this->extension != false ? '.' . $this->extension : '');
 		}
 	}
 
 	/**
-	 * Template Exists
+	 * Set Template Variables
 	 *
-	 * @return integer the number of templates defined
+	 * Sets the variables used by the templates
+	 *
+	 * @param string $parent_template parent template
+	 * @param string $child_template child (sub) template
+	 * @param string $css_class name of the CSS class for the module
+	 * @param string $js_basename basename for the javascript file for the module
 	 */
-	public function templateExists()
+	public function setTemplateVariables($parent_template, $child_template, $css_class, $js_basename)
 	{
-		return count($this->templates);
+		$this->setTemplate($parent_template, 'parent');
+		$this->setTemplate($child_template,  'child');
+
+		$this->css_class   = $css_class; 
+		$this->js_basename = $js_basename; 
 	}
 
 	/**
-	 * Preparation Method
+	 * Set Module Return
 	 *
-	 * @param array $css_class name of the CSS class name for this module
-	 * @param array $js_basename path and basename of the module's JS file
-	 * @param array $module_return data returned by the module
+	 * Sets the return data from the module so the display class can display it
+	 *
+	 * @param array $module_return key / value pairs for the data
 	 */
-	public function prepare($css_class, $js_basename, $module_return)
+	public function setModuleReturn($module_return)
 	{
-		$this->css_class     = $css_class;
-		$this->js_basename   = $js_basename;
-		$this->module_return = $module_return;
+		$this->module_return = $module_return; 
+	}
+	
+	/**
+	 * Template Exists
+	 *
+	 * Checks the templates for validity, not required by every display type so
+	 * the return defaults to true.
+	 *
+	 * @return boolean whether or not the template exists
+	 */
+	public function templateExists()
+	{
+		return true;
 	}
 
 	/**

@@ -36,43 +36,69 @@ class Display_PHP extends Display_Common
 	protected $extension = 'phtml';
 
 	/**
+	 * Template Exists
+	 *
+	 * @return integer the number of templates defined
+	 */
+	public function templateExists()
+	{
+		if ($this->parent_template != null)
+		{
+			return file_exists($this->parent_template) && file_exists($this->child_template);
+		}
+		else
+		{
+			return file_exists($this->child_template);
+		}
+	}
+
+	/**
 	 * Renders the PHP templated pages
 	 */
 	public function render()
 	{
-		// Assigns the variables and loads the template
-		if (is_array($this->templates) && isset($this->templates[0]))
+		// Starts up the buffer
+		ob_start();
+
+		// Puts the class variables in local scope for the template
+		$config           = $this->config;
+		$module_css_class = $this->css_class;
+		$module_js_file   = $this->js_basename;
+		$module           = $this->module_return;
+
+		// Loads the template
+		if ($this->parent_template != null)
 		{
-			// Starts up the buffer
-			ob_start();
-
-			// Puts the class variables in local scope for the template
-			$config           = $this->config;
-			$module_css_class = $this->css_class;
-			$module_js_file   = $this->js_basename;
-			$module           = $this->module_return;
-
-			// Assigns the template variable if there's more than one template
-			if (isset($this->templates[1]))
+			if ($this->child_template == null)
 			{
-				$template = $this->templates[1];
+				$template = $this->parent_template;
+			}
+			else
+			{
+				$template = $this->child_template;
 			}
 
-			// Loads the template
-			require_once $this->templates[0];
-
-			// Grabs the buffer contents and clears it out
-			$buffer = ob_get_clean();
-
-			// Minifies the output
-			// @todo Need to add logic to not minify blocks of CSS or Javascript
-			//$buffer = str_replace(array('    ', "\r\n", "\n", "\t"), null, $buffer);
-			$buffer = str_replace(array('    ', "\t"), null, $buffer);
-
-			// Spits out the minified buffer
-			echo $buffer;
-
+			require_once $this->parent_template;
 		}
+		elseif ($this->child_template != null)
+		{
+			$template = $this->child_template;
+
+			require_once $template;
+		}
+
+		// Grabs the buffer contents and clears it out
+		$buffer = ob_get_clean();
+
+		// Minifies the output
+		// @todo Need to add logic to not minify blocks of CSS or Javascript
+		//$buffer = str_replace(array('    ', "\r\n", "\n", "\t"), null, $buffer);
+		$buffer = str_replace(array('    ', "\t"), null, $buffer);
+
+		// Spits out the minified buffer
+		echo $buffer;
+
+		// Note, this doesn't exit in case you want to run code after the display of the page
 	}
 }
 

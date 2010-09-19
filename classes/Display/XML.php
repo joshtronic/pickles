@@ -45,6 +45,7 @@ class Display_XML extends Display_Common
 	 * @access private
 	 * @param  array $array array to convert into XML
 	 * @return string generated XML
+	 * @todo   Method sucks, should replace
 	 */
 	private function arrayToXML($array)
 	{

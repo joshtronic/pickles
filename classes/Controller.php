@@ -71,33 +71,19 @@ class Controller extends Object
 				$request[key($request)] = $last_part;
 			}
 
-			unset($last_part);
+			list($basename, $module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables(implode('/', $request));
 
-			$request = implode('/', $request);
-
-			$basename          = strtr($request, '-', '_');
-			$module_class      = strtr($basename, '/', '_');
-			$module_filename   = SITE_MODULE_PATH . $basename . '.php';
-			$template_basename = $basename;
-			$css_class         = str_replace(array('_', '/', ' '), '-', $basename);
-			$js_basename       = $basename;
-
-			unset($request);
+			unset($last_part, $request);
 		}
 		// Loads the default module information (if any)
 		else
 		{
-			$basename          = $this->config->module['default'];
-			$module_class      = strtr($basename, '/', '_');
-			$module_filename   = SITE_MODULE_PATH . $basename . '.php';
-			$template_basename = $basename;
-			$css_class         = str_replace(array('_', '/', ' '), '-', $basename);
-			$js_basename       = $basename;
+			list($basename, $module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($this->config->module['default']);
 		}
 
 		unset($basename);
 
-		$module_exists = (isset($module_filename) && $module_filename != null && file_exists($module_filename));
+		$module_exists   = (isset($module_filename) && $module_filename != null && file_exists($module_filename));
 
 		// Instantiates an instance of the module
 		if ($module_exists)
@@ -135,6 +121,9 @@ class Controller extends Object
 		}
 
 		// Validates the rendering engine
+		// @todo Need to validate against the module's return type(s)
+		$engine = $module->engine;
+
 		if (isset($return_type))
 		{
 			if (in_array(strtolower($return_type), array('json', 'rss', 'xml')))
@@ -145,21 +134,35 @@ class Controller extends Object
 			unset($return_type);
 		}
 
-		// Defaults the rendering engine
-		if (!isset($engine))
-		{
-			$engine = $module->engine;
-		}
-
 		// Starts up the display engine
 		$display_class = 'Display_' . $engine;
-		$display       = new $display_class($module->template, $template_basename);
+		$display       = new $display_class();
+
+		// Assigns the template / template variables
+		$display->setTemplateVariables($module->template, $template_basename, $css_class, $js_basename);
+
+		// Checks the templates
+		$template_exists = $display->templateExists();
 
 		// If there's no valid module or template redirect
-		// @todo The == 1 portion needs to be refactored as it's not mandatory to use a parent template
-		if (!$module_exists && (!$display->templateExists() || $display->templateExists() == 1))
+		if (!$module_exists && !$template_exists)
 		{
-			header('Location: /', 404);
+			if (!isset($_REQUEST['request']))
+			{
+				Error::fatal('Way to go, you\'ve successfully created an infinite redirect loop. Good thing I was here or you would have been served with a pretty ugly browser error.<br /><br />So here\'s the deal, no templates were able to be loaded. Make sure your parent and child templates actually exist and if you\'re using non-default values, make sure they\'re defined correctly in your config.');
+			}
+			else
+			{
+				$redirect_url = '/';
+
+				if (isset($this->config->site['404']) && $_REQUEST['request'] != $this->config->site['404'])
+				{
+					$redirect_url .= $this->config->site['404'];
+				}
+				
+				header('Location: ' . $redirect, 404);
+				exit;
+			}
 		}
 
 		$module_return = null;
@@ -177,13 +180,24 @@ class Controller extends Object
 			 * module know to use the cache, either passing in a variable
 			 * or setting it on the object
 			 */
-			$module_return = $module->__default();
-		}
+			$display->setModuleReturn($module->__default());
 
-		$display->prepare($css_class, $js_basename, $module_return);
+		}
 
 		// Renders the content
 		$display->render();
+	}
+
+	function prepareVariables($request)
+	{
+		$basename          = strtr($request, '-', '_');
+		$module_class      = strtr($basename, '/', '_');
+		$module_filename   = SITE_MODULE_PATH . $basename . '.php';
+		$template_basename = $basename;
+		$css_class         = str_replace(array('_', '/', ' '), '-', $basename);
+		$js_basename       = $basename;
+
+		return array($basename, $module_class, $module_filename, $template_basename, $css_class, $js_basename);
 	}
 }
 
