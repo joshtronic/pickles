@@ -72,10 +72,15 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-												
+																				
 												<div class="method-definition">
 											<span class="method-result">void</span>
 										<a href="#render" title="details" class="method-name">render</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">integer</span>
+										<a href="#templateExists" title="details" class="method-name">templateExists</a>
 										()
 									</div>
 								</div>
@@ -96,7 +101,7 @@
 					</div>
 		<div class="info-box-body">
 			<a name="var$extension" id="$extension"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -130,6 +135,9 @@
 									<p>Inherited from <span class="classname"><a href="../PICKLES/Display_Common.html">Display_Common</a></span></p>
 					<blockquote>
 													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$child_template">Display_Common::$child_template</a></span><br>
+							</span>
+													<span class="var-title">
 								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$css_class">Display_Common::$css_class</a></span><br>
 							</span>
 													<span class="var-title">
@@ -139,7 +147,7 @@
 								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$module_return">Display_Common::$module_return</a></span><br>
 							</span>
 													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$templates">Display_Common::$templates</a></span><br>
+								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$parent_template">Display_Common::$parent_template</a></span><br>
 							</span>
 											</blockquote> 
 									<p>Inherited from <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
@@ -165,10 +173,10 @@
 			<A NAME='method_detail'></A>
 
 <a name="methodrender" id="render"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">render</span> (line <span class="line-number">41</span>)
+		<span class="method-title">render</span> (line <span class="line-number">58</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -194,14 +202,46 @@
 					</dl>
 			
 	</div>
+<a name="methodtemplateExists" id="templateExists"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">templateExists</span> (line <span class="line-number">43</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Template Exists</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> the number of templates defined</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">integer</span>
+		<span class="method-name">
+			templateExists
+		</span>
+				()
+			</div>
+	
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../PICKLES/Display_Common.html#methodtemplateExists">Display_Common::templateExists()</a></dt>
+						<dd>Template Exists</dd>
+					</dl>
+			
+	</div>
 							<h4>Inherited Methods</h4>
 				<a name='inherited_methods'><!-- --></a>	
 									<!-- =========== Summary =========== -->
 					<p>Inherited From <span class="classname"><a href="../PICKLES/Display_Common.html">Display_Common</a></span></p>
 					<blockquote>
 													<span class="method-name"><a href="../PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a></span><br>
-													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodprepare">Display_Common::prepare()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodrender">Display_Common::render()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodsetModuleReturn">Display_Common::setModuleReturn()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodsetTemplateVariables">Display_Common::setTemplateVariables()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodtemplateExists">Display_Common::templateExists()</a></span><br>
 											</blockquote>
 									<!-- =========== Summary =========== -->
@@ -215,7 +255,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 12 Sep 2010 22:04:59 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sun, 19 Sep 2010 22:51:53 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

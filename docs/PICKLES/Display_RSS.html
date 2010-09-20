@@ -23,13 +23,13 @@
 	<div class="info-box-body">
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">RSS Display</p>
-<p class="description"><p>Displays data in RSS version 2.0 format.</p></p>
+<p class="description"><p>Displays data in RSS version 2.0 format. There are currently no plans to  support older versions of the RSS specification or alternative feed types  like ATOM.</p></p>
 	<ul class="tags">
 				<li><span class="field">link:</span> <a href="http://cyber.law.harvard.edu/rss/rss.html">http://cyber.law.harvard.edu/rss/rss.html</a></li>
-				<li><span class="field">todo:</span> Need to add support for RSS v1.0 as well as ATOM feeds.  This may        result in my abstracting out these classes a bit more (Probably a        Feed viewer that would take a parameter to determine which type of        of feed to use).</li>
+				<li><span class="field">todo:</span> This display type is totally jacked, no lie.</li>
 			</ul>
 		<p class="notes">
-			Located in <a class="field" href="_classes---Display---RSS.php.html">/classes/Display/RSS.php</a> (line <span class="field">29</span>)
+			Located in <a class="field" href="_classes---Display---RSS.php.html">/classes/Display/RSS.php</a> (line <span class="field">28</span>)
 		</p>
 		
 				
@@ -85,6 +85,9 @@
 									<p>Inherited from <span class="classname"><a href="../PICKLES/Display_Common.html">Display_Common</a></span></p>
 					<blockquote>
 													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$child_template">Display_Common::$child_template</a></span><br>
+							</span>
+													<span class="var-title">
 								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$css_class">Display_Common::$css_class</a></span><br>
 							</span>
 													<span class="var-title">
@@ -97,7 +100,7 @@
 								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$module_return">Display_Common::$module_return</a></span><br>
 							</span>
 													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$templates">Display_Common::$templates</a></span><br>
+								<span class="var-name"><a href="../PICKLES/Display_Common.html#var$parent_template">Display_Common::$parent_template</a></span><br>
 							</span>
 											</blockquote> 
 									<p>Inherited from <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
@@ -126,7 +129,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">render</span> (line <span class="line-number">39</span>)
+		<span class="method-title">render</span> (line <span class="line-number">38</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -160,8 +163,9 @@
 					<p>Inherited From <span class="classname"><a href="../PICKLES/Display_Common.html">Display_Common</a></span></p>
 					<blockquote>
 													<span class="method-name"><a href="../PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a></span><br>
-													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodprepare">Display_Common::prepare()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodrender">Display_Common::render()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodsetModuleReturn">Display_Common::setModuleReturn()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodsetTemplateVariables">Display_Common::setTemplateVariables()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Display_Common.html#methodtemplateExists">Display_Common::templateExists()</a></span><br>
 											</blockquote>
 									<!-- =========== Summary =========== -->
@@ -175,7 +179,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 12 Sep 2010 22:04:59 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sun, 19 Sep 2010 22:51:53 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>
