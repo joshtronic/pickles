@@ -30,7 +30,7 @@ error_reporting(E_ALL | E_STRICT);
 set_error_handler('__handleError');
 
 // @todo Allow users to override the timezone from their configuration file.
-// Sets the timezone to avoid Smarty warnings
+// Sets the timezone to avoid warnings
 if (ini_get('date.timezone') == '')
 {
 	ini_set('date.timezone', 'America/New_York');
@@ -56,7 +56,6 @@ define('SMARTY_PATH',   PRIVATE_PATH . 'smarty/');
 define('DISPLAY_JSON',   'JSON');
 define('DISPLAY_PHP',    'PHP');
 define('DISPLAY_RSS',    'RSS');
-define('DISPLAY_SMARTY', 'Smarty');
 define('DISPLAY_XML',    'XML');
 
 // Creates a constant as to whether or not we have JSON available
@@ -76,22 +75,15 @@ function __autoload($class)
 {
 	$loaded = false;
 
-	if ($class == 'Smarty')
-	{
-		return require_once 'vendors/smarty/libs/Smarty.class.php';
-	}
-	else
-	{
-		$filename = preg_replace('/_/', '/', $class) . '.php';
+	$filename = preg_replace('/_/', '/', $class) . '.php';
 
-		$paths = array(PICKLES_CLASS_PATH, SITE_CLASS_PATH, SITE_MODEL_PATH, SITE_MODULE_PATH);
+	$paths = array(PICKLES_CLASS_PATH, SITE_CLASS_PATH, SITE_MODEL_PATH, SITE_MODULE_PATH);
 
-		foreach ($paths as $path)
+	foreach ($paths as $path)
+	{
+		if (file_exists($path . $filename))
 		{
-			if (file_exists($path . $filename))
-			{
-				$loaded = require_once $path . $filename;
-			}
+			$loaded = require_once $path . $filename;
 		}
 	}
 

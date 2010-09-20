@@ -18,13 +18,12 @@
 /**
  * RSS Display
  *
- * Displays data in RSS version 2.0 format.
+ * Displays data in RSS version 2.0 format. There are currently no plans to
+ * support older versions of the RSS specification or alternative feed types
+ * like ATOM.
  *
  * @link http://cyber.law.harvard.edu/rss/rss.html
- * @todo Need to add support for RSS v1.0 as well as ATOM feeds.  This may
- *       result in my abstracting out these classes a bit more (Probably a
- *       Feed viewer that would take a parameter to determine which type of
- *       of feed to use).
+ * @todo This display type is totally jacked, no lie.
  */
 class Display_RSS extends Display_Common
 {
