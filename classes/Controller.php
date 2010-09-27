@@ -160,7 +160,7 @@ class Controller extends Object
 					$redirect_url .= $this->config->pickles['404'];
 				}
 				
-				header('Location: ' . $redirect, 404);
+				header('Location: ' . $redirect_url, 404);
 				exit;
 			}
 		}
