@@ -200,9 +200,9 @@ class Module extends Object
 	{
 		if ($this->$name == null)
 		{
-			if (isset($this->config->module[$name]))
+			if (isset($this->config->pickles[$name]))
 			{
-				$this->$name = $this->config->module[$name];
+				$this->$name = $this->config->pickles[$name];
 			}
 			else
 			{

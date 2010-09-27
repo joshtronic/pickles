@@ -61,30 +61,32 @@ class Display_PHP extends Display_Common
 		ob_start();
 
 		// Puts the class variables in local scope for the template
-		$config           = $this->config;
-		$module_css_class = $this->css_class;
-		$module_js_file   = $this->js_basename;
-		$module           = $this->module_return;
+		$__config    = $this->config;
+		$__module    = $this->module_return;
+		$__css_class = $this->css_class;
+		$__js_file   = $this->js_basename;
+		$form_class  = (isset($this->config->pickles['form']) ? $this->config->pickles['form'] : 'Form');
+		$__form      = new $form_class();
 
 		// Loads the template
 		if ($this->parent_template != null)
 		{
 			if ($this->child_template == null)
 			{
-				$template = $this->parent_template;
+				$__template = $this->parent_template;
 			}
 			else
 			{
-				$template = $this->child_template;
+				$__template = $this->child_template;
 			}
 
 			require_once $this->parent_template;
 		}
 		elseif ($this->child_template != null)
 		{
-			$template = $this->child_template;
+			$__template = $this->child_template;
 
-			require_once $template;
+			require_once $__template;
 		}
 
 		// Grabs the buffer contents and clears it out

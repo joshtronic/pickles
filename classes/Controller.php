@@ -38,13 +38,13 @@ class Controller extends Object
 		parent::__construct();
 
 		// Generate a generic "site down" message
-		if ($this->config->site['disabled'])
+		if ($this->config->pickles['disabled'])
 		{
 			Error::fatal($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
 		}
 
 		// Ack, not sure what page to load, throw an error
-		if (!isset($_REQUEST['request']) && (empty($this->config->module['default']) || $this->config->module['default'] == null))
+		if (!isset($_REQUEST['request']) && (empty($this->config->pickles['default']) || $this->config->pickles['default'] == null))
 		{
 			Error::fatal('Unable complete this request because no URI was provided and there is no default module specified in config.ini');
 		}
@@ -78,7 +78,7 @@ class Controller extends Object
 		// Loads the default module information (if any)
 		else
 		{
-			list($basename, $module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($this->config->module['default']);
+			list($basename, $module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($this->config->pickles['default']);
 		}
 
 		unset($basename);
@@ -155,9 +155,9 @@ class Controller extends Object
 			{
 				$redirect_url = '/';
 
-				if (isset($this->config->site['404']) && $_REQUEST['request'] != $this->config->site['404'])
+				if (isset($this->config->pickles['404']) && $_REQUEST['request'] != $this->config->pickles['404'])
 				{
-					$redirect_url .= $this->config->site['404'];
+					$redirect_url .= $this->config->pickles['404'];
 				}
 				
 				header('Location: ' . $redirect, 404);
