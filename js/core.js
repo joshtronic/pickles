@@ -1,14 +1,13 @@
 $(document).ready(function()
 {
 	// Catches forms being submitted
-	$('form.ajax input[type=submit]').click(function()
+	$('form.ajax input[type=submit],form.ajax button.submit').click(function()
 	{
 		// Grabs the form
 		var form = $(this).parents('form').get();
 
 		// Checks that it's valid
-		// @todo Check that the validation plugin is available
-		if ($('form').valid() == true)
+		if (typeof form.valid == 'undefined' || form.valid() == true)
 		{
 			// Hides the buttons on the form
 			$('button, input', form).attr('readonly', 'readonly');
