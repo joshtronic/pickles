@@ -110,9 +110,9 @@ class Form extends Object
 			foreach ($options as $value => $label)
 			{
 				$selected_attribute = false;
-				if ($selected_value !== null && $found_selected === false)
+				if ($selected !== null && $found_selected === false)
 				{
-					if ($selected_value == $value)
+					if ($selected == $value)
 					{
 						$selected_attribute = ' selected="selected"';
 						$found_selected     = true;
@@ -320,7 +320,7 @@ class Form extends Object
 	 * @param  string $classes optional class names
 	 * @param  string $additional optional additional parameters
 	 */
-	public function polarSelect($name = 'decision', $selected_value = 0, $classes = '', $additional = null)
+	public function polarSelect($name = 'decision', $selected = 0, $classes = '', $additional = null)
 	{
 		$options = array(1 => 'Yes', 0 => 'No');
 
