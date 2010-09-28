@@ -70,7 +70,7 @@ class Form extends Object
 	 */
 	public function textarea($name, $value = '', $classes = '', $additional = null)
 	{
-		return '<input name="' . $name . '" id="' . $name . '" class="' . $classes . '" ' . $additional . '>' . $value . '</textarea>';
+		return '<textarea name="' . $name . '" id="' . $name . '" class="' . $classes . '" ' . $additional . '>' . $value . '</textarea>';
 	}
 
 	/**
