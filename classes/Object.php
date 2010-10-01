@@ -23,8 +23,6 @@
  * class already.  This class handles getting an instance of the
  * Config object so that it's available.  Also provides a getter
  * and setter for variables.
- *
- * @todo Implement a profiler in every object
  */
 class Object
 {
@@ -44,6 +42,24 @@ class Object
 	public function __construct()
 	{
 		$this->config = Config::getInstance();
+
+		// Optionally logs the constructor to the profiler
+		if (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true)
+		{
+			Profiler::log($this, '__construct');
+		}
+	}
+
+	/**
+	 * Destructor
+	 */
+	public function __destruct()
+	{
+		// Optionally logs the destructor to the profiler
+		if (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true)
+		{
+			Profiler::log($this, '__destruct');
+		}
 	}
 }
 

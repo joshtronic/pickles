@@ -21,6 +21,9 @@
  * @usage     <code>require_once 'pickles.php';</code>
  */
 
+// Grabs the start time in case we're profiling
+define('PICKLES_START_TIME', microtime(true));
+
 // @todo Add options to the config to set this, and/or have it only run
 //       E_STRICT display ON locally (perhaps by IP?)
 ini_set('display_errors', true);

@@ -188,7 +188,17 @@ class Controller extends Object
 		$display->render();
 	}
 
-	function prepareVariables($request)
+	public function __destruct()
+	{
+		parent::__destruct();
+
+		if (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true)
+		{
+			Profiler::report();
+		}
+	}
+
+	public function prepareVariables($request)
 	{
 		$basename          = strtr($request, '-', '_');
 		$module_class      = strtr($basename, '/', '_');
