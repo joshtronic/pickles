@@ -117,7 +117,7 @@ class Model extends Object
 	{
 		parent::__construct();
 
-		$this->db = new Database();
+		$this->db = Database::getInstance();
 
 		if (isset($conditions))
 		{
