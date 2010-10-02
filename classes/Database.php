@@ -227,16 +227,31 @@ class Database extends Object
 		{
 			try
 			{
-				$start_time = microtime(true);
+				// Establishes if the profiler is enabled
+				$profiler = (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true && preg_match('/^EXPLAIN /i', $sql) == false);
 
 				// Executes a standard query
 				if ($input_parameters === null)
 				{
+					// Explains the query
+					if ($profiler == true)
+					{
+						$explain = $this->fetchAll('EXPLAIN ' . $sql);
+					}
+
+					$start_time = microtime(true);
 					$this->results = $this->connection->query($sql);
 				}
 				// Executes a prepared statement
 				else
 				{
+					// Explains the query
+					if ($profiler == true)
+					{
+						$explain = $this->fetchAll('EXPLAIN ' . $sql, $input_parameters);
+					}
+
+					$start_time = microtime(true);
 					$this->results = $this->connection->prepare($sql);
 					$this->results->execute($input_parameters);
 				}
@@ -247,6 +262,12 @@ class Database extends Object
 				if ($duration >= 1)
 				{
 					Log::slowQuery($duration . ' seconds: ' . $loggable_query);
+				}
+
+				// Logs the information to the profiler
+				if ($profiler == true)
+				{
+					Profiler::logQuery($sql, $input_parameters, isset($explain) ? $explain : false, $duration);
 				}
 			}
 			catch (PDOException $e)
