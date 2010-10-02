@@ -24,10 +24,12 @@
  * class object in the system that extends the code Object class.
  *
  * Note: I really wanted to use PHP Quick Profiler by Ryan Campbell of
- * Particletree but it kept barking out errors when I tried to use it. Here's
- * a link anyway: http://particletree.com/features/php-quick-profiler/
+ * Particletree but it kept barking out errors when I tried to use it with
+ * E_STRICT turned on. Here's a link anyway since it looks awesome:
+ * http://particletree.com/features/php-quick-profiler/
  *
- * @usage <code>Profiler::log('started stuff');</code>
+ * @usage <code>Profiler::log('some action you want to track');</code>
+ * @usage <code>Profiler::log($object, 'methodName');</code>
  */
 class Profiler
 {
