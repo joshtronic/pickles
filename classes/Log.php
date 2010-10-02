@@ -20,7 +20,7 @@
  *
  * Standardized logging methods for ease of reporting.
  */
-class Log extends Object
+class Log
 {
 	/**
 	 * Log Information

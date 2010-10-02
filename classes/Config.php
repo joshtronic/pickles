@@ -18,21 +18,17 @@
 /**
  * Config Class
  *
- * Handles loading the site's configuration file (if available).
+ * Handles loading the site's configuration file (if available). At the moment
+ * this class is a very skewed Singleton. The plan is to eventually extend this
+ * out to support multiple configuration files, and the ability to load in
+ * custom config files on the fly as well. The core of PICKLES uses the class
+ * as a Singleton so we're not loading the configuration multiple times per
+ * page load.
  *
  * @usage <code>$config = new Config($filename);</code>
  */
-class Config
+class Config extends Object
 {
-	/**
-	 * Instance of the Config object
-	 *
-	 * @static
-	 * @access private
-	 * @var    object
-	 */
-	private static $instance;
-
 	/**
 	 * Config data
 	 *
@@ -44,20 +40,22 @@ class Config
 	/**
 	 * Constructor
 	 *
-	 * Calls the parent constructor and loads the pass file
+	 * Calls the parent constructor and loads the passed file.
 	 *
 	 * @param string $filename optional Filename of the config
 	 */
 	public function __construct($filename = '../config.ini')
 	{
+		parent::__construct();
+
 		$this->load($filename);
 	}
 
 	/**
 	 * Loads a configuration file
 	 *
-	 * Handles the potential loading of the configuration file and
-	 * sanitizing the boolean strings into actual boolean values.
+	 * Handles the potential loading of the configuration file and sanitizing
+	 * the boolean strings into actual boolean values.
 	 *
 	 * @param  string $filename filename of the config file
 	 * @return boolean Success of the load process
@@ -80,20 +78,15 @@ class Config
 	/**
 	 * Get instance of the object
 	 *
-	 * Instantiates a new object if one isn't already available, then
-	 * returns the instance.
+	 * Let's the parent class do all the work
 	 *
 	 * @static
-	 * @return object self::$instance instance of the Config
+	 * @param  string $class name of the class to instantiate
+	 * @return object self::$instance instance of the Config class
 	 */
-	public static function getInstance()
+	public static function getInstance($class = 'Config')
 	{
-		if (!isset(self::$instance) || empty(self::$instance))
-		{
-			self::$instance = new Config();
-		}
-
-		return self::$instance;
+		return parent::getInstance($class);
 	}
 
 	/**

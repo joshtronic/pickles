@@ -21,8 +21,22 @@
  * This class contains methods for easily generating form elements. There is a
  * heavy focus on select boxes as they have the most overhead for a developer.
  */
-class Form extends Object
+class Form extends Singleton
 {
+	/**
+	 * Get Instance
+	 *
+	 * Gets an instance of the Form class
+	 *
+	 * @static
+	 * @param  string $class name of the class to get an instance of
+	 * @return object instance of the class
+	 */
+	public static function getInstance($class = 'Form')
+	{
+		return parent::getInstance($class);
+	}
+
 	/**
 	 * Input
 	 *

@@ -18,26 +18,15 @@
 /**
  * Database Abstraction Layer for MySQL
  *
- * All database usage inside PICKLES-based sites should be done
- * via the database object that is a part of every model ($this->db).
- * Because the database object can execute raw SQL, there should be
- * no limitations.
+ * All database usage inside PICKLES-based sites should be done via the
+ * database object that is a part of every model ($this->db). Because the
+ * database object can execute raw SQL, there should be no limitations. Within
+ * the PICKLES system, the database instance is shared, but the Database
+ * constructor is not private, just in case someone wants to create new 
+ * Database objects all willy nilly like.
  */
 class Database extends Object
 {
-	/**
-	 * Instance of the Database object
-	 *
-	 * Within the PICKLES system, the database instance is shared, but the
-	 * Database constructor is not private, just in case someone wants to
-	 * create new Database objects.
-	 *
-	 * @static
-	 * @access private
-	 * @var    object
-	 */
-	private static $instance;
-
 	/**
 	 * Hostname for the MySQL Server
 	 *
@@ -130,20 +119,15 @@ class Database extends Object
 	/**
 	 * Get instance of the object
 	 *
-	 * Instantiates a new object if one isn't already available, then
-	 * returns the instance.
+	 * Let's the parent class do all the work
 	 *
 	 * @static
-	 * @return object self::$instance instance of the Database
+	 * @param  string $class name of the class to instantiate
+	 * @return object self::$instance instance of the Config class
 	 */
-	public static function getInstance()
+	public static function getInstance($class = 'Database')
 	{
-		if (!isset(self::$instance) || empty(self::$instance))
-		{
-			self::$instance = new Database();
-		}
-
-		return self::$instance;
+		return parent::getInstance($class);
 	}
 
 	/**
@@ -201,8 +185,8 @@ class Database extends Object
 	/**
 	 * Executes an SQL Statement
 	 *
-	 * Executes a standard or prepared query based on passed parameters.
-	 * All queries are logged to a file as well as timed and logged in the
+	 * Executes a standard or prepared query based on passed parameters. All
+	 * queries are logged to a file as well as timed and logged in the
 	 * execution time is over 1 second.
 	 *
 	 * @param  string $sql statement to execute
@@ -321,8 +305,8 @@ class Database extends Object
 	/**
 	 * Fetch a single column from the database
 	 *
-	 * This method assumes you want the first column in your select.
-	 * If you need 2 or more columns you should simply use fetch()
+	 * This method assumes you want the first column in your select. If you
+	 * need 2 or more columns you should simply use fetch().
 	 *
 	 * @param  string $sql statement to be executed
 	 * @param  array $input_parameters optional key/values to be bound

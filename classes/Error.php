@@ -20,7 +20,7 @@
  *
  * Standardized error reporting, mostly used to display fatal errors.
  */
-class Error extends Object
+class Error
 {
 	/**
 	 * Fatal Error
