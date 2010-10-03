@@ -27,7 +27,7 @@
 class Singleton
 {
 	/**
-	 * Object Instances 
+	 * Object Instances
 	 *
 	 * @static
 	 * @access private

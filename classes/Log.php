@@ -117,7 +117,7 @@ class Log
 	private static function write($log_type, $message, $format = true, $time = false)
 	{
 		$log_path = LOG_PATH . date('Y/m/d/', ($time == false ? time() : $time));
-	
+
 		try
 		{
 			if (!file_exists($log_path))

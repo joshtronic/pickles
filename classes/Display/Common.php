@@ -74,7 +74,7 @@ abstract class Display_Common extends Object
 	/**
 	 * Constructor
 	 *
-	 * Gets those headers working 
+	 * Gets those headers working
 	 */
 	public function __construct()
 	{
@@ -97,7 +97,7 @@ abstract class Display_Common extends Object
 			header('Content-type: text/html; charset=UTF-8');
 		}
 	}
-	
+
 	/**
 	 * Set Template
 	 *
@@ -131,8 +131,8 @@ abstract class Display_Common extends Object
 		$this->setTemplate($parent_template, 'parent');
 		$this->setTemplate($child_template,  'child');
 
-		$this->css_class   = $css_class; 
-		$this->js_basename = $js_basename; 
+		$this->css_class   = $css_class;
+		$this->js_basename = $js_basename;
 	}
 
 	/**
@@ -144,9 +144,9 @@ abstract class Display_Common extends Object
 	 */
 	public function setModuleReturn($module_return)
 	{
-		$this->module_return = $module_return; 
+		$this->module_return = $module_return;
 	}
-	
+
 	/**
 	 * Template Exists
 	 *

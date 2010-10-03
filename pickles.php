@@ -67,7 +67,7 @@ define('JSON_AVAILABLE', function_exists('json_encode'));
 /**
  * Magic function to automatically load classes
  *
- * Attempts to load a core PICKLES class or a site level data model or 
+ * Attempts to load a core PICKLES class or a site level data model or
  * module class. If Smarty is being requested, will load the proper class
  * from the vendors directory
  *

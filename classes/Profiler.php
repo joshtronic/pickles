@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Profiler 
+ * Profiler
  *
  * PHP version 5
  *
@@ -91,7 +91,7 @@ class Profiler
 			case 'array':
 				$log = '<pre>' . print_r($data, true) . '</pre>';
 				break;
-	
+
 			case 'object':
 				$log = '<span style="color:#666">[</span><span style="color:#777">' . get_parent_class($data) . '</span><span style="color:#666">]</span> '
 					 . '<span style="color:#69c">' . get_class($data) . '</span>'
@@ -148,7 +148,7 @@ class Profiler
 				$query = str_replace($key, '<span style="color:#a82222">' . $key . '</span>', $query);
 			}
 		}
-		
+
 		$log = '<span style="color:#009600">' . $query . '</span>' . $log;
 
 		if (is_array($explain))
@@ -164,7 +164,7 @@ class Profiler
 					 . ($table['Extra'] != '' ? '<br /><span style="color:RoyalBlue">Extra</span> <span style="color:#666">=></span> <span style="color:DarkGoldenRod">' . $table['Extra'] . '</span>' : '');
 			}
 		}
-		
+
 		$log .= '<br /><br /><span style="color:DarkKhaki">Speed:</span> ' . number_format($duration * 100, 3) . ' ms';
 
 		self::log($log, false, '<span style="color:DarkCyan">database</span>');
@@ -190,7 +190,7 @@ class Profiler
 		$files  = count(get_included_files());
 		$files .= ' File' . ($files == 1 ? '' : 's');
 
-		$queries = self::$queries . ' Quer'. (self::$queries == 1 ? 'y' : 'ies'); 
+		$queries = self::$queries . ' Quer'. (self::$queries == 1 ? 'y' : 'ies');
 		?>
 		<style>
 			#pickles-profiler

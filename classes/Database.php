@@ -22,7 +22,7 @@
  * database object that is a part of every model ($this->db). Because the
  * database object can execute raw SQL, there should be no limitations. Within
  * the PICKLES system, the database instance is shared, but the Database
- * constructor is not private, just in case someone wants to create new 
+ * constructor is not private, just in case someone wants to create new
  * Database objects all willy nilly like.
  */
 class Database extends Object

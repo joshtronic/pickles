@@ -114,11 +114,11 @@ class Display_PHP extends Display_Common
 			$buffer = preg_replace($pattern, $hash, $buffer);
 		}
 
-		// Strips the whitespace 
-		$buffer = trim(preg_replace('/((?<!\?>)\n)[\s]+/m', '\1', $buffer)); 
+		// Strips the whitespace
+		$buffer = trim(preg_replace('/((?<!\?>)\n)[\s]+/m', '\1', $buffer));
 
 		// Kills any HTML comments
-		$buffer = preg_replace('/<!--.*-->/U', '', $buffer); 
+		$buffer = preg_replace('/<!--.*-->/U', '', $buffer);
 
 		// Injects the stuff we stripped earlier
 		foreach ($search_replace as $search => $replacements)
@@ -129,9 +129,9 @@ class Display_PHP extends Display_Common
 			}
 		}
 		*/
-	
+
 		// Kills any whitespace and HTML comments
-		$buffer = preg_replace(array('/^[\s]+/m', '/<!--.*-->/U'), '', $buffer); 
+		$buffer = preg_replace(array('/^[\s]+/m', '/<!--.*-->/U'), '', $buffer);
 
 		// Note, this doesn't exit in case you want to run code after the display of the page
 		echo $buffer;

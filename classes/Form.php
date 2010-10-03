@@ -69,7 +69,7 @@ class Form extends Singleton
 	{
 		return $this->input($name, $value, $classes, $additional, 'hidden');
 	}
-	
+
 	/**
 	 * Text Area
 	 *
@@ -112,7 +112,7 @@ class Form extends Singleton
 	 * @param  array $options key/values for the options
 	 * @param  string $selected optional default option
 	 * @return string HTML for the options
-	 * @todo   Add support for optgroup 
+	 * @todo   Add support for optgroup
 	 */
 	public function options($options, $selected = null)
 	{
