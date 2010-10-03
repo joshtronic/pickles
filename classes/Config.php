@@ -58,20 +58,41 @@ class Config extends Object
 	 * the boolean strings into actual boolean values.
 	 *
 	 * @param  string $filename filename of the config file
-	 * @return boolean Success of the load process
+	 * @param  boolean $merge whether or not the data should be merged
+	 * @return boolean success of the load process
 	 */
-	public function load($filename)
+	public function load($filename, $merge = false)
 	{
 		// Sanity checks the config file
 		if (file_exists($filename) && is_file($filename) && is_readable($filename))
 		{
-			$this->data = parse_ini_file($filename, true);
+			$config = parse_ini_file($filename, true);
+
+			if ($merge == false)
+			{
+				$this->data = $config;
+			}
+			else
+			{
+				foreach ($config as $section => $variables)
+				{
+					if (!isset($this->data[$section]))
+					{
+						$this->data[$section] = array();
+					}
+					
+					foreach ($variables as $variable => $value)
+					{
+						$this->data[$section][$variable] = $value;
+					}
+				}
+			}
 
 			return true;
 		}
 		else
 		{
-			Error::fatal('config.ini is either missing or unreadable');
+			Error::fatal(basename($filename) . ' is either missing or unreadable');
 		}
 	}
 

@@ -21,23 +21,10 @@
  * @usage     <code>require_once 'pickles.php';</code>
  */
 
+// {{{ PICKLES Constants
+
 // Grabs the start time in case we're profiling
 define('PICKLES_START_TIME', microtime(true));
-
-// @todo Add options to the config to set this, and/or have it only run
-//       E_STRICT display ON locally (perhaps by IP?)
-ini_set('display_errors', true);
-error_reporting(E_ALL | E_STRICT);
-
-// Sets the error handler
-set_error_handler('__handleError');
-
-// @todo Allow users to override the timezone from their configuration file.
-// Sets the timezone to avoid warnings
-if (ini_get('date.timezone') == '')
-{
-	ini_set('date.timezone', 'America/New_York');
-}
 
 // Establishes our PICKLES paths
 define('PICKLES_PATH',       dirname(__FILE__) . '/');
@@ -51,18 +38,73 @@ define('SITE_MODEL_PATH',    SITE_PATH . 'models/');
 define('SITE_MODULE_PATH',   SITE_PATH . 'modules/');
 define('SITE_TEMPLATE_PATH', SITE_PATH . 'templates/');
 
-define('PRIVATE_PATH',  SITE_PATH . 'private/');
-define('LOG_PATH',      PRIVATE_PATH . 'logs/');
-define('SMARTY_PATH',   PRIVATE_PATH . 'smarty/');
+define('PRIVATE_PATH', SITE_PATH . 'private/');
+define('LOG_PATH',     PRIVATE_PATH . 'logs/');
+define('SMARTY_PATH',  PRIVATE_PATH . 'smarty/');
 
 // Sets up constants for the Display names
-define('DISPLAY_JSON',   'JSON');
-define('DISPLAY_PHP',    'PHP');
-define('DISPLAY_RSS',    'RSS');
-define('DISPLAY_XML',    'XML');
+define('DISPLAY_JSON', 'JSON');
+define('DISPLAY_PHP',  'PHP');
+define('DISPLAY_RSS',  'RSS');
+define('DISPLAY_XML',  'XML');
 
 // Creates a constant as to whether or not we have JSON available
 define('JSON_AVAILABLE', function_exists('json_encode'));
+
+// }}}
+
+// Error reporting is not modified initially
+// Feel free to uncomment these lines if you want error reporting on before the config is loaded
+//ini_set('display_errors', true);
+//error_reporting(-1);
+
+// Loads the base config
+$config = Config::getInstance();
+
+// Determines the environment
+if ($config->environment != false && is_array($config->environment))
+{
+	$environment = false;
+
+	// Loops through the environments and tries to match on IP or name
+	foreach ($config->environment as $name => $host)
+	{
+		if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host) && $_SERVER['SERVER_ADDR'] == $host) || $_SERVER['SERVER_NAME'] == $host)
+		{
+			// Tries to load the environment config
+			$environment_config = SITE_PATH . $name . '.ini';
+			if (file_exists($environment_config))
+			{
+				$config->load($environment_config, true);
+			}
+			break;
+		}
+	}
+}
+
+// Configures any available PHP configuration options
+if (isset($config->php['display_error']))
+{
+	ini_set('display_errors', (boolean)$config->php['display_error']);
+}
+
+if (isset($config->php['error_reporting']))
+{
+	error_reporting($config->php['error_reporting']);
+}
+
+// Sets the timezone to avoid warnings
+if (isset($config->php['date.timezone']))
+{
+	ini_set('date.timezone', $config->php['date.timezone']);
+}
+elseif (ini_get('date.timezone') == '')
+{
+	ini_set('date.timezone', 'Etc/UTC');
+}
+
+// Sets the error handler
+set_error_handler(isset($config->php['error_handler']) ? $config->php['error_handler'] : '__handleError');
 
 /**
  * Magic function to automatically load classes
