@@ -25,7 +25,7 @@
 class Model extends Object
 {
 	/**
-	 * Database Object 
+	 * Database Object
 	 *
 	 * @access private
 	 * @var    object
@@ -121,12 +121,12 @@ class Model extends Object
 	protected $limit = false; // LIMIT
 
 	/**
-	 * Offset 
+	 * Offset
 	 *
 	 * @access protected
 	 * @var    mixed (string or array)
 	 */
-	protected $offset = false; // OFFSET 
+	protected $offset = false; // OFFSET
 
 	/**
 	 * Query Results
@@ -201,7 +201,7 @@ class Model extends Object
 			elseif (is_int($type_or_parameters))
 			{
 				$this->sql[] = 'WHERE id = :id LIMIT 1;';
-				
+
 				$this->input_parameters = array('id' => $parameters);
 			}
 			else
@@ -222,7 +222,7 @@ class Model extends Object
 					// Leaves the query as is
 					case 'all':
 						break;
-					
+
 					// Throws an error
 					default:
 						throw new Exception('Unknown query type');
@@ -231,7 +231,7 @@ class Model extends Object
 			}
 
 			$this->records = $this->db->fetchAll(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
-			
+
 			$list_type = ($type_or_parameters == 'list');
 
 			// Flattens the data into a list
@@ -243,10 +243,10 @@ class Model extends Object
 				{
 					$list[array_shift($record)] = array_shift($record);
 				}
-				
+
 				$this->records = $list;
 			}
-			
+
 			// Sets up the current record
 			if (isset($this->records[0]))
 			{
@@ -264,7 +264,7 @@ class Model extends Object
 				}
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -319,31 +319,31 @@ class Model extends Object
 		{
 			$this->sql[] = 'WHERE ' . (is_array($this->conditions) ? $this->generateConditions($this->conditions) : $this->conditions);
 		}
-		
+
 		// Adds the GROUP BY syntax
 		if ($this->group != false)
 		{
 			$this->sql[] = 'GROUP BY ' . (is_array($this->group) ? implode(', ', $this->group) : $this->group);
 		}
-		
+
 		// Adds the HAVING conditions
 		if ($this->having != false)
 		{
 			$this->sql[] = 'HAVING ' . (is_array($this->having) ? $this->generateConditions($this->having) : $this->having);
 		}
-		
+
 		// Adds the ORDER BY syntax
 		if ($this->order != false)
 		{
 			$this->sql[] = 'ORDER BY ' . (is_array($this->order) ? implode(', ', $this->order) : $this->order);
 		}
-		
+
 		// Adds the LIMIT syntax
 		if ($this->limit != false)
 		{
 			$this->sql[] = 'LIMIT ' . (is_array($this->limit) ? implode(', ', $this->limit) : $this->limit);
 		}
-		
+
 		// Adds the OFFSET syntax
 		if ($this->offset != false)
 		{
@@ -382,8 +382,8 @@ class Model extends Object
 				{
 					// Determines if we need to include ( )
 					$nested = (count($value) > 1);
-					
-					$sql .= ' ' . $key . ' ' . ($nested ? '(' : '') . $this->generateConditions($value) . ($nested ? ')' : ''); 
+
+					$sql .= ' ' . $key . ' ' . ($nested ? '(' : '') . $this->generateConditions($value) . ($nested ? ')' : '');
 				}
 				else
 				{
@@ -393,7 +393,7 @@ class Model extends Object
 			else
 			{
 				$key = trim($key);
-		
+
 				// Checks for our keywords to control the flow
 				$operator      = preg_match('/(<|<=|=|>=|>|!=|<>| LIKE)$/i', $key);
 				$between       = preg_match('/ BETWEEN$/i', $key);
@@ -466,7 +466,7 @@ class Model extends Object
 				}
 			}
 		}
-	
+
 		return $sql;
 	}
 
