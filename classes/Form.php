@@ -112,7 +112,6 @@ class Form extends Singleton
 	 * @param  array $options key/values for the options
 	 * @param  string $selected optional default option
 	 * @return string HTML for the options
-	 * @todo   Add support for optgroup
 	 */
 	public function options($options, $selected = null)
 	{
@@ -121,19 +120,43 @@ class Form extends Singleton
 
 		if (is_array($options))
 		{
-			foreach ($options as $value => $label)
+			foreach ($options as $main_key => $main_label)
 			{
-				$selected_attribute = false;
-				if ($selected !== null && $found_selected === false)
+				if (is_array($main_label))
 				{
-					if ($selected == $value)
-					{
-						$selected_attribute = ' selected="selected"';
-						$found_selected     = true;
-					}
-				}
+					$options_html .= '<optgroup label="' . addslashes($main_key) . '">';
 
-				$options_html .= '<option value="' . $value . '"' . $selected . '>' . $label . '</option>';
+					foreach ($main_label as $sub_key => $sub_label)
+					{
+						$selected_attribute = false;
+						if ($selected !== null && $found_selected === false)
+						{
+							if ($selected == $sub_key)
+							{
+								$selected_attribute = ' selected="selected"';
+								$found_selected     = true;
+							}
+						}
+
+						$options_html .= '<option label="' . addslashes($sub_label) . '" value="' . $sub_key . '"' . $selected . '>' . $sub_label . '</option>';
+					}
+
+					$options_html .= '</optgroup>';
+				}
+				else
+				{
+					$selected_attribute = false;
+					if ($selected !== null && $found_selected === false)
+					{
+						if ($selected == $main_key)
+						{
+							$selected_attribute = ' selected="selected"';
+							$found_selected     = true;
+						}
+					}
+
+					$options_html .= '<option label="' . addslashes($main_label) . '" value="' . $main_key . '"' . $selected . '>' . $main_label . '</option>';
+				}
 			}
 		}
 
