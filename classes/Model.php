@@ -25,230 +25,459 @@
 class Model extends Object
 {
 	/**
-	 * Database
+	 * Database Object 
 	 *
-	 * @access protected
+	 * @access private
 	 * @var    object
 	 */
-	protected $db = null;
+	private $db = null;
 
 	/**
-	 * Reserved Variables
+	 * SQL Array
 	 *
-	 * @access protected
+	 * @access private
 	 * @var    array
 	 */
-	protected $reserved = array('SELECT', 'TABLE', 'ORDER BY', 'LIMIT');
+	private $sql = array();
+
+	/**
+	 * Input Parameters Array
+	 *
+	 * @access private
+	 * @var    array
+	 */
+	private $input_parameters = array();
+
+	/**
+	 * Delayed Insert
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $delayed = false;
+
+	/**
+	 * Field List
+	 *
+	 * @access protected
+	 * @var    mixed
+	 */
+	protected $fields = '*'; // SELECT
 
 	/**
 	 * Table Name
 	 *
 	 * @access protected
-	 * @var    string
+	 * @var    mixed
 	 */
-	protected $table = null;
+	protected $table = false; // FROM
 
 	/**
-	 * Select [Column] List
+	 * Joins
 	 *
 	 * @access protected
-	 * @var    mixed string, array
+	 * @var    mixed
 	 */
-	protected $select = '*';
+	protected $joins = false; // JOIN
 
 	/**
-	 * Order By Clause
+	 * Conditions
 	 *
 	 * @access protected
-	 * @var    mixed string, array
+	 * @var    mixed
 	 */
-	protected $order_by = null;
+	protected $conditions = false; // WHERE
 
 	/**
-	 * Limit Results
+	 * Group
 	 *
 	 * @access protected
-	 * @var    mixed integer, string or array
+	 * @var    mixed
 	 */
-	protected $limit = null;
+	protected $group  = false; // GROUP BY
 
 	/**
-	 * Data
+	 * Having
+	 *
+	 * @access protected
+	 * @var    mixed
+	 */
+	protected $having = false; // HAVING
+
+	/**
+	 * Order
+	 *
+	 * @access protected
+	 * @var    mixed
+	 */
+	protected $order = false; // ORDER BY
+
+	/**
+	 * Limit
+	 *
+	 * @access protected
+	 * @var    mixed
+	 */
+	protected $limit = false; // LIMIT
+
+	/**
+	 * Offset 
+	 *
+	 * @access protected
+	 * @var    mixed (string or array)
+	 */
+	protected $offset = false; // OFFSET 
+
+	/**
+	 * Query Results
 	 *
 	 * @access protected
 	 * @var    array
 	 */
-	protected $data = null;
+	protected $results = null;
 
 	/**
-	 * Record Array
+	 * Record
 	 *
-	 * @access protected
-	 * @var    array
+	 * @var array
 	 */
-	protected $record  = null;
+	public $record = null;
 
 	/**
-	 * Records Array
+	 * Records
 	 *
-	 * @access protected
-	 * @var    array
+	 * @var array
 	 */
-	protected $records = null;
-
-	/**
-	 * Record Count
-	 *
-	 * @access protected
-	 * @var    integer
-	 */
-	protected $count = 0;
+	public $records = null;
 
 	/**
 	 * Constructor
 	 *
-	 * Creates a new (empty) object or creates the record set from the
-	 * passed parameters.  The record and records arrays are populated as
-	 * well as the count variable.
+	 * Creates a new (empty) object or creates the record set from the passed
+	 * arguments. The record and records arrays are populated as well as the
+	 * count variable.
 	 *
-	 * @param mixed $conditions optional key/values for the WHERE cause
+	 * @param mixed $type_or_parameters optional type of query or parameters
+	 * @param array $parameters optional data to create a query from
 	 */
-	public function __construct($conditions = null)
+	public function __construct($type_or_parameters = null, $parameters = null)
 	{
+		// Runs the parent constructor so we have the config
 		parent::__construct();
 
+		// Gets an instance of the database
 		$this->db = Database::getInstance();
 
-		if (isset($conditions))
+		// Builds out the query
+		if ($type_or_parameters != null)
 		{
-			// Overrides with the "reserved" values
-			if (is_array($conditions) && is_array($this->reserved))
+			// Loads the parameters into the object
+			if (is_array($type_or_parameters))
 			{
-				foreach ($this->reserved as $reserved)
+				if (is_array($parameters))
 				{
-					if (isset($conditions[$reserved]))
-					{
-						$variable = strtolower(strtr($reserved, ' ', '_'));
-
-						$this->$variable = $conditions[$reserved];
-						unset($conditions[$reserved]);
-					}
+					throw new Exception('You cannot pass in 2 query parameter arrays');
 				}
+
+				$this->loadParameters($type_or_parameters);
+			}
+			elseif (is_array($parameters))
+			{
+				$this->loadParameters($parameters);
 			}
 
-			if (is_array($this->select))
+			// Starts with a basic SELECT ... FROM
+			$this->sql = array(
+				'SELECT ' . (is_array($this->fields) ? implode(', ', $this->fields) : $this->fields),
+				'FROM '   . $this->table,
+			);
+
+			// Pulls based on parameters
+			if (is_array($type_or_parameters))
 			{
-				$this->select = implode(', ', $this->select);
+				$this->generateQuery();
 			}
-
-			$sql = 'SELECT ' . $this->select . ' FROM ' . $this->table;
-
-			if (is_array($conditions) && count($conditions) > 0)
+			// Pulls by ID
+			elseif (is_int($type_or_parameters))
 			{
-				$sql .= ' WHERE ';
-
-				$input_parameters = null;
-				$include_and      = false;
-
-				foreach ($conditions as $column => $value)
-				{
-					if ($input_parameters != null || $include_and == true)
-					{
-						$sql .= ' AND ';
-					}
-
-					if (is_array($value))
-					{
-						$sql .= $column . ' IN ("' . implode($value, '", "') . '") ';
-					}
-					elseif (strpos($column, 'IS') === false && strpos($value, 'IS ') === false)
-					{
-						$sql   .= $column . (preg_match('/(=|!=|<|>|LIKE)/', $column) ? ' ' : '= ') . ':';
-						$column = trim(str_replace(array('!', '=', '<', '>', 'LIKE'), '', $column));
-						$sql   .= $column;
-					}
-					else
-					{
-						$sql .= $column . ' ' . $value;
-					}
-
-					if (!is_array($value) && $value != 'NULL')
-					{
-						$input_parameters[':' . $column] = $value;
-					}
-					else
-					{
-						$include_and = true;
-					}
-				}
-
-				if ($this->order_by != null)
-				{
-					if (is_array($this->order_by))
-					{
-						$this->order_by = implode(', ', $this->order_by);
-					}
-
-					$sql .= ' ORDER BY ' . $this->order_by;
-				}
-
-				if ($this->limit != null)
-				{
-					if (is_array($this->limit))
-					{
-						$this->limit = implode(', ', $this->limit);
-					}
-
-					$sql .= ' LIMIT ' . $this->limit;
-				}
-
-				$this->data = $this->db->fetchAll($sql, $input_parameters);
-			}
-			elseif ($conditions === true || count($conditions) == 0)
-			{
-				if ($this->order_by != null)
-				{
-					if (is_array($this->order_by))
-					{
-						$this->order_by = implode(', ', $this->order_by);
-					}
-
-					$sql .= ' ORDER BY ' . $this->order_by;
-				}
-
-				if ($this->limit != null)
-				{
-					if (is_array($this->limit))
-					{
-						$this->limit = implode(', ', $this->limit);
-					}
-
-					$sql .= ' LIMIT ' . $this->limit;
-				}
-
-				$this->data = $this->db->fetchAll($sql);
+				$this->sql[] = 'WHERE id = :id LIMIT 1;';
+				
+				$this->input_parameters = array('id' => $parameters);
 			}
 			else
 			{
-				$this->data = $this->db->fetch($sql . ' WHERE id = "' . $conditions . '" LIMIT 1;');
+				switch ($type_or_parameters)
+				{
+					// Updates query to use COUNT syntax
+					case 'count':
+						$this->sql[0] = 'SELECT COUNT(*) AS count';
+						$this->generateQuery();
+						break;
+
+					// Adds the rest of the query
+					case 'list':
+						$this->generateQuery();
+						break;
+
+					// Leaves the query as is
+					case 'all':
+						break;
+					
+					// Throws an error
+					default:
+						throw new Exception('Unknown query type');
+						break;
+				}
 			}
 
-			$this->records = $this->data;
+			$this->records = $this->db->fetchAll(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
+			
+			$list_type = ($type_or_parameters == 'list');
 
+			// Flattens the data into a list
+			if ($list_type == true)
+			{
+				$list = array();
+
+				foreach ($this->records as $record)
+				{
+					$list[array_shift($record)] = array_shift($record);
+				}
+				
+				$this->records = $list;
+			}
+			
+			// Sets up the current record
 			if (isset($this->records[0]))
 			{
 				$this->record = $this->records[0];
 			}
 			else
 			{
-				$this->record = $this->records;
-			}
-
-			if (!empty($this->records))
-			{
-				$this->count = count($this->records);
+				if ($list_type == true)
+				{
+					$this->record[key($this->records)] = current($this->records);
+				}
+				else
+				{
+					$this->record = $this->records;
+				}
 			}
 		}
+		
+		return true;
+	}
+
+	/**
+	 * Load Parameters
+	 *
+	 * Loads the passed parameters back into the object.
+	 *
+	 * @access private
+	 * @param  array $parameters key / value list
+	 * @param  boolean whether or not the parameters were loaded
+	 */
+	private function loadParameters($parameters)
+	{
+		if (is_array($parameters))
+		{
+			// Adds the parameters to the object
+			foreach ($parameters as $key => $value)
+			{
+				if (isset($this->$key))
+				{
+					$this->$key = $value;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Generate Query
+	 *
+	 * Goes through all of the object variables that correspond with parts of
+	 * the query and adds them to the master SQL array.
+	 *
+	 * @return boolean true
+	 */
+	private function generateQuery()
+	{
+		// Adds the JOIN syntax
+		// @todo
+		if ($this->joins != false)
+		{
+			// $sql[] = 'JOIN ...';
+			throw new Exception('Joins parameter is not yet implemented, sorry');
+		}
+
+		// Adds the WHERE conditionals
+		if ($this->conditions != false)
+		{
+			$this->sql[] = 'WHERE ' . (is_array($this->conditions) ? $this->generateConditions($this->conditions) : $this->conditions);
+		}
+		
+		// Adds the GROUP BY syntax
+		if ($this->group != false)
+		{
+			$this->sql[] = 'GROUP BY ' . (is_array($this->group) ? implode(', ', $this->group) : $this->group);
+		}
+		
+		// Adds the HAVING conditions
+		if ($this->having != false)
+		{
+			$this->sql[] = 'HAVING ' . (is_array($this->having) ? $this->generateConditions($this->having) : $this->having);
+		}
+		
+		// Adds the ORDER BY syntax
+		if ($this->order != false)
+		{
+			$this->sql[] = 'ORDER BY ' . (is_array($this->order) ? implode(', ', $this->order) : $this->order);
+		}
+		
+		// Adds the LIMIT syntax
+		if ($this->limit != false)
+		{
+			$this->sql[] = 'LIMIT ' . (is_array($this->limit) ? implode(', ', $this->limit) : $this->limit);
+		}
+		
+		// Adds the OFFSET syntax
+		if ($this->offset != false)
+		{
+			$this->sql[] = 'OFFSET ' . $this->offset;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Generate Conditions
+	 *
+	 * Generates the conditional blocks of SQL from the passed array of
+	 * conditions. Supports as much as I could remember to implement. This
+	 * method is utilized by both the WHERE and HAVING clauses.
+	 *
+	 * @param array $conditions array of potentially nested conditions
+	 */
+	private function generateConditions($conditions)
+	{
+		$sql = '';
+
+		foreach ($conditions as $key => $value)
+		{
+			$key = trim($key);
+
+			if (strtoupper($key) == 'NOT')
+			{
+				$key = 'AND NOT';
+			}
+
+			// Checks if conditional to start recursion
+			if (preg_match('/(AND|&&|OR|\|\||XOR)( NOT)?/i', $key))
+			{
+				if (is_array($value))
+				{
+					// Determines if we need to include ( )
+					$nested = (count($value) > 1);
+					
+					$sql .= ' ' . $key . ' ' . ($nested ? '(' : '') . $this->generateConditions($value) . ($nested ? ')' : ''); 
+				}
+				else
+				{
+					$sql .= ' ' . $key . ' ' . $value;
+				}
+			}
+			else
+			{
+				$key = trim($key);
+		
+				// Checks for our keywords to control the flow
+				$operator      = preg_match('/(<|<=|=|>=|>|!=|<>| LIKE)$/i', $key);
+				$between       = preg_match('/ BETWEEN$/i', $key);
+				$null_operator = preg_match('/( IS| IS NOT)$/i', $key);
+				$null          = ($value === null);
+
+				// Generates an IN statement
+				if (is_array($value) && $between == false)
+				{
+					$sql .= $key . ' IN (' . implode(', ', array_fill(1, count($value), '?')) . ')';
+					$this->input_parameters = array_merge($this->input_parameters, $value);
+				}
+				else
+				{
+					// Omits the operator as the operator is there
+					if ($operator == true || $null_operator == true)
+					{
+						if ($null)
+						{
+							// Scrubs the operator if someone doesn't use IS / IS NOT
+							if ($operator == true)
+							{
+								$key = preg_replace('/ ?(!=|<>)$/i', ' IS NOT', $key);
+								$key = preg_replace('/ ?(<|<=|=|>=| LIKE)$/i', ' IS', $key);
+							}
+
+							$sql .= $key . ' NULL';
+						}
+						else
+						{
+							$sql .= $key . ' ?';
+							$this->input_parameters[] = $value;
+						}
+					}
+					// Generates a BETWEEN statement
+					elseif ($between == true)
+					{
+						$sql .= $key . ' ? AND ?';
+
+						if (is_array($value))
+						{
+							// Checks the number of values, BETWEEN expects 2
+							if (count($value) != 2)
+							{
+								throw new Exception('Between expects 2 values');
+							}
+							else
+							{
+								$this->input_parameters = array_merge($this->input_parameters, $value);
+							}
+						}
+						else
+						{
+							throw new Exception('Between usage expects values to be in an array');
+						}
+					}
+					else
+					{
+						// Checks if we're working with NULL values
+						if ($null)
+						{
+							$sql .= $key . ' IS NULL';
+						}
+						else
+						{
+							$sql .= $key . ' = ?';
+							$this->input_parameters[] = $value;
+						}
+					}
+				}
+			}
+		}
+	
+		return $sql;
+	}
+
+	/**
+	 * Count Records
+	 *
+	 * Counts the records
+	 */
+	public function count()
+	{
+		return count($this->records);
 	}
 
 	/**
@@ -258,7 +487,7 @@ class Model extends Object
 	 */
 	public function next()
 	{
-		$this->record = next($this->data);
+		$this->record = next($this->records);
 	}
 
 	/**
@@ -268,7 +497,7 @@ class Model extends Object
 	 */
 	public function prev()
 	{
-		$this->record = prev($this->data);
+		$this->record = prev($this->record);
 	}
 
 	/**
@@ -278,7 +507,7 @@ class Model extends Object
 	 */
 	public function first()
 	{
-		$this->record = reset($this->data);
+		$this->record = reset($this->records);
 	}
 
 	/**
@@ -288,27 +517,29 @@ class Model extends Object
 	 */
 	public function last()
 	{
-		$this->record = end($this->data);
+		$this->record = end($this->records);
 	}
 
 	/**
-	 * Commit Record
+	 * Commit
 	 *
-	 * Commits a record to the database. Intelligently does an UPDATE or
-	 * INSERT INTO.
+	 * Inserts or updates a record in the database.
 	 *
 	 * @return boolean results of the query
-	 * @todo   This will replace commit() eventually will add commitAll();
 	 */
-	public function commitRecord()
+	public function commit()
 	{
+		// Checks if the record is actually populated
 		if (count($this->record) > 0)
 		{
-			$update = isset($this->record['id']) && Utility::isValid($this->record['id']);
+			// Determines if it's an UPDATE or INSERT
+			$update = (isset($this->record['id']) && trim($this->record['id']) != '');
 
-			$sql = ($update === true ? 'UPDATE' : 'INSERT INTO') . ' ' . $this->table . ' SET ';
+			// Establishes the query, optionally uses DELAYED INSERTS
+			$sql = ($update === true ? 'UPDATE' : 'INSERT' . ($this->delayed == true ? ' DELAYED' : '') . ' INTO') . ' ' . $this->table . ' SET ';
 			$input_parameters = null;
 
+			// Loops through all the columns and assembles the query
 			foreach ($this->record as $column => $value)
 			{
 				if ($column != 'id')
@@ -319,16 +550,18 @@ class Model extends Object
 					}
 
 					$sql .= $column . ' = :' . $column;
-					$input_parameters[':' . $column] = is_array($value) ? json_encode($value) : $value;
+					$input_parameters[':' . $column] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
 				}
 			}
 
+			// If it's an UPDATE tack on the ID
 			if ($update === true)
 			{
 				$sql .= ' WHERE id = :id LIMIT 1;';
 				$input_parameters[':id'] = $this->record['id'];
 			}
 
+			// Executes the query
 			return $this->db->execute($sql, $input_parameters);
 		}
 
@@ -348,98 +581,6 @@ class Model extends Object
 		$input_parameters[':id'] = $this->record['id'];
 
 		return $this->db->execute($sql, $input_parameters);
-	}
-
-	/**
-	 * Magic Getter
-	 *
-	 * Overrides the built in PHP getter and checks our data variable for
-	 * the variable or returns false.  The data array is loaded via the
-	 * magic setter.
-	 *
-	 * @param  string $variable name of the variable
-	 * @return mixed requested variable, the entire data array or false
-	 */
-	public function __get($variable)
-	{
-		if (in_array($variable, array('data', 'records', 'record', 'count')))
-		{
-			return $this->$variable;
-		}
-		elseif (isset($this->data[$variable]))
-		{
-			return $this->data[$variable];
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * Magic Setter
-	 *
-	 * Overrides the built in PHP setter so that we can assign variables to
-	 * our private data array (avoids conflicts with the object variables).
-	 *
-	 * @param string $variable name of the variable
-	 * @param mixed $value value for the variable
-	 */
-	public function __set($variable, $value)
-	{
-		if (in_array($variable, array('record', 'records')))
-		{
-			$this->$variable = $value;
-		}
-		else
-		{
-			$this->data[$variable] = $value;
-			$this->record[$variable] = $value;
-		}
-	}
-
-	/**
-	 * Commit
-	 *
-	 * Commits the record to the database. Intelligently does an UPDATE or
-	 * INSERT INTO.
-	 *
-	 * @deprecated Deprecated is commitRecord() is even implemented
-	 * @return     boolean results of the query
-	 */
-	public function commit()
-	{
-		if (count($this->data) > 0)
-		{
-			$update = isset($this->data['id']) && Utility::isValid($this->data['id']);
-
-			$sql = ($update === true ? 'UPDATE' : 'INSERT INTO') . ' ' . $this->table . ' SET ';
-			$input_parameters = null;
-
-			foreach ($this->data as $column => $value)
-			{
-				if ($column != 'id')
-				{
-					if ($input_parameters != null)
-					{
-						$sql .= ', ';
-					}
-
-					$sql .= $column . ' = :' . $column;
-					$input_parameters[':' . $column] = is_array($value) ? json_encode($value) : $value;
-				}
-			}
-
-			if ($update === true)
-			{
-				$sql .= ' WHERE id = :id LIMIT 1;';
-				$input_parameters[':id'] = $this->id;
-			}
-
-			return $this->db->execute($sql, $input_parameters);
-		}
-
-		return false;
 	}
 
 	/**
