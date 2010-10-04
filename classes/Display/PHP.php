@@ -67,7 +67,7 @@ class Display_PHP extends Display_Common
 		$__module    = $this->module_return;
 		$__css_class = $this->css_class;
 		$__js_file   = $this->js_basename;
-		$__form      = $form_class::getInstance();
+		$__form      = new $form_class();
 
 		// Loads the template
 		if ($this->parent_template != null)

@@ -21,7 +21,7 @@
  * This class contains methods for easily generating form elements. There is a
  * heavy focus on select boxes as they have the most overhead for a developer.
  */
-class Form extends Singleton
+class Form extends Object 
 {
 	/**
 	 * Get Instance

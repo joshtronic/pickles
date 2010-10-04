@@ -21,23 +21,6 @@
  * Every instantiated class in PICKLES should be extending this class. By doing
  * so the class is automatically hooked into the profiler, and the object will
  * have access to some common components as well.
- *
- * That all being said, PICKLES does have 4 distinct class types, and not all
- * need this class. First, there are true Singleton's which extend the class of
- * the same name. There are also instantiated classes (like Module and Model)
- * which need to be instantiated to be used. Those classes need to extend this
- * class. The 3rd type of class is a static non-Singleton class. They are
- * generally seen with no parent class, and are used for performing stateless
- * actions. Now we have our 4th type of class, and this is where it gets fun!
- * The last class type is a instantiated class with Singleton tendencies. So
- * yeah, lines get blurred for the sake of building a very bendable system.
- * These "hybrid" classes extend the Object class, but can be instantiated or
- * accessed via getInstance(). Why? Well that's simple, I do that so that I can
- * share a single instance of the object within the core of PICKLES, but still
- * have the availability to create new instances of the object for use outside
- * of the core. The Config and Database classes are examples of this type.
- *
- * So guess what, I bend the rules.
  */
 class Object
 {
@@ -84,20 +67,30 @@ class Object
 	/**
 	 * Get Instance
 	 *
-	 * Gets an instance of the passed class.
+	 * Gets an instance of the passed class. Allows for easy sharing of certain
+	 * classes within the system to avoid the extra overhead of creating new
+	 * objects each time. Also avoids the hassle of passing around variables.
 	 *
 	 * @static
 	 * @param  string $class name of the class
 	 * @return object instance of the class
 	 */
-	public static function getInstance($class)
+	public static function getInstance($class = false)
 	{
-		if (!isset(self::$instances[$class]))
+		// In < 5.3 arguments must match in child, hence defaulting $class
+		if ($class == false)
 		{
-			self::$instances[$class] = new $class();
+			return false;
 		}
+		else
+		{
+			if (!isset(self::$instances[$class]))
+			{
+				self::$instances[$class] = new $class();
+			}
 
-		return self::$instances[$class];
+			return self::$instances[$class];
+		}
 	}
 
 	/**

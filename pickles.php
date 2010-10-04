@@ -55,8 +55,17 @@ define('JSON_AVAILABLE', function_exists('json_encode'));
 
 // Error reporting is not modified initially
 // Feel free to uncomment these lines if you want error reporting on before the config is loaded
-//ini_set('display_errors', true);
-//error_reporting(-1);
+ini_set('display_errors', true);
+error_reporting(-1);
+
+// Sets the error handler
+set_error_handler('__handleError');
+
+// Defaults timezone to UTC if not set
+if (ini_get('date.timezone') == '')
+{
+	ini_set('date.timezone', 'Etc/UTC');
+}
 
 // Loads the base config
 $config = Config::getInstance();
@@ -98,13 +107,12 @@ if (isset($config->php['date.timezone']))
 {
 	ini_set('date.timezone', $config->php['date.timezone']);
 }
-elseif (ini_get('date.timezone') == '')
-{
-	ini_set('date.timezone', 'Etc/UTC');
-}
 
 // Sets the error handler
-set_error_handler(isset($config->php['error_handler']) ? $config->php['error_handler'] : '__handleError');
+if (isset($config->php['error_handler']))
+{
+	set_error_handler($config->php['error_handler']);
+}
 
 /**
  * Magic function to automatically load classes

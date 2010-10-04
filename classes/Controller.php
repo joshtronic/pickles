@@ -167,6 +167,8 @@ class Controller extends Object
 
 		$module_return = null;
 
+		$profiler = (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true);
+
 		// Attempts to execute the default method
 		if (method_exists($module, '__default'))
 		{
@@ -175,13 +177,22 @@ class Controller extends Object
 				$module->setRequest(array('id' => $requested_id));
 			}
 
+			if ($profiler)
+			{
+				Profiler::log($module, '__default');
+			}
+
 			/**
 			 * Note to Self: When building in caching will need to let the
 			 * module know to use the cache, either passing in a variable
 			 * or setting it on the object
 			 */
 			$display->setModuleReturn($module->__default());
+		}
 
+		if ($profiler)
+		{
+			Profiler::log($display, 'render');
 		}
 
 		// Renders the content
