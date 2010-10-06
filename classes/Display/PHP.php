@@ -64,6 +64,7 @@ class Display_PHP extends Display_Common
 		$form_class  = (isset($this->config->pickles['form']) ? $this->config->pickles['form'] : 'Form');
 
 		$__config    = $this->config;
+		$__meta      = $this->meta_data;
 		$__module    = $this->module_return;
 		$__css_class = $this->css_class;
 		$__js_file   = $this->js_basename;

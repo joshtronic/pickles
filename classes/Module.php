@@ -28,7 +28,7 @@
 class Module extends Object
 {
 	/**
-	 * Database
+	 * Database object
 	 *
 	 * @access protected
 	 * @var    object
@@ -60,14 +60,6 @@ class Module extends Object
 	protected $keywords = null;
 
 	/**
-	 * Access level of the page
-	 *
-	 * @access protected
-	 * @var    boolean, null by default
-	 */
-	protected $access = null;
-
-	/**
 	 * Secure
 	 *
 	 * Whether or not the page should be loaded via SSL.
@@ -77,6 +69,14 @@ class Module extends Object
 	 * @todo   Implement this functionality
 	 */
 	protected $secure = null;
+
+	/**
+	 * Security settings of the page
+	 *
+	 * @access protected
+	 * @var    boolean, null by default
+	 */
+	protected $security = null;
 
 	/**
 	 * Session
@@ -133,6 +133,7 @@ class Module extends Object
 	 * @access protected
 	 * @var    array, null by default
 	 * @todo   Currently the super globals are not being cleared out
+	 * @todo   Not even sure I want to implement this at this point
 	 */
 	protected $request = null;
 
@@ -177,14 +178,12 @@ class Module extends Object
 	 *
 	 * Prohibits the direct modification of module variables.
 	 *
-	 * @param  string $name name of the variable to be set
-	 * @param  mixed $value value of the variable to be set
-	 * @return boolean false
+	 * @param string $name name of the variable to be set
+	 * @param mixed $value value of the variable to be set
 	 */
 	public function __set($name, $value)
 	{
-		trigger_error('Cannot set module variables directly', E_USER_ERROR);
-		return false;
+		throw new Exception('Cannot set module variables directly');
 	}
 
 	/**
@@ -230,8 +229,7 @@ class Module extends Object
 		}
 		else
 		{
-			trigger_error('Only Controller can perform setRequest()', E_USER_ERROR);
-			return false;
+			throw new Exception('Only Controller can perform setRequest()');
 		}
 	}
 }

@@ -115,14 +115,12 @@ class Config extends Object
 	 *
 	 * Prohibits the direct modification of module variables.
 	 *
-	 * @param  string $name name of the variable to be set
-	 * @param  mixed $value value of the variable to be set
-	 * @return boolean false
+	 * @param string $name name of the variable to be set
+	 * @param mixed $value value of the variable to be set
 	 */
 	public function __set($name, $value)
 	{
-		trigger_error('Cannot set config variables directly', E_USER_ERROR);
-		return false;
+		throw new Exception('Cannot set config variables directly', E_USER_ERROR);
 	}
 
 	/**

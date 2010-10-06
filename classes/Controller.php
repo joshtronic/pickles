@@ -40,13 +40,13 @@ class Controller extends Object
 		// Generate a generic "site down" message
 		if ($this->config->pickles['disabled'])
 		{
-			Error::fatal($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
+			throw new Exception($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
 		}
 
 		// Ack, not sure what page to load, throw an error
 		if (!isset($_REQUEST['request']) && (empty($this->config->pickles['default']) || $this->config->pickles['default'] == null))
 		{
-			Error::fatal('Unable complete this request because no URI was provided and there is no default module specified in config.ini');
+			throw new Exception('Unable complete this request because no URI was provided and there is no default module specified in config.ini');
 		}
 		// Loads the requested module's information
 		if (isset($_REQUEST['request']) && trim($_REQUEST['request']) != '')
@@ -83,7 +83,7 @@ class Controller extends Object
 
 		unset($basename);
 
-		$module_exists   = (isset($module_filename) && $module_filename != null && file_exists($module_filename));
+		$module_exists = (isset($module_filename) && $module_filename != null && file_exists($module_filename));
 
 		// Instantiates an instance of the module
 		if ($module_exists)
@@ -120,6 +120,20 @@ class Controller extends Object
 			}
 		}
 
+		// Validates security level
+		if ($module->security !== false)
+		{
+			// @todo If no type is set, default to isLevel (safer)
+			// @todo If array is present and no type set, validate against each level there
+			// @todo Is array is present under type, validate against each level accordingly
+			if (Security::isLevel($module->security) == false)
+			{
+				// @todo Redirect to login page, potentially configured in the config, else /login
+				// @todo Set variable for the destination, perhaps $_SESSION['__pickles']['login']['destination']
+				exit;
+			}
+		}
+
 		// Validates the rendering engine
 		// @todo Need to validate against the module's return type(s)
 		$engine = $module->engine;
@@ -149,7 +163,7 @@ class Controller extends Object
 		{
 			if (!isset($_REQUEST['request']))
 			{
-				Error::fatal('Way to go, you\'ve successfully created an infinite redirect loop. Good thing I was here or you would have been served with a pretty ugly browser error.<br /><br />So here\'s the deal, no templates were able to be loaded. Make sure your parent and child templates actually exist and if you\'re using non-default values, make sure they\'re defined correctly in your config.');
+				throw new Exception('Way to go, you\'ve successfully created an infinite redirect loop. Good thing I was here or you would have been served with a pretty ugly browser error.<br /><br />So here\'s the deal, no templates were able to be loaded. Make sure your parent and child templates actually exist and if you\'re using non-default values, make sure they\'re defined correctly in your config.');
 			}
 			else
 			{
@@ -165,6 +179,7 @@ class Controller extends Object
 			}
 		}
 
+		$meta_data     = null;
 		$module_return = null;
 
 		$profiler = (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true);
@@ -181,6 +196,13 @@ class Controller extends Object
 			{
 				Profiler::log($module, '__default');
 			}
+
+			// Sets meta data from the module
+			$display->setMetaData(array(
+				'title'       => $module->title,
+				'description' => $module->description,
+				'keywords'    => $module->keywords
+			));
 
 			/**
 			 * Note to Self: When building in caching will need to let the

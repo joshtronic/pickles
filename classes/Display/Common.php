@@ -64,6 +64,14 @@ abstract class Display_Common extends Object
 	protected $js_basename = '';
 
 	/**
+	 * Meta Data
+	 *
+	 * @access protected
+	 * @var    array
+	 */
+	protected $meta_data = null;
+
+	/**
 	 * Module Return Data
 	 *
 	 * @access protected
@@ -133,6 +141,18 @@ abstract class Display_Common extends Object
 
 		$this->css_class   = $css_class;
 		$this->js_basename = $js_basename;
+	}
+
+	/**
+	 * Set Meta Data
+	 *
+	 * Sets the meta data from the module so the display class can use it
+	 *
+	 * @param array $meta_data key/value array of data
+	 */
+	public function setMetaData($meta_data)
+	{
+		$this->meta_data = $meta_data;
 	}
 
 	/**

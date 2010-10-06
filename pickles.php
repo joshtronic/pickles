@@ -53,19 +53,26 @@ define('JSON_AVAILABLE', function_exists('json_encode'));
 
 // }}}
 
+// {{{ Defaults some important configuration options
+
 // Error reporting is not modified initially
 // Feel free to uncomment these lines if you want error reporting on before the config is loaded
-ini_set('display_errors', true);
-error_reporting(-1);
+// ini_set('display_errors', true);
+// error_reporting(-1);
 
-// Sets the error handler
+// Sets the error and exceptios handlers
 set_error_handler('__handleError');
+set_exception_handler('__handleException');
 
 // Defaults timezone to UTC if not set
 if (ini_get('date.timezone') == '')
 {
 	ini_set('date.timezone', 'Etc/UTC');
 }
+
+// }}}
+
+// {{{ Loads the configuration file(1)
 
 // Loads the base config
 $config = Config::getInstance();
@@ -91,6 +98,10 @@ if ($config->environment != false && is_array($config->environment))
 	}
 }
 
+// }}}
+
+// {{{ Sets any configurable options
+
 // Configures any available PHP configuration options
 if (isset($config->php['display_error']))
 {
@@ -102,7 +113,7 @@ if (isset($config->php['error_reporting']))
 	error_reporting($config->php['error_reporting']);
 }
 
-// Sets the timezone to avoid warnings
+// Sets the timezone
 if (isset($config->php['date.timezone']))
 {
 	ini_set('date.timezone', $config->php['date.timezone']);
@@ -113,6 +124,14 @@ if (isset($config->php['error_handler']))
 {
 	set_error_handler($config->php['error_handler']);
 }
+
+// Sets the exception handler
+if (isset($config->php['exception_handler']))
+{
+	set_exception_handler($config->php['exception_handler']);
+}
+
+// }}}
 
 /**
  * Magic function to automatically load classes
@@ -168,6 +187,18 @@ function __handleError($number, $string, $file, $line, array $context)
 	}
 
 	throw new ErrorException($string, 0, $number, $file, $line);
+}
+
+/**
+ * Exception handling function
+ *
+ * Catches thrown exceptions and displays them.
+ *
+ * @param object $exception the exception
+ */
+function __handleException($exception)
+{
+	Error::fatal($exception->getMessage());
 }
 
 ?>
