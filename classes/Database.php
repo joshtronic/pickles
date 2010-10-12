@@ -70,23 +70,95 @@ class Database extends Object
 			if (isset($config->datasources[$name]))
 			{
 				$datasource = $config->datasources[$name];
-				$datasource['type'] = strtolower($datasource['type']);
 
 				switch ($datasource['type'])
 				{
-					case 'mysql':
-						if (!isset(self::$instances['Database'][$name]))
+					case 'Mongo':
+						// Assembles the server string
+						$server = 'mongodb://';
+
+						if (isset($datasource['username']))
 						{
-							self::$instances['Database'][$name] = new Database_MySQL($datasource['hostname'], $datasource['username'], $datasource['password'], $datasource['database']);
+							$server .= $datasource['username'];
+
+							if (isset($datasource['password']))
+							{
+								$server .= ':' . $datasource['password'];
+							}
+
+							$server .= '@';
 						}
 
-						return self::$instances['Database'][$name];
+						$server .= $datasource['hostname'] . ':' . $datasource['port'] . '/' . $datasource['database'];
+
+						// Attempts to connect
+						try
+						{
+							$instance = new Mongo($server, array('persist' => 'pickles'));
+
+							// If we have database and collection, attempt to assign them
+							if (isset($datasource['database']))
+							{
+								$instance = $instance->$datasource['database'];
+
+								if (isset($datasource['collection']))
+								{
+									$instance = $instance->$datasource['collection'];
+								}
+							}
+						}
+						catch (Exception $exception)
+						{
+							throw new Exception('Unable to connect to Mongo database');
+						}
+						break;
+
+					// @todo This is going to end up being all PDO driven
+					case 'MySQL':
+						if (!isset(self::$instances['Database'][$name]))
+						{
+							$class = 'Database_' . $datasource['type'];
+
+							$instance = new $class();
+						
+							if (isset($datasource['hostname']))
+							{
+								$instance->setHostname($datasource['hostname']);
+							}
+
+							if (isset($datasource['port']))
+							{
+								$instance->setPort($datasource['port']);
+							}
+
+							if (isset($datasource['username']))
+							{
+								$instance->setUsername($datasource['username']);
+							}
+
+							if (isset($datasource['password']))
+							{
+								$instance->setPassword($datasource['password']);
+							}
+
+							if (isset($datasource['database']))
+							{
+								$instance->setDatabase($datasource['database']);
+							}
+						}
 						break;
 					
 					default:
 						throw new Exception('Datasource type "' . $datasource['type'] . '" is invalid');
 						break;
 				}
+
+				if (isset($instance))
+				{
+					self::$instances['Database'][$name] = $instance;
+				}
+
+				return self::$instances['Database'][$name];
 			}
 		}
 

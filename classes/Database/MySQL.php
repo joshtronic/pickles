@@ -23,78 +23,8 @@
  *
  * @todo Add in a check if the class is being called directly and except.
  */
-class Database_MySQL extends Object
+class Database_MySQL extends Database_Common 
 {
-	/**
-	 * Hostname for the MySQL Server
-	 *
-	 * @access private
-	 * @var    string
-	 */
-	private $hostname = 'localhost';
-
-	/**
-	 * Username for the MySQL Server
-	 *
-	 * @access private
-	 * @var    string
-	 */
-	private $username = null;
-
-	/**
-	 * Password for the MySQL Server
-	 *
-	 * @access private
-	 * @var    string
-	 */
-	private $password = null;
-
-	/**
-	 * Database name for the MySQL Server
-	 *
-	 * @access private
-	 * @var    string
-	 */
-	private $database = null;
-
-	/**
-	 * Connection resource to MySQL
-	 *
-	 * @access private
-	 * @var    object
-	 */
-	private $connection = null;
-
-	/**
-	 * Results object for the executed statement
-	 *
-	 * @access private
-	 * @var    object
-	 */
-	private $results = null;
-
-	/**
-	 * Constructor
-	 *
-	 * Sets up our connection variables
-	 *
-	 * @param string $hostname hostname to connect to
-	 * @param string $username username to use
-	 * @param string $password password to use
-	 * @param string $database database to connect to
-	 */
-	public function __construct($hostname, $username, $password, $database)
-	{
-		parent::__construct();
-			
-		$this->hostname = $hostname;
-		$this->username = $username;
-		$this->password = $password;
-		$this->database = $database;
-
-		return true;
-	}
-
 	/**
 	 * Opens database connection
 	 *
