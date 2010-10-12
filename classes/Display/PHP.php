@@ -61,7 +61,7 @@ class Display_PHP extends Display_Common
 		ob_start();
 
 		// Puts the class variables in local scope for the template
-		$form_class  = (isset($this->config->pickles['form']) ? $this->config->pickles['form'] : 'Form');
+		$form_class  = (isset($this->config->pickles['classes']['Form']) ? $this->config->pickles['classes']['Form'] : 'Form');
 
 		$__config    = $this->config;
 		$__meta      = $this->meta_data;

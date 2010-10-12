@@ -44,7 +44,7 @@ class Config extends Object
 	 *
 	 * @param string $filename optional Filename of the config
 	 */
-	public function __construct($filename = '../config.ini')
+	public function __construct($filename = '../config.php')
 	{
 		parent::__construct();
 
@@ -54,46 +54,87 @@ class Config extends Object
 	/**
 	 * Loads a configuration file
 	 *
-	 * Handles the potential loading of the configuration file and sanitizing
-	 * the boolean strings into actual boolean values.
-	 *
 	 * @param  string $filename filename of the config file
-	 * @param  boolean $merge whether or not the data should be merged
 	 * @return boolean success of the load process
 	 */
-	public function load($filename, $merge = false)
+	public function load($filename)
 	{
+		$environments = false;
+		$environment  = false;
+
 		// Sanity checks the config file
 		if (file_exists($filename) && is_file($filename) && is_readable($filename))
 		{
-			$config = parse_ini_file($filename, true);
+			require_once $filename;
 
-			if ($merge == false)
+			// Determines the environment
+			if (isset($config['environment']))
 			{
-				$this->data = $config;
+				$environment = $config['environment'];
 			}
 			else
 			{
-				foreach ($config as $section => $variables)
+				if (isset($config['environments']) && is_array($config['environments']))
 				{
-					if (!isset($this->data[$section]))
+					$environments = $config['environments'];
+
+					// Loops through the environments and tries to match on IP or name
+					foreach ($config['environments'] as $name => $host)
 					{
-						$this->data[$section] = array();
-					}
-					
-					foreach ($variables as $variable => $value)
-					{
-						$this->data[$section][$variable] = $value;
+						if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host) && $_SERVER['SERVER_ADDR'] == $host) || $_SERVER['SERVER_NAME'] == $host)
+						{
+							// Sets the environment and makes a run for it
+							$environment = $name;
+							break;
+						}
 					}
 				}
 			}
 
+			// Flattens the array based on the environment
+			$this->data = $this->flatten($environment, $config);
+
+			// Restore environments value
+			if ($environments != false)
+			{
+				$this->data['environments'] = $environments;
+			}
+
+			// Sets the environment if it's not set already
+			if (!isset($this->data['environment']))
+			{
+				$this->data['environment'] = $environment;
+			}
+
 			return true;
 		}
-		else
+
+		return false;
+	}
+
+	private function flatten($environment, $array)
+	{
+		if (is_array($array))
 		{
-			Error::fatal(basename($filename) . ' is either missing or unreadable');
+			foreach ($array as $key => $value)
+			{
+				if (is_array($value))
+				{
+					if (isset($value[$environment]))
+					{
+						$value = $value[$environment];
+					}
+					else
+					{
+						$value = $this->flatten($environment, $value);
+					}
+				}
+
+				$array[$key] = $value;
+			}
 		}
+		
+		return $array;
 	}
 
 	/**

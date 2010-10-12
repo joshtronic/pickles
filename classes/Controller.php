@@ -37,17 +37,12 @@ class Controller extends Object
 	{
 		parent::__construct();
 
-		// Generate a generic "site down" message
-		if ($this->config->pickles['disabled'])
+		// Generate a generic "site down" message if the site is set to be disabled
+		if (isset($this->config->pickles['disabled']) && $this->config->pickles['disabled'] == true)
 		{
 			throw new Exception($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
 		}
 
-		// Ack, not sure what page to load, throw an error
-		if (!isset($_REQUEST['request']) && (empty($this->config->pickles['default']) || $this->config->pickles['default'] == null))
-		{
-			throw new Exception('Unable complete this request because no URI was provided and there is no default module specified in config.ini');
-		}
 		// Loads the requested module's information
 		if (isset($_REQUEST['request']) && trim($_REQUEST['request']) != '')
 		{
@@ -78,7 +73,9 @@ class Controller extends Object
 		// Loads the default module information (if any)
 		else
 		{
-			list($basename, $module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($this->config->pickles['default']);
+			$default_module = isset($this->config->pickles['module']) ? $this->config->pickles['module'] : 'home';
+
+			list($basename, $module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($default_module);
 		}
 
 		unset($basename);

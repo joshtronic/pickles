@@ -31,7 +31,7 @@ class Object
 	 * @access private
 	 * @var    mixed
 	 */
-	private static $instances = array();
+	protected static $instances = array();
 
 	/**
 	 * Instance of the Config object

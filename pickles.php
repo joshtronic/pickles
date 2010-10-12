@@ -72,35 +72,10 @@ if (ini_get('date.timezone') == '')
 
 // }}}
 
-// {{{ Loads the configuration file(1)
+// {{{ Loads the configuration file and sets any configuration options
 
 // Loads the base config
 $config = Config::getInstance();
-
-// Determines the environment
-if ($config->environment != false && is_array($config->environment))
-{
-	$environment = false;
-
-	// Loops through the environments and tries to match on IP or name
-	foreach ($config->environment as $name => $host)
-	{
-		if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host) && $_SERVER['SERVER_ADDR'] == $host) || $_SERVER['SERVER_NAME'] == $host)
-		{
-			// Tries to load the environment config
-			$environment_config = SITE_PATH . $name . '.ini';
-			if (file_exists($environment_config))
-			{
-				$config->load($environment_config, true);
-			}
-			break;
-		}
-	}
-}
-
-// }}}
-
-// {{{ Sets any configurable options
 
 // Configures any available PHP configuration options
 if (isset($config->php['display_error']))
