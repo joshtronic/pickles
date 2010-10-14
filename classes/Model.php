@@ -49,6 +49,14 @@ class Model extends Object
 	private $input_parameters = array();
 
 	/**
+	 * Datasource
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $datasource;
+
+	/**
 	 * Delayed Insert
 	 *
 	 * @access protected
@@ -166,7 +174,7 @@ class Model extends Object
 		parent::__construct();
 
 		// Gets an instance of the database
-		$this->db = Database::getInstance();
+		$this->db = Database::getInstance($this->datasource != '' ? $this->datasource : null);
 
 		// Builds out the query
 		if ($type_or_parameters != null)

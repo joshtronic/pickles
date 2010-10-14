@@ -58,13 +58,20 @@ class Database extends Object
 		// Checks if we have a default
 		if ($name == null)
 		{
-			if (is_array($config->datasources))
+			// Checks the config for a default
+			if (isset($config->pickles['datasource']))
+			{
+				$name = $config->pickles['datasource'];
+			}
+			// Tries to use the first defined datasource
+			elseif (is_array($config->datasources))
 			{
 				$datasources = $config->datasources;
 				$name        = key($datasources);
 			}
 		}
 
+		// If we have a name try to set up a connection
 		if ($name != null)
 		{
 			if (isset($config->datasources[$name]))
@@ -124,7 +131,7 @@ class Database extends Object
 						{
 							$datasource['type'] = str_replace('sql', 'SQL', ucwords($datasource['type']));
 
-							$class = 'Database_' . $datasource['type'];
+							$class = 'Database_PDO_' . $datasource['type'];
 
 							$instance = new $class();
 						

@@ -18,7 +18,7 @@
 /**
  * MySQL Database Abstraction Layer
  */
-class Database_MySQL extends Database_PDO
+class Database_PDO_MySQL extends Database_PDO_Common
 {
 	/**
 	 * Driver

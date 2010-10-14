@@ -18,7 +18,7 @@
 /**
  * PostgreSQL Database Abstraction Layer
  */
-class Database_PostgreSQL extends Database_PDO
+class Database_PDO_PostgreSQL extends Database_PDO_Common
 {
 	/**
 	 * Driver

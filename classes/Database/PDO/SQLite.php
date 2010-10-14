@@ -18,7 +18,7 @@
 /**
  * SQLite Database Abstraction Layer
  */
-class Database_SQLite extends Database_PDO
+class Database_PDO_SQLite extends Database_PDO_Common
 {
 	/**
 	 * Driver

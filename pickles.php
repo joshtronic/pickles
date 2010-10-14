@@ -146,6 +146,8 @@ function __autoload($class)
  * function, but I opted to use the __ prefix to help avoid a naming collision
  * since namespace support is 5.3+ and PICKLES strives to be 5.0+ compatible.
  *
+ * Keep in mind that fetal errors cannot and will not be handled.
+ * 
  * @param  integer        $number error number
  * @param  string         $string error string (message)
  * @param  string         $file name of the file with the error

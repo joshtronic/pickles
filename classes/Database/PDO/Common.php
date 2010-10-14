@@ -20,7 +20,7 @@
  *
  * Parent class for any of our database classes that use PDO.
  */
-class Database_PDO extends Database_Common 
+class Database_PDO_Common extends Database_Common 
 {
 	/**
 	 * DSN format
