@@ -24,6 +24,14 @@
 abstract class Database_Common extends Object
 {
 	/**
+	 * Driver
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $driver;
+
+	/**
 	 * Hostname for the server
 	 *
 	 * @access protected
@@ -38,6 +46,14 @@ abstract class Database_Common extends Object
 	 * @var    integer
 	 */
 	protected $port = null;
+
+	/**
+	 * UNIX socket for the server
+	 *
+	 * @access protected
+	 * @var    integer
+	 */
+	protected $socket = null;
 
 	/**
 	 * Username for the server
@@ -80,6 +96,27 @@ abstract class Database_Common extends Object
 	protected $results = null;
 
 	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		// Checks the driver is set and available
+		if ($this->driver == null)
+		{
+			throw new Exception('Driver name is not set');
+		}
+		else
+		{
+			if (extension_loaded($this->driver) == false)
+			{
+				throw new Exception('Driver "' . $this->driver . '" is not loaded');
+			}
+		}
+	}
+
+	/**
 	 * Set Hostname
 	 *
 	 * @param string $hostname hostname for the database
@@ -97,6 +134,16 @@ abstract class Database_Common extends Object
 	public function setPort($port)
 	{
 		return $this->port = $port;
+	}
+
+	/**
+	 * Set Socket
+	 *
+	 * @param string $socket name of the UNIX socket
+	 */
+	public function setSocket($socket)
+	{
+		return $this->socket = $socket;
 	}
 
 	/**

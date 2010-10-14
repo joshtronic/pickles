@@ -70,10 +70,13 @@ class Database extends Object
 			if (isset($config->datasources[$name]))
 			{
 				$datasource = $config->datasources[$name];
+				
+				$datasource['type'] = strtolower($datasource['type']);
 
 				switch ($datasource['type'])
 				{
-					case 'Mongo':
+					// MongoDB
+					case 'mongo':
 						// Assembles the server string
 						$server = 'mongodb://';
 
@@ -112,11 +115,15 @@ class Database extends Object
 							throw new Exception('Unable to connect to Mongo database');
 						}
 						break;
-
-					// @todo This is going to end up being all PDO driven
-					case 'MySQL':
+				
+					// PDO Types
+					case 'mysql':
+					case 'postgresql':
+					case 'sqlite':
 						if (!isset(self::$instances['Database'][$name]))
 						{
+							$datasource['type'] = str_replace('sql', 'SQL', ucwords($datasource['type']));
+
 							$class = 'Database_' . $datasource['type'];
 
 							$instance = new $class();
@@ -129,6 +136,11 @@ class Database extends Object
 							if (isset($datasource['port']))
 							{
 								$instance->setPort($datasource['port']);
+							}
+
+							if (isset($datasource['socket']))
+							{
+								$instance->setSocket($datasource['socket']);
 							}
 
 							if (isset($datasource['username']))
