@@ -1,0 +1,28 @@
+# Sets up ETags
+FileETag MTime Size
+
+# Prevent session IDs from appearing 
+php_value session.use_only_cookies 1
+php_value session.use_trans_sid 0
+
+# Sets up the mod_rewrite engine
+RewriteEngine on
+RewriteBase /
+
+# Strips the trailing slash
+RewriteRule ^(.+)/$ $1 [R]
+
+# Makes sure to skip rewriting actual files and directories
+RewriteCond %{REQUEST_FILENAME} -f [NC,OR]
+RewriteCond %{REQUEST_FILENAME} -d [NC]
+RewriteRule .* - [L]
+
+# One rewrite to rule them all
+RewriteRule ^(.+)$ index.php?request=$1 [NC,QSA]
+
+# Blocks access to .htaccess
+<Files .htaccess>
+    order allow,deny
+    deny from all
+</Files>
+
