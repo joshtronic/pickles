@@ -5,14 +5,14 @@
  *
  * PHP version 5
  *
- * Licensed under the GNU General Public License Version 3
+ * Licensed under The MIT License 
  * Redistribution of these files must retain the above copyright notice.
  *
- * @package   PICKLES
- * @author    Josh Sherman <josh@phpwithpickles.org>
+ * @author    Josh Sherman <josh@gravityblvd.com>
  * @copyright Copyright 2007-2010, Gravity Boulevard, LLC
- * @license   http://www.gnu.org/licenses/gpl.html GPL v3
- * @link      http://phpwithpickles.org
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
  */
 
 /**
