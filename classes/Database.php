@@ -78,9 +78,9 @@ class Database extends Object
 			{
 				$datasource = $config->datasources[$name];
 				
-				$datasource['type'] = strtolower($datasource['type']);
+				$datasource['driver'] = strtolower($datasource['driver']);
 
-				switch ($datasource['type'])
+				switch ($datasource['driver'])
 				{
 					// MongoDB
 					case 'mongo':
@@ -124,14 +124,19 @@ class Database extends Object
 						break;
 				
 					// PDO Types
-					case 'mysql':
-					case 'postgresql':
-					case 'sqlite':
+					case 'pdo_mysql':
+					case 'pdo_pgsql':
+					case 'pdo_sqlite':
 						if (!isset(self::$instances['Database'][$name]))
 						{
-							$datasource['type'] = str_replace('sql', 'SQL', ucwords($datasource['type']));
+							switch ($datasource['driver'])
+							{
+								case 'pdo_mysql':  $class = 'PDO_MySQL';      break;
+								case 'pdo_pgsql':  $class = 'PDO_PostgreSQL'; break;
+								case 'pdo_sqlite': $class = 'PDO_SQLite';     break;
+							}
 
-							$class = 'Database_PDO_' . $datasource['type'];
+							$class = 'Database_' . $class;
 
 							$instance = new $class();
 						
@@ -168,7 +173,7 @@ class Database extends Object
 						break;
 					
 					default:
-						throw new Exception('Datasource type "' . $datasource['type'] . '" is invalid');
+						throw new Exception('Datasource driver "' . $datasource['driver'] . '" is invalid');
 						break;
 				}
 
