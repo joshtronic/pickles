@@ -16,8 +16,7 @@
 	<div class="info-box-title">Description</div>
 	<div class="nav-bar">
 					<span class="disabled">Description</span> |
-							<a href="#sec-descendents">Descendents</a>
-			|											<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+													<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
 						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
 						
 					</div>
@@ -37,31 +36,6 @@
 			</div>
 </div>
 
-	<a name="sec-descendents"></a>
-	<div class="info-box">
-		<div class="info-box-title">Direct descendents</div>
-		<div class="nav-bar">
-			<a href="#sec-description">Description</a> |
-			<span class="disabled">Descendents</span>
-			|												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
-								|															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
-							
-								</div>
-		<div class="info-box-body">
-			<table cellpadding="2" cellspacing="0" class="class-table">
-				<tr>
-					<th class="class-table-header">Class</th>
-					<th class="class-table-header">Description</th>
-				</tr>
-								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Post.html">Post</a></td>
-					<td>
-											Post Model
-										</td>
-				</tr>
-							</table>
-		</div>
-	</div>
 
 
 	<a name="sec-var-summary"></a>
@@ -69,7 +43,6 @@
 		<div class="info-box-title">Variable Summary</span></div>
 		<div class="nav-bar">
 			<a href="#sec-description">Description</a> |
-							<a href="#sec-descendents">Descendents</a> |
 						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
 							| 
 									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
@@ -77,17 +50,33 @@
 								</div>
 		<div class="info-box-body">
 			<div class="var-summary">
-																																																																																																<div class="var-title">
-					<span class="var-type">integer</span>
-					<a href="#$count" title="details" class="var-name">$count</a>
+																																																																																																																																<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$conditions" title="details" class="var-name">$conditions</a>
 				</div>
 																<div class="var-title">
-					<span class="var-type">array</span>
-					<a href="#$data" title="details" class="var-name">$data</a>
+					<span class="var-type">string</span>
+					<a href="#$datasource" title="details" class="var-name">$datasource</a>
 				</div>
 																<div class="var-title">
-					<span class="var-type">object</span>
-					<a href="#$db" title="details" class="var-name">$db</a>
+					<span class="var-type">boolean</span>
+					<a href="#$delayed" title="details" class="var-name">$delayed</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$fields" title="details" class="var-name">$fields</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$group" title="details" class="var-name">$group</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$having" title="details" class="var-name">$having</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$joins" title="details" class="var-name">$joins</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">mixed</span>
@@ -95,7 +84,11 @@
 				</div>
 																<div class="var-title">
 					<span class="var-type">mixed</span>
-					<a href="#$order_by" title="details" class="var-name">$order_by</a>
+					<a href="#$offset" title="details" class="var-name">$offset</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$order" title="details" class="var-name">$order</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">array</span>
@@ -107,14 +100,10 @@
 				</div>
 																<div class="var-title">
 					<span class="var-type">array</span>
-					<a href="#$reserved" title="details" class="var-name">$reserved</a>
+					<a href="#$results" title="details" class="var-name">$results</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">mixed</span>
-					<a href="#$select" title="details" class="var-name">$select</a>
-				</div>
-																<div class="var-title">
-					<span class="var-type">string</span>
 					<a href="#$table" title="details" class="var-name">$table</a>
 				</div>
 											</div>
@@ -126,7 +115,6 @@
 		<div class="info-box-title">Method Summary</span></div>
 		<div class="nav-bar">
 			<a href="#sec-description">Description</a> |
-							<a href="#sec-descendents">Descendents</a> |
 																		<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
 				 
 				|
@@ -134,11 +122,11 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																																																																																												
+																																																																												
 												<div class="method-definition">
 											<span class="method-result">Model</span>
 										<a href="#__construct" title="details" class="method-name">__construct</a>
-											([<span class="var-type">mixed</span>&nbsp;<span class="var-name">$conditions</span> = <span class="var-default">null</span>])
+											([<span class="var-type">mixed</span>&nbsp;<span class="var-name">$type_or_parameters</span> = <span class="var-default">null</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$parameters</span> = <span class="var-default">null</span>])
 									</div>
 																<div class="method-definition">
 											<span class="method-result">boolean</span>
@@ -146,8 +134,8 @@
 										()
 									</div>
 																<div class="method-definition">
-											<span class="method-result">boolean</span>
-										<a href="#commitRecord" title="details" class="method-name">commitRecord</a>
+											<span class="method-result">void</span>
+										<a href="#count" title="details" class="method-name">count</a>
 										()
 									</div>
 																<div class="method-definition">
@@ -180,16 +168,6 @@
 										<a href="#unescape" title="details" class="method-name">unescape</a>
 											(<span class="var-type">string</span>&nbsp;<span class="var-name">$value</span>)
 									</div>
-																<div class="method-definition">
-											<span class="method-result">mixed</span>
-										<a href="#__get" title="details" class="method-name">__get</a>
-											(<span class="var-type">string</span>&nbsp;<span class="var-name">$variable</span>)
-									</div>
-																<div class="method-definition">
-											<span class="method-result">void</span>
-										<a href="#__set" title="details" class="method-name">__set</a>
-											(<span class="var-type">string</span>&nbsp;<span class="var-name">$variable</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$value</span>)
-									</div>
 								</div>
 		</div>
 	</div>		
@@ -199,7 +177,6 @@
 		<div class="info-box-title">Variables</div>
 		<div class="nav-bar">
 			<a href="#sec-description">Description</a> |
-							<a href="#sec-descendents">Descendents</a> |
 										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
 						
 			
@@ -208,19 +185,19 @@
 							
 					</div>
 		<div class="info-box-body">
-			<a name="var$count" id="$count"><!-- --></A>
+			<a name="var$conditions" id="$conditions"><!-- --></A>
 <div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
-			<span class="var-type">integer</span>
-			<span class="var-name">$count</span>
-			 = <span class="var-default"> 0</span>			(line <span class="line-number">105</span>)
+			<span class="var-type">mixed</span>
+			<span class="var-name">$conditions</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">97</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Record Count</p>
+<p class="short-description">Conditions</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> protected</li>
 			</ul>
@@ -230,19 +207,19 @@
 		
 
 </div>
-<a name="var$data" id="$data"><!-- --></A>
+<a name="var$datasource" id="$datasource"><!-- --></A>
 <div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
-			<span class="var-type">array</span>
-			<span class="var-name">$data</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">81</span>)
+			<span class="var-type">string</span>
+			<span class="var-name">$datasource</span>
+						(line <span class="line-number">57</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Data</p>
+<p class="short-description">Datasource</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> protected</li>
 			</ul>
@@ -252,19 +229,107 @@
 		
 
 </div>
-<a name="var$db" id="$db"><!-- --></A>
+<a name="var$delayed" id="$delayed"><!-- --></A>
 <div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
-			<span class="var-type">object</span>
-			<span class="var-name">$db</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">33</span>)
+			<span class="var-type">boolean</span>
+			<span class="var-name">$delayed</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">65</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Database</p>
+<p class="short-description">Delayed Insert</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$fields" id="$fields"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$fields</span>
+			 = <span class="var-default"> '*'</span>			(line <span class="line-number">73</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Field List</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$group" id="$group"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$group</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">105</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Group</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$having" id="$having"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$having</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">113</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Having</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$joins" id="$joins"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$joins</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">89</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Joins</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> protected</li>
 			</ul>
@@ -281,14 +346,13 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$limit</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">73</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">129</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Limit Results</p>
+<p class="short-description">Limit</p>
 	<ul class="tags">
-				<li><span class="field">var:</span> integer, string or array</li>
 				<li><span class="field">access:</span> protected</li>
 			</ul>
 	
@@ -297,52 +361,66 @@
 		
 
 </div>
-<a name="var$order_by" id="$order_by"><!-- --></A>
+<a name="var$offset" id="$offset"><!-- --></A>
 <div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
-			<span class="var-name">$order_by</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">65</span>)
+			<span class="var-name">$offset</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">137</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Order By Clause</p>
+<p class="short-description">Offset</p>
 	<ul class="tags">
-				<li><span class="field">var:</span> string, array</li>
+				<li><span class="field">var:</span> (string or array)</li>
 				<li><span class="field">access:</span> protected</li>
 			</ul>
 	
 	
 		
-			<hr class="separator" />
-		<div class="notes">Redefined in descendants as:</div>
-		<ul class="redefinitions">
-					<li>
-				<a href="../PICKLES/Post.html#var$order_by">Post::$order_by</a>
-								: Columns to Order By
-							</li>
-				</ul>
+		
+
+</div>
+<a name="var$order" id="$order"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$order</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">121</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Order</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
 		
 
 </div>
 <a name="var$record" id="$record"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$record</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">89</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">152</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Record Array</p>
+<p class="short-description">Record</p>
 	<ul class="tags">
-				<li><span class="field">access:</span> protected</li>
+				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	
@@ -351,42 +429,20 @@
 
 </div>
 <a name="var$records" id="$records"><!-- --></A>
-<div class="evenrow">
-
-	<div class="var-header">
-		<span class="var-title">
-			<span class="var-type">array</span>
-			<span class="var-name">$records</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">97</span>)
-		</span>
-	</div>
-
-	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Records Array</p>
-	<ul class="tags">
-				<li><span class="field">access:</span> protected</li>
-			</ul>
-	
-	
-		
-		
-
-</div>
-<a name="var$reserved" id="$reserved"><!-- --></A>
 <div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array</span>
-			<span class="var-name">$reserved</span>
-			 = <span class="var-default">array('SELECT', 'TABLE', 'ORDER BY', 'LIMIT')</span>			(line <span class="line-number">41</span>)
+			<span class="var-name">$records</span>
+			 = <span class="var-default"> null</span>			(line <span class="line-number">159</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Reserved Variables</p>
+<p class="short-description">Records</p>
 	<ul class="tags">
-				<li><span class="field">access:</span> protected</li>
+				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	
@@ -394,21 +450,20 @@
 		
 
 </div>
-<a name="var$select" id="$select"><!-- --></A>
+<a name="var$results" id="$results"><!-- --></A>
 <div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
-			<span class="var-type">mixed</span>
-			<span class="var-name">$select</span>
-			 = <span class="var-default"> '*'</span>			(line <span class="line-number">57</span>)
+			<span class="var-type">array</span>
+			<span class="var-name">$results</span>
+			 = <span class="var-default"> null</span>			(line <span class="line-number">145</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Select [Column] List</p>
+<p class="short-description">Query Results</p>
 	<ul class="tags">
-				<li><span class="field">var:</span> string, array</li>
 				<li><span class="field">access:</span> protected</li>
 			</ul>
 	
@@ -422,9 +477,9 @@
 
 	<div class="var-header">
 		<span class="var-title">
-			<span class="var-type">string</span>
+			<span class="var-type">mixed</span>
 			<span class="var-name">$table</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">49</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">81</span>)
 		</span>
 	</div>
 
@@ -436,14 +491,6 @@
 	
 	
 		
-			<hr class="separator" />
-		<div class="notes">Redefined in descendants as:</div>
-		<ul class="redefinitions">
-					<li>
-				<a href="../PICKLES/Post.html#var$table">Post::$table</a>
-								: Table Name
-							</li>
-				</ul>
 		
 
 </div>
@@ -453,6 +500,9 @@
 					<blockquote>
 													<span class="var-title">
 								<span class="var-name"><a href="../PICKLES/Object.html#var$config">Object::$config</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Object.html#var$instances">Object::$instances</a></span><br>
 							</span>
 											</blockquote> 
 										
@@ -464,7 +514,6 @@
 		<div class="info-box-title">Methods</div>
 		<div class="nav-bar">
 			<a href="#sec-description">Description</a> |
-							<a href="#sec-descendents">Descendents</a> |
 															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
 																	<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
 						
@@ -476,12 +525,12 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">116</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">171</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Constructor</p>
-<p class="description"><p>Creates a new (empty) object or creates the record set from the  passed parameters.  The record and records arrays are populated as  well as the count variable.</p></p>
+<p class="description"><p>Creates a new (empty) object or creates the record set from the passed  arguments. The record and records arrays are populated as well as the  count variable.</p></p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -491,13 +540,16 @@
 		<span class="method-name">
 			__construct
 		</span>
-					([<span class="var-type">mixed</span>&nbsp;<span class="var-name">$conditions</span> = <span class="var-default">null</span>])
+					([<span class="var-type">mixed</span>&nbsp;<span class="var-name">$type_or_parameters</span> = <span class="var-default">null</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$parameters</span> = <span class="var-default">null</span>])
 			</div>
 	
 			<ul class="parameters">
 					<li>
 				<span class="var-type">mixed</span>
-				<span class="var-name">$conditions</span><span class="var-description">: optional key/values for the WHERE cause</span>			</li>
+				<span class="var-name">$type_or_parameters</span><span class="var-description">: optional type of query or parameters</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$parameters</span><span class="var-description">: optional data to create a query from</span>			</li>
 				</ul>
 		
 			<hr class="separator" />
@@ -512,15 +564,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">commit</span> (line <span class="line-number">410</span>)
+		<span class="method-title">commit</span> (line <span class="line-number">538</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Commit</p>
-<p class="description"><p>Commits the record to the database. Intelligently does an UPDATE or  INSERT INTO.</p></p>
+<p class="description"><p>Inserts or updates a record in the database.</p></p>
 	<ul class="tags">
 				<li><span class="field">return:</span> results of the query</li>
-				<li><span class="field">deprecated:</span> Deprecated is commitRecord() is even implemented</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -535,26 +586,24 @@
 		
 			
 	</div>
-<a name="methodcommitRecord" id="commitRecord"><!-- --></a>
+<a name="methodcount" id="count"><!-- --></a>
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">commitRecord</span> (line <span class="line-number">303</span>)
+		<span class="method-title">count</span> (line <span class="line-number">486</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Commit Record</p>
-<p class="description"><p>Commits a record to the database. Intelligently does an UPDATE or  INSERT INTO.</p></p>
+<p class="short-description">Count Records</p>
+<p class="description"><p>Counts the records</p></p>
 	<ul class="tags">
-				<li><span class="field">return:</span> results of the query</li>
-				<li><span class="field">todo:</span> This will replace commit() eventually will add commitAll();</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">boolean</span>
+		<span class="method-result">void</span>
 		<span class="method-name">
-			commitRecord
+			count
 		</span>
 				()
 			</div>
@@ -566,7 +615,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">delete</span> (line <span class="line-number">345</span>)
+		<span class="method-title">delete</span> (line <span class="line-number">586</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -592,7 +641,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">first</span> (line <span class="line-number">279</span>)
+		<span class="method-title">first</span> (line <span class="line-number">516</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -617,7 +666,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">last</span> (line <span class="line-number">289</span>)
+		<span class="method-title">last</span> (line <span class="line-number">526</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -642,7 +691,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">next</span> (line <span class="line-number">259</span>)
+		<span class="method-title">next</span> (line <span class="line-number">496</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -667,7 +716,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">prev</span> (line <span class="line-number">269</span>)
+		<span class="method-title">prev</span> (line <span class="line-number">506</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -692,7 +741,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">unescape</span> (line <span class="line-number">454</span>)
+		<span class="method-title">unescape</span> (line <span class="line-number">603</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -719,76 +768,13 @@
 		
 			
 	</div>
-<a name="method__get" id="__get"><!-- --></a>
-<div class="oddrow">
-	
-	<div class="method-header">
-		<span class="method-title">__get</span> (line <span class="line-number">363</span>)
-	</div> 
-	
-	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Magic Getter</p>
-<p class="description"><p>Overrides the built in PHP getter and checks our data variable for  the variable or returns false.  The data array is loaded via the  magic setter.</p></p>
-	<ul class="tags">
-				<li><span class="field">return:</span> requested variable, the entire data array or false</li>
-				<li><span class="field">access:</span> public</li>
-			</ul>
-	
-	<div class="method-signature">
-		<span class="method-result">mixed</span>
-		<span class="method-name">
-			__get
-		</span>
-					(<span class="var-type">string</span>&nbsp;<span class="var-name">$variable</span>)
-			</div>
-	
-			<ul class="parameters">
-					<li>
-				<span class="var-type">string</span>
-				<span class="var-name">$variable</span><span class="var-description">: name of the variable</span>			</li>
-				</ul>
-		
-			
-	</div>
-<a name="method__set" id="__set"><!-- --></a>
-<div class="evenrow">
-	
-	<div class="method-header">
-		<span class="method-title">__set</span> (line <span class="line-number">388</span>)
-	</div> 
-	
-	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Magic Setter</p>
-<p class="description"><p>Overrides the built in PHP setter so that we can assign variables to  our private data array (avoids conflicts with the object variables).</p></p>
-	<ul class="tags">
-				<li><span class="field">access:</span> public</li>
-			</ul>
-	
-	<div class="method-signature">
-		<span class="method-result">void</span>
-		<span class="method-name">
-			__set
-		</span>
-					(<span class="var-type">string</span>&nbsp;<span class="var-name">$variable</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$value</span>)
-			</div>
-	
-			<ul class="parameters">
-					<li>
-				<span class="var-type">string</span>
-				<span class="var-name">$variable</span><span class="var-description">: name of the variable</span>			</li>
-					<li>
-				<span class="var-type">mixed</span>
-				<span class="var-name">$value</span><span class="var-description">: value for the variable</span>			</li>
-				</ul>
-		
-			
-	</div>
 							<h4>Inherited Methods</h4>
 				<a name='inherited_methods'><!-- --></a>	
 									<!-- =========== Summary =========== -->
 					<p>Inherited From <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
 					<blockquote>
 													<span class="method-name"><a href="../PICKLES/Object.html#method__construct">Object::__construct()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Object.html#methodgetInstance">Object::getInstance()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Object.html#method__destruct">Object::__destruct()</a></span><br>
 											</blockquote>
 										
@@ -797,7 +783,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Fri, 01 Oct 2010 23:27:51 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Thu, 14 Oct 2010 20:15:17 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class Database_PDO_Common</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Class Database_PDO_Common</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+							<a href="#sec-descendents">Descendents</a>
+			|											<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">PDO Abstraction Layer</p>
+<p class="description"><p>Parent class for any of our database classes that use PDO.</p></p>
+		<p class="notes">
+			Located in <a class="field" href="_classes---Database---PDO---Common.php.html">/classes/Database/PDO/Common.php</a> (line <span class="field">23</span>)
+		</p>
+		
+				
+		<pre><a href="../PICKLES/Object.html">Object</a>
+   |
+   --<a href="../PICKLES/Database_Common.html">Database_Common</a>
+      |
+      --Database_PDO_Common</pre>
+	
+			</div>
+</div>
+
+	<a name="sec-descendents"></a>
+	<div class="info-box">
+		<div class="info-box-title">Direct descendents</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+			<span class="disabled">Descendents</span>
+			|												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+								|															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<table cellpadding="2" cellspacing="0" class="class-table">
+				<tr>
+					<th class="class-table-header">Class</th>
+					<th class="class-table-header">Description</th>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Database_PDO_MySQL.html">Database_PDO_MySQL</a></td>
+					<td>
+											MySQL Database Abstraction Layer
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Database_PDO_SQLite.html">Database_PDO_SQLite</a></td>
+					<td>
+											SQLite Database Abstraction Layer
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Database_PDO_PostgreSQL.html">Database_PDO_PostgreSQL</a></td>
+					<td>
+											PostgreSQL Database Abstraction Layer
+										</td>
+				</tr>
+							</table>
+		</div>
+	</div>
+
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendents</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+																																<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$attributes" title="details" class="var-name">$attributes</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$dsn" title="details" class="var-name">$dsn</a>
+				</div>
+											</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendents</a> |
+																		<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																																												
+												<div class="method-definition">
+											<span class="method-result">Database_PDO_Common</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">boolean</span>
+										<a href="#close" title="details" class="method-name">close</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">integer</span>
+										<a href="#execute" title="details" class="method-name">execute</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$sql</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$input_parameters</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result">mixed</span>
+										<a href="#fetch" title="details" class="method-name">fetch</a>
+											([<span class="var-type">string</span>&nbsp;<span class="var-name">$sql</span> = <span class="var-default">null</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$input_parameters</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$return_type</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result">array</span>
+										<a href="#fetchAll" title="details" class="method-name">fetchAll</a>
+											([<span class="var-type">string</span>&nbsp;<span class="var-name">$sql</span> = <span class="var-default">null</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$input_parameters</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result">string</span>
+										<a href="#fetchColumn" title="details" class="method-name">fetchColumn</a>
+											([<span class="var-type">string</span>&nbsp;<span class="var-name">$sql</span> = <span class="var-default">null</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$input_parameters</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result">boolean</span>
+										<a href="#open" title="details" class="method-name">open</a>
+										()
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendents</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="var$attributes" id="$attributes"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$attributes</span>
+			 = <span class="var-default">array(<br />		PDO::ATTR_PERSISTENT   =&gt; true,<br />		PDO::ATTR_ERRMODE      =&gt; PDO::ERRMODE_EXCEPTION,<br />		PDO::NULL_EMPTY_STRING =&gt; true<br />	)</span>			(line <span class="line-number">39</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">PDO Attributes</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$dsn" id="$dsn"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$dsn</span>
+						(line <span class="line-number">31</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">DSN format</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../PICKLES/Database_PDO_MySQL.html#var$dsn">Database_PDO_MySQL::$dsn</a>
+								: DSN format
+							</li>
+					<li>
+				<a href="../PICKLES/Database_PDO_SQLite.html#var$dsn">Database_PDO_SQLite::$dsn</a>
+								: DSN format
+							</li>
+					<li>
+				<a href="../PICKLES/Database_PDO_PostgreSQL.html#var$dsn">Database_PDO_PostgreSQL::$dsn</a>
+								: DSN format
+							</li>
+				</ul>
+		
+
+</div>
+							<h4>Inherited Variables</h4>
+				<A NAME='inherited_vars'><!-- --></A>
+									<p>Inherited from <span class="classname"><a href="../PICKLES/Database_Common.html">Database_Common</a></span></p>
+					<blockquote>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Database_Common.html#var$connection">Database_Common::$connection</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Database_Common.html#var$database">Database_Common::$database</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Database_Common.html#var$driver">Database_Common::$driver</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Database_Common.html#var$hostname">Database_Common::$hostname</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Database_Common.html#var$password">Database_Common::$password</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Database_Common.html#var$port">Database_Common::$port</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Database_Common.html#var$results">Database_Common::$results</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Database_Common.html#var$socket">Database_Common::$socket</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Database_Common.html#var$username">Database_Common::$username</a></span><br>
+							</span>
+											</blockquote> 
+									<p>Inherited from <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
+					<blockquote>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Object.html#var$config">Object::$config</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Object.html#var$instances">Object::$instances</a></span><br>
+							</span>
+											</blockquote> 
+										
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendents</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+																	<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">48</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Constructor</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">Database_PDO_Common</span>
+		<span class="method-name">
+			__construct
+		</span>
+				()
+			</div>
+	
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../PICKLES/Database_Common.html#method__construct">Database_Common::__construct()</a></dt>
+						<dd>Constructor</dd>
+					</dl>
+			
+	</div>
+<a name="methodclose" id="close"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">close</span> (line <span class="line-number">107</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Closes database connection</p>
+<p class="description"><p>Sets the connection to null regardless of state.</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> always true</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			close
+		</span>
+				()
+			</div>
+	
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../PICKLES/Database_Common.html#methodclose">Database_Common::close()</a></dt>
+						<dd>Closes database connection</dd>
+					</dl>
+			
+	</div>
+<a name="methodexecute" id="execute"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">execute</span> (line <span class="line-number">124</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Executes an SQL Statement</p>
+<p class="description"><p>Executes a standard or prepared query based on passed parameters. All  queries are logged to a file as well as timed and logged in the  execution time is over 1 second.</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> ID of the last inserted row or sequence number</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">integer</span>
+		<span class="method-name">
+			execute
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$sql</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$input_parameters</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$sql</span><span class="var-description">: statement to execute</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$input_parameters</span><span class="var-description">: optional key/values to be bound</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodfetch" id="fetch"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">fetch</span> (line <span class="line-number">206</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Fetch a single row from the database</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> based on return type</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixed</span>
+		<span class="method-name">
+			fetch
+		</span>
+					([<span class="var-type">string</span>&nbsp;<span class="var-name">$sql</span> = <span class="var-default">null</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$input_parameters</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$return_type</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$sql</span><span class="var-description">: statement to be executed</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$input_parameters</span><span class="var-description">: optional key/values to be bound</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$return_type</span><span class="var-description">: optional type of return set</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodfetchAll" id="fetchAll"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">fetchAll</span> (line <span class="line-number">255</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Fetches all rows as an array</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			fetchAll
+		</span>
+					([<span class="var-type">string</span>&nbsp;<span class="var-name">$sql</span> = <span class="var-default">null</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$input_parameters</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$sql</span><span class="var-description">: statement to be executed</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$input_parameters</span><span class="var-description">: optional key/values to be bound</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodfetchColumn" id="fetchColumn"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">fetchColumn</span> (line <span class="line-number">243</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Fetch a single column from the database</p>
+<p class="description"><p>This method assumes you want the first column in your select. If you  need 2 or more columns you should simply use fetch().</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			fetchColumn
+		</span>
+					([<span class="var-type">string</span>&nbsp;<span class="var-name">$sql</span> = <span class="var-default">null</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$input_parameters</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$sql</span><span class="var-description">: statement to be executed</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$input_parameters</span><span class="var-description">: optional key/values to be bound</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodopen" id="open"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">open</span> (line <span class="line-number">67</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Opens database connection</p>
+<p class="description"><p>Establishes a connection to the database based on the set configuration  options.</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> true on success, throws an exception overwise</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			open
+		</span>
+				()
+			</div>
+	
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../PICKLES/Database_Common.html#methodopen">Database_Common::open()</a></dt>
+						<dd>Opens database connection</dd>
+					</dl>
+			
+	</div>
+							<h4>Inherited Methods</h4>
+				<a name='inherited_methods'><!-- --></a>	
+									<!-- =========== Summary =========== -->
+					<p>Inherited From <span class="classname"><a href="../PICKLES/Database_Common.html">Database_Common</a></span></p>
+					<blockquote>
+													<span class="method-name"><a href="../PICKLES/Database_Common.html#method__construct">Database_Common::__construct()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodclose">Database_Common::close()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodopen">Database_Common::open()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodsetDatabase">Database_Common::setDatabase()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodsetHostname">Database_Common::setHostname()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodsetPassword">Database_Common::setPassword()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodsetPort">Database_Common::setPort()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodsetSocket">Database_Common::setSocket()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodsetUsername">Database_Common::setUsername()</a></span><br>
+											</blockquote>
+									<!-- =========== Summary =========== -->
+					<p>Inherited From <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
+					<blockquote>
+													<span class="method-name"><a href="../PICKLES/Object.html#method__construct">Object::__construct()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Object.html#methodgetInstance">Object::getInstance()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Object.html#method__destruct">Object::__destruct()</a></span><br>
+											</blockquote>
+										
+		</div>
+	</div>
+
+
+	<p class="notes" id="credit">
+		Documentation generated on Thu, 14 Oct 2010 20:15:16 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

@@ -49,18 +49,18 @@
 	</div>
 	<dl>
 			<dt class="field">
-						<span class="var-title">$access</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Module.html#var$access">Module::$access</a> in Module.php</div>
-							<div class="index-item-description">Access level of the page</div>
-					</dd>
-			<dt class="field">
 						<span class="var-title">$ajax</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Module.html#var$ajax">Module::$ajax</a> in Module.php</div>
 							<div class="index-item-description">AJAX</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$attributes</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#var$attributes">Database_PDO_Common::$attributes</a> in Common.php</div>
+							<div class="index-item-description">PDO Attributes</div>
 					</dd>
 		</dl>
 	<a name="c"></a>
@@ -78,6 +78,13 @@
 							<div class="index-item-description">Child (sub) Template</div>
 					</dd>
 			<dt class="field">
+						<span class="var-title">$conditions</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Model.html#var$conditions">Model::$conditions</a> in Model.php</div>
+							<div class="index-item-description">Conditions</div>
+					</dd>
+			<dt class="field">
 						<span class="var-title">$config</span>
 					</dt>
 		<dd class="index-item-body">
@@ -85,11 +92,11 @@
 							<div class="index-item-description">Instance of the Config object</div>
 					</dd>
 			<dt class="field">
-						<span class="var-title">$count</span>
+						<span class="var-title">$connection</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#var$count">Model::$count</a> in Model.php</div>
-							<div class="index-item-description">Record Count</div>
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#var$connection">Database_Common::$connection</a> in Common.php</div>
+							<div class="index-item-description">Connection resource</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$css_class</span>
@@ -114,13 +121,39 @@
 						<span class="include-title">Common.php</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/_classes---Database---Common.php.html">Common.php</a> in Common.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">Common.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/_classes---Database---PDO---Common.php.html">Common.php</a> in Common.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">Common.php</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/_classes---Display---Common.php.html">Common.php</a> in Common.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">clearLevel</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Security.html#methodclearLevel">Security::clearLevel()</a> in Security.php</div>
+							<div class="index-item-description">Clear Level</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">close</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database.html#methodclose">Database::close()</a> in Database.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#methodclose">Database_Common::close()</a> in Common.php</div>
+							<div class="index-item-description">Closes database connection</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">close</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#methodclose">Database_PDO_Common::close()</a> in Common.php</div>
 							<div class="index-item-description">Closes database connection</div>
 					</dd>
 			<dt class="field">
@@ -129,13 +162,6 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Model.html#methodcommit">Model::commit()</a> in Model.php</div>
 							<div class="index-item-description">Commit</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">commitRecord</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#methodcommitRecord">Model::commitRecord()</a> in Model.php</div>
-							<div class="index-item-description">Commit Record</div>
 					</dd>
 			<dt class="field">
 						Config
@@ -151,6 +177,13 @@
 			<div class="index-item-details"><a href="PICKLES/Controller.html">Controller</a> in Controller.php</div>
 							<div class="index-item-description">Controller Class</div>
 					</dd>
+			<dt class="field">
+						<span class="method-title">count</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Model.html#methodcount">Model::count()</a> in Model.php</div>
+							<div class="index-item-description">Count Records</div>
+					</dd>
 		</dl>
 	<a name="d"></a>
 	<div class="index-letter-section">
@@ -160,25 +193,32 @@
 	</div>
 	<dl>
 			<dt class="field">
-						<span class="var-title">$data</span>
+						<span class="var-title">$database</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#var$data">Model::$data</a> in Model.php</div>
-							<div class="index-item-description">Data</div>
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#var$database">Database_Common::$database</a> in Common.php</div>
+							<div class="index-item-description">Database name for the server</div>
 					</dd>
 			<dt class="field">
-						<span class="var-title">$db</span>
+						<span class="var-title">$datasource</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#var$db">Model::$db</a> in Model.php</div>
-							<div class="index-item-description">Database</div>
+			<div class="index-item-details"><a href="PICKLES/Model.html#var$datasource">Model::$datasource</a> in Model.php</div>
+							<div class="index-item-description">Datasource</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$db</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Module.html#var$db">Module::$db</a> in Module.php</div>
-							<div class="index-item-description">Database</div>
+							<div class="index-item-description">Database object</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$delayed</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Model.html#var$delayed">Model::$delayed</a> in Model.php</div>
+							<div class="index-item-description">Delayed Insert</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$description</span>
@@ -186,6 +226,62 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Module.html#var$description">Module::$description</a> in Module.php</div>
 							<div class="index-item-description">Meta description</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$driver</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_PostgreSQL.html#var$driver">Database_PDO_PostgreSQL::$driver</a> in PostgreSQL.php</div>
+							<div class="index-item-description">Driver</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$driver</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#var$driver">Database_Common::$driver</a> in Common.php</div>
+							<div class="index-item-description">Driver</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$driver</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_SQLite.html#var$driver">Database_PDO_SQLite::$driver</a> in SQLite.php</div>
+							<div class="index-item-description">Driver</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$driver</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_MySQL.html#var$driver">Database_PDO_MySQL::$driver</a> in MySQL.php</div>
+							<div class="index-item-description">Driver</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$dsn</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#var$dsn">Database_PDO_Common::$dsn</a> in Common.php</div>
+							<div class="index-item-description">DSN format</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$dsn</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_PostgreSQL.html#var$dsn">Database_PDO_PostgreSQL::$dsn</a> in PostgreSQL.php</div>
+							<div class="index-item-description">DSN format</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$dsn</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_SQLite.html#var$dsn">Database_PDO_SQLite::$dsn</a> in SQLite.php</div>
+							<div class="index-item-description">DSN format</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$dsn</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_MySQL.html#var$dsn">Database_PDO_MySQL::$dsn</a> in MySQL.php</div>
+							<div class="index-item-description">DSN format</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">Database.php</span>
@@ -198,7 +294,42 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Database.html">Database</a> in Database.php</div>
-							<div class="index-item-description">Database Abstraction Layer for MySQL</div>
+							<div class="index-item-description">Database Factory</div>
+					</dd>
+			<dt class="field">
+						Database_Common
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html">Database_Common</a> in Common.php</div>
+							<div class="index-item-description">Common Database Abstraction Layer</div>
+					</dd>
+			<dt class="field">
+						Database_PDO_Common
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html">Database_PDO_Common</a> in Common.php</div>
+							<div class="index-item-description">PDO Abstraction Layer</div>
+					</dd>
+			<dt class="field">
+						Database_PDO_MySQL
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_MySQL.html">Database_PDO_MySQL</a> in MySQL.php</div>
+							<div class="index-item-description">MySQL Database Abstraction Layer</div>
+					</dd>
+			<dt class="field">
+						Database_PDO_PostgreSQL
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_PostgreSQL.html">Database_PDO_PostgreSQL</a> in PostgreSQL.php</div>
+							<div class="index-item-description">PostgreSQL Database Abstraction Layer</div>
+					</dd>
+			<dt class="field">
+						Database_PDO_SQLite
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_SQLite.html">Database_PDO_SQLite</a> in SQLite.php</div>
+							<div class="index-item-description">SQLite Database Abstraction Layer</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">dateSelect</span>
@@ -222,12 +353,6 @@
 							<div class="index-item-description">Common Display Class</div>
 					</dd>
 			<dt class="field">
-						<span class="const-title">DISPLAY_JSON</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#defineDISPLAY_JSON">DISPLAY_JSON</a> in pickles.php</div>
-					</dd>
-			<dt class="field">
 						Display_JSON
 					</dt>
 		<dd class="index-item-body">
@@ -235,10 +360,10 @@
 							<div class="index-item-description">JSON Display</div>
 					</dd>
 			<dt class="field">
-						<span class="const-title">DISPLAY_PHP</span>
+						<span class="const-title">DISPLAY_JSON</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#defineDISPLAY_PHP">DISPLAY_PHP</a> in pickles.php</div>
+			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#defineDISPLAY_JSON">DISPLAY_JSON</a> in pickles.php</div>
 					</dd>
 			<dt class="field">
 						Display_PHP
@@ -248,17 +373,23 @@
 							<div class="index-item-description">PHP Display</div>
 					</dd>
 			<dt class="field">
-						Display_RSS
+						<span class="const-title">DISPLAY_PHP</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Display_RSS.html">Display_RSS</a> in RSS.php</div>
-							<div class="index-item-description">RSS Display</div>
+			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#defineDISPLAY_PHP">DISPLAY_PHP</a> in pickles.php</div>
 					</dd>
 			<dt class="field">
 						<span class="const-title">DISPLAY_RSS</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#defineDISPLAY_RSS">DISPLAY_RSS</a> in pickles.php</div>
+					</dd>
+			<dt class="field">
+						Display_RSS
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Display_RSS.html">Display_RSS</a> in RSS.php</div>
+							<div class="index-item-description">RSS Display</div>
 					</dd>
 			<dt class="field">
 						<span class="const-title">DISPLAY_XML</span>
@@ -333,7 +464,7 @@
 						<span class="method-title">execute</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database.html#methodexecute">Database::execute()</a> in Database.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#methodexecute">Database_PDO_Common::execute()</a> in Common.php</div>
 							<div class="index-item-description">Executes an SQL Statement</div>
 					</dd>
 		</dl>
@@ -344,6 +475,13 @@
 		<div style="clear: both"></div>
 	</div>
 	<dl>
+			<dt class="field">
+						<span class="var-title">$fields</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Model.html#var$fields">Model::$fields</a> in Model.php</div>
+							<div class="index-item-description">Field List</div>
+					</dd>
 			<dt class="field">
 						<span class="include-title">Form.php</span>
 					</dt>
@@ -361,21 +499,21 @@
 						<span class="method-title">fetch</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database.html#methodfetch">Database::fetch()</a> in Database.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#methodfetch">Database_PDO_Common::fetch()</a> in Common.php</div>
 							<div class="index-item-description">Fetch a single row from the database</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">fetchAll</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database.html#methodfetchAll">Database::fetchAll()</a> in Database.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#methodfetchAll">Database_PDO_Common::fetchAll()</a> in Common.php</div>
 							<div class="index-item-description">Fetches all rows as an array</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">fetchColumn</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database.html#methodfetchColumn">Database::fetchColumn()</a> in Database.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#methodfetchColumn">Database_PDO_Common::fetchColumn()</a> in Common.php</div>
 							<div class="index-item-description">Fetch a single column from the database</div>
 					</dd>
 			<dt class="field">
@@ -401,11 +539,32 @@
 	</div>
 	<dl>
 			<dt class="field">
+						<span class="var-title">$group</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Model.html#var$group">Model::$group</a> in Model.php</div>
+							<div class="index-item-description">Group</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getInstance</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Object.html#methodgetInstance">Object::getInstance()</a> in Object.php</div>
+							<div class="index-item-description">Get Instance</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getInstance</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Form.html#methodgetInstance">Form::getInstance()</a> in Form.php</div>
+							<div class="index-item-description">Get Instance</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">getInstance</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Database.html#methodgetInstance">Database::getInstance()</a> in Database.php</div>
-							<div class="index-item-description">Get instance of the object</div>
+							<div class="index-item-description">Get instance</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getInstance</span>
@@ -423,6 +582,27 @@
 	</div>
 	<dl>
 			<dt class="field">
+						<span class="var-title">$having</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Model.html#var$having">Model::$having</a> in Model.php</div>
+							<div class="index-item-description">Having</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$hostname</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#var$hostname">Database_Common::$hostname</a> in Common.php</div>
+							<div class="index-item-description">Hostname for the server</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">hasLevel</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Security.html#methodhasLevel">Security::hasLevel()</a> in Security.php</div>
+							<div class="index-item-description">Has Level</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">hiddenInput</span>
 					</dt>
 		<dd class="index-item-body">
@@ -438,6 +618,13 @@
 	</div>
 	<dl>
 			<dt class="field">
+						<span class="var-title">$instances</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Object.html#var$instances">Object::$instances</a> in Object.php</div>
+							<div class="index-item-description">Object Instances</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">information</span>
 					</dt>
 		<dd class="index-item-body">
@@ -451,6 +638,13 @@
 			<div class="index-item-details"><a href="PICKLES/Form.html#methodinput">Form::input()</a> in Form.php</div>
 							<div class="index-item-description">Input</div>
 					</dd>
+			<dt class="field">
+						<span class="method-title">isLevel</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Security.html#methodisLevel">Security::isLevel()</a> in Security.php</div>
+							<div class="index-item-description">Is Level</div>
+					</dd>
 		</dl>
 	<a name="j"></a>
 	<div class="index-letter-section">
@@ -459,6 +653,13 @@
 		<div style="clear: both"></div>
 	</div>
 	<dl>
+			<dt class="field">
+						<span class="var-title">$joins</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Model.html#var$joins">Model::$joins</a> in Model.php</div>
+							<div class="index-item-description">Joins</div>
+					</dd>
 			<dt class="field">
 						<span class="var-title">$js_basename</span>
 					</dt>
@@ -506,7 +707,7 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Model.html#var$limit">Model::$limit</a> in Model.php</div>
-							<div class="index-item-description">Limit Results</div>
+							<div class="index-item-description">Limit</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">Log.php</span>
@@ -564,11 +765,24 @@
 	</div>
 	<dl>
 			<dt class="field">
+						<span class="var-title">$meta_data</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Display_Common.html#var$meta_data">Display_Common::$meta_data</a> in Common.php</div>
+							<div class="index-item-description">Meta Data</div>
+					</dd>
+			<dt class="field">
 						<span class="var-title">$module_return</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Display_Common.html#var$module_return">Display_Common::$module_return</a> in Common.php</div>
 							<div class="index-item-description">Module Return Data</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">MySQL.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/_classes---Database---PDO---MySQL.php.html">MySQL.php</a> in MySQL.php</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">Model.php</span>
@@ -620,18 +834,18 @@
 	</div>
 	<dl>
 			<dt class="field">
-						<span class="var-title">$order_by</span>
+						<span class="var-title">$offset</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Post.html#var$order_by">Post::$order_by</a> in Post.php</div>
-							<div class="index-item-description">Columns to Order By</div>
+			<div class="index-item-details"><a href="PICKLES/Model.html#var$offset">Model::$offset</a> in Model.php</div>
+							<div class="index-item-description">Offset</div>
 					</dd>
 			<dt class="field">
-						<span class="var-title">$order_by</span>
+						<span class="var-title">$order</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#var$order_by">Model::$order_by</a> in Model.php</div>
-							<div class="index-item-description">Order By Clause</div>
+			<div class="index-item-details"><a href="PICKLES/Model.html#var$order">Model::$order</a> in Model.php</div>
+							<div class="index-item-description">Order</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">Object.php</span>
@@ -650,7 +864,14 @@
 						<span class="method-title">open</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database.html#methodopen">Database::open()</a> in Database.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#methodopen">Database_Common::open()</a> in Common.php</div>
+							<div class="index-item-description">Opens database connection</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">open</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#methodopen">Database_PDO_Common::open()</a> in Common.php</div>
 							<div class="index-item-description">Opens database connection</div>
 					</dd>
 			<dt class="field">
@@ -674,6 +895,40 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Display_Common.html#var$parent_template">Display_Common::$parent_template</a> in Common.php</div>
 							<div class="index-item-description">Parent Template</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$password</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#var$password">Database_Common::$password</a> in Common.php</div>
+							<div class="index-item-description">Password for the server</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$port</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#var$port">Database_Common::$port</a> in Common.php</div>
+							<div class="index-item-description">Port number for the server</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$port</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_PostgreSQL.html#var$port">Database_PDO_PostgreSQL::$port</a> in PostgreSQL.php</div>
+							<div class="index-item-description">Default port</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$port</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_MySQL.html#var$port">Database_PDO_MySQL::$port</a> in MySQL.php</div>
+							<div class="index-item-description">Default port</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">PostgreSQL.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/_classes---Database---PDO---PostgreSQL.php.html">PostgreSQL.php</a> in PostgreSQL.php</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">PHP.php</span>
@@ -733,13 +988,6 @@
 							<div class="index-item-description">Polar Select</div>
 					</dd>
 			<dt class="field">
-						Post
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Post.html">Post</a> in Post.php</div>
-							<div class="index-item-description">Post Model</div>
-					</dd>
-			<dt class="field">
 						<span class="method-title">prepareVariables</span>
 					</dt>
 		<dd class="index-item-body">
@@ -764,12 +1012,6 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Profiler.html">Profiler</a> in Profiler.php</div>
 							<div class="index-item-description">Profiler Class</div>
-					</dd>
-			<dt class="field">
-						<span class="include-title">Post.php</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/_sample-site---models---Post.php.html">Post.php</a> in Post.php</div>
 					</dd>
 		</dl>
 	<a name="q"></a>
@@ -799,14 +1041,14 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Model.html#var$record">Model::$record</a> in Model.php</div>
-							<div class="index-item-description">Record Array</div>
+							<div class="index-item-description">Record</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$records</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Model.html#var$records">Model::$records</a> in Model.php</div>
-							<div class="index-item-description">Records Array</div>
+							<div class="index-item-description">Records</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$request</span>
@@ -816,11 +1058,18 @@
 							<div class="index-item-description">Request Data</div>
 					</dd>
 			<dt class="field">
-						<span class="var-title">$reserved</span>
+						<span class="var-title">$results</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#var$reserved">Model::$reserved</a> in Model.php</div>
-							<div class="index-item-description">Reserved Variables</div>
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#var$results">Database_Common::$results</a> in Common.php</div>
+							<div class="index-item-description">Results object for the executed statement</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$results</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Model.html#var$results">Model::$results</a> in Model.php</div>
+							<div class="index-item-description">Query Results</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">RSS.php</span>
@@ -839,8 +1088,8 @@
 						<span class="method-title">render</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Display_XML.html#methodrender">Display_XML::render()</a> in XML.php</div>
-							<div class="index-item-description">Renders the data in XML format</div>
+			<div class="index-item-details"><a href="PICKLES/Display_JSON.html#methodrender">Display_JSON::render()</a> in JSON.php</div>
+							<div class="index-item-description">Renders the data in JSON format</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">render</span>
@@ -860,8 +1109,8 @@
 						<span class="method-title">render</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Display_JSON.html#methodrender">Display_JSON::render()</a> in JSON.php</div>
-							<div class="index-item-description">Renders the data in JSON format</div>
+			<div class="index-item-details"><a href="PICKLES/Display_XML.html#methodrender">Display_XML::render()</a> in XML.php</div>
+							<div class="index-item-description">Renders the data in XML format</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">report</span>
@@ -886,11 +1135,11 @@
 							<div class="index-item-description">Secure</div>
 					</dd>
 			<dt class="field">
-						<span class="var-title">$select</span>
+						<span class="var-title">$security</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#var$select">Model::$select</a> in Model.php</div>
-							<div class="index-item-description">Select [Column] List</div>
+			<div class="index-item-details"><a href="PICKLES/Module.html#var$security">Module::$security</a> in Module.php</div>
+							<div class="index-item-description">Security settings of the page</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$session</span>
@@ -900,11 +1149,65 @@
 							<div class="index-item-description">Session</div>
 					</dd>
 			<dt class="field">
+						<span class="var-title">$socket</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#var$socket">Database_Common::$socket</a> in Common.php</div>
+							<div class="index-item-description">UNIX socket for the server</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">SQLite.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/_classes---Database---PDO---SQLite.php.html">SQLite.php</a> in SQLite.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">Security.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/_classes---Security.php.html">Security.php</a> in Security.php</div>
+					</dd>
+			<dt class="field">
+						Security
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Security.html">Security</a> in Security.php</div>
+							<div class="index-item-description">Security Class</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">select</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Form.html#methodselect">Form::select()</a> in Form.php</div>
 							<div class="index-item-description">Select</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">setDatabase</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#methodsetDatabase">Database_Common::setDatabase()</a> in Common.php</div>
+							<div class="index-item-description">Set Database</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">setHostname</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#methodsetHostname">Database_Common::setHostname()</a> in Common.php</div>
+							<div class="index-item-description">Set Hostname</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">setLevel</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Security.html#methodsetLevel">Security::setLevel()</a> in Security.php</div>
+							<div class="index-item-description">Set Level</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">setMetaData</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Display_Common.html#methodsetMetaData">Display_Common::setMetaData()</a> in Common.php</div>
+							<div class="index-item-description">Set Meta Data</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">setModuleReturn</span>
@@ -914,6 +1217,20 @@
 							<div class="index-item-description">Set Module Return</div>
 					</dd>
 			<dt class="field">
+						<span class="method-title">setPassword</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#methodsetPassword">Database_Common::setPassword()</a> in Common.php</div>
+							<div class="index-item-description">Set Password</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">setPort</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#methodsetPort">Database_Common::setPort()</a> in Common.php</div>
+							<div class="index-item-description">Set Port</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">setRequest</span>
 					</dt>
 		<dd class="index-item-body">
@@ -921,11 +1238,25 @@
 							<div class="index-item-description">Sets the Request</div>
 					</dd>
 			<dt class="field">
+						<span class="method-title">setSocket</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#methodsetSocket">Database_Common::setSocket()</a> in Common.php</div>
+							<div class="index-item-description">Set Socket</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">setTemplateVariables</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Display_Common.html#methodsetTemplateVariables">Display_Common::setTemplateVariables()</a> in Common.php</div>
 							<div class="index-item-description">Set Template Variables</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">setUsername</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#methodsetUsername">Database_Common::setUsername()</a> in Common.php</div>
+							<div class="index-item-description">Set Username</div>
 					</dd>
 			<dt class="field">
 						<span class="const-title">SITE_CLASS_PATH</span>
@@ -989,13 +1320,6 @@
 						<span class="var-title">$table</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Post.html#var$table">Post::$table</a> in Post.php</div>
-							<div class="index-item-description">Table Name</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$table</span>
-					</dt>
-		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Model.html#var$table">Model::$table</a> in Model.php</div>
 							<div class="index-item-description">Table Name</div>
 					</dd>
@@ -1049,6 +1373,13 @@
 		<div style="clear: both"></div>
 	</div>
 	<dl>
+			<dt class="field">
+						<span class="var-title">$username</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#var$username">Database_Common::$username</a> in Common.php</div>
+							<div class="index-item-description">Username for the server</div>
+					</dd>
 			<dt class="field">
 						<span class="method-title">unescape</span>
 					</dt>
@@ -1111,28 +1442,7 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#method__construct">Model::__construct()</a> in Model.php</div>
-							<div class="index-item-description">Constructor</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Module.html#method__construct">Module::__construct()</a> in Module.php</div>
-							<div class="index-item-description">Constructor</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a> in Common.php</div>
-							<div class="index-item-description">Constructor</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Controller.html#method__construct">Controller::__construct()</a> in Controller.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#method__construct">Database_Common::__construct()</a> in Common.php</div>
 							<div class="index-item-description">Constructor</div>
 					</dd>
 			<dt class="field">
@@ -1146,7 +1456,42 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Controller.html#method__construct">Controller::__construct()</a> in Controller.php</div>
+							<div class="index-item-description">Constructor</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Module.html#method__construct">Module::__construct()</a> in Module.php</div>
+							<div class="index-item-description">Constructor</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Model.html#method__construct">Model::__construct()</a> in Model.php</div>
+							<div class="index-item-description">Constructor</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Config.html#method__construct">Config::__construct()</a> in Config.php</div>
+							<div class="index-item-description">Constructor</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#method__construct">Database_PDO_Common::__construct()</a> in Common.php</div>
+							<div class="index-item-description">Constructor</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a> in Common.php</div>
 							<div class="index-item-description">Constructor</div>
 					</dd>
 			<dt class="field">
@@ -1180,13 +1525,6 @@
 						<span class="method-title">__get</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#method__get">Model::__get()</a> in Model.php</div>
-							<div class="index-item-description">Magic Getter</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__get</span>
-					</dt>
-		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Config.html#method__get">Config::__get()</a> in Config.php</div>
 							<div class="index-item-description">Magic Getter Method</div>
 					</dd>
@@ -1198,18 +1536,18 @@
 							<div class="index-item-description">Error handling function that thinks it's magical</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">__set</span>
+						<span class="method-title">__handleException</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Config.html#method__set">Config::__set()</a> in Config.php</div>
-							<div class="index-item-description">Magic Setter Method</div>
+			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#function__handleException">__handleException()</a> in pickles.php</div>
+							<div class="index-item-description">Exception handling function</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__set</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#method__set">Model::__set()</a> in Model.php</div>
-							<div class="index-item-description">Magic Setter</div>
+			<div class="index-item-details"><a href="PICKLES/Config.html#method__set">Config::__set()</a> in Config.php</div>
+							<div class="index-item-description">Magic Setter Method</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__set</span>

@@ -51,10 +51,6 @@
 		<div class="info-box-body">
 			<div class="var-summary">
 																																																																																																								<div class="var-title">
-					<span class="var-type">boolean,</span>
-					<a href="#$access" title="details" class="var-name">$access</a>
-				</div>
-																<div class="var-title">
 					<span class="var-type">boolean</span>
 					<a href="#$ajax" title="details" class="var-name">$ajax</a>
 				</div>
@@ -81,6 +77,10 @@
 																<div class="var-title">
 					<span class="var-type">boolean,</span>
 					<a href="#$secure" title="details" class="var-name">$secure</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">boolean,</span>
+					<a href="#$security" title="details" class="var-name">$security</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">boolean,</span>
@@ -132,7 +132,7 @@
 											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>)
 									</div>
 																<div class="method-definition">
-											<span class="method-result">boolean</span>
+											<span class="method-result">void</span>
 										<a href="#__set" title="details" class="method-name">__set</a>
 											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$value</span>)
 									</div>
@@ -153,31 +153,8 @@
 							
 					</div>
 		<div class="info-box-body">
-			<a name="var$access" id="$access"><!-- --></A>
+			<a name="var$ajax" id="$ajax"><!-- --></A>
 <div class="oddrow">
-
-	<div class="var-header">
-		<span class="var-title">
-			<span class="var-type">boolean,</span>
-			<span class="var-name">$access</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">68</span>)
-		</span>
-	</div>
-
-	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Access level of the page</p>
-	<ul class="tags">
-				<li><span class="field">var:</span> null by default</li>
-				<li><span class="field">access:</span> protected</li>
-			</ul>
-	
-	
-		
-		
-
-</div>
-<a name="var$ajax" id="$ajax"><!-- --></A>
-<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -202,7 +179,7 @@
 
 </div>
 <a name="var$db" id="$db"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -213,7 +190,7 @@
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Database</p>
+<p class="short-description">Database object</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> protected</li>
 			</ul>
@@ -224,7 +201,7 @@
 
 </div>
 <a name="var$description" id="$description"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -247,7 +224,7 @@
 
 </div>
 <a name="var$engine" id="$engine"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -271,7 +248,7 @@
 
 </div>
 <a name="var$keywords" id="$keywords"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -294,13 +271,13 @@
 
 </div>
 <a name="var$request" id="$request"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array,</span>
 			<span class="var-name">$request</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">137</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">138</span>)
 		</span>
 	</div>
 
@@ -309,6 +286,7 @@
 <p class="description"><p>Modules should not interact with $_REQUEST, $_POST or $_GET directly as  the contents could be unsafe. The Controller cleanses this data and sets  it into this variable for safe access by the module.</p></p>
 	<ul class="tags">
 				<li><span class="field">var:</span> null by default</li>
+				<li><span class="field">todo:</span> Not even sure I want to implement this at this point</li>
 				<li><span class="field">todo:</span> Currently the super globals are not being cleared out</li>
 				<li><span class="field">access:</span> protected</li>
 			</ul>
@@ -319,13 +297,13 @@
 
 </div>
 <a name="var$secure" id="$secure"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">boolean,</span>
 			<span class="var-name">$secure</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">79</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">71</span>)
 		</span>
 	</div>
 
@@ -335,6 +313,29 @@
 	<ul class="tags">
 				<li><span class="field">var:</span> null by default</li>
 				<li><span class="field">todo:</span> Implement this functionality</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$security" id="$security"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">boolean,</span>
+			<span class="var-name">$security</span>
+			 = <span class="var-default"> null</span>			(line <span class="line-number">79</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Security settings of the page</p>
+	<ul class="tags">
+				<li><span class="field">var:</span> null by default</li>
 				<li><span class="field">access:</span> protected</li>
 			</ul>
 	
@@ -421,6 +422,9 @@
 													<span class="var-title">
 								<span class="var-name"><a href="../PICKLES/Object.html#var$config">Object::$config</a></span><br>
 							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Object.html#var$instances">Object::$instances</a></span><br>
+							</span>
 											</blockquote> 
 										
 		</div>
@@ -442,7 +446,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">149</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">150</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -478,7 +482,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">setRequest</span> (line <span class="line-number">222</span>)
+		<span class="method-title">setRequest</span> (line <span class="line-number">221</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -508,7 +512,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">__default</span> (line <span class="line-number">170</span>)
+		<span class="method-title">__default</span> (line <span class="line-number">171</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -533,7 +537,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">__get</span> (line <span class="line-number">199</span>)
+		<span class="method-title">__get</span> (line <span class="line-number">198</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -571,12 +575,11 @@
 <p class="short-description">Magic Setter Method</p>
 <p class="description"><p>Prohibits the direct modification of module variables.</p></p>
 	<ul class="tags">
-				<li><span class="field">return:</span> false</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">boolean</span>
+		<span class="method-result">void</span>
 		<span class="method-name">
 			__set
 		</span>
@@ -600,6 +603,7 @@
 					<p>Inherited From <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
 					<blockquote>
 													<span class="method-name"><a href="../PICKLES/Object.html#method__construct">Object::__construct()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Object.html#methodgetInstance">Object::getInstance()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Object.html#method__destruct">Object::__destruct()</a></span><br>
 											</blockquote>
 										
@@ -608,7 +612,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Fri, 01 Oct 2010 23:27:51 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Thu, 14 Oct 2010 20:15:17 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>
