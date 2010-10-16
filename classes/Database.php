@@ -80,108 +80,64 @@ class Database extends Object
 				
 				$datasource['driver'] = strtolower($datasource['driver']);
 
-				switch ($datasource['driver'])
+				if (!isset(self::$instances['Database'][$name]))
 				{
-					// MongoDB
-					case 'mongo':
-						// Assembles the server string
-						$server = 'mongodb://';
+					// Checks the driver is legit and scrubs the name
+					switch ($datasource['driver'])
+					{
+						case 'mongo':      $class = 'Mongo';          break;
+						case 'pdo_mysql':  $class = 'PDO_MySQL';      break;
+						case 'pdo_pgsql':  $class = 'PDO_PostgreSQL'; break;
+						case 'pdo_sqlite': $class = 'PDO_SQLite';     break;
 
-						if (isset($datasource['username']))
-						{
-							$server .= $datasource['username'];
+						default:
+							throw new Exception('Datasource driver "' . $datasource['driver'] . '" is invalid');
+							break;
+					}
 
-							if (isset($datasource['password']))
-							{
-								$server .= ':' . $datasource['password'];
-							}
-
-							$server .= '@';
-						}
-
-						$server .= $datasource['hostname'] . ':' . $datasource['port'] . '/' . $datasource['database'];
-
-						// Attempts to connect
-						try
-						{
-							$instance = new Mongo($server, array('persist' => 'pickles'));
-
-							// If we have database and collection, attempt to assign them
-							if (isset($datasource['database']))
-							{
-								$instance = $instance->$datasource['database'];
-
-								if (isset($datasource['collection']))
-								{
-									$instance = $instance->$datasource['collection'];
-								}
-							}
-						}
-						catch (Exception $exception)
-						{
-							throw new Exception('Unable to connect to Mongo database');
-						}
-						break;
+					// Instantiates our database class
+					$class    = 'Database_' . $class;
+					$instance = new $class();
 				
-					// PDO Types
-					case 'pdo_mysql':
-					case 'pdo_pgsql':
-					case 'pdo_sqlite':
-						if (!isset(self::$instances['Database'][$name]))
-						{
-							switch ($datasource['driver'])
-							{
-								case 'pdo_mysql':  $class = 'PDO_MySQL';      break;
-								case 'pdo_pgsql':  $class = 'PDO_PostgreSQL'; break;
-								case 'pdo_sqlite': $class = 'PDO_SQLite';     break;
-							}
+					// Sets our database parameters
+					if (isset($datasource['hostname']))
+					{
+						$instance->setHostname($datasource['hostname']);
+					}
 
-							$class = 'Database_' . $class;
+					if (isset($datasource['port']))
+					{
+						$instance->setPort($datasource['port']);
+					}
 
-							$instance = new $class();
-						
-							if (isset($datasource['hostname']))
-							{
-								$instance->setHostname($datasource['hostname']);
-							}
+					if (isset($datasource['socket']))
+					{
+						$instance->setSocket($datasource['socket']);
+					}
 
-							if (isset($datasource['port']))
-							{
-								$instance->setPort($datasource['port']);
-							}
+					if (isset($datasource['username']))
+					{
+						$instance->setUsername($datasource['username']);
+					}
 
-							if (isset($datasource['socket']))
-							{
-								$instance->setSocket($datasource['socket']);
-							}
+					if (isset($datasource['password']))
+					{
+						$instance->setPassword($datasource['password']);
+					}
 
-							if (isset($datasource['username']))
-							{
-								$instance->setUsername($datasource['username']);
-							}
-
-							if (isset($datasource['password']))
-							{
-								$instance->setPassword($datasource['password']);
-							}
-
-							if (isset($datasource['database']))
-							{
-								$instance->setDatabase($datasource['database']);
-							}
-						}
-						break;
-					
-					default:
-						throw new Exception('Datasource driver "' . $datasource['driver'] . '" is invalid');
-						break;
+					if (isset($datasource['database']))
+					{
+						$instance->setDatabase($datasource['database']);
+					}
 				}
 
+				// Caches the instance for possible reuse later
 				if (isset($instance))
 				{
 					self::$instances['Database'][$name] = $instance;
 				}
 
+				// Returns the instance
 				return self::$instances['Database'][$name];
 			}
 		}
