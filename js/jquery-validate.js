@@ -1,0 +1,1 @@
+../vendors/jquery/jquery-validate-1.7.min.js
