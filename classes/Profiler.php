@@ -196,7 +196,7 @@ class Profiler
 			#pickles-profiler
 			{
 				background: #212121;
-				width: 700px;
+				width: 800px;
 				margin: 0 auto;
 				margin-top: 20px;
 				margin-bottom: 20px;
@@ -222,6 +222,10 @@ class Profiler
 			#pickles-profiler .even
 			{
 				background-color: #323232;
+			}
+			#pickles-profiler, #pickles-profiler table tr td, #pickles-profiler table tr th
+			{
+				color: #efefe8;
 			}
 		</style>
 		<div id="pickles-profiler">
