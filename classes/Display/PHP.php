@@ -67,9 +67,9 @@ class Display_PHP extends Display_Common
 		$__css_class = $this->css_class;
 		$__js_file   = $this->js_basename;
 
-		// Creates (possibly overwritten) objects 
-		$form_class    = (isset($this->config->pickles['classes']['Form']) ? $this->config->pickles['classes']['Form'] : 'Form');
-		$dynamic_class = (isset($this->config->pickles['classes']['Dynamic']) ? $this->config->pickles['classes']['Dynamic'] : 'Dynamic');
+		// Creates (possibly overwritten) objects
+		$form_class    = (class_exists('CustomForm')    ? 'CustomForm'    : 'Form');
+		$dynamic_class = (class_exists('CustomDynamic') ? 'CustomDynamic' : 'Dynamic');
 
 		$__form    = new $form_class();
 		$__dynamic = new $dynamic_class();

@@ -27,8 +27,6 @@ $config = array(
 		'module'          => 'home',
 		// Name of the module to serve on 404 errors
 		'404'             => 404,
-		// Internal class overides
-		'classes'         => array('Form' => 'CustomForm'),
 		// Default datasource
 		'datasource'      => 'mysql',
 		// Whether or not you want to use the profiler
