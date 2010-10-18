@@ -28,6 +28,18 @@
 class Controller extends Object
 {
 	/**
+	 * Pass Thru
+	 *
+	 * Whether or not the page being loaded is simple a pass thru for an
+	 * internal PICKLES file. The point of this variable is to suppress the
+	 * profiler report in the destructor.
+	 *
+	 * @access private
+	 * @var    boolean
+	 */
+	private $passthru = false;
+
+	/**
 	 * Constructor
 	 *
 	 * To make life a bit easier when using PICKLES, the Controller logic is
@@ -36,6 +48,19 @@ class Controller extends Object
 	public function __construct()
 	{
 		parent::__construct();
+
+		// Catches requests to PICKLES core files and passes them through
+		if (preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']))
+		{
+			// Checks that the file exists
+			$file = str_replace('__pickles', PICKLES_PATH, $_REQUEST['request']);
+			if (file_exists($file))
+			{
+				// Sets the pass thru flag and dumps the data
+				$this->passthru = true;
+				exit(file_get_contents($file));
+			}
+		}
 
 		// Generate a generic "site down" message if the site is set to be disabled
 		if (isset($this->config->pickles['disabled']) && $this->config->pickles['disabled'] == true)
@@ -222,7 +247,8 @@ class Controller extends Object
 	{
 		parent::__destruct();
 
-		if (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true)
+		// Display the Profiler's report is the stars are aligned
+		if (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true && $this->passthru == false)
 		{
 			Profiler::report();
 		}
