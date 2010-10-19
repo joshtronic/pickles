@@ -79,13 +79,21 @@ class Config extends Object
 					$environments = $config['environments'];
 
 					// Loops through the environments and tries to match on IP or name
-					foreach ($config['environments'] as $name => $host)
+					foreach ($config['environments'] as $name => $hosts)
 					{
-						if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host) && $_SERVER['SERVER_ADDR'] == $host) || $_SERVER['SERVER_NAME'] == $host)
+						if (!is_array($hosts))
 						{
-							// Sets the environment and makes a run for it
-							$environment = $name;
-							break;
+							$hosts = array($hosts);
+						}
+
+						foreach ($hosts as $host)
+						{
+							if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host) && $_SERVER['SERVER_ADDR'] == $host) || $_SERVER['SERVER_NAME'] == $host)
+							{
+								// Sets the environment and makes a run for it
+								$environment = $name;
+								break;
+							}
 						}
 					}
 				}
