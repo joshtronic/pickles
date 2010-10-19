@@ -40,7 +40,7 @@ $config = array(
 	// Datasources, keys are what's referenced in your models
 	'datasources' => array(
 		'mysql' => array(
-			'type'     => 'MySQL',
+			'driver'   => 'pdo_mysql',
 			'hostname' => 'localhost',
 			'username' => 'root',
 			'password' => '',
