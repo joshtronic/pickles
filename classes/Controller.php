@@ -50,7 +50,7 @@ class Controller extends Object
 		parent::__construct();
 
 		// Catches requests to PICKLES core files and passes them through
-		if (preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']))
+		if (isset($_REQUEST['request']) && preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']))
 		{
 			// Checks that the file exists
 			$file = str_replace('__pickles', PICKLES_PATH, $_REQUEST['request']);
