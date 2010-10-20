@@ -209,7 +209,8 @@ class Profiler
 				border: 6px solid #666;
 				padding: 10px 20px 20px;
 				font-family: monospace;
-				font-size: 1em;
+				font-size: 12px;
+				text-align: left;
 			}
 			#pickles-profiler table
 			{
