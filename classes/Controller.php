@@ -49,16 +49,25 @@ class Controller extends Object
 	{
 		parent::__construct();
 
-		// Catches requests to PICKLES core files and passes them through
-		if (isset($_REQUEST['request']) && preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']))
+		if (isset($_REQUEST['request']))
 		{
-			// Checks that the file exists
-			$file = str_replace('__pickles', PICKLES_PATH, $_REQUEST['request']);
-			if (file_exists($file))
+			// Catches requests to PICKLES core files and passes them through
+			if (preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']))
 			{
-				// Sets the pass thru flag and dumps the data
-				$this->passthru = true;
-				exit(file_get_contents($file));
+				// Checks that the file exists
+				$file = str_replace('__pickles', PICKLES_PATH, $_REQUEST['request']);
+				if (file_exists($file))
+				{
+					// Sets the pass thru flag and dumps the data
+					$this->passthru = true;
+					exit(file_get_contents($file));
+				}
+			}
+			// Catches requests to the __shared directory
+			if (preg_match('/^__shared/', $_REQUEST['request']))
+			{
+				header('Location: /');
+				exit;
 			}
 		}
 

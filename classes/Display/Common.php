@@ -120,7 +120,10 @@ abstract class Display_Common extends Object
 		if ($template != null)
 		{
 			$template_name = $type . '_template';
-			$this->$template_name = SITE_TEMPLATE_PATH . $template . ($this->extension != false ? '.' . $this->extension : '');
+			$template_path = SITE_TEMPLATE_PATH . ($type == 'parent' ? '__shared/' : '');
+			$template_file = $template_path . $template . ($this->extension != false ? '.' . $this->extension : '');
+
+			$this->$template_name = $template_file;
 		}
 	}
 
