@@ -213,7 +213,8 @@ class Controller extends Object
 		$meta_data     = null;
 		$module_return = null;
 
-		$profiler = (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true);
+		// Gets the profiler status
+		$profiler = (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] != '' ? $this->config->pickles['profiler'] : false);
 
 		// Attempts to execute the default method
 		if (method_exists($module, '__default'))
@@ -223,17 +224,19 @@ class Controller extends Object
 				$module->setRequest(array('id' => $requested_id));
 			}
 
-			if ($profiler)
-			{
-				Profiler::log($module, '__default');
-			}
-
 			// Sets meta data from the module
 			$display->setMetaData(array(
 				'title'       => $module->title,
 				'description' => $module->description,
 				'keywords'    => $module->keywords
 			));
+
+			// Profiles the module
+			// @todo Update to Profiler::timer('module') when timer is implemented
+			if ($profiler === true || ((is_array($profiler) && in_array('module', $profiler)) || stripos($profiler, 'module') !== false))
+			{
+				Profiler::log($module, '__default');
+			}
 
 			/**
 			 * Note to Self: When building in caching will need to let the
@@ -243,7 +246,9 @@ class Controller extends Object
 			$display->setModuleReturn($module->__default());
 		}
 
-		if ($profiler)
+		// Profiles the display
+		// @todo Update to Profiler::timer('display') when timer is implemented
+		if ($profiler === true || ((is_array($profiler) && in_array('display', $profiler)) || stripos($profiler, 'display') !== false))
 		{
 			Profiler::log($display, 'render');
 		}
@@ -257,7 +262,7 @@ class Controller extends Object
 		parent::__destruct();
 
 		// Display the Profiler's report is the stars are aligned
-		if (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true && $this->passthru == false)
+		if (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] != false && $this->passthru == false)
 		{
 			Profiler::report();
 		}

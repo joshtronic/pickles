@@ -42,12 +42,22 @@ class Object
 	protected $config = null;
 
 	/**
+	 * Profiler flag
+	 *
+	 *
+	 * @access private
+	 * @var    mixed
+	 */
+	private $profiler = false;
+
+	/**
 	 * Constructor
 	 *
 	 * Establishes a Config instance for all children to enjoy
 	 */
 	public function __construct()
 	{
+		// Gets an instance of the config, unless we ARE the config
 		if (get_class($this) == 'Config')
 		{
 			$this->config = true;
@@ -56,9 +66,12 @@ class Object
 		{
 			$this->config = Config::getInstance();
 		}
+	
+		// Assigns the profiler flag
+		$this->profiler = (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] != '' ? $this->config->pickles['profiler'] : false);
 
 		// Optionally logs the constructor to the profiler
-		if ($this->config == true || (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true))
+		if ($this->profiler === true || ((is_array($this->profiler) && in_array('objects', $this->profiler)) || stripos($this->profiler, 'objects') !== false))
 		{
 			Profiler::log($this, '__construct');
 		}
@@ -99,7 +112,7 @@ class Object
 	public function __destruct()
 	{
 		// Optionally logs the destructor to the profiler
-		if ($this->config == true || (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] == true))
+		if ($this->profiler === true || ((is_array($this->profiler) && in_array('objects', $this->profiler)) || stripos($this->profiler, 'objects') !== false))
 		{
 			Profiler::log($this, '__destruct');
 		}

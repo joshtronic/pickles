@@ -114,6 +114,14 @@ class Config extends Object
 				$this->data['environment'] = $environment;
 			}
 
+			// Defaults profiler to true if it doesn't match an option exactly
+			if (isset($this->data['pickles']['profiler'])
+				&& $this->data['pickles']['profiler'] != ''
+				&& !in_array($this->data['pickles']['profiler'], array('objects', 'module', 'queries', 'explains', 'display')))
+			{
+				$this->data['pickles']['profiler'] = true;
+			}
+
 			return true;
 		}
 
