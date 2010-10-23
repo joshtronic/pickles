@@ -214,7 +214,7 @@ class Controller extends Object
 		$module_return = null;
 
 		// Gets the profiler status
-		$profiler = (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] != '' ? $this->config->pickles['profiler'] : false);
+		$profiler = $this->config->pickles['profiler'];
 
 		// Attempts to execute the default method
 		if (method_exists($module, '__default'))
@@ -231,11 +231,10 @@ class Controller extends Object
 				'keywords'    => $module->keywords
 			));
 
-			// Profiles the module
-			// @todo Update to Profiler::timer('module') when timer is implemented
-			if ($profiler === true || ((is_array($profiler) && in_array('module', $profiler)) || stripos($profiler, 'module') !== false))
+			// Starts a timer before the module is executed
+			if ($profiler === true || stripos($profiler, 'timers') !== false)
 			{
-				Profiler::log($module, '__default');
+				Profiler::timer('module __default');
 			}
 
 			/**
@@ -244,17 +243,28 @@ class Controller extends Object
 			 * or setting it on the object
 			 */
 			$display->setModuleReturn($module->__default());
+			
+			// Stops the module timer
+			if ($profiler === true || stripos($profiler, 'timers') !== false)
+			{
+				Profiler::timer('module __default');
+			}
 		}
 
-		// Profiles the display
-		// @todo Update to Profiler::timer('display') when timer is implemented
-		if ($profiler === true || ((is_array($profiler) && in_array('display', $profiler)) || stripos($profiler, 'display') !== false))
+		// Starts a timer for the display rendering
+		if ($profiler === true || stripos($profiler, 'timers') !== false)
 		{
-			Profiler::log($display, 'render');
+			Profiler::timer('display render');
 		}
 
 		// Renders the content
 		$display->render();
+		
+		// Steps the display timer
+		if ($profiler === true || stripos($profiler, 'timers') !== false)
+		{
+			Profiler::timer('display render');
+		}
 	}
 
 	public function __destruct()
@@ -262,7 +272,7 @@ class Controller extends Object
 		parent::__destruct();
 
 		// Display the Profiler's report is the stars are aligned
-		if (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] != false && $this->passthru == false)
+		if ($this->config->pickles['profiler'] != false && $this->passthru == false)
 		{
 			Profiler::report();
 		}

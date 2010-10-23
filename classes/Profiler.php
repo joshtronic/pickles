@@ -34,6 +34,17 @@
 class Profiler
 {
 	/**
+	 * Config
+	 *
+	 * Profiler configuration
+	 *
+	 * @static
+	 * @access private
+	 * @var    array
+	 */
+	private static $config;
+
+	/**
 	 * Profile
 	 *
 	 * Array of logged events
@@ -56,6 +67,17 @@ class Profiler
 	private static $queries = 0;
 
 	/**
+	 * Timers
+	 *
+	 * Array of active timers
+	 *
+	 * @static
+	 * @access private
+	 * @var    array
+	 */
+	private static $timers = array();
+
+	/**
 	 * Constructor
 	 *
 	 * Private constructor since this class is interfaced wtih statically.
@@ -65,6 +87,45 @@ class Profiler
 	private function __construct()
 	{
 
+	}
+	
+	/**
+	 * Enabled
+	 *
+	 * Checks if the profiler is set to boolean true or if the passed type is
+	 * specified in the profiler configuration value.
+	 *
+	 * @param  array $type type(s) to check
+	 * @return boolean whether or not the type is enabled
+	 */
+	public static function enabled(/* polymorphic */)
+	{
+		// Grabs the config object if we don't have one yet
+		if (self::$config == null)
+		{
+			$config       = Config::getInstance();
+			self::$config = $config->pickles['profiler'];
+		}
+		
+		// Checks if we're set to boolean true
+		if (self::$config === true)
+		{
+			return true;
+		}
+		else
+		{
+			$types = func_get_args();
+
+			foreach ($types as $type)
+			{
+				if (stripos(self::$config, $type) !== false)
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	/**
@@ -83,7 +144,7 @@ class Profiler
 	public static function log($data, $method = false, $type = false)
 	{
 		$time      = microtime(true);
-		$data_type = gettype($data);
+		$data_type = ($data == 'timer' ? $data : gettype($data));
 
 		// Tidys the data by type
 		switch ($data_type)
@@ -98,6 +159,12 @@ class Profiler
 					 . ($method != '' ? '<span style="color:#666">-></span><span style="color:#4eed9e">' . $method . '</span><span style="color:#666">()</span>' : '');
 
 				$data_type = '<span style="color:Peru">' . $data_type . '</span>';
+				break;
+
+			case 'timer':
+				$log = $method;
+
+				$data_type = '<span style="color:#6c0">' . $data_type . '</span>';
 				break;
 
 			case 'string':
@@ -168,6 +235,38 @@ class Profiler
 		$log .= '<br /><br /><span style="color:DarkKhaki">Speed:</span> ' . number_format($duration * 100, 3) . ' ms';
 
 		self::log($log, false, '<span style="color:DarkCyan">database</span>');
+	}
+
+	/**
+	 * Timer
+	 *
+	 * Logs the start and end of a timer.
+	 *
+	 * @param  string $timer name of the timer
+	 * @return boolean whether or not timer profiling is enabled
+	 */
+	public static function timer($timer)
+	{
+		if (self::enabled('timers'))
+		{
+			// Starts the timer
+			if (!isset(self::$timers[$timer]))
+			{
+				self::$timers[$timer] = microtime(true);
+				self::Log('timer', '<span style="color:Orchid">Started timer</span> <span style="color:Yellow">' . $timer . '</span>');
+			}
+			// Ends the timer
+			else
+			{
+				self::Log('timer', '<span style="color:Orchid">Stopped timer</span> <span style="color:Yellow">' . $timer . '</span> <span style="color:#666">=></span> <span style="color:DarkKhaki">Time Elapsed:</span> ' . number_format((microtime(true) - self::$timers[$timer]) * 100, 3) . ' ms');
+				
+				unset(self::$timers[$timer]);
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

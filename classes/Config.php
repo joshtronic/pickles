@@ -115,11 +115,26 @@ class Config extends Object
 			}
 
 			// Defaults profiler to true if it doesn't match an option exactly
-			if (isset($this->data['pickles']['profiler'])
-				&& $this->data['pickles']['profiler'] != ''
-				&& !in_array($this->data['pickles']['profiler'], array('objects', 'module', 'queries', 'explains', 'display')))
+			if (isset($this->data['pickles']['profiler']))
 			{
-				$this->data['pickles']['profiler'] = true;
+				if ($this->data['pickles']['profiler'] !== true)
+				{
+					// If we have an array convert to a string
+					if (is_array($this->data['pickles']['profiler']))
+					{
+						$this->data['pickles']['profiler'] = implode(',', $this->data['pickles']['profiler']);
+					}
+
+					// Checks that one of our known values exists, if not, force true
+					if (preg_match('/(objects|timers|queries|explains)/', $this->data['pickles']['profiler'] == false))
+					{
+						$this->data['pickles']['profiler'] = true;
+					}
+				}
+			}
+			else
+			{
+				$this->data['pickles']['profiler'] = false;
 			}
 
 			return true;

@@ -139,16 +139,14 @@ class Database_PDO_Common extends Database_Common
 		{
 			try
 			{
-				// Establishes if the profiler is enabled
-				$profiler = (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] != '' && preg_match('/^EXPLAIN /i', $sql) == false ? $this->config->pickles['profiler'] : false);
-
-				$explain = false;
+				// Establishes if we're working on an EXPLAIN
+				$explaining = preg_match('/^EXPLAIN /i', $sql);
 
 				// Executes a standard query
 				if ($input_parameters === null)
 				{
 					// Explains the query
-					if ($profiler === true || ((is_array($profiler) && in_array('explains', $profiler)) || stripos($profiler, 'explains') !== false))
+					if ($explaining == false && Profiler::enabled('explains'))
 					{
 						$explain = $this->fetchAll('EXPLAIN ' . $sql);
 					}
@@ -160,7 +158,7 @@ class Database_PDO_Common extends Database_Common
 				else
 				{
 					// Explains the query
-					if ($profiler === true || ((is_array($profiler) && in_array('explains', $profiler)) || stripos($profiler, 'explains') !== false))
+					if ($explaining == false && Profiler::enabled('explains'))
 					{
 						$explain = $this->fetchAll('EXPLAIN ' . $sql, $input_parameters);
 					}
@@ -179,13 +177,9 @@ class Database_PDO_Common extends Database_Common
 				}
 
 				// Logs the information to the profiler
-				if ($profiler === true
-					|| ((is_array($profiler) && in_array('explains', $profiler))
-					|| stripos($profiler, 'explains') !== false)
-					|| ((is_array($profiler) && in_array('queries', $profiler))
-					|| stripos($profiler, 'queries') !== false))
+				if ($explaining == false && Profiler::enabled('explains', 'queries'))
 				{
-					Profiler::logQuery($sql, $input_parameters, $explain, $duration);
+					Profiler::logQuery($sql, $input_parameters, (isset($explain) ? $explain : false), $duration);
 				}
 			}
 			catch (PDOException $e)
