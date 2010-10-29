@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -19,11 +19,13 @@
  * Model Class
  *
  * This is a parent class that all PICKLES data models should be extending.
- * The only thing it does currently is establish a database object for the
- * data models to use.
+ * When using the class as designed, objects will function as active record
+ * pattern objects.
  */
 class Model extends Object
 {
+	// {{{ Properties
+
 	/**
 	 * Database Object
 	 *
@@ -145,9 +147,17 @@ class Model extends Object
 	protected $results = null;
 
 	/**
+	 * Index
+	 *
+	 * @var integer
+	 */
+	private $index = null;
+
+	/**
 	 * Record
 	 *
-	 * @var array
+	 * @access private
+	 * @var    array
 	 */
 	public $record = null;
 
@@ -157,6 +167,26 @@ class Model extends Object
 	 * @var array
 	 */
 	public $records = null;
+
+	/**
+	 * Original Record
+	 *
+	 * @access private
+	 * @var    array
+	 */
+	private $original_record = null;
+
+	/**
+	 * Original Records
+	 *
+	 * @access private
+	 * @var    array
+	 */
+	private $originals = null;
+
+	// }}}
+
+	// {{{ Class Constructor
 
 	/**
 	 * Constructor
@@ -271,38 +301,16 @@ class Model extends Object
 					$this->record = $this->records;
 				}
 			}
+
+			$this->index = 0;
 		}
 
 		return true;
 	}
 
-	/**
-	 * Load Parameters
-	 *
-	 * Loads the passed parameters back into the object.
-	 *
-	 * @access private
-	 * @param  array $parameters key / value list
-	 * @param  boolean whether or not the parameters were loaded
-	 */
-	private function loadParameters($parameters)
-	{
-		if (is_array($parameters))
-		{
-			// Adds the parameters to the object
-			foreach ($parameters as $key => $value)
-			{
-				if (isset($this->$key))
-				{
-					$this->$key = $value;
-				}
-			}
+	// }}}
 
-			return true;
-		}
-
-		return false;
-	}
+	// {{{ SQL Generation Methods
 
 	/**
 	 * Generate Query
@@ -478,6 +486,10 @@ class Model extends Object
 		return $sql;
 	}
 
+	// }}}
+
+	// {{{ Record Interaction Methods
+
 	/**
 	 * Count Records
 	 *
@@ -492,41 +504,107 @@ class Model extends Object
 	 * Next Record
 	 *
 	 * Increment the record array to the next member of the record set.
+	 *
+	 * @return boolean whether or not there was next element
 	 */
 	public function next()
 	{
-		$this->record = next($this->records);
+		$return = (boolean)($this->record = next($this->records));
+
+		if ($return == true)
+		{
+			$this->index++;
+		}
+
+		return $return;
 	}
 
 	/**
 	 * Previous Record
 	 *
 	 * Decrement the record array to the next member of the record set.
+	 *
+	 * @return boolean whether or not there was previous element
 	 */
 	public function prev()
 	{
-		$this->record = prev($this->record);
+		$return = (boolean)($this->record = prev($this->records));
+
+		if ($return == true)
+		{
+			$this->index--;
+		}
+
+		return $return;
+	}
+
+	/**
+	 * Reset Record
+	 *
+	 * Set the pointer to the first element of the record set.
+	 *
+	 * @return boolean whether or not records is an array (and could be reset)
+	 */
+	public function reset()
+	{
+		$return = (boolean)($this->record = reset($this->records));
+
+		if ($return == true)
+		{
+			$this->index = 0;
+		}
+
+		return $return;
 	}
 
 	/**
 	 * First Record
 	 *
-	 * Set the pointer to the first element of the record set.
+	 * Alias of reset(). "first" is more intuitive to me, but reset stays in
+	 * line with the built in PHP functions.
+	 *
+	 * @return boolean whether or not records is an array (and could be reset)
 	 */
 	public function first()
 	{
-		$this->record = reset($this->records);
+		return $this->reset();
+	}
+
+	/**
+	 * End Record
+	 *
+	 * Set the pointer to the last element of the record set.
+	 *
+	 * @return boolean whether or not records is an array (and end() worked)
+	 */
+	public function end()
+	{
+		$return = (boolean)($this->record = end($this->records));
+
+		if ($return == true)
+		{
+			$this->index = $this->count() - 1;
+		}
+
+		return $return;
 	}
 
 	/**
 	 * Last Record
 	 *
-	 * Set the pointer to the last element of the record set.
+	 * Alias of end(). "last" is more intuitive to me, but end stays in line
+	 * with the built in PHP functions.
+	 *
+	 * @return boolean whether or not records is an array (and end() worked)
 	 */
 	public function last()
 	{
-		$this->record = end($this->records);
+		return $this->end();
 	}
+
+	// }}}
+
+	// {{{ Record Manipulation Methods
 
 	/**
 	 * Commit
@@ -591,6 +669,37 @@ class Model extends Object
 		return $this->db->execute($sql, $input_parameters);
 	}
 
+	// }}}
+
+	// {{{ Utility Methods
+
+	/**
+	 * Load Parameters
+	 *
+	 * Loads the passed parameters back into the object.
+	 *
+	 * @access private
+	 * @param  array $parameters key / value list
+	 * @param  boolean whether or not the parameters were loaded
+	 */
+	private function loadParameters($parameters)
+	{
+		if (is_array($parameters))
+		{
+			// Adds the parameters to the object
+			foreach ($parameters as $key => $value)
+			{
+				if (isset($this->$key))
+				{
+					$this->$key = $value;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
 	/**
 	 * Unescape String
 	 *
@@ -609,6 +718,8 @@ class Model extends Object
 
 		return $value;
 	}
+
+	// }}}
 }
 
 ?>
