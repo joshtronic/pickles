@@ -83,6 +83,18 @@ class Model extends Object
 	protected $table = false; // FROM
 
 	/**
+	 * Collection Name
+	 *
+	 * For compatibility with the naming conventions used by MongoDB, the
+	 * collection name can be specified. If the collection name is set, it will
+	 * set the table name value to it and proceed as normal.
+	 *
+	 * @access protected
+	 * @var    mixed
+	 */
+	protected $collection = false;
+
+	/**
 	 * Joins
 	 *
 	 * @access protected
@@ -216,41 +228,76 @@ class Model extends Object
 				$this->loadParameters($parameters);
 			}
 
-			// Starts with a basic SELECT ... FROM
-			$this->sql = array(
-				'SELECT ' . (is_array($this->fields) ? implode(', ', $this->fields) : $this->fields),
-				'FROM '   . $this->table,
-			);
-
-			// Pulls based on parameters
-			if (is_array($type_or_parameters))
+			// Overwrites the table name with the available collection name
+			if ($this->collection != false)
 			{
-				$this->generateQuery();
+				$this->table = $this->collection;
 			}
-			// Pulls by ID
-			elseif (is_int($type_or_parameters))
-			{
-				$this->sql[] = 'WHERE id = :id LIMIT 1;';
 
-				$this->input_parameters = array('id' => $parameters);
+			// If we're using an RDBMS (not Mongo) proceed with using SQL to pull the data 
+			if ($this->db->getDriver() != 'mongo')
+			{
+				// Starts with a basic SELECT ... FROM
+				$this->sql = array(
+					'SELECT ' . (is_array($this->fields) ? implode(', ', $this->fields) : $this->fields),
+					'FROM '   . $this->table,
+				);
+
+				// Pulls based on parameters
+				if (is_array($type_or_parameters))
+				{
+					$this->generateQuery();
+				}
+				// Pulls by ID
+				elseif (is_int($type_or_parameters))
+				{
+					$this->sql[] = 'WHERE id = :id LIMIT 1;';
+
+					$this->input_parameters = array('id' => $parameters);
+				}
+				else
+				{
+					switch ($type_or_parameters)
+					{
+						// Updates query to use COUNT syntax
+						case 'count':
+							$this->sql[0] = 'SELECT COUNT(*) AS count';
+							$this->generateQuery();
+							break;
+
+						// Adds the rest of the query
+						case 'list':
+							$this->generateQuery();
+							break;
+
+						// Leaves the query as is
+						case 'all':
+							break;
+
+						// Throws an error
+						default:
+							throw new Exception('Unknown query type');
+							break;
+					}
+				}
+
+				$this->records = $this->db->fetch(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
 			}
 			else
 			{
+				throw new Exception('Sorry, Mongo support in the PICKLES Model is not quite ready yet');
+
+				/*
 				switch ($type_or_parameters)
 				{
-					// Updates query to use COUNT syntax
 					case 'count':
-						$this->sql[0] = 'SELECT COUNT(*) AS count';
-						$this->generateQuery();
 						break;
 
-					// Adds the rest of the query
 					case 'list':
-						$this->generateQuery();
 						break;
 
-					// Leaves the query as is
 					case 'all':
+						$this->db->fetch($this->table, $this->input_parameters);
 						break;
 
 					// Throws an error
@@ -258,9 +305,8 @@ class Model extends Object
 						throw new Exception('Unknown query type');
 						break;
 				}
+				*/
 			}
-
-			$this->records = $this->db->fetchAll(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
 
 			$list_type = ($type_or_parameters == 'list');
 

@@ -196,14 +196,14 @@ class Database_PDO_Common extends Database_Common
 	}
 
 	/**
-	 * Fetch a single row from the database
+	 * Fetch records from the database
 	 *
 	 * @param  string $sql statement to be executed
 	 * @param  array $input_parameters optional key/values to be bound
 	 * @param  string $return_type optional type of return set
 	 * @return mixed based on return type
 	 */
-	public function fetch($sql = null, $input_parameters = null, $return_type = null)
+	public function fetch($sql = null, $input_parameters = null)
 	{
 		$this->open();
 
@@ -213,48 +213,9 @@ class Database_PDO_Common extends Database_Common
 		}
 
 		// Pulls the results based on the type
-		$results = false;
-		switch ($return_type)
-		{
-			case 'column':
-				$results = $this->results->fetchColumn(0);
-				break;
-			case 'all':
-				$results = $this->results->fetchAll(PDO::FETCH_ASSOC);
-				break;
-			default:
-				$results = $this->results->fetch(PDO::FETCH_ASSOC);
-				break;
-		}
+		$results = $this->results->fetchAll(PDO::FETCH_ASSOC);
 
 		return $results;
-	}
-
-	/**
-	 * Fetch a single column from the database
-	 *
-	 * This method assumes you want the first column in your select. If you
-	 * need 2 or more columns you should simply use fetch().
-	 *
-	 * @param  string $sql statement to be executed
-	 * @param  array $input_parameters optional key/values to be bound
-	 * @return string
-	 */
-	public function fetchColumn($sql = null, $input_parameters = null)
-	{
-		return $this->fetch($sql, $input_parameters, 'column');
-	}
-
-	/**
-	 * Fetches all rows as an array
-	 *
-	 * @param  string $sql statement to be executed
-	 * @param  array $input_parameters optional key/values to be bound
-	 * @return array
-	 */
-	public function fetchAll($sql = null, $input_parameters = null)
-	{
-		return $this->fetch($sql, $input_parameters, 'all');
 	}
 }
 

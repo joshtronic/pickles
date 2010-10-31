@@ -101,32 +101,16 @@ class Database_Mongo extends Database_Common
 	}
 	
 	/**
-	 * Fetch a single row from the database
+	 * Fetch records from the database
 	 */
-	public function fetch($collection, $query, $fields = null, $return_type = null)
+	public function fetch($collection, $query = array(), $fields = array())
 	{
 		$this->open();
 
 		// Pulls the results based on the type
-		$results = false;
-		if ($return_type == 'all')
-		{
-			$results = $this->connection->$collection->find($query, $fields);
-		}
-		else
-		{
-			$results = $this->connection->$collection->findOne($query, $fields);
-		}
+		$results = $this->connection->$collection->find($query, $fields);
 
 		return $results;
-	}
-
-	/**
-	 * Fetches all rows as an array
-	 */
-	public function fetchAll($collection, $query, $fields = null)
-	{
-		return $this->fetch($collection, $query, $fields, 'all');
 	}
 }
 
