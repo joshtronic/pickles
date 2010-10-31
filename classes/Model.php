@@ -315,8 +315,7 @@ class Model extends Object
 	 */
 	private function generateQuery()
 	{
-		// Adds the JOIN syntax
-		// @todo
+		// @todo Adds the JOIN syntax
 		if ($this->joins != false)
 		{
 			// $sql[] = 'JOIN ...';
