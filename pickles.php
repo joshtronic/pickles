@@ -176,6 +176,7 @@ function __handleError($number, $string, $file, $line, array $context)
 function __handleException($exception)
 {
 	Error::fatal($exception->getMessage());
+	//exit('<pre>' . $exception->xdebug_message . "\n\n" . $exception->getTraceAsString());
 }
 
 ?>
