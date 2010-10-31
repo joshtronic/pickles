@@ -177,6 +177,19 @@ abstract class Database_Common extends Object
 	}
 
 	/**
+	 * Get Driver
+	 *
+	 * Returns the name of the driver in use. Used by the Model class to
+	 * determine which path to take when interfacing with the Database object.
+	 *
+	 * @return string name of the driver in use
+	 */
+	public function getDriver()
+	{
+		return $this->driver;
+	}
+
+	/**
 	 * Opens database connection
 	 *
 	 * Establishes a connection to the MySQL database based on the
