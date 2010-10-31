@@ -174,15 +174,7 @@ class Model extends Object
 	 * @access private
 	 * @var    array
 	 */
-	private $original_record = null;
-
-	/**
-	 * Original Records
-	 *
-	 * @access private
-	 * @var    array
-	 */
-	private $originals = null;
+	private $original = null;
 
 	// }}}
 
@@ -302,7 +294,8 @@ class Model extends Object
 				}
 			}
 
-			$this->index = 0;
+			$this->index    = 0;
+			$this->original = $this->records;
 		}
 
 		return true;
@@ -625,8 +618,11 @@ class Model extends Object
 			$sql = ($update === true ? 'UPDATE' : 'INSERT' . ($this->delayed == true ? ' DELAYED' : '') . ' INTO') . ' ' . $this->table . ' SET ';
 			$input_parameters = null;
 
+			// Limits the columns being updated
+			$record = ($update === true ? array_diff($this->record, $this->original[$this->index]) : $this->record);
+
 			// Loops through all the columns and assembles the query
-			foreach ($this->record as $column => $value)
+			foreach ($record as $column => $value)
 			{
 				if ($column != 'id')
 				{
