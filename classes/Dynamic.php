@@ -20,6 +20,11 @@
  *
  * Handles generating links to static content that are a timestamp injected as
  * to avoid hard caching. Also minifies content where applicable.
+ *
+ * Note: you will want to add a mod_rewrite line to your .htaccess to support
+ * the routing to the filenames with the timestamp injected:
+ * 
+ * RewriteRule ^(.+)\.([\d]+)\.(css|js|gif|png|jpg|jpeg)$ /$1.$3 [NC,QSA]
  */
 class Dynamic extends Object
 {
@@ -155,6 +160,10 @@ class Dynamic extends Object
 					{
 						$reference = $minified_reference;
 					}
+					else
+					{
+						// @todo Log a warning
+					}
 
 					$reference = $this->ref($reference);
 				}
@@ -220,6 +229,10 @@ class Dynamic extends Object
 			elseif (file_exists($minified_filename))
 			{
 				$reference = $minified_reference;
+			}
+			else
+			{
+				// @todo Log a warning
 			}
 
 			$reference = $this->ref($reference);
