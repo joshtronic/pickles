@@ -74,7 +74,7 @@ class Controller extends Object
 		// Generate a generic "site down" message if the site is set to be disabled
 		if (isset($this->config->pickles['disabled']) && $this->config->pickles['disabled'] == true)
 		{
-			throw new Exception($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
+			Error::fatal($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
 		}
 
 		// Loads the requested module's information
@@ -194,7 +194,7 @@ class Controller extends Object
 		{
 			if (!isset($_REQUEST['request']))
 			{
-				throw new Exception('Way to go, you\'ve successfully created an infinite redirect loop. Good thing I was here or you would have been served with a pretty ugly browser error.<br /><br />So here\'s the deal, no templates were able to be loaded. Make sure your parent and child templates actually exist and if you\'re using non-default values, make sure they\'re defined correctly in your config.');
+				Error::fatal('Way to go, you\'ve successfully created an infinite redirect loop. Good thing I was here or you would have been served with a pretty ugly browser error.<br /><br />So here\'s the deal, no templates were able to be loaded. Make sure your parent and child templates actually exist and if you\'re using non-default values, make sure they\'re defined correctly in your config.');
 			}
 			else
 			{
