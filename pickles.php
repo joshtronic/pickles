@@ -60,9 +60,8 @@ define('JSON_AVAILABLE', function_exists('json_encode'));
 // ini_set('display_errors', true);
 // error_reporting(-1);
 
-// Sets the error and exceptios handlers
+// Sets the error handler
 set_error_handler('__handleError');
-set_exception_handler('__handleException');
 
 // Defaults timezone to UTC if not set
 if (ini_get('date.timezone') == '')
@@ -146,16 +145,16 @@ function __autoload($class)
  * function, but I opted to use the __ prefix to help avoid a naming collision
  * since namespace support is 5.3+ and PICKLES strives to be 5.0+ compatible.
  *
- * Keep in mind that fetal errors cannot and will not be handled.
+ * Keep in mind that fatal errors cannot and will not be handled.
  * 
- * @param  integer        $number error number
- * @param  string         $string error string (message)
- * @param  string         $file name of the file with the error
- * @param  integer        $line line number the error occurred on
- * @param  array          $context variables that were in play
+ * @param  integer $errno the level of the error raised
+ * @param  string  $errstr the error message
+ * @param  string  $errfile filename that the error was raised in
+ * @param  integer $errline line number the error was raised at
+ * @param  array   $errcontext array of every vairable that existed in scope
  * @return ErrorException not really returned, but worth documenting
  */
-function __handleError($number, $string, $file, $line, array $context)
+function __handleError($errno, $errstr, $errfile, $errline, array $errcontext)
 {
 	// Handle hacktastic @ error suppression. Seriously, don't ever use @
 	if (error_reporting() === 0)
@@ -163,20 +162,7 @@ function __handleError($number, $string, $file, $line, array $context)
 		return false;
 	}
 
-	throw new ErrorException($string, 0, $number, $file, $line);
-}
-
-/**
- * Exception handling function
- *
- * Catches thrown exceptions and displays them.
- *
- * @param object $exception the exception
- */
-function __handleException($exception)
-{
-	Error::fatal($exception->getMessage());
-	//exit('<pre>' . $exception->xdebug_message . "\n\n" . $exception->getTraceAsString());
+	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 }
 
 ?>
