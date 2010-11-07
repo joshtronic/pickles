@@ -108,6 +108,8 @@ if (isset($config->php['exception_handler']))
 
 // }}}
 
+// {{{ Auto[magical] Loader
+
 /**
  * Magic function to automatically load classes
  *
@@ -136,6 +138,10 @@ function __autoload($class)
 
 	return $loaded;
 }
+
+// }}}
+
+// {{{ Error Handler
 
 /**
  * Error handling function that thinks it's magical
@@ -166,18 +172,103 @@ function __handleError($errno, $errstr, $errfile, $errline, array $errcontext)
 	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 }
 
+// }}}
+
+// {{{ Exception Handler
+
 /**
  * Top level exception handling function
  *
  * Catches uncaught exceptions and displays them.
  *
  * @param object $exception the exception
- * @todo  Pretty up the exception display
  */
 function __handleException($exception)
 {
-	echo '<pre>' . $exception->__toString() . '</pre>';
-	exit;
+	?>
+	<style>
+		#pickles-exception
+		{
+			background: #212121;
+			width: 800px;
+			margin: 0 auto;
+			margin-top: 20px;
+			margin-bottom: 20px;
+			border-radius: 20px;
+			-moz-border-radius: 20px;
+			-webkit-border-radius: 20px;
+			box-shadow: 0 3px 4px #000;
+			-moz-box-shadow: 0 3px 4px #000;
+			-webkit-box-shadow: 0 3px 4px #000;
+			border: 6px solid #666;
+			padding: 10px 20px 20px;
+			font-family: monospace;
+			font-size: 12px;
+			text-align: left;
+		}
+		#pickles-exception table
+		{
+			width: 100%;
+		}
+		#pickles-exception table tr th, #pickles-exception table tr td
+		{
+			padding: 10px;
+		}
+		#pickles-exception .even
+		{
+			background-color: #323232;
+		}
+		#pickles-exception, #pickles-exception table tr td, #pickles-exception table tr th
+		{
+			color: #efefe8;
+		}
+	</style>
+	<div id="pickles-exception">
+		<strong style="font-size:1.5em">Uncaught Exception</strong><br /><br />
+		<table style="border-collapse:separate;border-spacing:1px;border-radius:10px;text-shadow:1px 1px 1px #000;text-align:center">
+			<tr><td style="background-color:#480000;padding:10px">
+				<div style="font-size:1.5em;font-style:italic"><?php echo $exception->getMessage(); ?></div>
+				<div style="font-size:1.2em"><?php echo $exception->getFile(); ?> on line <?php echo $exception->getLine(); ?></div>
+				</td>
+			</tr>
+		</table>
+		
+		<table>
+			<tr>
+				<th style="text-align:left" colspan="2">Trace</th>
+				<th>File</th>
+				<th style="text-align:right">Line</th>
+			</tr>
+			<?php
+			$trace = $exception->getTrace();
+			rsort($trace);
+
+			foreach ($trace as $key => $data)
+			{
+				$method = '';
+				
+				if (isset($data['class']))
+				{
+					$method .= $data['class'] . $data['type'];
+				}
+				
+				$method .= $data['function'] . '()';
+				?>
+				<tr>
+					<td style="font-weight:bold;color:#999"><?php echo $key + 1; ?>.</td>
+					<td><?php echo $method; ?></td>
+					<td><?php echo isset($data['file']) ? $data['file'] : __FILE__; ?></td>
+					<td style="text-align:right"><?php echo isset($data['line']) ? $data['line'] : '0'; ?></td>
+				</tr>
+				<?php
+			}
+			?>
+		</table>
+	</div>
+	<br /><br />
+	<?php
 }
+
+// }}}
 
 ?>
