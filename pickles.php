@@ -60,8 +60,9 @@ define('JSON_AVAILABLE', function_exists('json_encode'));
 // ini_set('display_errors', true);
 // error_reporting(-1);
 
-// Sets the error handler
+// Sets the error and exception handlers
 set_error_handler('__handleError');
+set_exception_handler('__handleException');
 
 // Defaults timezone to UTC if not set
 if (ini_get('date.timezone') == '')
@@ -163,6 +164,20 @@ function __handleError($errno, $errstr, $errfile, $errline, array $errcontext)
 	}
 
 	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+}
+
+/**
+ * Top level exception handling function
+ *
+ * Catches uncaught exceptions and displays them.
+ *
+ * @param object $exception the exception
+ * @todo  Pretty up the exception display
+ */
+function __handleException($exception)
+{
+	echo '<pre>' . $exception->__toString() . '</pre>';
+	exit;
 }
 
 ?>
