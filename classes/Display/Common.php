@@ -123,7 +123,10 @@ abstract class Display_Common extends Object
 			$template_path = SITE_TEMPLATE_PATH . ($type == 'parent' ? '__shared/' : '');
 			$template_file = $template_path . $template . ($this->extension != false ? '.' . $this->extension : '');
 
-			$this->$template_name = $template_file;
+			if (file_exists($template_file))
+			{
+				$this->$template_name = $template_file;
+			}
 		}
 	}
 

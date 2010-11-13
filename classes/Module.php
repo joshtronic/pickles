@@ -121,7 +121,7 @@ class Module extends Object
 	 * @access protected
 	 * @var    string, null by default
 	 */
-	protected $template = null;
+	protected $template = 'index';
 
 	/**
 	 * Request Data
