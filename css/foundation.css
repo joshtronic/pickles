@@ -22,3 +22,4 @@
 .lower { text-transform: lowercase }
 .capitalize { text-transform: capitalize }
 .normal { text-transform: none; font-style: normal; font-weight: normal; text-decoration: none }
+.hidden { display: none }
