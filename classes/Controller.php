@@ -166,14 +166,20 @@ class Controller extends Object
 		}
 
 		// Validates the rendering engine
-		// @todo Need to validate against the module's return type(s)
-		$engine = $module->engine;
+		$engines = is_array($module->engine) ? array_values($module->engine) : array($module->engine);
+		$engines = array_combine($engines, $engines);
+		$engine  = current($engines);
 
+		// Possibly overrides the engine with the passed return type
 		if (isset($return_type))
 		{
-			if (in_array(strtolower($return_type), array('json', 'xml'))) // @todo add back rss and possibly atom
+			$return_type = strtoupper($return_type);
+
+			// Validates the return type against the module
+			// @todo add back rss and possibly add atom as well
+			if (in_array($return_type, array('JSON', 'XML')) && in_array($return_type, $engines))
 			{
-				$engine = strtoupper($return_type);
+				$engine = $return_type;
 			}
 
 			unset($return_type);
