@@ -34,14 +34,7 @@ class Display_JSON extends Display_Common
 	 */
 	public function render()
 	{
-        if (JSON_AVAILABLE)
-		{
-            echo json_encode($this->module_return);
-        }
-		else
-		{
-            echo '{ "status": "error", "message": "json_encode() not found" }';
-        }
+		return $this->jsonEncode();
 	}
 }
 

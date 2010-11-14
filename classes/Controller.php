@@ -171,7 +171,7 @@ class Controller extends Object
 
 		if (isset($return_type))
 		{
-			if (in_array(strtolower($return_type), array('json', 'rss', 'xml')))
+			if (in_array(strtolower($return_type), array('json', 'xml'))) // @todo add back rss and possibly atom
 			{
 				$engine = strtoupper($return_type);
 			}
@@ -189,7 +189,7 @@ class Controller extends Object
 		// Checks the templates
 		$template_exists = $display->templateExists();
 
-		// If there's no valid module or template redirect
+		// If there is no valid module or template, then redirect
 		if (!$module_exists && !$template_exists)
 		{
 			if (!isset($_REQUEST['request']))

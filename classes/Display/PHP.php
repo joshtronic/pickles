@@ -57,89 +57,96 @@ class Display_PHP extends Display_Common
 	 */
 	public function render()
 	{
-		// Starts up the buffer
-		ob_start();
-		
-		// Puts the class variables in local scope of the template
-		$__config    = $this->config;
-		$__meta      = $this->meta_data;
-		$__module    = $this->module_return;
-		$__css_class = $this->css_class;
-		$__js_file   = $this->js_basename;
-
-		// Creates (possibly overwritten) objects
-		$form_class    = (class_exists('CustomForm')    ? 'CustomForm'    : 'Form');
-		$dynamic_class = (class_exists('CustomDynamic') ? 'CustomDynamic' : 'Dynamic');
-
-		$__form    = new $form_class();
-		$__dynamic = new $dynamic_class();
-
-		// Loads the template
-		if ($this->parent_template != null)
+		if ($this->templateExists())
 		{
-			if ($this->child_template == null)
+			// Starts up the buffer
+			ob_start();
+			
+			// Puts the class variables in local scope of the template
+			$__config    = $this->config;
+			$__meta      = $this->meta_data;
+			$__module    = $this->module_return;
+			$__css_class = $this->css_class;
+			$__js_file   = $this->js_basename;
+
+			// Creates (possibly overwritten) objects
+			$form_class    = (class_exists('CustomForm')    ? 'CustomForm'    : 'Form');
+			$dynamic_class = (class_exists('CustomDynamic') ? 'CustomDynamic' : 'Dynamic');
+
+			$__form    = new $form_class();
+			$__dynamic = new $dynamic_class();
+
+			// Loads the template
+			if ($this->parent_template != null)
 			{
-				$__template = $this->parent_template;
+				if ($this->child_template == null)
+				{
+					$__template = $this->parent_template;
+				}
+				else
+				{
+					$__template = $this->child_template;
+				}
+
+				require_once $this->parent_template;
 			}
-			else
+			elseif ($this->child_template != null)
 			{
 				$__template = $this->child_template;
+
+				require_once $__template;
 			}
 
-			require_once $this->parent_template;
-		}
-		elseif ($this->child_template != null)
-		{
-			$__template = $this->child_template;
+			// Grabs the buffer contents and clears it out
+			$buffer = ob_get_clean();
 
-			require_once $__template;
-		}
+			/*
+			@todo this wasn't working as well as I'd like:
 
-		// Grabs the buffer contents and clears it out
-		$buffer = ob_get_clean();
+			$regex = array(
+				'PRE'      => '!<pre>.+?</pre>!is',
+				'SCRIPT'   => '!<script[^>]+>.+?</script>!is',
+				'TEXTAREA' => '!<textarea[^>]+>.+?</textarea>!is',
+			);
 
-		/*
-		@todo this wasn't working as well as I'd like:
+			$search_replace = array();
 
-		$regex = array(
-			'PRE'      => '!<pre>.+?</pre>!is',
-			'SCRIPT'   => '!<script[^>]+>.+?</script>!is',
-			'TEXTAREA' => '!<textarea[^>]+>.+?</textarea>!is',
-		);
-
-		$search_replace = array();
-
-		// Cleans up the stuff we don't want to minify
-		foreach ($regex as $type => $pattern)
-		{
-			$hash = '@@@PICKLES::' . $type . '@@@';
-
-			preg_match_all($pattern, $buffer, $matches);
-			$search_replace[$hash] = $matches[0];
-			$buffer = preg_replace($pattern, $hash, $buffer);
-		}
-
-		// Strips the whitespace
-		$buffer = trim(preg_replace('/((?<!\?>)\n)[\s]+/m', '\1', $buffer));
-
-		// Kills any HTML comments
-		$buffer = preg_replace('/<!--.*-->/U', '', $buffer);
-
-		// Injects the stuff we stripped earlier
-		foreach ($search_replace as $search => $replacements)
-		{
-			foreach ($replacements as $replacement)
+			// Cleans up the stuff we don't want to minify
+			foreach ($regex as $type => $pattern)
 			{
-				$buffer = preg_replace('/'.$search.'/', $replacement, $buffer, 1);
+				$hash = '@@@PICKLES::' . $type . '@@@';
+
+				preg_match_all($pattern, $buffer, $matches);
+				$search_replace[$hash] = $matches[0];
+				$buffer = preg_replace($pattern, $hash, $buffer);
 			}
+
+			// Strips the whitespace
+			$buffer = trim(preg_replace('/((?<!\?>)\n)[\s]+/m', '\1', $buffer));
+
+			// Kills any HTML comments
+			$buffer = preg_replace('/<!--.*-->/U', '', $buffer);
+
+			// Injects the stuff we stripped earlier
+			foreach ($search_replace as $search => $replacements)
+			{
+				foreach ($replacements as $replacement)
+				{
+					$buffer = preg_replace('/'.$search.'/', $replacement, $buffer, 1);
+				}
+			}
+			*/
+
+			// Kills any whitespace and HTML comments
+			$buffer = preg_replace(array('/^[\s]+/m', '/<!--.*-->/U'), '', $buffer);
+
+			// Note, this doesn't exit in case you want to run code after the display of the page
+			echo $buffer;
 		}
-		*/
-
-		// Kills any whitespace and HTML comments
-		$buffer = preg_replace(array('/^[\s]+/m', '/<!--.*-->/U'), '', $buffer);
-
-		// Note, this doesn't exit in case you want to run code after the display of the page
-		echo $buffer;
+		else
+		{
+			$this->jsonEncode();
+		}
 	}
 }
 

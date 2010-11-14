@@ -185,6 +185,33 @@ abstract class Display_Common extends Object
 	{
 		return true;
 	}
+        
+	/**
+	 * JSON Encode
+	 *
+	 * Encodes module return data as JSON. 
+	 *
+	 * Requires PHP 5 >= 5.2.0 or PECL json >= 1.2.0
+	 * Note: PECL json 1.2.1 is included /vendors
+	 *
+	 * @link http://json.org/
+	 * @link http://us.php.net/json_encode
+	 * @link http://pecl.php.net/package/json
+	 *
+	 * @return JSON encoded string
+	 * @todo   This really should be moved into some sort of converter class. I couldn't settle on a name, so it will live here for now.
+	 */
+	public function jsonEncode()
+	{
+		if (JSON_AVAILABLE)
+		{
+			echo json_encode($this->module_return);
+        }
+		else
+		{
+            echo '{ "status": "error", "message": "json_encode() not found" }';
+        }
+	}
 
 	/**
 	 * Rendering Method
