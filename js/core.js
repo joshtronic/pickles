@@ -9,12 +9,10 @@ $(document).ready(function()
 		// Checks that it's valid
 		if (typeof form.valid == 'undefined' || form.valid() == true)
 		{
-			// Hides the buttons on the form
-			$('button, input', form).attr('readonly', 'readonly');
+			// Sets the buttons, inputs and textareas to READONLY
+			$('button, input, textarea', form).attr('readonly', 'readonly');
 
-			// @todo Hide the form and add a throbber
-
-			// Copies any CKEditor data to the same named form element
+			// Copies any CKEditor data to the same named form element (hack)
 			if (typeof(CKEDITOR) != 'undefined')
 			{
 				if (typeof(CKEDITOR.instances) != 'undefined')
@@ -31,53 +29,63 @@ $(document).ready(function()
 				}
 			}
 
-			$.ajax({
-				'type':     $(form).attr('method'),
-				'url':      $(form).attr('action'),
-				'data':     $(form).serialize(),
-				'dataType': 'json',
+			var method = $(form).attr('method') == '' ? 'GET' : $(form).attr('method');
+			var action = $(form).attr('action');
 
-				'success': function(data, textStatus, XMLHttpRequest)
-				{
-					if (data.status != 'success' && typeof(data.message) != 'undefined')
-					{
-						alert('Error: ' + data.message);
-						$('button', form).show();
-					}
-					else if (data.status == 'success')
-					{
-						$('input[type=text]', form).val('');
-						$('select',           form).val('');
-						$('textarea',         form).val('');
+			if (action == '')
+			{
+				injectMessage(form, 'Form element lacks action attribute', 'error');
+			}
+			else
+			{
+				$.ajax({
+					'type':     method,
+					'url':      action,
+					'data':     $(form).serialize(),
+					'dataType': 'json',
 
-						if (typeof(data.message) != 'undefined')
+					'success': function(data, textStatus, XMLHttpRequest)
+					{
+						if (data.status != 'success' && typeof(data.message) != 'undefined')
 						{
-							alert(data.message);
+							injectmessage(error, data.message, 'error');
+							$('button', form).show();
+						}
+						else if (data.status == 'success')
+						{
+							$('input[type=text]', form).val('');
+							$('select',           form).val('');
+							$('textarea',         form).val('');
+
+							if (typeof(data.message) != 'undefined')
+							{
+								injectMessage(form, data.message, 'message');
+							}
+
+							if (typeof(data.url) != 'undefined')
+							{
+								parent.location.href = data.url;
+							}
+
+							if (typeof(data.callback) != 'undefined')
+							{
+								window[data.callback](data);
+							}
+						}
+						else
+						{
+							injectMessage(form, data, 'error');
 						}
 
-						if (typeof(data.url) != 'undefined')
-						{
-							parent.location.href = data.url;
-						}
+						$('button, input, textarea', form).attr('readonly', '');
+					},
 
-						if (typeof(data.callback) != 'undefined')
-						{
-							window[data.callback](data);
-						}
-					}
-					else
+					'error': function(XMLHttpRequest, textStatus, errorThrown)
 					{
-						alert('Error: ' + data);
+
 					}
-
-					$('button, input', form).attr('readonly', '');
-				},
-
-				'error': function(XMLHttpRequest, textStatus, errorThrown)
-				{
-
-				}
-			});
+				});
+			}
 		}
 	});
 
@@ -88,6 +96,37 @@ $(document).ready(function()
 	$('table tr:even td').addClass('even');
 	$('table tr:odd td').addClass('odd');
 });
+
+// Injects a div before the passed element
+function injectMessage(element, message, type)
+{
+	if (typeof type == 'undefined')
+	{
+		var type = 'error';
+	}
+
+	switch (type)
+	{
+		case 'error':
+			var color = '#900';
+			break;
+
+		case 'message':
+			var color = '#090';
+			break;
+
+		default:
+			var color = '#000';
+			break;
+	}
+
+	var class_name = 'ajax-form-' + type;
+	var style      = 'display:none;color:' + color;
+
+	$('.' + class_name, element).remove();
+	$(element).prepend('<div class="' + class_name + '" style="' + style + '">' + message + '</div>');
+	$('.' + class_name, element).fadeIn();
+}
 
 // Automatically tab to next element when max length is reached
 function autoTab(element)
@@ -101,8 +140,8 @@ function autoTab(element)
 // Disable Enter Key
 function disableEnterKey(e)
 {
-	var key;     
-	
+	var key;
+
 	if(window.event)
 	{
 		key = window.event.keyCode; // IE
