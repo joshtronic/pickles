@@ -1,7 +1,13 @@
 $(document).ready(function()
 {
+	// Apply the validator if available
+	if (jQuery().validate)
+	{
+		$('form').validate();
+	}
+
 	// Catches forms being submitted
-	$('form.ajax input[type=submit],form.ajax button.submit').click(function()
+	$('form.ajax input[type=submit],form.ajax button.submit').live('click', function()
 	{
 		// Grabs the form
 		var form = $(this).parents('form').get();
@@ -11,6 +17,9 @@ $(document).ready(function()
 		{
 			// Sets the buttons, inputs and textareas to READONLY
 			$('button, input, textarea', form).attr('readonly', 'readonly');
+
+			// Forces the cursor to be waiting
+			document.body.style.cursor = 'wait';
 
 			// Copies any CKEditor data to the same named form element (hack)
 			if (typeof(CKEDITOR) != 'undefined')
@@ -77,7 +86,11 @@ $(document).ready(function()
 							injectMessage(form, data, 'error');
 						}
 
+						// Removes READONLY status
 						$('button, input, textarea', form).attr('readonly', '');
+			
+						// Returns the cursor to normal... but is anyone really normal?
+						document.body.style.cursor = 'default';
 					},
 
 					'error': function(XMLHttpRequest, textStatus, errorThrown)
