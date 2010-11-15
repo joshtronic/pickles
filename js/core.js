@@ -48,7 +48,7 @@ $(document).ready(function()
 					{
 						if (data.status != 'success' && typeof(data.message) != 'undefined')
 						{
-							injectmessage(error, data.message, 'error');
+							injectMessage(form, data.message, 'error');
 							$('button', form).show();
 						}
 						else if (data.status == 'success')
@@ -108,11 +108,11 @@ function injectMessage(element, message, type)
 	switch (type)
 	{
 		case 'error':
-			var color = '#900';
+			var color = '#800';
 			break;
 
 		case 'message':
-			var color = '#090';
+			var color = '#080';
 			break;
 
 		default:
