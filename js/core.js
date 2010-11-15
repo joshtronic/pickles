@@ -137,7 +137,7 @@ function injectMessage(element, message, type)
 	var style      = 'display:none;color:' + color;
 
 	$('.' + class_name, element).remove();
-	$(element).prepend('<div class="' + class_name + '" style="' + style + '">' + message + '</div>');
+	$(element).prepend('<div class="' + class_name + '" style="' + style + '" generated="true">' + message + '</div>');
 	$('.' + class_name, element).fadeIn();
 }
 
