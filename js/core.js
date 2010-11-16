@@ -13,7 +13,7 @@ $(document).ready(function()
 		var form = $(this).parents('form').get();
 
 		// Checks that it's valid
-		if (typeof form.valid == 'undefined' || form.valid() == true)
+		if (typeof $(form).valid == 'undefined' || $(form).valid() == true)
 		{
 			// Sets the buttons, inputs and textareas to READONLY
 			$('button, input, textarea', form).attr('readonly', 'readonly');
@@ -99,6 +99,10 @@ $(document).ready(function()
 					}
 				});
 			}
+		}
+		else
+		{
+			return false;
 		}
 	});
 
