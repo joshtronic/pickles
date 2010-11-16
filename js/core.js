@@ -12,6 +12,9 @@ $(document).ready(function()
 		// Grabs the form
 		var form = $(this).parents('form').get();
 
+		// Removes any messages
+		$('.ajax-form-error, .ajax-form-message, label.error', form).fadeOut('normal', function(){ $(this).remove(); });
+
 		// Checks that it's valid
 		if (typeof $(form).valid == 'undefined' || $(form).valid() == true)
 		{
