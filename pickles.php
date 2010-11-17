@@ -40,7 +40,6 @@ define('SITE_TEMPLATE_PATH', SITE_PATH . 'templates/');
 
 define('PRIVATE_PATH', SITE_PATH . 'private/');
 define('LOG_PATH',     PRIVATE_PATH . 'logs/');
-define('SMARTY_PATH',  PRIVATE_PATH . 'smarty/');
 
 // Sets up constants for the Display names
 define('DISPLAY_JSON', 'JSON');
