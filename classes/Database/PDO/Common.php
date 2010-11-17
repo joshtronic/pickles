@@ -80,6 +80,9 @@ class Database_PDO_Common extends Database_Common
 						$this->dsn
 					);
 
+					// Strips any empty parameters in the DSN
+					$this->dsn = str_replace(array('host=;', 'port=;', 'unix_socket=;'), '', $this->dsn);
+
 					// Attempts to establish a connection
 					$this->connection = new PDO($this->dsn,	$this->username, $this->password, $this->attributes);
 				}
