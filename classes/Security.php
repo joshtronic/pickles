@@ -37,7 +37,7 @@ class Security
 	{
 		if (session_id() == '')
 		{
-			throw new Exception('Sessions must be enabled to use Security class');
+			throw new Exception('Sessions must be enabled to use the Security class');
 		}
 		else
 		{
@@ -124,21 +124,28 @@ class Security
 	 *
 	 * Checks the user's access level is exactly the passed level
 	 *
-	 * @param  mixed $access_level access level to be checked against
-	 * @param  mixed $user_level optional user's access level
+	 * @param  integer $access_level access level to be checked against
 	 * @return boolean whether or not the user is that level
 	 */
-	public static function isLevel($access_level, $user_level = null)
+	public static function isLevel()
 	{
-		if (self::checkSession() && self::checkLevel($access_level) && ($user_level == null || ($user_level != null && self::checkLevel($user_level))))
+		$is_level = false;
+
+		if (self::checkSession())
 		{
-			if ($user_level != null)
+			if (isset($_SESSION['__pickles']['security']['level']))
 			{
-				return ($user_level == $access_level);
-			}
-			elseif (isset($_SESSION['__pickles']['security']['level']))
-			{
-				return ($_SESSION['__pickles']['security']['level'] == $access_level);
+				foreach (func_get_args() as $access_level)
+				{
+					if (self::checkLevel($access_level))
+					{
+						if ($_SESSION['__pickles']['security']['level'] == $access_level)
+						{
+							$is_level = true;
+							break;
+						}
+					}
+				}
 			}
 			else
 			{
@@ -146,7 +153,7 @@ class Security
 			}
 		}
 
-		return false;
+		return $is_level;
 	}
 
 	/**
@@ -155,20 +162,27 @@ class Security
 	 * Checks the user's access level against the passed level.
 	 *
 	 * @param  integer $access_level access level to be checked against
-	 * @param  integer $user_level optional user's access level
 	 * @return boolean whether or not the user has access
 	 */
-	public static function hasLevel($access_level, $user_level = null)
+	public static function hasLevel()
 	{
-		if (self::checkSession() && self::checkLevel($access_level) && ($user_level == null || ($user_level != null && self::checkLevel($user_level))))
+		$has_level = false;
+
+		if (self::checkSession())
 		{
-			if ($user_level != null)
+			if (isset($_SESSION['__pickles']['security']['level']))
 			{
-				return ($user_level >= $access_level);
-			}
-			elseif (isset($_SESSION['__pickles']['security']['level']))
-			{
-				return ($_SESSION['__pickles']['security']['level'] >= $access_level);
+				foreach (func_get_args() as $access_level)
+				{
+					if (self::checkLevel($access_level))
+					{
+						if ($_SESSION['__pickles']['security']['level'] >= $access_level)
+						{
+							$has_level = true;
+							break;
+						}
+					}
+				}
 			}
 			else
 			{
@@ -176,7 +190,42 @@ class Security
 			}
 		}
 
-		return false;
+		return $has_level;
+	}
+
+	/**
+	 * Between Level
+	 *
+	 * Checks the user's access level against the passed range.
+	 *
+	 * @param  integer $low access level to be checked against
+	 * @param  integer $high access level to be checked against
+	 * @return boolean whether or not the user has access
+	 */
+	public static function betweenLevel($low, $high)
+	{
+		$between_level = false;
+
+		if (self::checkSession())
+		{
+			if (isset($_SESSION['__pickles']['security']['level']))
+			{
+				if (self::checkLevel($low) && self::checkLevel($high))
+				{
+					if ($_SESSION['__pickles']['security']['level'] >= $low && $_SESSION['__pickles']['security']['level'] <= $high)
+					{
+						$between_level = true;
+						break;
+					}
+				}
+			}
+			else
+			{
+				throw new Exception('Security level between not been set');
+			}
+		}
+
+		return $between_level;
 	}
 }
 
