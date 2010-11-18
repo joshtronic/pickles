@@ -135,7 +135,13 @@ class Security
 		{
 			if (isset($_SESSION['__pickles']['security']['level']))
 			{
-				foreach (func_get_args() as $access_level)
+				$arguments = func_get_args();
+				if (is_array($arguments[0]))
+				{
+					$arguments = $arguments[0];
+				}
+
+				foreach ($arguments as $access_level)
 				{
 					if (self::checkLevel($access_level))
 					{
@@ -172,7 +178,13 @@ class Security
 		{
 			if (isset($_SESSION['__pickles']['security']['level']))
 			{
-				foreach (func_get_args() as $access_level)
+				$arguments = func_get_args();
+				if (is_array($arguments[0]))
+				{
+					$arguments = $arguments[0];
+				}
+
+				foreach ($arguments as $access_level)
 				{
 					if (self::checkLevel($access_level))
 					{

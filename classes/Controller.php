@@ -154,14 +154,85 @@ class Controller extends Object
 		// Validates security level
 		if ($module->security !== false)
 		{
-			// @todo If no type is set, default to isLevel (safer)
-			// @todo If array is present and no type set, validate against each level there
-			// @todo Is array is present under type, validate against each level accordingly
-			if (Security::isLevel($module->security) == false)
+			$is_authenticated = false;
+
+			if (is_array($module->security))
+			{
+				$module_security      = $module->security;
+				$security_check_class = 'isLevel';
+
+				// Checks the type and validates it
+				if (isset($module_security['type']))
+				{
+					$security_check_type = strtoupper($module_security['type']);
+
+					if (in_array($security_check_type, array('IS', 'HAS', 'BETWEEN')))
+					{
+						$security_check_class = $security_check_type;
+					}
+
+					unset($security_check_type, $module_security['type']);
+				}
+
+				$module_security_levels = array();
+
+				// If there's a level(s) key use it
+				foreach (array('level', 'levels') as $security_level_key)
+				{
+					if (isset($module_security[$security_level_key]))
+					{
+						if (is_array($module_security[$security_level_key]))
+						{
+							array_merge($module_security_levels, $module_security[$security_level_key]);
+						}
+						else
+						{
+							$module_security_levels[] = $module_security[$security_level_key];
+						}
+
+						unset($module_security[$security_level_key]);
+					}
+				}
+
+				// Assume everything left in the array is a level and add it to the array
+				array_merge($module_security_levels, $module_security);
+
+				$security_level_count = count($module_security_levels);
+
+				switch ($security_check_class)
+				{
+					case 'BETWEEN':
+						if ($security_level_count >= 2)
+						{
+							$is_authenticated = Security::betweenLevel($module_security_levels[0], array_pop($module_security_levels));
+						}
+						break;
+
+					case 'HAS':
+						if ($security_level_count > 0)
+						{
+							$is_authenticated = Security::hasLevel($module_security_levels);
+						}
+						break;
+					
+					case 'IS':
+						if ($security_level_count > 0)
+						{
+							$is_authenticated = Security::isLevel($module_security_levels);
+						}
+						break;
+				}
+			}
+			else
+			{
+				$is_authenticated = Security::isLevel($module->security);
+			}
+
+			if ($is_authenticated == false)
 			{
 				// @todo Redirect to login page, potentially configured in the config, else /login
 				// @todo Set variable for the destination, perhaps $_SESSION['__pickles']['login']['destination']
-				exit;
+				exit('@todo this should bring you to a login page');
 			}
 		}
 
@@ -176,7 +247,7 @@ class Controller extends Object
 			$return_type = strtoupper($return_type);
 
 			// Validates the return type against the module
-			// @todo add back rss and possibly add atom as well
+			// @todo add back RSS and possibly add ATOM as well
 			if (in_array($return_type, array('JSON', 'XML')) && in_array($return_type, $engines))
 			{
 				$engine = $return_type;
