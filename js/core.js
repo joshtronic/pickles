@@ -47,6 +47,12 @@ $(document).ready(function()
 			if (action == '')
 			{
 				injectMessage(form, 'Form element lacks action attribute', 'error');
+
+				// Removes READONLY status
+				$('button, input, textarea', form).attr('readonly', '');
+
+				// Returns the cursor to normal... but is anyone really normal?
+				document.body.style.cursor = 'default';
 			}
 			else
 			{
@@ -61,7 +67,6 @@ $(document).ready(function()
 						if (data.status != 'success' && typeof(data.message) != 'undefined')
 						{
 							injectMessage(form, data.message, 'error');
-							$('button', form).show();
 						}
 						else if (data.status == 'success')
 						{
@@ -91,7 +96,7 @@ $(document).ready(function()
 
 						// Removes READONLY status
 						$('button, input, textarea', form).attr('readonly', '');
-			
+
 						// Returns the cursor to normal... but is anyone really normal?
 						document.body.style.cursor = 'default';
 					},
