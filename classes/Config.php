@@ -137,12 +137,40 @@ class Config extends Object
 				$this->data['pickles']['profiler'] = false;
 			}
 
+			// Creates constants for the security levels
+			if (isset($this->data['security']['levels']) && is_array($this->data['security']['levels']))
+			{
+				foreach ($this->data['security']['levels'] as $value => $name)
+				{
+					$constant = 'SECURITY_LEVEL_' . strtoupper($name);
+
+					// Checks if constant is already defined, and throws an error
+					if (defined($constant))
+					{
+						throw new Exception('The constant ' . $constant . ' is already defined');
+					}
+					else
+					{
+						define($constant, $value);
+					}
+				}
+			}
+
 			return true;
 		}
 
 		return false;
 	}
 
+	/**
+	 * Flatten
+	 *
+	 * Flattens the configuration array around the specified environment.
+	 *
+	 * @param  string $environment selected environment
+	 * @param  array $array configuration error to flatten
+	 * @return array flattened configuration array
+	 */
 	private function flatten($environment, $array)
 	{
 		if (is_array($array))
