@@ -21,16 +21,29 @@
  * Collection of static methods for handling security within a website running
  * on PICKLES. Requires sessions to be enabled.
  *
- * @usage <code>Security::setLevel('level');</code>
- * @usage <code>Security::isLevel('level');</code>
+ * @usage <code>Security::login(10);</code>
+ * @usage <code>Security::isLevel(SECURITY_LEVEL_ADMIN);</code>
  */
 class Security
 {
+	/**
+	 * Lookup Cache
+	 *
+	 * Used to minimize database lookups
+	 *
+	 * @static
+	 * @access private
+	 * @var    array
+	 */
+	private static $cache = array();
+
 	/**
 	 * Check Session
 	 *
 	 * Checks if sessions are enabled.
 	 *
+	 * @static
+	 * @access private
 	 * @return boolean whether or not sessions are enabled
 	 */
 	private static function checkSession()
@@ -38,6 +51,7 @@ class Security
 		if (session_id() == '')
 		{
 			throw new Exception('Sessions must be enabled to use the Security class');
+			return false;
 		}
 		else
 		{
@@ -51,6 +65,8 @@ class Security
 	 * Checks if a passed level is an integer and/or properly defined in the
 	 * site's configuration file.
 	 *
+	 * @static
+	 * @access private
 	 * @param  mixed access level to validate
 	 * @return whether ot not the access level is valid
 	 */
@@ -82,41 +98,140 @@ class Security
 				throw new Exception('Level "' . $access_level . '" is not defined in config.ini');
 			}
 		}
+
+		return false;
 	}
 
 	/**
-	 * Set Level
+	 * Login
 	 *
-	 * Sets the security level.
+	 * Creates a session variable containing the user ID and generated token.
+	 * The token is also assigned to a cookie to be used when validating the
+	 * security level.
 	 *
-	 * @param  mixed $access_level access level to set this session to
-	 * @return boolean true on success, thrown exception on error
+	 * @static
+	 * @param  $user_id ID of the user that's been logged in
+	 * @return boolean whether or not the login could be completed
 	 */
-	public static function setLevel($access_level)
+	public static function login($user_id)
 	{
-		if (self::checkSession() && self::checkLevel($access_level))
+		if (self::checkSession())
 		{
-			$_SESSION['__pickles']['security']['level'] = $access_level;
-		}
+			$token = sha1(microtime());
 
-		return true;
+			$_SESSION['__pickles']['security'] = array(
+				'token'   => $token,
+				'user_id' => (int)$user_id,
+			);
+
+			setcookie('pickles_security_token', $token);
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**
-	 * Clear Level
+	 * Logout
 	 *
-	 * Clears out the security level.
+	 * Clears out the security information in the session and the cookie.
 	 *
+	 * @static
 	 * @return boolean true
 	 */
-	public static function clearLevel()
+	public static function logout()
 	{
-		if (isset($_SESSION['__pickles']['security']['level']))
+		if (isset($_SESSION['__pickles']['security']))
 		{
-			$_SESSION['__pickles']['security']['level'] = null;
+			$_SESSION['__pickles']['security'] = null;
+			unset($_SESSION['__pickles']['security']);
+
+			setcookie('pickles_security_token', '', time() - 3600);
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get User Level
+	 *
+	 * Looks up the user level in the database and caches it. Cache is used
+	 * for any subsequent look ups for the user. Also validates the session
+	 * variable against the cookie to ensure everything is legit.
+	 *
+	 * return integer user level or false
+	 */
+	private static function getUserLevel()
+	{
+		// Checks the session against the cookie
+		if (isset($_SESSION['__pickles']['security']['user_id'], $_SESSION['__pickles']['security']['token'], $_COOKIE['pickles_security_token'])
+			&& $_SESSION['__pickles']['security']['token'] != $_COOKIE['pickles_security_token'])
+		{
+			Security::logout();
+			return false;
+		}
+		// Hits the database to determine the user's level
+		else
+		{
+			// Checks the session cache instead of hitting the database
+			if (isset(self::$cache[(int)$_SESSION['__pickles']['security']['user_id']]))
+			{
+				return self::$cache[(int)$_SESSION['__pickles']['security']['user_id']];
+			}
+			else
+			{
+				// Pulls the config and defaults where necessary
+				$config = Config::getInstance();
+
+				if ($config->security === false)
+				{
+					$config = array();
+				}
+				else
+				{
+					$config = $config->security;
+				}
+
+				$defaults = array('login' => 'login', 'model' => 'User', 'column' => 'level');
+				foreach ($defaults as $variable => $value)
+				{
+					if (!isset($config[$variable]))
+					{
+						$config[$variable] = $value; 
+					}
+				}
+
+				// Uses the model to pull the user's access level
+				$class = $config['model'];
+				$model = new $class(array('fields' => $config['column'], 'conditions' => array('id' => (int)$_SESSION['__pickles']['security']['user_id'])));
+
+				if ($model->count() == 0)
+				{
+					Security::logout();
+					return false;
+				}
+				else
+				{
+					$constant = 'SECURITY_LEVEL_' . $model->record[$config['column']];
+
+					if (defined($constant))
+					{
+						$constant = constant($constant);
+
+						self::$cache[(int)$_SESSION['__pickles']['security']['user_id']] = $constant;
+
+						return $constant;
+					}
+					else
+					{
+						throw new Exception('Security level constant is not defined');
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -124,6 +239,7 @@ class Security
 	 *
 	 * Checks the user's access level is exactly the passed level
 	 *
+	 * @static
 	 * @param  integer $access_level access level to be checked against
 	 * @return boolean whether or not the user is that level
 	 */
@@ -133,29 +249,22 @@ class Security
 
 		if (self::checkSession())
 		{
-			if (isset($_SESSION['__pickles']['security']['level']))
+			$arguments = func_get_args();
+			if (is_array($arguments[0]))
 			{
-				$arguments = func_get_args();
-				if (is_array($arguments[0]))
-				{
-					$arguments = $arguments[0];
-				}
+				$arguments = $arguments[0];
+			}
 
-				foreach ($arguments as $access_level)
+			foreach ($arguments as $access_level)
+			{
+				if (self::checkLevel($access_level))
 				{
-					if (self::checkLevel($access_level))
+					if (self::getUserLevel() == $access_level)
 					{
-						if ($_SESSION['__pickles']['security']['level'] == $access_level)
-						{
-							$is_level = true;
-							break;
-						}
+						$is_level = true;
+						break;
 					}
 				}
-			}
-			else
-			{
-				throw new Exception('Security level has not been set');
 			}
 		}
 
@@ -167,6 +276,7 @@ class Security
 	 *
 	 * Checks the user's access level against the passed level.
 	 *
+	 * @static
 	 * @param  integer $access_level access level to be checked against
 	 * @return boolean whether or not the user has access
 	 */
@@ -176,29 +286,22 @@ class Security
 
 		if (self::checkSession())
 		{
-			if (isset($_SESSION['__pickles']['security']['level']))
+			$arguments = func_get_args();
+			if (is_array($arguments[0]))
 			{
-				$arguments = func_get_args();
-				if (is_array($arguments[0]))
-				{
-					$arguments = $arguments[0];
-				}
+				$arguments = $arguments[0];
+			}
 
-				foreach ($arguments as $access_level)
+			foreach ($arguments as $access_level)
+			{
+				if (self::checkLevel($access_level))
 				{
-					if (self::checkLevel($access_level))
+					if (self::getUserLevel() >= $access_level)
 					{
-						if ($_SESSION['__pickles']['security']['level'] >= $access_level)
-						{
-							$has_level = true;
-							break;
-						}
+						$has_level = true;
+						break;
 					}
 				}
-			}
-			else
-			{
-				throw new Exception('Security level has not been set');
 			}
 		}
 
@@ -210,6 +313,7 @@ class Security
 	 *
 	 * Checks the user's access level against the passed range.
 	 *
+	 * @static
 	 * @param  integer $low access level to be checked against
 	 * @param  integer $high access level to be checked against
 	 * @return boolean whether or not the user has access
@@ -220,20 +324,15 @@ class Security
 
 		if (self::checkSession())
 		{
-			if (isset($_SESSION['__pickles']['security']['level']))
+			if (self::checkLevel($low) && self::checkLevel($high))
 			{
-				if (self::checkLevel($low) && self::checkLevel($high))
+				$user_level = self::getUserLevel();
+
+				if ($user_level >= $low && $user_level <= $high)
 				{
-					if ($_SESSION['__pickles']['security']['level'] >= $low && $_SESSION['__pickles']['security']['level'] <= $high)
-					{
-						$between_level = true;
-						break;
-					}
+					$between_level = true;
+					break;
 				}
-			}
-			else
-			{
-				throw new Exception('Security level between not been set');
 			}
 		}
 
