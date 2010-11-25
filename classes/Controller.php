@@ -138,6 +138,18 @@ class Controller extends Object
 			$module = new Module();
 		}
 
+		// Determines if we need to serve over HTTP or HTTPS 
+		if ($module->secure == false && isset($_SERVER['HTTPS']))
+		{
+			header('Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+			exit;
+		}
+		elseif ($module->secure == true && !isset($_SERVER['HTTPS']))
+		{
+			header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+			exit;
+		}
+
 		// Establishes the session
 		if (ini_get('session.auto_start') == 0)
 		{

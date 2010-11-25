@@ -66,7 +66,6 @@ class Module extends Object
 	 *
 	 * @access protected
 	 * @var    boolean, null by default
-	 * @todo   Implement this functionality
 	 */
 	protected $secure = null;
 
@@ -122,20 +121,6 @@ class Module extends Object
 	 * @var    string, null by default
 	 */
 	protected $template = 'index';
-
-	/**
-	 * Request Data
-	 *
-	 * Modules should not interact with $_REQUEST, $_POST or $_GET directly as
-	 * the contents could be unsafe. The Controller cleanses this data and sets
-	 * it into this variable for safe access by the module.
-	 *
-	 * @access protected
-	 * @var    array, null by default
-	 * @todo   Currently the super globals are not being cleared out
-	 * @todo   Not even sure I want to implement this at this point
-	 */
-	protected $request = null;
 
 	/**
 	 * Constructor
