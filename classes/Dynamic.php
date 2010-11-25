@@ -162,7 +162,7 @@ class Dynamic extends Object
 					}
 					else
 					{
-						// @todo Log a warning
+						Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
 					}
 
 					$reference = $this->ref($reference);
