@@ -79,68 +79,61 @@ class Convert
 	 */
 	public static function arrayToXML($array, $format = false, $level = 0)
 	{
-		if ($level == 0)
-		{
-			$xml = '<' . key($array) . '>' . ($format ? "\n" : '') . self::arrayToXML(current($array), $format, $level + 1) . '</' . key($array) . '>' . ($format ? "\n" : '');
-		}
-		else
-		{
-			$xml = '';
+		$xml = '';
 
-			if (is_array($array))
+		if (is_array($array))
+		{
+			foreach ($array as $node => $value)
 			{
-				foreach ($array as $node => $value)
+				// Checks if the value is an array
+				if (is_array($value))
 				{
-					// Checks if the value is an array
-					if (is_array($value))
+					foreach ($value as $node2 => $value2)
 					{
-						foreach ($value as $node2 => $value2)
+						if (is_array($value2))
 						{
-							if (is_array($value2))
-							{
-								// Nest the value if the node is an integer
-								$new_value = (is_int($node2) ? $value2 : array($node2 => $value2));
-			
-								$xml .= ($format ? str_repeat("\t", $level) : '');
-								$xml .= '<' . $node . '>' . ($format ? "\n" : '');
-								$xml .= self::arrayToXML($new_value, $format, $level + 1);
-								$xml .= ($format ? str_repeat("\t", $level) : '');
-								$xml .= '</' . $node . '>' . ($format ? "\n" : '');
-							}
-							else
-							{
-								if (is_int($node2))
-								{
-									$node2 = $node;
-								}
-
-								// Checks for special characters
-								if (htmlspecialchars($value2) != $value2)
-								{
-									$xml .= ($format ? str_repeat("\t", $level) : '');
-									$xml .= '<' . $node2 . '><![CDATA[' . $value2 . ']]></' . $node2 . '>' . ($format ? "\n" : '');
-								}
-								else
-								{
-									$xml .= ($format ? str_repeat("\t", $level) : '');
-									$xml .= '<' . $node2 . '>' . $value2 . '</' . $node2 . '>' . ($format ? "\n" : '');
-								}
-							}
-						}
-					}
-					else
-					{
-						// Checks for special characters
-						if (htmlspecialchars($value) != $value)
-						{
+							// Nest the value if the node is an integer
+							$new_value = (is_int($node2) ? $value2 : array($node2 => $value2));
+		
 							$xml .= ($format ? str_repeat("\t", $level) : '');
-							$xml .= '<' . $node . '><![CDATA[' . $value . ']]></' . $node . '>' . ($format ? "\n" : '');
+							$xml .= '<' . $node . '>' . ($format ? "\n" : '');
+							$xml .= self::arrayToXML($new_value, $format, $level + 1);
+							$xml .= ($format ? str_repeat("\t", $level) : '');
+							$xml .= '</' . $node . '>' . ($format ? "\n" : '');
 						}
 						else
 						{
-							$xml .= ($format ? str_repeat("\t", $level) : '');
-							$xml .= '<' . $node . '>' . $value . '</' . $node . '>' . ($format ? "\n" : '');
+							if (is_int($node2))
+							{
+								$node2 = $node;
+							}
+
+							// Checks for special characters
+							if (htmlspecialchars($value2) != $value2)
+							{
+								$xml .= ($format ? str_repeat("\t", $level) : '');
+								$xml .= '<' . $node2 . '><![CDATA[' . $value2 . ']]></' . $node2 . '>' . ($format ? "\n" : '');
+							}
+							else
+							{
+								$xml .= ($format ? str_repeat("\t", $level) : '');
+								$xml .= '<' . $node2 . '>' . $value2 . '</' . $node2 . '>' . ($format ? "\n" : '');
+							}
 						}
+					}
+				}
+				else
+				{
+					// Checks for special characters
+					if (htmlspecialchars($value) != $value)
+					{
+						$xml .= ($format ? str_repeat("\t", $level) : '');
+						$xml .= '<' . $node . '><![CDATA[' . $value . ']]></' . $node . '>' . ($format ? "\n" : '');
+					}
+					else
+					{
+						$xml .= ($format ? str_repeat("\t", $level) : '');
+						$xml .= '<' . $node . '>' . $value . '</' . $node . '>' . ($format ? "\n" : '');
 					}
 				}
 			}
