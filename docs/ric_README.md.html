@@ -10,89 +10,58 @@
 		<body>
 						<h1 align="center">README.md</h1>
 <pre>
-               ______ _____ _____  _   __ _      _____ _____
-               | ___ \_   _/  __ \| | / /| |    |  ___/  ___|
-               | |_/ / | | | /  \/| |/ / | |    | |__ \ `--.
-               |  __/  | | | |    |    \ | |    |  __| `--. \
-               | |    _| |_| \__/\| |\  \| |____| |___/\__/ /
-               \_|    \___/ \____/\_| \_/\_____/\____/\____/
-       
-       PHP Interface Collection of Killer Libraries to Enhance Stuff
-===========================================================================
+# PHP Interface Collection of Killer Libraries to Enhance Stuff
 
-What is PICKLES?
-----------------
+## What is PICKLES?
 
-The whole point behind PHP with PICKLES was for me (Josh Sherman) to take
-a decade of PHP experience and a dozen or so of my own websites (all
-running on different but similar custom systems of my own design) and build
-a new framework / rapid development system that would be flexible enough to 
-run all of my sites off of a single shared code base. PICKLES runs in such a
-way that the core files are completely separate from the site code it's 
-serving. So much so, that the core files should never really need to be 
-accessed after installation (unless you want to void your warranty and/or 
-make a global change to all of your sites), and each site you have running 
-will be nicely packaged in a directory all it's own. This keeps your sites 
-simple and tidy with no duplicated code for each site! In a site's 
-directory, models and modules (page logic) and templates are kept separate
-from each other and everything is ran through a single entry point 
-controller. 
+PICKLES is an open source framework for the rapid development of web applications.
 
-Okay, but why?
---------------
+## Okay, but why?
 
-Now I know you're wondering, &quot;why didn't you just use one of the
-preexisting and already established PHP frameworks that are out there?&quot; I
-do have a handful of reasons for that, but those are personal gripes based
-on a limited number of experiences and I won't be going into detail 
-about them. The main reason for developing my own framework is that I am, 
-and also have been, a very do it yourself type when it comes to coding, and
-typically very proud of my coding accomplishments. Also, because all of the
-sites I had previously written shared a lot of the same concepts and in 
-some cases, the same bits of code, it made a heck of a lot more sense for 
-me to develop a new system based around some of the better concepts from 
-previous outings than to rebuild my sites inside of another framework. 
+I could have went with any number of existing frameworks, but I opted to build my own because I like to code. I've built quite a few sites from the ground up over the years, and I wanted to roll that experience into a single system that I could not only use for my sites, but share with the world.
 
-Get the facts!
---------------
+## Wait, what, it's not MVC?
 
-* PICKLES will only run on PHP 5.0.0 or greater. There are no plans to 
-  ever support PHP 4.x.y (or below) as those versions have reached end of 
-  life, so please don't ask.
+PICKLES is in fact not a true MVC system and won't be masquerading around as one (yeah, I know, I borrowed some naming conventions). PICKLES does have a main controller that handles incoming page views. The controller loads a module that contains all of the business logic (optionally interacting with data models) and then execution is passed off to the display layer. The display layer gives the user what they asked for (even if they didn't say please). This is how web pages work, and there has never been a reason for me to force PICKLES into the MVC box just for the hell of it.
 
-* PICKLES is not Model-View-Controller (MVC). It was developed around 
-  concepts (as well as some naming conventions) of the MVC design pattern 
-  but does not entirely conform to my own understanding of MVC. I'm from 
-  the school of thought that there's not a single hammer for every nail, 
-  so there's no point in forcing PICKLES into the MVC box for the sake of 
-  it. PICKLES strives to provide a modular system for developing websites 
-  while keeping the display elements separated from any database calls and 
-  other logic. That isn't necessarily a bad thing, it just means that 
-  PICKLES isn't all that trendy because it lacks a silly buzzword that's a 
-  bit overused at this point.
+## Requirements
 
-* PICKLES supports rendering Smarty template pages, returning JSON data 
-  and RSS feeds (currently only supports version 2.0) and is fully capable 
-  of running from the command line modes.
+### Required Software
 
-* PICKLES is coded fairly close to the PEAR coding standards and is fully
-  documented in DocBlock notation.
+* Apache (should run on 1.3+)
+* Apache Module mod_rewrite
+* PHP 5.0+
 
-* Included with PICKLES are shared CSS files (foundation classes and one to 
-  do a full CSS reset) and shared JavaScript files with includes jQuery
-  (and some plug-ins / add-ons) and a core JavaScript file which includes
-  automatic AJAXing of forms and some other niceties.
+### Highly Recommended Software
 
-* Writing error free code is very important to me, so any PHP development I 
-  do is made to be E_STRICT compatible. This means that not only is PICKLES 
-  code free of any errors, it is free of warnings as well.
+* PHP 5.2.0+ for native JSON support or PECL JSON 1.2.1 (included)
 
-* Depending on your server, any number of sites can be ran off of a single 
-  PICKLES install!
+### Optional Software
+
+* MySQL with PDO and PDO_MYSQL drivers
+* PostgreSQL with PDO and PDO_PGSQL drivers
+* SQLite 3 with PDO and PDO_SQLITE drivers
+* Mongo with Mongo driver and PECL Mongo 1.0.10 (included)
+
+## Installation
+
+Installation is quite simple as there is no installer to run, and all server configuration options can be set in your index.php for your site.
+
+1. Download the source [[http://github.com/joshtronic/pickles/zipball/master]] (or clone the repository)
+
+2. Place the code anywhere you'd like (that's at least 2 directories up from the root of your website). I recommend using /usr/share/pickles
+
+3.     Open the launchpad directory and you will find a sample site ready to be copied and pasted to wherever the site you set up is located.
+
+    - The directory public will need to be renamed to whatever you've set up your document root as.
+
+    - The file apache.conf will give you some insight to how configure Apache, or you can just set the include path in public/index.php
+
+4. At this point you should have a very rudimentary site up and running.
 
 </pre>
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 17 Oct 2010 23:17:22 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Wed, 24 Nov 2010 23:41:51 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</body>
 </html>

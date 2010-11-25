@@ -52,7 +52,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">DISPLAY_JSON</span> = 'JSON'
-			(line <span class="line-number">46</span>)
+			(line <span class="line-number">45</span>)
 		</span>
 	</div>
 	
@@ -66,7 +66,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">DISPLAY_PHP</span> = 'PHP'
-			(line <span class="line-number">47</span>)
+			(line <span class="line-number">46</span>)
 		</span>
 	</div>
 	
@@ -80,7 +80,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">DISPLAY_RSS</span> = 'RSS'
-			(line <span class="line-number">48</span>)
+			(line <span class="line-number">47</span>)
 		</span>
 	</div>
 	
@@ -94,7 +94,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">DISPLAY_XML</span> = 'XML'
-			(line <span class="line-number">49</span>)
+			(line <span class="line-number">48</span>)
 		</span>
 	</div>
 	
@@ -108,7 +108,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">JSON_AVAILABLE</span> = function_exists('json_encode')
-			(line <span class="line-number">52</span>)
+			(line <span class="line-number">51</span>)
 		</span>
 	</div>
 	
@@ -256,20 +256,6 @@
 	
 		
 </div>
-<a name="defineSMARTY_PATH"><!-- --></a>
-<div class="oddrow">
-	
-	<div>
-		<span class="const-title">
-			<span class="const-name">SMARTY_PATH</span> = PRIVATE_PATH.'smarty/'
-			(line <span class="line-number">43</span>)
-		</span>
-	</div>
-	
-	<!-- ========== Info from phpDoc block ========= -->
-	
-		
-</div>
 		</div>
 	</div>
 	
@@ -284,10 +270,10 @@
 		</div>
 		<div class="info-box-body">	
 			<a name="function__autoload" id="function__autoload"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div>
-		<span class="method-title">__autoload</span> (line <span class="line-number">121</span>)
+		<span class="method-title">__autoload</span> (line <span class="line-number">122</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
@@ -314,15 +300,15 @@
 	
 </div>
 <a name="function__handleError" id="function__handleError"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div>
-		<span class="method-title">__handleError</span> (line <span class="line-number">158</span>)
+		<span class="method-title">__handleError</span> (line <span class="line-number">163</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Error handling function that thinks it's magical</p>
-<p class="description"><p>Catches errors (warnings and the like) and throws it back out as an  ErrorException. This really helps trapping complex errors that need a ton of  sanity checks, just try / catch and you're good. Also, this isn't a magic  function, but I opted to use the __ prefix to help avoid a naming collision  since namespace support is 5.3+ and PICKLES strives to be 5.0+ compatible.</p><p>Keep in mind that fetal errors cannot and will not be handled.</p></p>
+<p class="description"><p>Catches errors (warnings and the like) and throws it back out as an  ErrorException. This really helps trapping complex errors that need a ton of  sanity checks, just try / catch and you're good. Also, this isn't a magic  function, but I opted to use the __ prefix to help avoid a naming collision  since namespace support is 5.3+ and PICKLES strives to be 5.0+ compatible.</p><p>Keep in mind that fatal errors cannot and will not be handled.</p></p>
 	<ul class="tags">
 				<li><span class="field">return:</span> not really returned, but worth documenting</li>
 			</ul>
@@ -332,39 +318,39 @@
 		<span class="method-name">
 			__handleError
 		</span>
-					(<span class="var-type">integer</span>&nbsp;<span class="var-name">$number</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$string</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$file</span>, <span class="var-type">integer</span>&nbsp;<span class="var-name">$line</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$context</span>)
+					(<span class="var-type">integer</span>&nbsp;<span class="var-name">$errno</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$errstr</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$errfile</span>, <span class="var-type">integer</span>&nbsp;<span class="var-name">$errline</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$errcontext</span>)
 			</div>
 
 			<ul class="parameters">
 					<li>
 				<span class="var-type">integer</span>
-				<span class="var-name">$number</span><span class="var-description">: error number</span>			</li>
+				<span class="var-name">$errno</span><span class="var-description">: the level of the error raised</span>			</li>
 					<li>
 				<span class="var-type">string</span>
-				<span class="var-name">$string</span><span class="var-description">: error string (message)</span>			</li>
+				<span class="var-name">$errstr</span><span class="var-description">: the error message</span>			</li>
 					<li>
 				<span class="var-type">string</span>
-				<span class="var-name">$file</span><span class="var-description">: name of the file with the error</span>			</li>
+				<span class="var-name">$errfile</span><span class="var-description">: filename that the error was raised in</span>			</li>
 					<li>
 				<span class="var-type">integer</span>
-				<span class="var-name">$line</span><span class="var-description">: line number the error occurred on</span>			</li>
+				<span class="var-name">$errline</span><span class="var-description">: line number the error was raised at</span>			</li>
 					<li>
 				<span class="var-type">array</span>
-				<span class="var-name">$context</span><span class="var-description">: variables that were in play</span>			</li>
+				<span class="var-name">$errcontext</span><span class="var-description">: array of every vairable that existed in scope</span>			</li>
 				</ul>
 		
 	
 </div>
 <a name="function__handleException" id="function__handleException"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div>
-		<span class="method-title">__handleException</span> (line <span class="line-number">176</span>)
+		<span class="method-title">__handleException</span> (line <span class="line-number">185</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Exception handling function</p>
-<p class="description"><p>Catches thrown exceptions and displays them.</p></p>
+<p class="short-description">Top level exception handling function</p>
+<p class="description"><p>Catches uncaught exceptions and displays them.</p></p>
 	
 	<div class="method-signature">
 		<span class="method-result">void</span>
@@ -386,7 +372,7 @@
 	</div>
 	
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 17 Oct 2010 23:17:23 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Wed, 24 Nov 2010 23:41:53 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

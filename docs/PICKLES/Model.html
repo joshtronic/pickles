@@ -23,7 +23,7 @@
 	<div class="info-box-body">
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Model Class</p>
-<p class="description"><p>This is a parent class that all PICKLES data models should be extending.  The only thing it does currently is establish a database object for the  data models to use.</p></p>
+<p class="description"><p>This is a parent class that all PICKLES data models should be extending.  When using the class as designed, objects will function as active record  pattern objects.</p></p>
 		<p class="notes">
 			Located in <a class="field" href="_classes---Model.php.html">/classes/Model.php</a> (line <span class="field">25</span>)
 		</p>
@@ -50,7 +50,11 @@
 								</div>
 		<div class="info-box-body">
 			<div class="var-summary">
-																																																																																																																																<div class="var-title">
+																																																																																																																																								<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$collection" title="details" class="var-name">$collection</a>
+				</div>
+																<div class="var-title">
 					<span class="var-type">mixed</span>
 					<a href="#$conditions" title="details" class="var-name">$conditions</a>
 				</div>
@@ -122,7 +126,7 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																																																																												
+																																																																																												
 												<div class="method-definition">
 											<span class="method-result">Model</span>
 										<a href="#__construct" title="details" class="method-name">__construct</a>
@@ -144,23 +148,33 @@
 										()
 									</div>
 																<div class="method-definition">
-											<span class="method-result">void</span>
+											<span class="method-result">boolean</span>
+										<a href="#end" title="details" class="method-name">end</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">boolean</span>
 										<a href="#first" title="details" class="method-name">first</a>
 										()
 									</div>
 																<div class="method-definition">
-											<span class="method-result">void</span>
+											<span class="method-result">boolean</span>
 										<a href="#last" title="details" class="method-name">last</a>
 										()
 									</div>
 																<div class="method-definition">
-											<span class="method-result">void</span>
+											<span class="method-result">boolean</span>
 										<a href="#next" title="details" class="method-name">next</a>
 										()
 									</div>
 																<div class="method-definition">
-											<span class="method-result">void</span>
+											<span class="method-result">boolean</span>
 										<a href="#prev" title="details" class="method-name">prev</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">boolean</span>
+										<a href="#reset" title="details" class="method-name">reset</a>
 										()
 									</div>
 																<div class="method-definition">
@@ -185,14 +199,37 @@
 							
 					</div>
 		<div class="info-box-body">
-			<a name="var$conditions" id="$conditions"><!-- --></A>
+			<a name="var$collection" id="$collection"><!-- --></A>
 <div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
+			<span class="var-name">$collection</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">95</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Collection Name</p>
+<p class="description"><p>For compatibility with the naming conventions used by MongoDB, the  collection name can be specified. If the collection name is set, it will  set the table name value to it and proceed as normal.</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$conditions" id="$conditions"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
 			<span class="var-name">$conditions</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">97</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">111</span>)
 		</span>
 	</div>
 
@@ -208,13 +245,13 @@
 
 </div>
 <a name="var$datasource" id="$datasource"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$datasource</span>
-						(line <span class="line-number">57</span>)
+						(line <span class="line-number">59</span>)
 		</span>
 	</div>
 
@@ -230,13 +267,13 @@
 
 </div>
 <a name="var$delayed" id="$delayed"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">boolean</span>
 			<span class="var-name">$delayed</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">65</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">67</span>)
 		</span>
 	</div>
 
@@ -252,13 +289,13 @@
 
 </div>
 <a name="var$fields" id="$fields"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$fields</span>
-			 = <span class="var-default"> '*'</span>			(line <span class="line-number">73</span>)
+			 = <span class="var-default"> '*'</span>			(line <span class="line-number">75</span>)
 		</span>
 	</div>
 
@@ -274,13 +311,13 @@
 
 </div>
 <a name="var$group" id="$group"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$group</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">105</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">119</span>)
 		</span>
 	</div>
 
@@ -296,13 +333,13 @@
 
 </div>
 <a name="var$having" id="$having"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$having</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">113</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">127</span>)
 		</span>
 	</div>
 
@@ -318,13 +355,13 @@
 
 </div>
 <a name="var$joins" id="$joins"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$joins</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">89</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">103</span>)
 		</span>
 	</div>
 
@@ -340,13 +377,13 @@
 
 </div>
 <a name="var$limit" id="$limit"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$limit</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">129</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">143</span>)
 		</span>
 	</div>
 
@@ -362,13 +399,13 @@
 
 </div>
 <a name="var$offset" id="$offset"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$offset</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">137</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">151</span>)
 		</span>
 	</div>
 
@@ -385,13 +422,13 @@
 
 </div>
 <a name="var$order" id="$order"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$order</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">121</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">135</span>)
 		</span>
 	</div>
 
@@ -407,13 +444,13 @@
 
 </div>
 <a name="var$record" id="$record"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$record</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">152</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">174</span>)
 		</span>
 	</div>
 
@@ -429,13 +466,13 @@
 
 </div>
 <a name="var$records" id="$records"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$records</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">159</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">181</span>)
 		</span>
 	</div>
 
@@ -451,13 +488,13 @@
 
 </div>
 <a name="var$results" id="$results"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$results</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">145</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">159</span>)
 		</span>
 	</div>
 
@@ -473,13 +510,13 @@
 
 </div>
 <a name="var$table" id="$table"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$table</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">81</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">83</span>)
 		</span>
 	</div>
 
@@ -522,10 +559,10 @@
 			<A NAME='method_detail'></A>
 
 <a name="method__construct" id="__construct"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">171</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">205</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -561,10 +598,10 @@
 			
 	</div>
 <a name="methodcommit" id="commit"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">commit</span> (line <span class="line-number">538</span>)
+		<span class="method-title">commit</span> (line <span class="line-number">654</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -587,10 +624,10 @@
 			
 	</div>
 <a name="methodcount" id="count"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">count</span> (line <span class="line-number">486</span>)
+		<span class="method-title">count</span> (line <span class="line-number">536</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -612,10 +649,10 @@
 			
 	</div>
 <a name="methoddelete" id="delete"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">delete</span> (line <span class="line-number">586</span>)
+		<span class="method-title">delete</span> (line <span class="line-number">705</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -637,22 +674,49 @@
 		
 			
 	</div>
-<a name="methodfirst" id="first"><!-- --></a>
-<div class="oddrow">
+<a name="methodend" id="end"><!-- --></a>
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">first</span> (line <span class="line-number">516</span>)
+		<span class="method-title">end</span> (line <span class="line-number">618</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">First Record</p>
-<p class="description"><p>Set the pointer to the first element of the record set.</p></p>
+<p class="short-description">End Record</p>
+<p class="description"><p>Set the pointer to the last element of the record set.</p></p>
 	<ul class="tags">
+				<li><span class="field">return:</span> whether or not records is an array (and end() worked)</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">void</span>
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			end
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodfirst" id="first"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">first</span> (line <span class="line-number">606</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">First Record</p>
+<p class="description"><p>Alias of reset(). &quot;first&quot; is more intuitive to me, but reset stays in  line with the built in PHP functions.</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> whether or not records is an array (and could be reset)</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
 		<span class="method-name">
 			first
 		</span>
@@ -666,18 +730,19 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">last</span> (line <span class="line-number">526</span>)
+		<span class="method-title">last</span> (line <span class="line-number">638</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Last Record</p>
-<p class="description"><p>Set the pointer to the last element of the record set.</p></p>
+<p class="description"><p>Alias of end(). &quot;last&quot; is more intuitive to me, but end stays in line  with the built in PHP functions.</p></p>
 	<ul class="tags">
+				<li><span class="field">return:</span> whether or not records is an array (and end() worked)</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">void</span>
+		<span class="method-result">boolean</span>
 		<span class="method-name">
 			last
 		</span>
@@ -691,18 +756,19 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">next</span> (line <span class="line-number">496</span>)
+		<span class="method-title">next</span> (line <span class="line-number">548</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Next Record</p>
 <p class="description"><p>Increment the record array to the next member of the record set.</p></p>
 	<ul class="tags">
+				<li><span class="field">return:</span> whether or not there was next element</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">void</span>
+		<span class="method-result">boolean</span>
 		<span class="method-name">
 			next
 		</span>
@@ -716,18 +782,19 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">prev</span> (line <span class="line-number">506</span>)
+		<span class="method-title">prev</span> (line <span class="line-number">567</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Previous Record</p>
 <p class="description"><p>Decrement the record array to the next member of the record set.</p></p>
 	<ul class="tags">
+				<li><span class="field">return:</span> whether or not there was previous element</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">void</span>
+		<span class="method-result">boolean</span>
 		<span class="method-name">
 			prev
 		</span>
@@ -737,11 +804,37 @@
 		
 			
 	</div>
-<a name="methodunescape" id="unescape"><!-- --></a>
+<a name="methodreset" id="reset"><!-- --></a>
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">unescape</span> (line <span class="line-number">603</span>)
+		<span class="method-title">reset</span> (line <span class="line-number">586</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Reset Record</p>
+<p class="description"><p>Set the pointer to the first element of the record set.</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> whether or not records is an array (and could be reset)</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			reset
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodunescape" id="unescape"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">unescape</span> (line <span class="line-number">753</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -783,7 +876,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 17 Oct 2010 23:17:23 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Wed, 24 Nov 2010 23:41:52 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

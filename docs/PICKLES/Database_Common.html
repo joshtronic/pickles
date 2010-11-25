@@ -139,7 +139,7 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																																																																												
+																																																																																				
 												<div class="method-definition">
 											<span class="method-result">Database_Common</span>
 										<a href="#__construct" title="details" class="method-name">__construct</a>
@@ -148,6 +148,11 @@
 																<div class="method-definition">
 											<span class="method-result">boolean</span>
 										<a href="#close" title="details" class="method-name">close</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">string</span>
+										<a href="#getDriver" title="details" class="method-name">getDriver</a>
 										()
 									</div>
 																<div class="method-definition">
@@ -204,7 +209,7 @@
 					</div>
 		<div class="info-box-body">
 			<a name="var$connection" id="$connection"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -226,7 +231,7 @@
 
 </div>
 <a name="var$database" id="$database"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -248,7 +253,7 @@
 
 </div>
 <a name="var$driver" id="$driver"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -290,7 +295,7 @@
 
 </div>
 <a name="var$hostname" id="$hostname"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -312,7 +317,7 @@
 
 </div>
 <a name="var$password" id="$password"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -334,7 +339,7 @@
 
 </div>
 <a name="var$port" id="$port"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -368,7 +373,7 @@
 
 </div>
 <a name="var$results" id="$results"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -390,7 +395,7 @@
 
 </div>
 <a name="var$socket" id="$socket"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -412,7 +417,7 @@
 
 </div>
 <a name="var$username" id="$username"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -462,7 +467,7 @@
 			<A NAME='method_detail'></A>
 
 <a name="method__construct" id="__construct"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<span class="method-title">Constructor __construct</span> (line <span class="line-number">101</span>)
@@ -500,10 +505,10 @@
 				</ul>
 	</div>
 <a name="methodclose" id="close"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">close</span> (line <span class="line-number">197</span>)
+		<span class="method-title">close</span> (line <span class="line-number">210</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -538,11 +543,37 @@
 							</li>
 				</ul>
 	</div>
+<a name="methodgetDriver" id="getDriver"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">getDriver</span> (line <span class="line-number">187</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get Driver</p>
+<p class="description"><p>Returns the name of the driver in use. Used by the Model class to  determine which path to take when interfacing with the Database object.</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> name of the driver in use</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			getDriver
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
 <a name="methodopen" id="open"><!-- --></a>
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">open</span> (line <span class="line-number">188</span>)
+		<span class="method-title">open</span> (line <span class="line-number">201</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -766,7 +797,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 17 Oct 2010 23:17:22 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Wed, 24 Nov 2010 23:41:52 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>
