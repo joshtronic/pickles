@@ -108,7 +108,7 @@ class Display_PHP extends Display_Common
 		}
 		else
 		{
-			$this->jsonEncode();
+			echo Convert::toJSON($this->module_return);
 		}
 	}
 }
