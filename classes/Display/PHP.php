@@ -100,43 +100,6 @@ class Display_PHP extends Display_Common
 			// Grabs the buffer contents and clears it out
 			$buffer = ob_get_clean();
 
-			/*
-			@todo this wasn't working as well as I'd like:
-
-			$regex = array(
-				'PRE'      => '!<pre>.+?</pre>!is',
-				'SCRIPT'   => '!<script[^>]+>.+?</script>!is',
-				'TEXTAREA' => '!<textarea[^>]+>.+?</textarea>!is',
-			);
-
-			$search_replace = array();
-
-			// Cleans up the stuff we don't want to minify
-			foreach ($regex as $type => $pattern)
-			{
-				$hash = '@@@PICKLES::' . $type . '@@@';
-
-				preg_match_all($pattern, $buffer, $matches);
-				$search_replace[$hash] = $matches[0];
-				$buffer = preg_replace($pattern, $hash, $buffer);
-			}
-
-			// Strips the whitespace
-			$buffer = trim(preg_replace('/((?<!\?>)\n)[\s]+/m', '\1', $buffer));
-
-			// Kills any HTML comments
-			$buffer = preg_replace('/<!--.*-->/U', '', $buffer);
-
-			// Injects the stuff we stripped earlier
-			foreach ($search_replace as $search => $replacements)
-			{
-				foreach ($replacements as $replacement)
-				{
-					$buffer = preg_replace('/'.$search.'/', $replacement, $buffer, 1);
-				}
-			}
-			*/
-
 			// Kills any whitespace and HTML comments
 			$buffer = preg_replace(array('/^[\s]+/m', '/<!--.*-->/U'), '', $buffer);
 
