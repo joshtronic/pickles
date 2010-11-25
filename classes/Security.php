@@ -166,72 +166,75 @@ class Security
 	 */
 	private static function getUserLevel()
 	{
-		// Checks the session against the cookie
-		if (isset($_SESSION['__pickles']['security']['user_id'], $_SESSION['__pickles']['security']['token'], $_COOKIE['pickles_security_token'])
-			&& $_SESSION['__pickles']['security']['token'] != $_COOKIE['pickles_security_token'])
+		if (self::checkSession() == true && isset($_SESSION['__pickles']['security']['user_id']))
 		{
-			Security::logout();
-			return false;
-		}
-		// Hits the database to determine the user's level
-		else
-		{
-			// Checks the session cache instead of hitting the database
-			if (isset(self::$cache[(int)$_SESSION['__pickles']['security']['user_id']]))
+			// Checks the session against the cookie
+			if (isset($_SESSION['__pickles']['security']['token'], $_COOKIE['pickles_security_token'])
+				&& $_SESSION['__pickles']['security']['token'] != $_COOKIE['pickles_security_token'])
 			{
-				return self::$cache[(int)$_SESSION['__pickles']['security']['user_id']];
+				Security::logout();
 			}
+			// Hits the database to determine the user's level
 			else
 			{
-				// Pulls the config and defaults where necessary
-				$config = Config::getInstance();
-
-				if ($config->security === false)
+				// Checks the session cache instead of hitting the database
+				if (isset($_SESSION['__pickles']['security']['user_id'], self::$cache[(int)$_SESSION['__pickles']['security']['user_id']]))
 				{
-					$config = array();
+					return self::$cache[(int)$_SESSION['__pickles']['security']['user_id']];
 				}
 				else
 				{
-					$config = $config->security;
-				}
+					// Pulls the config and defaults where necessary
+					$config = Config::getInstance();
 
-				$defaults = array('login' => 'login', 'model' => 'User', 'column' => 'level');
-				foreach ($defaults as $variable => $value)
-				{
-					if (!isset($config[$variable]))
+					if ($config->security === false)
 					{
-						$config[$variable] = $value; 
-					}
-				}
-
-				// Uses the model to pull the user's access level
-				$class = $config['model'];
-				$model = new $class(array('fields' => $config['column'], 'conditions' => array('id' => (int)$_SESSION['__pickles']['security']['user_id'])));
-
-				if ($model->count() == 0)
-				{
-					Security::logout();
-					return false;
-				}
-				else
-				{
-					$constant = 'SECURITY_LEVEL_' . $model->record[$config['column']];
-
-					if (defined($constant))
-					{
-						$constant = constant($constant);
-
-						self::$cache[(int)$_SESSION['__pickles']['security']['user_id']] = $constant;
-
-						return $constant;
+						$config = array();
 					}
 					else
 					{
-						throw new Exception('Security level constant is not defined');
+						$config = $config->security;
+					}
+
+					$defaults = array('login' => 'login', 'model' => 'User', 'column' => 'level');
+					foreach ($defaults as $variable => $value)
+					{
+						if (!isset($config[$variable]))
+						{
+							$config[$variable] = $value; 
+						}
+					}
+
+					// Uses the model to pull the user's access level
+					$class = $config['model'];
+					$model = new $class(array('fields' => $config['column'], 'conditions' => array('id' => (int)$_SESSION['__pickles']['security']['user_id'])));
+
+					if ($model->count() == 0)
+					{
+						Security::logout();
+					}
+					else
+					{
+						$constant = 'SECURITY_LEVEL_' . $model->record[$config['column']];
+
+						if (defined($constant))
+						{
+							$constant = constant($constant);
+
+							self::$cache[(int)$_SESSION['__pickles']['security']['user_id']] = $constant;
+
+							return $constant;
+						}
+						else
+						{
+							throw new Exception('Security level constant is not defined');
+						}
 					}
 				}
 			}
 		}
+		
+		return false;
 	}
 
 	/**
