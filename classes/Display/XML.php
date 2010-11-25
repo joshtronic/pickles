@@ -40,28 +40,95 @@ class Display_XML extends Display_Common
 	/**
 	 * Array to XML
 	 *
-	 * Converts an array into XML tags (recursive).
+	 * Converts an array into XML tags (recursive). This method expects the
+	 * passed array to be formatted very specifically to accomodate the fact
+	 * that an array's format isn't quite the same as well-formed XML.
+	 *
+	 * Input Array =
+	 *     array('children' => array(
+	 *         'child' => array(
+	 *             array('name' => 'Wendy Darling'),
+	 *             array('name' => 'John Darling'),
+	 *             array('name' => 'Michael Darling')
+	 *         )
+	 *     ))
+	 *
+	 * Output XML =
+	 *     <children>
+	 *         <child><name>Wendy Darling</name></child>
+	 *         <child><name>John Darling</name></child>
+	 *         <child><name>Michael Darling</name></child>
+	 *     </children>
 	 *
 	 * @access private
 	 * @param  array $array array to convert into XML
 	 * @return string generated XML
-	 * @todo   Method sucks, should replace
 	 */
-	private function arrayToXML($array)
+	private function arrayToXML($array, $format = false, $level = 0)
 	{
-		$xml = '';
-
-		if (is_array($array))
+		if ($level == 0)
 		{
-			foreach ($array as $tag => $data)
+			$xml = '<' . key($array) . '>' . ($format ? "\n" : '') . $this->arrayToXML(current($array), $format, $level + 1) . '</' . key($array) . '>' . ($format ? "\n" : '');
+		}
+		else
+		{
+			$xml = '';
+
+			if (is_array($array))
 			{
-				if (is_int($tag))
+				foreach ($array as $node => $value)
 				{
-					$xml .= (is_array($data) ? $this->arrayToXML($data) : $data);
-				}
-				else
-				{
-					$xml .= '<' . $tag . '>' . (is_array($data) ? $this->array2Xml($data) : $data) . '</' . $tag . '>';
+					// Checks if the value is an array
+					if (is_array($value))
+					{
+						foreach ($value as $node2 => $value2)
+						{
+							if (is_array($value2))
+							{
+								// Nest the value if the node is an integer
+								$new_value = (is_int($node2) ? $value2 : array($node2 => $value2));
+			
+								$xml .= ($format ? str_repeat("\t", $level) : '');
+								$xml .= '<' . $node . '>' . ($format ? "\n" : '');
+								$xml .= $this->arrayToXML($new_value, $format, $level + 1);
+								$xml .= ($format ? str_repeat("\t", $level) : '');
+								$xml .= '</' . $node . '>' . ($format ? "\n" : '');
+							}
+							else
+							{
+								if (is_int($node2))
+								{
+									$node2 = $node;
+								}
+
+								// Checks for special characters
+								if (htmlspecialchars($value2) != $value2)
+								{
+									$xml .= ($format ? str_repeat("\t", $level) : '');
+									$xml .= '<' . $node2 . '><![CDATA[' . $value2 . ']]></' . $node2 . '>' . ($format ? "\n" : '');
+								}
+								else
+								{
+									$xml .= ($format ? str_repeat("\t", $level) : '');
+									$xml .= '<' . $node2 . '>' . $value2 . '</' . $node2 . '>' . ($format ? "\n" : '');
+								}
+							}
+						}
+					}
+					else
+					{
+						// Checks for special characters
+						if (htmlspecialchars($value) != $value)
+						{
+							$xml .= ($format ? str_repeat("\t", $level) : '');
+							$xml .= '<' . $node . '><![CDATA[' . $value . ']]></' . $node . '>' . ($format ? "\n" : '');
+						}
+						else
+						{
+							$xml .= ($format ? str_repeat("\t", $level) : '');
+							$xml .= '<' . $node . '>' . $value . '</' . $node . '>' . ($format ? "\n" : '');
+						}
+					}
 				}
 			}
 		}
