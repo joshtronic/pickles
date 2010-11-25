@@ -262,14 +262,11 @@ class Form extends Object
 	 * @param  string $selected optional selected option
 	 * @param  string $classes optional class names
 	 * @param  string $additional optional additional parameters
-	 * @param  integer $end_year optional last year to display
 	 * @param  integer $start_year optional first year to display
+	 * @param  integer $end_year optional last year to display
 	 * @return string HTML for the select boxes
-	 * @todo   Currently only the DOB select is using this code, if another
-	 *         select comes along the DOB-centric logic will need to be
-	 *         moved.
 	 */
-	public function dateSelect($name = 'date', $selected = null, $classes = '', $additional = null, $end_year = null, $start_year = null)
+	public function dateSelect($name = 'date', $selected = null, $classes = '', $additional = null, $start_year = null, $end_year = null)
 	{
 		$html = '';
 
@@ -311,10 +308,10 @@ class Form extends Object
 		}
 
 		// Generates the list of years
-		$start_year = $start_year == null ? date('Y') : $start_year;
-		$end_year   = $end_year   == null ? 1895      : $end_year;
+		$current_year = date('Y');
+		$start_year   = $start_year == null ? $current_year - 10 : $start_year;
+		$end_year     = $end_year   == null ? $current_year + 10 : $end_year;
 
-		// Start year based on oldest living person: http://en.wikipedia.org/wiki/Oldest_people as of September 2009
 		for ($i = $start_year; $i >= $end_year; --$i)
 		{
 			$year_options[$i] = $i;
@@ -344,7 +341,9 @@ class Form extends Object
 	 */
 	public function dobSelect($name = 'dob', $selected = null, $classes = '', $additional = null)
 	{
-		return $this->dateSelect($name, $selected, $classes, $additional);
+		// Note: Start year based on oldest living person: http://en.wikipedia.org/wiki/Oldest_people as of November 2010
+		// Note: Start and end year may seem backwards, but we want them in descending order when rendered
+		return $this->dateSelect($name, $selected, $classes, $additional, date('Y'), 1896);
 	}
 
 	/**
