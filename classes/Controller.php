@@ -230,9 +230,13 @@ class Controller extends Object
 
 			if ($is_authenticated == false)
 			{
-				// @todo Redirect to login page, potentially configured in the config, else /login
-				// @todo Set variable for the destination, perhaps $_SESSION['__pickles']['login']['destination']
-				exit('@todo this should bring you to a login page');
+				// Sets variable for the destination
+				$_SESSION['__pickles']['login']['destination'] = $_REQUEST['request'];
+
+				// Redirect to login page, potentially configured in the config, else /login
+				header('Location: /' . (isset($this->config->security['login']) ? $this->config->security['login'] : 'login'));
+
+				exit;
 			}
 		}
 
@@ -247,7 +251,7 @@ class Controller extends Object
 			$return_type = strtoupper($return_type);
 
 			// Validates the return type against the module
-			// @todo add back RSS and possibly add ATOM as well
+			// @todo Update RSS class and add RSS back to the list of possible return types
 			if (in_array($return_type, array('JSON', 'XML')) && in_array($return_type, $engines))
 			{
 				$engine = $return_type;
