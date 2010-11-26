@@ -331,6 +331,7 @@ class Controller extends Object
 			}
 
 			$valid_request = false;
+			$error_message = 'An unexpected error has occurred';
 			
 			// Determines if the request method is valid for this request
 			if ($module->method != false)
@@ -348,11 +349,43 @@ class Controller extends Object
 					}
 				}
 
+				if ($valid_request == false)
+				{
+					$error_message = 'There was a problem with your request method';
+				}
+
 				unset($methods, $request_method, $method);
 			}
 			else
 			{
-				$valid_request = true;
+				// Validates the hash if applicable
+				if ($module->hash != false)
+				{
+					if (isset($_REQUEST['security_hash']))
+					{
+						$hash_value = ($module->hash === true ? get_class($module) : $module->hash);
+
+						if (Security::generateHash($hash_value) == $_REQUEST['security_hash'])
+						{
+							$valid_request = true;
+						}
+						else
+						{
+							var_dump(Security::generateHash($hash_value), $_REQUEST['security_hash']);
+							$error_message = 'Invalid security hash';
+						}
+
+						unset($hash_value);
+					}
+					else
+					{
+						$error_message = 'Missing security hash';
+					}
+				}
+				else
+				{
+					$valid_request = true;
+				}
 			}
 
 			/**
@@ -360,7 +393,9 @@ class Controller extends Object
 			 * module know to use the cache, either passing in a variable
 			 * or setting it on the object
 			 */
-			$display->setModuleReturn($valid_request == true ? $module->__default() : array('status' => 'error', 'message' => 'There was a problem with your request method'));
+			$display->setModuleReturn($valid_request == true ? $module->__default() : array('status' => 'error', 'message' => $error_message));
+
+			unset($error_message);
 
 			// Stops the module timer
 			if ($profiler === true || stripos($profiler, 'timers') !== false)

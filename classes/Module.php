@@ -98,6 +98,18 @@ class Module extends Object
 	protected $method = null;
 
 	/**
+	 * Hash
+	 *
+	 * Whether or not to validate the security hash. Boolean true will indicate
+	 * using the name of the module as the hash, a string value will use the
+	 * value instead.
+	 *
+	 * @access protected
+	 * @var    string or boolean, null by default
+	 */
+	protected $hash = null;
+
+	/**
 	 * Default display engine
 	 *
 	 * Defaults to PHP but could be set to JSON, XML or RSS. Value is
