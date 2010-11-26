@@ -73,19 +73,17 @@ class Form extends Object
 	/**
 	 * Security Input
 	 *
-	 * Generates a hidden input with an SHA1 hash as the value. Optionally can
-	 * be salted via a config variable or password argument. The name of the
+	 * Generates a hidden input with an SHA1 hash as the value. The name of the
 	 * field is cannot be changed as this method was only intended for use with
 	 * forms that are submitted via AJAX to provide better security.
 	 *
 	 * @param  string $value value to hash
-	 * @param  mixed $salts optional salt or salts
 	 * @return string HTML for the input
 	 */
-	public function securityInput($value, $salts = null)
+	public function securityInput($value)
 	{
 		// Returns the hidden input
-		return $this->hiddenInput('security_hash', Security::generateHash($value, $salts));
+		return $this->hiddenInput('security_hash', Security::generateHash($value));
 	}
 
 	/**
