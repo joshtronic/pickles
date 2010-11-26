@@ -361,11 +361,49 @@ class Model extends Object
 	 */
 	private function generateQuery()
 	{
-		// @todo Adds the JOIN syntax
+		// Adds the JOIN syntax
 		if ($this->joins != false)
 		{
-			// $sql[] = 'JOIN ...';
-			throw new Exception('Joins parameter is not yet implemented, sorry');
+			if (is_array($this->joins))
+			{
+				foreach ($this->joins as $join => $tables)
+				{
+					$join_pieces = array((stripos('JOIN ', $join) === false ? 'JOIN' : strtoupper($join)));
+
+					if (is_array($tables))
+					{
+						foreach ($tables as $table => $conditions)
+						{
+							$join_pieces[] = $table;
+
+							if (is_array($conditions))
+							{
+								$type       = strtoupper(key($conditions));
+								$conditions = current($conditions);
+
+								$join_pieces[] = $type;
+								$join_pieces[] = $this->generateConditions($conditions, true);
+							}
+							else
+							{
+								$join_pieces = $conditions;
+							}
+						}
+					}
+					else
+					{
+						$join_pieces[] = $tables;
+					}
+				}
+
+				$this->sql[] = implode(' ', $join_pieces);
+
+				unset($join_pieces);
+			}
+			else
+			{
+				$this->sql[] = (stripos('JOIN ', $join) === false ? 'JOIN ' : '') . $this->joins;
+			}
 		}
 
 		// Adds the WHERE conditionals
@@ -414,9 +452,11 @@ class Model extends Object
 	 * conditions. Supports as much as I could remember to implement. This
 	 * method is utilized by both the WHERE and HAVING clauses.
 	 *
-	 * @param array $conditions array of potentially nested conditions
+	 * @param  array $conditions array of potentially nested conditions
+	 * @param  boolean $inject_values whether or not to use input parameters
+	 * @return string $sql generated SQL for the conditions
 	 */
-	private function generateConditions($conditions)
+	private function generateConditions($conditions, $inject_values = false)
 	{
 		$sql = '';
 
@@ -437,7 +477,7 @@ class Model extends Object
 					// Determines if we need to include ( )
 					$nested = (count($value) > 1);
 
-					$sql .= ' ' . $key . ' ' . ($nested ? '(' : '') . $this->generateConditions($value) . ($nested ? ')' : '');
+					$sql .= ' ' . $key . ' ' . ($nested ? '(' : '') . $this->generateConditions($value, $inject_values) . ($nested ? ')' : '');
 				}
 				else
 				{
@@ -457,8 +497,19 @@ class Model extends Object
 				// Generates an IN statement
 				if (is_array($value) && $between == false)
 				{
-					$sql .= $key . ' IN (' . implode(', ', array_fill(1, count($value), '?')) . ')';
-					$this->input_parameters = array_merge($this->input_parameters, $value);
+					$sql .= $key . ' IN (';
+
+					if ($inject_values == true)
+					{
+						$sql .= implode(', ', $value);
+					}
+					else
+					{
+						$sql .= implode(', ', array_fill(1, count($value), '?'));
+						$this->input_parameters = array_merge($this->input_parameters, $value);
+					}
+						
+					$sql .= ')';
 				}
 				else
 				{
@@ -478,15 +529,22 @@ class Model extends Object
 						}
 						else
 						{
-							$sql .= $key . ' ?';
-							$this->input_parameters[] = $value;
+							$sql .= $key . ' ';
+
+							if ($inject_values == true)
+							{
+								$sql .= $value;
+							}
+							else
+							{
+								$sql .= '?';
+								$this->input_parameters[] = $value;
+							}
 						}
 					}
 					// Generates a BETWEEN statement
 					elseif ($between == true)
 					{
-						$sql .= $key . ' ? AND ?';
-
 						if (is_array($value))
 						{
 							// Checks the number of values, BETWEEN expects 2
@@ -496,7 +554,17 @@ class Model extends Object
 							}
 							else
 							{
-								$this->input_parameters = array_merge($this->input_parameters, $value);
+								$sql .= $key . ' ';
+
+								if ($inject_values == true)
+								{
+									$sql .= $value[0] . ' AND ' . $value[1];
+								}
+								else
+								{
+									$sql .= '? AND ?';
+									$this->input_parameters = array_merge($this->input_parameters, $value);
+								}
 							}
 						}
 						else
@@ -506,15 +574,24 @@ class Model extends Object
 					}
 					else
 					{
+						$sql .= $key . ' ';
+
 						// Checks if we're working with NULL values
 						if ($null)
 						{
-							$sql .= $key . ' IS NULL';
+							$sql .= 'IS NULL';
 						}
 						else
 						{
-							$sql .= $key . ' = ?';
-							$this->input_parameters[] = $value;
+							if ($inject_values == true)
+							{
+								$sql .= '= ' . $value;
+							}
+							else
+							{
+								$sql .= '= ?';
+								$this->input_parameters[] = $value;
+							}
 						}
 					}
 				}
