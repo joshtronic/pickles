@@ -71,6 +71,50 @@ class Form extends Object
 	}
 
 	/**
+	 * Security Input
+	 *
+	 * Generates a hidden input with an SHA1 hash as the value. Optionally can
+	 * be salted via a config variable or password argument. The name of the
+	 * field is cannot be changed as this method was only intended for use with
+	 * forms that are submitted via AJAX to provide better security.
+	 *
+	 * @param  string $value value to hash
+	 * @param  mixed $salts optional salt or salts
+	 * @return string HTML for the input
+	 */
+	public function securityInput($value, $salts = null)
+	{
+		// Determines which salt(s) to use
+		if ($salts == null)
+		{
+			if (!isset($this->config->security['salt']) || $this->config->security['salt'] == null)
+			{
+				$salts = array('P1ck73', 'Ju1C3');
+			}
+			else
+			{
+				$salts = $this->config->security['salt'];
+			}
+		}
+
+		// Forces the variable to be an array
+		if (!is_array($salts))
+		{
+			$salts = array($salts);
+		}
+
+		// Loops through the salts, applies them and calculates the hash
+		$hash = $value;
+		foreach ($salts as $salt)
+		{
+			$hash = sha1($salt . $hash);
+		}
+
+		// Returns the hidden input
+		return $this->hiddenInput('security_hash', $hash);
+	}
+
+	/**
 	 * Text Area
 	 *
 	 * Generates a textarea with the passed data.
