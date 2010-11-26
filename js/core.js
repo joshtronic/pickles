@@ -7,7 +7,7 @@ $(document).ready(function()
 	}
 
 	// Catches forms being submitted
-	$('form.ajax input[type=submit],form.ajax button.submit').live('click', function()
+	$('form.ajax input[type=submit], form.ajax button.submit').live('click', function()
 	{
 		// Grabs the form
 		var form = $(this).parents('form').get();
@@ -24,7 +24,7 @@ $(document).ready(function()
 			// Forces the cursor to be waiting
 			document.body.style.cursor = 'wait';
 
-			// Copies any CKEditor data to the same named form element (hack)
+			// Copies any CKEditor data to the same named form element (it's a hack!)
 			if (typeof(CKEDITOR) != 'undefined')
 			{
 				if (typeof(CKEDITOR.instances) != 'undefined')
@@ -103,7 +103,13 @@ $(document).ready(function()
 
 					'error': function(XMLHttpRequest, textStatus, errorThrown)
 					{
+						injectMessage(form, errorThrown, 'error');
 
+						// Removes READONLY status
+						$('button, input, textarea', form).attr('readonly', '');
+
+						// Returns the cursor to normal... but is anyone really normal?
+						document.body.style.cursor = 'default';
 					}
 				});
 			}
