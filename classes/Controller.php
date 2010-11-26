@@ -371,7 +371,6 @@ class Controller extends Object
 						}
 						else
 						{
-							var_dump(Security::generateHash($hash_value), $_REQUEST['security_hash']);
 							$error_message = 'Invalid security hash';
 						}
 
