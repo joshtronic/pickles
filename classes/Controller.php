@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -138,7 +138,7 @@ class Controller extends Object
 			$module = new Module();
 		}
 
-		// Determines if we need to serve over HTTP or HTTPS 
+		// Determines if we need to serve over HTTP or HTTPS
 		if ($module->secure == false && isset($_SERVER['HTTPS']))
 		{
 			header('Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
@@ -226,7 +226,7 @@ class Controller extends Object
 							$is_authenticated = Security::hasLevel($module_security_levels);
 						}
 						break;
-					
+
 					case 'IS':
 						if ($security_level_count > 0)
 						{
@@ -330,13 +330,38 @@ class Controller extends Object
 				Profiler::timer('module __default');
 			}
 
+			$valid_request = false;
+			
+			// Determines if the request method is valid for this request
+			if ($module->method != false)
+			{
+				$methods = (is_array($module->method) ? $module->method : array($module->method));
+
+				$request_method = $_SERVER['REQUEST_METHOD'];
+
+				foreach ($methods as $method)
+				{
+					if ($request_method == strtoupper($method))
+					{
+						$valid_request = true;
+						break;
+					}
+				}
+
+				unset($methods, $request_method, $method);
+			}
+			else
+			{
+				$valid_request = true;
+			}
+
 			/**
 			 * Note to Self: When building in caching will need to let the
 			 * module know to use the cache, either passing in a variable
 			 * or setting it on the object
 			 */
-			$display->setModuleReturn($module->__default());
-			
+			$display->setModuleReturn($valid_request == true ? $module->__default() : array('status' => 'error', 'message' => 'There was a problem with your request method'));
+
 			// Stops the module timer
 			if ($profiler === true || stripos($profiler, 'timers') !== false)
 			{
@@ -352,7 +377,7 @@ class Controller extends Object
 
 		// Renders the content
 		$display->render();
-		
+
 		// Steps the display timer
 		if ($profiler === true || stripos($profiler, 'timers') !== false)
 		{

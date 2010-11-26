@@ -88,16 +88,14 @@ class Module extends Object
 	protected $session = null;
 
 	/**
-	 * AJAX
+	 * Method
 	 *
-	 * Whether or not the page must be loaded via AJAX and if so, what pages
-	 * are allowed to access it and the request method.
+	 * Request methods that are allowed to access the module.
 	 *
 	 * @access protected
-	 * @var    boolean or array, null by default
-	 * @todo   Implement this functionality
+	 * @var    string or array, null by default
 	 */
-	protected $ajax = null;
+	protected $method = null;
 
 	/**
 	 * Default display engine
