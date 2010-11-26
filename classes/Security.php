@@ -36,6 +36,48 @@ class Security
 	 * @var    array
 	 */
 	private static $cache = array();
+		
+	/**
+	 * Generate Hash
+	 *
+	 * Generates an SHA1 hash from the provided string. Optionally can be salted.
+	 *
+	 * @param  string $value value to hash
+	 * @param  mixed $salts optional salt or salts
+	 * @return string SHA1 has
+	 */
+	public static function generateHash($value, $salts = null)
+	{
+		// Determines which salt(s) to use
+		if ($salts == null)
+		{
+			$config = Config::getInstance();
+
+			if (isset($config->security['salt']) && $config->security['salt'] != null)
+			{
+				$salts = $config->security['salt'];
+			}
+			else
+			{
+ 				$salts = array('P1ck73', 'Ju1C3');
+			}
+		}
+
+		// Forces the variable to be an array
+		if (!is_array($salts))
+		{
+			$salts = array($salts);
+		}
+
+		// Loops through the salts, applies them and calculates the hash
+		$hash = $value;
+		foreach ($salts as $salt)
+		{
+			$hash = sha1($salt . $hash);
+		}
+
+		return $hash;
+	}
 
 	/**
 	 * Check Session

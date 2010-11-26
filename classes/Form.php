@@ -84,34 +84,8 @@ class Form extends Object
 	 */
 	public function securityInput($value, $salts = null)
 	{
-		// Determines which salt(s) to use
-		if ($salts == null)
-		{
-			if (!isset($this->config->security['salt']) || $this->config->security['salt'] == null)
-			{
-				$salts = array('P1ck73', 'Ju1C3');
-			}
-			else
-			{
-				$salts = $this->config->security['salt'];
-			}
-		}
-
-		// Forces the variable to be an array
-		if (!is_array($salts))
-		{
-			$salts = array($salts);
-		}
-
-		// Loops through the salts, applies them and calculates the hash
-		$hash = $value;
-		foreach ($salts as $salt)
-		{
-			$hash = sha1($salt . $hash);
-		}
-
 		// Returns the hidden input
-		return $this->hiddenInput('security_hash', $hash);
+		return $this->hiddenInput('security_hash', Security::generateHash($value, $salts));
 	}
 
 	/**
