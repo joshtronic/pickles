@@ -31,14 +31,17 @@ class String
 	 * Formats a 10 digit phone number with dashes as ###-###-####.
 	 *
 	 * @static
-	 * @param  integer $number number to format
+	 * @param  string $number number to format
+	 * @param  string $replacement output of the string
 	 * @return string formatted phone number
-	 * @todo   Allow a format to be passed in, perhaps make it configurable in config.php
 	 */
-	static function formatPhoneNumber($number)
+	static function formatPhoneNumber($number, $replacement = '$1-$2-$3')
 	{
+		// Strips characters we don't need
 		$number = str_replace(array('(', ')', ' ', '-', '.', '_'), '', $number);
-		return preg_replace('/^(\d{3})(\d{3})(.+)$/', '$1-$2-$3', $number);
+		
+		// Formats the number
+		return preg_replace('/^(\d{3})(\d{3})(.+)$/', $replacement, $number);
 	}
 
 	// }}}
