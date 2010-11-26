@@ -64,7 +64,7 @@ class Controller extends Object
 				}
 			}
 			// Catches requests to the __shared directory
-			if (preg_match('/^__shared/', $_REQUEST['request']))
+			elseif (preg_match('/^__shared/', $_REQUEST['request']))
 			{
 				header('Location: /');
 				exit;
