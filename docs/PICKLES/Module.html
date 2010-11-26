@@ -50,11 +50,7 @@
 								</div>
 		<div class="info-box-body">
 			<div class="var-summary">
-																																																																																																<div class="var-title">
-					<span class="var-type">boolean</span>
-					<a href="#$ajax" title="details" class="var-name">$ajax</a>
-				</div>
-																<div class="var-title">
+																																																																																																								<div class="var-title">
 					<span class="var-type">object</span>
 					<a href="#$db" title="details" class="var-name">$db</a>
 				</div>
@@ -67,8 +63,16 @@
 					<a href="#$engine" title="details" class="var-name">$engine</a>
 				</div>
 																<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$hash" title="details" class="var-name">$hash</a>
+				</div>
+																<div class="var-title">
 					<span class="var-type">string,</span>
 					<a href="#$keywords" title="details" class="var-name">$keywords</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$method" title="details" class="var-name">$method</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">boolean,</span>
@@ -149,32 +153,7 @@
 							
 					</div>
 		<div class="info-box-body">
-			<a name="var$ajax" id="$ajax"><!-- --></A>
-<div class="evenrow">
-
-	<div class="var-header">
-		<span class="var-title">
-			<span class="var-type">boolean</span>
-			<span class="var-name">$ajax</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">100</span>)
-		</span>
-	</div>
-
-	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">AJAX</p>
-<p class="description"><p>Whether or not the page must be loaded via AJAX and if so, what pages  are allowed to access it and the request method.</p></p>
-	<ul class="tags">
-				<li><span class="field">var:</span> or array, null by default</li>
-				<li><span class="field">todo:</span> Implement this functionality</li>
-				<li><span class="field">access:</span> protected</li>
-			</ul>
-	
-	
-		
-		
-
-</div>
-<a name="var$db" id="$db"><!-- --></A>
+			<a name="var$db" id="$db"><!-- --></A>
 <div class="oddrow">
 
 	<div class="var-header">
@@ -226,7 +205,7 @@
 		<span class="var-title">
 			<span class="var-type">string,</span>
 			<span class="var-name">$engine</span>
-			 = <span class="var-default"> DISPLAY_PHP</span>			(line <span class="line-number">111</span>)
+			 = <span class="var-default"> DISPLAY_PHP</span>			(line <span class="line-number">121</span>)
 		</span>
 	</div>
 
@@ -243,8 +222,32 @@
 		
 
 </div>
-<a name="var$keywords" id="$keywords"><!-- --></A>
+<a name="var$hash" id="$hash"><!-- --></A>
 <div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$hash</span>
+			 = <span class="var-default"> null</span>			(line <span class="line-number">110</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Hash</p>
+<p class="description"><p>Whether or not to validate the security hash. Boolean true will indicate  using the name of the module as the hash, a string value will use the  value instead.</p></p>
+	<ul class="tags">
+				<li><span class="field">var:</span> or boolean, null by default</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$keywords" id="$keywords"><!-- --></A>
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -258,6 +261,30 @@
 <p class="short-description">Meta keywords (comma separated)</p>
 	<ul class="tags">
 				<li><span class="field">var:</span> null by default</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$method" id="$method"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$method</span>
+			 = <span class="var-default"> null</span>			(line <span class="line-number">98</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Method</p>
+<p class="description"><p>Request methods that are allowed to access the module.</p></p>
+	<ul class="tags">
+				<li><span class="field">var:</span> or array, null by default</li>
 				<li><span class="field">access:</span> protected</li>
 			</ul>
 	
@@ -344,7 +371,7 @@
 		<span class="var-title">
 			<span class="var-type">string,</span>
 			<span class="var-name">$template</span>
-			 = <span class="var-default"> 'index'</span>			(line <span class="line-number">123</span>)
+			 = <span class="var-default"> 'index'</span>			(line <span class="line-number">133</span>)
 		</span>
 	</div>
 
@@ -415,7 +442,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">135</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">145</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -451,7 +478,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">setRequest</span> (line <span class="line-number">206</span>)
+		<span class="method-title">setRequest</span> (line <span class="line-number">216</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -481,7 +508,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">__default</span> (line <span class="line-number">156</span>)
+		<span class="method-title">__default</span> (line <span class="line-number">166</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -506,7 +533,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">__get</span> (line <span class="line-number">183</span>)
+		<span class="method-title">__get</span> (line <span class="line-number">193</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -537,7 +564,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">__set</span> (line <span class="line-number">169</span>)
+		<span class="method-title">__set</span> (line <span class="line-number">179</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -581,7 +608,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Thu, 25 Nov 2010 01:52:51 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Fri, 26 Nov 2010 11:34:24 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>
