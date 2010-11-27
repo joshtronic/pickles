@@ -111,6 +111,14 @@ class Model extends Object
 	protected $joins = false; // JOIN
 
 	/**
+	 * [Index] Hints
+	 *
+	 * @access protected
+	 * @var    mixed
+	 */
+	protected $hints = false; // USE INDEX
+
+	/**
 	 * Conditions
 	 *
 	 * @access protected
@@ -411,6 +419,33 @@ class Model extends Object
 			else
 			{
 				$this->sql[] = (stripos('JOIN ', $join) === false ? 'JOIN ' : '') . $this->joins;
+			}
+		}
+
+		// Adds the index hints
+		if ($this->hints != false)
+		{
+			if (is_array($this->hints))
+			{
+				foreach ($this->hints as $hint => $columns)
+				{
+					if (is_array($columns))
+					{
+						$this->sql[] = $hint . ' (' . implode(', ', $columns) . ')';
+					}
+					else
+					{
+						$format = (stripos($columns, 'USE ') === false);
+
+						$this->sql[] = ($format == true ? 'USE INDEX (' : '') . $columns . ($format == true ? ')' : '');
+					}
+				}
+			}
+			else
+			{
+				$format = (stripos($this->hints, 'USE ') === false);
+
+				$this->sql[] = ($format == true ? 'USE INDEX (' : '') . $this->hints . ($format == true ? ')' : '');
 			}
 		}
 
