@@ -21,6 +21,8 @@ $config = array(
 		'disabled'        => false,
 		// Use sessions
 		'session'         => true,
+		// Force HTTPS
+		'secure'          => true,
 		// Name of the parent template
 		'template'        => 'index',
 		// Name of the default module
@@ -45,6 +47,21 @@ $config = array(
 			'username' => 'root',
 			'password' => '',
 			'database' => 'test'
+		),
+	),
+	
+	// Security configuration
+	'security' => array(
+		// Login page
+		'login'  => 'login',
+		// Your user table
+		'model'  => 'User',
+		// The column you use to specify the user role
+		'column' => 'access_level',
+		// The available levels (roles)
+		'levels' => array(
+			10 => 'USER',
+			20 => 'ADMIN',
 		),
 	),
 
