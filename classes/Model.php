@@ -499,7 +499,7 @@ class Model extends Object
 	 * @param  boolean $inject_values whether or not to use input parameters
 	 * @return string $sql generated SQL for the conditions
 	 */
-	private function generateConditions($conditions, $inject_values = false)
+	private function generateConditions($conditions, $inject_values = false, $conditional = 'AND')
 	{
 		$sql = '';
 
@@ -513,26 +513,40 @@ class Model extends Object
 			}
 
 			// Checks if conditional to start recursion
-			if (preg_match('/(AND|&&|OR|\|\||XOR)( NOT)?/i', $key))
+			if (preg_match('/^(AND|&&|OR|\|\||XOR)( NOT)?$/i', $key))
 			{
 				if (is_array($value))
 				{
 					// Determines if we need to include ( )
 					$nested = (count($value) > 1);
 
-					$sql .= ' ' . $key . ' ' . ($nested ? '(' : '') . $this->generateConditions($value, $inject_values) . ($nested ? ')' : '');
+					$conditional = $key;
+
+					$sql .= ' ' . ($sql == '' ? '' : $key) . ' ' . ($nested ? '(' : '');
+					$sql .= $this->generateConditions($value, $inject_values, $conditional);
+					$sql .= ($nested ? ')' : '');
 				}
 				else
 				{
-					$sql .= ' ' . $key . ' ' . $value;
+					$sql .= ' ' . ($sql == '' ? '' : $key) . ' ' . $value;
 				}
 			}
 			else
 			{
-				$key = trim($key);
+				if ($sql != '')
+				{
+					if (preg_match('/^(AND|&&|OR|\|\||XOR)( NOT)?/i', $key))
+					{
+						$sql .= ' ';
+					}
+					else
+					{
+						$sql .= ' ' . $conditional . ' ';
+					}
+				}
 
 				// Checks for our keywords to control the flow
-				$operator      = preg_match('/(<|<=|=|>=|>|!=|<>| LIKE)$/i', $key);
+				$operator      = preg_match('/(<|<=|=|>=|>|!=|!|<>| LIKE)$/i', $key);
 				$between       = preg_match('/ BETWEEN$/i', $key);
 				$null_operator = preg_match('/( IS| IS NOT)$/i', $key);
 				$null          = ($value === null);
@@ -556,44 +570,26 @@ class Model extends Object
 				}
 				else
 				{
-					// Omits the operator as the operator is there
-					if ($operator == true || $null_operator == true)
+					// If the key is numeric it wasn't set, so don't use it
+					if (is_numeric($key))
 					{
-						if ($null)
-						{
-							// Scrubs the operator if someone doesn't use IS / IS NOT
-							if ($operator == true)
-							{
-								$key = preg_replace('/ ?(!=|<>)$/i', ' IS NOT', $key);
-								$key = preg_replace('/ ?(<|<=|=|>=| LIKE)$/i', ' IS', $key);
-							}
-
-							$sql .= $key . ' NULL';
-						}
-						else
-						{
-							$sql .= $key . ' ';
-
-							if ($inject_values == true)
-							{
-								$sql .= $value;
-							}
-							else
-							{
-								$sql .= '?';
-								$this->input_parameters[] = $value;
-							}
-						}
+						$sql .= $value;
 					}
-					// Generates a BETWEEN statement
-					elseif ($between == true)
+					else
 					{
-						if (is_array($value))
+						// Omits the operator as the operator is there
+						if ($operator == true || $null_operator == true)
 						{
-							// Checks the number of values, BETWEEN expects 2
-							if (count($value) != 2)
+							if ($null)
 							{
-								throw new Exception('Between expects 2 values');
+								// Scrubs the operator if someone doesn't use IS / IS NOT
+								if ($operator == true)
+								{
+									$key = preg_replace('/ ?(!=|!|<>)$/i', ' IS NOT', $key);
+									$key = preg_replace('/ ?(<|<=|=|>=| LIKE)$/i', ' IS', $key);
+								}
+
+								$sql .= $key . ' NULL';
 							}
 							else
 							{
@@ -601,39 +597,65 @@ class Model extends Object
 
 								if ($inject_values == true)
 								{
-									$sql .= $value[0] . ' AND ' . $value[1];
+									$sql .= $value;
 								}
 								else
 								{
-									$sql .= '? AND ?';
-									$this->input_parameters = array_merge($this->input_parameters, $value);
+									$sql .= '?';
+									$this->input_parameters[] = $value;
 								}
 							}
 						}
-						else
+						// Generates a BETWEEN statement
+						elseif ($between == true)
 						{
-							throw new Exception('Between usage expects values to be in an array');
-						}
-					}
-					else
-					{
-						$sql .= $key . ' ';
-
-						// Checks if we're working with NULL values
-						if ($null)
-						{
-							$sql .= 'IS NULL';
-						}
-						else
-						{
-							if ($inject_values == true)
+							if (is_array($value))
 							{
-								$sql .= '= ' . $value;
+								// Checks the number of values, BETWEEN expects 2
+								if (count($value) != 2)
+								{
+									throw new Exception('Between expects 2 values');
+								}
+								else
+								{
+									$sql .= $key . ' ';
+
+									if ($inject_values == true)
+									{
+										$sql .= $value[0] . ' AND ' . $value[1];
+									}
+									else
+									{
+										$sql .= '? AND ?';
+										$this->input_parameters = array_merge($this->input_parameters, $value);
+									}
+								}
 							}
 							else
 							{
-								$sql .= '= ?';
-								$this->input_parameters[] = $value;
+								throw new Exception('Between usage expects values to be in an array');
+							}
+						}
+						else
+						{
+							$sql .= $key . ' ';
+
+							// Checks if we're working with NULL values
+							if ($null)
+							{
+								$sql .= 'IS NULL';
+							}
+							else
+							{
+								if ($inject_values == true)
+								{
+									$sql .= '= ' . $value;
+								}
+								else
+								{
+									$sql .= '= ?';
+									$this->input_parameters[] = $value;
+								}
 							}
 						}
 					}
