@@ -83,6 +83,14 @@ class Model extends Object
 	protected $table = false; // FROM
 
 	/**
+	 * ID Column
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $id = 'id'; // WHERE ___ = ?
+
+	/**
 	 * Collection Name
 	 *
 	 * For compatibility with the naming conventions used by MongoDB, the
@@ -251,9 +259,9 @@ class Model extends Object
 				// Pulls by ID
 				elseif (is_int($type_or_parameters))
 				{
-					$this->sql[] = 'WHERE id = :id LIMIT 1;';
+					$this->sql[] = 'WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
 
-					$this->input_parameters = array('id' => $parameters);
+					$this->input_parameters = array($this->id => $parameters);
 				}
 				else
 				{
@@ -734,7 +742,7 @@ class Model extends Object
 		if (count($this->record) > 0)
 		{
 			// Determines if it's an UPDATE or INSERT
-			$update = (isset($this->record['id']) && trim($this->record['id']) != '');
+			$update = (isset($this->record[$this->id]) && trim($this->record[$this->id]) != '');
 
 			// Establishes the query, optionally uses DELAYED INSERTS
 			$sql = ($update === true ? 'UPDATE' : 'INSERT' . ($this->delayed == true ? ' DELAYED' : '') . ' INTO') . ' ' . $this->table . ' SET ';
@@ -746,7 +754,7 @@ class Model extends Object
 			// Loops through all the columns and assembles the query
 			foreach ($record as $column => $value)
 			{
-				if ($column != 'id')
+				if ($column != $this->id)
 				{
 					if ($input_parameters != null)
 					{
@@ -761,8 +769,8 @@ class Model extends Object
 			// If it's an UPDATE tack on the ID
 			if ($update === true)
 			{
-				$sql .= ' WHERE id = :id LIMIT 1;';
-				$input_parameters[':id'] = $this->record['id'];
+				$sql .= ' WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
+				$input_parameters[':' . $this->id] = $this->record[$this->id];
 			}
 
 			// Executes the query
@@ -781,8 +789,8 @@ class Model extends Object
 	 */
 	public function delete()
 	{
-		$sql = 'DELETE FROM ' . $this->table . ' WHERE id = :id LIMIT 1;';
-		$input_parameters[':id'] = $this->record['id'];
+		$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
+		$input_parameters[':' . $this->id] = $this->record[$this->id];
 
 		return $this->db->execute($sql, $input_parameters);
 	}
