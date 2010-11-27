@@ -263,8 +263,7 @@ class Controller extends Object
 			$return_type = strtoupper($return_type);
 
 			// Validates the return type against the module
-			// @todo Update RSS class and add RSS back to the list of possible return types
-			if (in_array($return_type, array('JSON', 'XML')) && in_array($return_type, $engines))
+			if (in_array($return_type, array('JSON', 'RSS', 'XML')) && in_array($return_type, $engines))
 			{
 				$engine = $return_type;
 			}
