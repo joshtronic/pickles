@@ -477,6 +477,7 @@ class Model extends Object
 	 *
 	 * @param  array $conditions array of potentially nested conditions
 	 * @param  boolean $inject_values whether or not to use input parameters
+	 * @param  string $conditional syntax to use between conditions
 	 * @return string $sql generated SQL for the conditions
 	 */
 	private function generateConditions($conditions, $inject_values = false, $conditional = 'AND')
