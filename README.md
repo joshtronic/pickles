@@ -29,7 +29,7 @@ PICKLES is in fact not a true MVC system and won't be masquerading around as one
 * MySQL with PDO and PDO_MYSQL drivers
 * PostgreSQL with PDO and PDO_PGSQL drivers
 * SQLite 3 with PDO and PDO_SQLITE drivers
-* Mongo with Mongo driver and PECL Mongo 1.0.10 (included)
+* Limited support for Mongo with Mongo driver and PECL Mongo 1.0.10 (included)
 
 ## Installation
 
