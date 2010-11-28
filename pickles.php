@@ -77,9 +77,9 @@ if (ini_get('date.timezone') == '')
 $config = Config::getInstance();
 
 // Configures any available PHP configuration options
-if (isset($config->php['display_error']))
+if (isset($config->php['display_errors']))
 {
-	ini_set('display_errors', (boolean)$config->php['display_error']);
+	ini_set('display_errors', (boolean)$config->php['display_errors']);
 }
 
 if (isset($config->php['error_reporting']))
