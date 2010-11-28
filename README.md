@@ -29,7 +29,7 @@ PICKLES is in fact not a true MVC system and won't be masquerading around as one
 * MySQL with PDO and PDO_MYSQL drivers
 * PostgreSQL with PDO and PDO_PGSQL drivers
 * SQLite 3 with PDO and PDO_SQLITE drivers
-* Mongo with Mongo driver and PECL Mongo 1.0.10 (included)
+* Limited support for Mongo with Mongo driver and PECL Mongo 1.0.10 (included)
 
 ## Installation
 
@@ -41,8 +41,8 @@ Installation is quite simple as there is no installer to run, and all server con
 
 3.     Open the launchpad directory and you will find a sample site ready to be copied and pasted to wherever the site you set up is located.
 
-    - The directory public will need to be renamed to whatever you've set up your document root as.
+       - The directory public will need to be renamed to whatever you've set up your document root as.
 
-    - The file apache.conf will give you some insight to how configure Apache, or you can just set the include path in public/index.php
+       - The file apache.conf will give you some insight to how configure Apache, or you can just set the include path in public/index.php
 
 4. At this point you should have a very rudimentary site up and running.
