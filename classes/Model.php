@@ -787,7 +787,7 @@ class Model extends Object
 			$input_parameters = null;
 
 			// Limits the columns being updated
-			$record = ($update === true ? array_diff($this->record, $this->original[$this->index]) : $this->record);
+			$record = ($update === true ? array_diff_assoc($this->record, $this->original[$this->index]) : $this->record);
 
 			// Loops through all the columns and assembles the query
 			foreach ($record as $column => $value)
