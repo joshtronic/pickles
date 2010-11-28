@@ -302,26 +302,6 @@ class Model extends Object
 			else
 			{
 				throw new Exception('Sorry, Mongo support in the PICKLES Model is not quite ready yet');
-
-				/*
-				switch ($type_or_parameters)
-				{
-					case 'count':
-						break;
-
-					case 'list':
-						break;
-
-					case 'all':
-						$this->db->fetch($this->table, $this->input_parameters);
-						break;
-
-					// Throws an error
-					default:
-						throw new Exception('Unknown query type');
-						break;
-				}
-				*/
 			}
 
 			$list_type = ($type_or_parameters == 'list');

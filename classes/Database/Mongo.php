@@ -17,6 +17,8 @@
 
 /**
  * Mongo Database Abstraction Layer
+ *
+ * This database class is still considered incomplete and very experimental.
  */
 class Database_Mongo extends Database_Common
 {
