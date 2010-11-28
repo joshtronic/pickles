@@ -41,8 +41,8 @@ Installation is quite simple as there is no installer to run, and all server con
 
 3.     Open the launchpad directory and you will find a sample site ready to be copied and pasted to wherever the site you set up is located.
 
-- The directory public will need to be renamed to whatever you've set up your document root as.
+       - The directory public will need to be renamed to whatever you've set up your document root as.
 
-- The file apache.conf will give you some insight to how configure Apache, or you can just set the include path in public/index.php
+       - The file apache.conf will give you some insight to how configure Apache, or you can just set the include path in public/index.php
 
 4. At this point you should have a very rudimentary site up and running.
