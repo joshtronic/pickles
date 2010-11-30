@@ -157,6 +157,8 @@ function injectMessage(element, message, type)
 	$('.' + class_name, element).remove();
 	$(element).prepend('<div class="' + class_name + '" style="' + style + '" generated="true">' + message + '</div>');
 	$('.' + class_name, element).fadeIn();
+
+	return $('.' + class_name, element);
 }
 
 // Automatically tab to next element when max length is reached
