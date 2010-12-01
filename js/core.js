@@ -7,7 +7,7 @@ $(document).ready(function()
 	}
 
 	// Catches forms being submitted
-	$('form.ajax input[type=submit], form.ajax button.submit').live('click', function()
+	$('form.ajax input[type=submit], form.ajax .submit').live('click', function()
 	{
 		// Grabs the form
 		var form = $(this).parents('form').get();
