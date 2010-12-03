@@ -265,11 +265,11 @@ class Model extends Object
 					$this->generateQuery();
 				}
 				// Pulls by ID
-				elseif (is_int($type_or_parameters))
+				elseif (ctype_digit($type_or_parameters))
 				{
 					$this->sql[] = 'WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
 
-					$this->input_parameters = array($this->id => $parameters);
+					$this->input_parameters = array($this->id => $type_or_parameters);
 				}
 				else
 				{
@@ -292,6 +292,7 @@ class Model extends Object
 
 						// Throws an error
 						default:
+							print_r($this->sql);
 							throw new Exception('Unknown query type');
 							break;
 					}
