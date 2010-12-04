@@ -78,6 +78,15 @@ class Config extends Object
 				{
 					$environments = $config['environments'];
 
+					// Is this a CLI script 
+					$is_cli = isset($_SERVER['argc']);
+
+					// If we're on the CLI, check an environment was even passed in
+					if ($is_cli == true && $_SERVER['argc'] < 2)
+					{
+						throw new Exception('You must pass an environment (e.g. php script.php <environment>)');
+					}
+
 					// Loops through the environments and tries to match on IP or name
 					foreach ($config['environments'] as $name => $hosts)
 					{
@@ -86,13 +95,26 @@ class Config extends Object
 							$hosts = array($hosts);
 						}
 
+						// Tries to determine the environment name
 						foreach ($hosts as $host)
 						{
-							if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host) && $_SERVER['SERVER_ADDR'] == $host) || $_SERVER['SERVER_NAME'] == $host)
+							if ($is_cli)
 							{
-								// Sets the environment and makes a run for it
-								$environment = $name;
-								break;
+								// Checks the first argument on the command line
+								if ($_SERVER['argv'][1] == $name)
+								{
+									$environment = $name;
+									break;
+								}
+							}
+							else
+							{
+								if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host) && $_SERVER['SERVER_ADDR'] == $host) || $_SERVER['SERVER_NAME'] == $host)
+								{
+									// Sets the environment and makes a run for it
+									$environment = $name;
+									break;
+								}
 							}
 						}
 					}
