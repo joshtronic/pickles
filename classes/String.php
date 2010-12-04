@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -14,7 +14,7 @@
  * @package   PICKLES
  * @link      http://p.ickl.es
  */
- 
+
 /**
  * String Class
  *
@@ -35,16 +35,46 @@ class String
 	 * @param  string $replacement output of the string
 	 * @return string formatted phone number
 	 */
-	static function formatPhoneNumber($number, $replacement = '$1-$2-$3')
+	public static function formatPhoneNumber($number, $replacement = '$1-$2-$3')
 	{
 		// Strips characters we don't need
 		$number = str_replace(array('(', ')', ' ', '-', '.', '_'), '', $number);
-		
+
 		// Formats the number
 		return preg_replace('/^(\d{3})(\d{3})(.+)$/', $replacement, $number);
 	}
 
 	// }}}
+
+	// {{{ Is Empty
+
+	/**
+	 * Is Empty
+	 *
+	 * Checks if a string is empty. You can use the PHP function empty() but
+	 * that returns true for a string of "0". Last I checked, that's not an
+	 * empty string. PHP's function also doesn't apply trim() to the value
+	 * to ensure it's not just a bunch of spaces.
+	 *
+	 * @static
+	 * @param  string $value string(s) to be checked
+	 * @return boolean whether or not the string is empty
+	 */
+	public static function isEmpty()
+	{
+		foreach (func_get_args() as $value)
+		{
+			if (trim($value) == '')
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	// }}}
+
 
 	// {{{ Random
 
@@ -113,7 +143,7 @@ class String
 	/**
 	 * Truncate
 	 *
-	 * Truncates a string to a specified length and (optionally) adds a span to 
+	 * Truncates a string to a specified length and (optionally) adds a span to
 	 * provide a rollover to see the expanded text.
 	 *
 	 * @static
