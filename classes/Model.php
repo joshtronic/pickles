@@ -851,13 +851,22 @@ class Model extends Object
 	{
 		if (is_array($parameters))
 		{
+			$conditions = true;
+
 			// Adds the parameters to the object
 			foreach ($parameters as $key => $value)
 			{
 				if (isset($this->$key))
 				{
 					$this->$key = $value;
+
+					$conditions = false;
 				}
+			}
+
+			if ($conditions == true)
+			{
+				$this->conditions = $parameters;
 			}
 
 			return true;
