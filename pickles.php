@@ -38,7 +38,7 @@ define('SITE_MODEL_PATH',    SITE_PATH . 'models/');
 define('SITE_MODULE_PATH',   SITE_PATH . 'modules/');
 define('SITE_TEMPLATE_PATH', SITE_PATH . 'templates/');
 
-define('PRIVATE_PATH', SITE_PATH . 'private/');
+define('PRIVATE_PATH', SITE_PATH    . 'private/');
 define('LOG_PATH',     PRIVATE_PATH . 'logs/');
 
 // Sets up constants for the Display names
