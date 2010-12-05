@@ -155,7 +155,10 @@ class Controller extends Object
 		{
 			if ($module->session)
 			{
-				session_start();
+				if (session_id() == '')
+				{
+					session_start();
+				}
 			}
 			else
 			{

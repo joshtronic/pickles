@@ -105,6 +105,12 @@ if (isset($config->php['exception_handler']))
 	set_exception_handler($config->php['exception_handler']);
 }
 
+// Starts session handling
+if (isset($config->pickles['session']) && $config->pickles['session'] == true && session_id() == '')
+{
+	session_start();
+}
+
 // }}}
 
 // {{{ Auto[magical] Loader
