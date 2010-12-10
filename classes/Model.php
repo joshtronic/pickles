@@ -856,6 +856,9 @@ class Model extends Object
 			// Adds the parameters to the object
 			foreach ($parameters as $key => $value)
 			{
+				// Clean up the variable just in case
+				$key = trim(strtolower($key));
+
 				if (isset($this->$key))
 				{
 					$this->$key = $value;
@@ -874,6 +877,7 @@ class Model extends Object
 
 		return false;
 	}
+
 	/**
 	 * Unescape String
 	 *
