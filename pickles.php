@@ -241,7 +241,7 @@ function __handleException($exception)
 		<table>
 			<tr>
 				<th style="text-align:left" colspan="2">Trace</th>
-				<th>File</th>
+				<th style="text-align:left">File</th>
 				<th style="text-align:right">Line</th>
 			</tr>
 			<?php
