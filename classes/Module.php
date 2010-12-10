@@ -70,6 +70,16 @@ class Module extends Object
 	protected $secure = null;
 
 	/**
+	 * Private
+	 *
+	 * Whether or not the page can be accessed directly.
+	 *
+	 * @access protected
+	 * @var    boolean, false by default
+	 */
+	protected $private = false;
+
+	/**
 	 * Security settings of the page
 	 *
 	 * @access protected

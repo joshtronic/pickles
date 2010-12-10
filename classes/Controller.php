@@ -138,6 +138,13 @@ class Controller extends Object
 			$module = new Module();
 		}
 
+		// Determines if the module is private and should be, well, private
+		if ($module->private == true)
+		{
+			header('Location: /');
+			exit;
+		}
+
 		// Determines if we need to serve over HTTP or HTTPS
 		if ($module->secure == false && isset($_SERVER['HTTPS']))
 		{
