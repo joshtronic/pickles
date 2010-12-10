@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -88,7 +88,7 @@ class Profiler
 	{
 
 	}
-	
+
 	/**
 	 * Enabled
 	 *
@@ -106,7 +106,7 @@ class Profiler
 			$config       = Config::getInstance();
 			self::$config = $config->pickles['profiler'];
 		}
-		
+
 		// Checks if we're set to boolean true
 		if (self::$config === true)
 		{
@@ -124,7 +124,7 @@ class Profiler
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -259,7 +259,7 @@ class Profiler
 			else
 			{
 				self::Log('timer', '<span style="color:Orchid">Stopped timer</span> <span style="color:Yellow">' . $timer . '</span> <span style="color:#666">=></span> <span style="color:DarkKhaki">Time Elapsed:</span> ' . number_format((microtime(true) - self::$timers[$timer]) * 100, 3) . ' ms');
-				
+
 				unset(self::$timers[$timer]);
 			}
 

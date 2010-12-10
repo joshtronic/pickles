@@ -250,7 +250,7 @@ class Model extends Object
 				$this->table = $this->collection;
 			}
 
-			// If we're using an RDBMS (not Mongo) proceed with using SQL to pull the data 
+			// If we're using an RDBMS (not Mongo) proceed with using SQL to pull the data
 			if ($this->db->getDriver() != 'mongo')
 			{
 				// Starts with a basic SELECT ... FROM
@@ -547,7 +547,7 @@ class Model extends Object
 						$sql .= implode(', ', array_fill(1, count($value), '?'));
 						$this->input_parameters = array_merge($this->input_parameters, $value);
 					}
-						
+
 					$sql .= ')';
 				}
 				else

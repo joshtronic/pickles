@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -101,7 +101,7 @@ class Database_Mongo extends Database_Common
 
 		return true;
 	}
-	
+
 	/**
 	 * Fetch records from the database
 	 */

@@ -63,7 +63,7 @@ class String
 		// Trims whitespace, lowers the case then applies MD5
 		return md5(strtolower(trim($string)));
 	}
-	
+
 	// }}}
 
 	// {{{ Is Empty

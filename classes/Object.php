@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -66,7 +66,7 @@ class Object
 		{
 			$this->config = Config::getInstance();
 		}
-	
+
 		// Assigns the profiler flag
 		$this->profiler = (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] != '' ? $this->config->pickles['profiler'] : false);
 

@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -20,7 +20,7 @@
  *
  * Generic class to simplify connecting to a database. All database objects
  * should be created by this class to future proof against any internal changes
- * to PICKLES. 
+ * to PICKLES.
  */
 class Database extends Object
 {
@@ -77,7 +77,7 @@ class Database extends Object
 			if (isset($config->datasources[$name]))
 			{
 				$datasource = $config->datasources[$name];
-				
+
 				$datasource['driver'] = strtolower($datasource['driver']);
 
 				if (!isset(self::$instances['Database'][$name]))
@@ -98,7 +98,7 @@ class Database extends Object
 					// Instantiates our database class
 					$class    = 'Database_' . $class;
 					$instance = new $class();
-				
+
 					// Sets our database parameters
 					if (isset($datasource['hostname']))
 					{

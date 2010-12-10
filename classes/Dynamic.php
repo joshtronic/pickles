@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -23,7 +23,7 @@
  *
  * Note: you will want to add a mod_rewrite line to your .htaccess to support
  * the routing to the filenames with the timestamp injected:
- * 
+ *
  * RewriteRule ^(.+)\.([\d]+)\.(css|js|gif|png|jpg|jpeg)$ /$1.$3 [NC,QSA]
  */
 class Dynamic extends Object
@@ -64,7 +64,7 @@ class Dynamic extends Object
 				// Adds the dot so the file functions can find the file
 				$file = '.' . $reference;
 			}
-			
+
 			if (file_exists($file))
 			{
 				// Replaces the extension with time().extension
@@ -103,7 +103,7 @@ class Dynamic extends Object
 		{
 			throw new Exception('Reference value must be absolute (e.g. /path/to/file.png)');
 		}
-		
+
 		return $reference;
 	}
 
@@ -141,7 +141,7 @@ class Dynamic extends Object
 						$parts[key($parts)] = 'min.' . current($parts);
 						$minified_reference = implode('.', $parts);
 					}
-					
+
 					$original_filename = '.' . $original_reference;
 					$minified_filename = '.' . $minified_reference;
 
@@ -192,7 +192,7 @@ class Dynamic extends Object
 					{
 						throw new Exception('Supplied reference does not exist');
 					}
-					
+
 					break;
 
 				default:
@@ -234,7 +234,7 @@ class Dynamic extends Object
 				$parts[key($parts)] = 'min.' . current($parts);
 				$minified_reference = implode('.', $parts);
 			}
-			
+
 			$original_filename = '.' . $original_reference;
 			$minified_filename = '.' . $minified_reference;
 

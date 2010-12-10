@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -27,7 +27,7 @@ class Database_PDO_MySQL extends Database_PDO_Common
 	 * @var    string
 	 */
 	protected $driver = 'pdo_mysql';
-	
+
 	/**
 	 * DSN format
 	 *

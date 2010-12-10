@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Security System for PICKLES 
+ * Security System for PICKLES
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -36,7 +36,7 @@ class Security
 	 * @var    array
 	 */
 	private static $cache = array();
-		
+
 	/**
 	 * Generate Hash
 	 *
@@ -243,7 +243,7 @@ class Security
 					{
 						if (!isset($config[$variable]))
 						{
-							$config[$variable] = $value; 
+							$config[$variable] = $value;
 						}
 					}
 
@@ -275,7 +275,7 @@ class Security
 				}
 			}
 		}
-		
+
 		return false;
 	}
 

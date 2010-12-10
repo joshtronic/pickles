@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -20,7 +20,7 @@
  *
  * Parent class for any of our database classes that use PDO.
  */
-class Database_PDO_Common extends Database_Common 
+class Database_PDO_Common extends Database_Common
 {
 	/**
 	 * DSN format

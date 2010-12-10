@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -61,7 +61,7 @@ class Display_PHP extends Display_Common
 		{
 			// Starts up the buffer
 			ob_start();
-			
+
 			// Puts the class variables in local scope of the template
 			$__config    = $this->config;
 			$__meta      = $this->meta_data;

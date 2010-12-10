@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -21,7 +21,7 @@
  * This class contains methods for easily generating form elements. There is a
  * heavy focus on select boxes as they have the most overhead for a developer.
  */
-class Form extends Object 
+class Form extends Object
 {
 	/**
 	 * Get Instance

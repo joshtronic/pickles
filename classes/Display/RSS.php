@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -41,7 +41,7 @@ class Display_RSS extends Display_Common
 	private $date_format = 'r';
 
 	// }}}
-	
+
 	// {{{ Channel Defaults
 
 	/**

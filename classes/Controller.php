@@ -334,7 +334,7 @@ class Controller extends Object
 
 			$valid_request = false;
 			$error_message = 'An unexpected error has occurred';
-			
+
 			// Determines if the request method is valid for this request
 			if ($module->method != false)
 			{

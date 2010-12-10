@@ -10,7 +10,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -158,7 +158,7 @@ function __autoload($class)
  * since namespace support is 5.3+ and PICKLES strives to be 5.0+ compatible.
  *
  * Keep in mind that fatal errors cannot and will not be handled.
- * 
+ *
  * @param  integer $errno the level of the error raised
  * @param  string  $errstr the error message
  * @param  string  $errfile filename that the error was raised in
@@ -237,7 +237,7 @@ function __handleException($exception)
 				</td>
 			</tr>
 		</table>
-		
+
 		<table>
 			<tr>
 				<th style="text-align:left" colspan="2">Trace</th>
@@ -251,12 +251,12 @@ function __handleException($exception)
 			foreach ($trace as $key => $data)
 			{
 				$method = '';
-				
+
 				if (isset($data['class']))
 				{
 					$method .= $data['class'] . $data['type'];
 				}
-				
+
 				$method .= $data['function'] . '()';
 				?>
 				<tr>

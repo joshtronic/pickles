@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -25,7 +25,7 @@ class Convert
 	/**
 	 * To JSON
 	 *
-	 * Encodes passed variable as JSON. 
+	 * Encodes passed variable as JSON.
 	 *
 	 * Requires PHP 5 >= 5.2.0 or PECL json >= 1.2.0
 	 * Note: PECL json 1.2.1 is included /vendors
@@ -94,7 +94,7 @@ class Convert
 						{
 							// Nest the value if the node is an integer
 							$new_value = (is_int($node2) ? $value2 : array($node2 => $value2));
-		
+
 							$xml .= ($format ? str_repeat("\t", $level) : '');
 							$xml .= '<' . $node . '>' . ($format ? "\n" : '');
 							$xml .= self::arrayToXML($new_value, $format, $level + 1);

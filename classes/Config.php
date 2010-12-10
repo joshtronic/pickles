@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * Licensed under The MIT License 
+ * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
@@ -78,7 +78,7 @@ class Config extends Object
 				{
 					$environments = $config['environments'];
 
-					// Is this a CLI script 
+					// Is this a CLI script
 					$is_cli = !isset($_SERVER['REQUEST_METHOD']);
 
 					// If we're on the CLI, check an environment was even passed in
@@ -214,7 +214,7 @@ class Config extends Object
 				$array[$key] = $value;
 			}
 		}
-		
+
 		return $array;
 	}
 
