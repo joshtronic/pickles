@@ -108,6 +108,76 @@ class Dynamic extends Object
 	}
 
 	/**
+	 * Generate Stylesheet Reference
+	 *
+	 * Attempts to minify the stylesheet and then  returns the reference URI
+	 * for the file, minified or not.
+	 *
+	 * @param  string $reference URI reference of the Stylesheet
+	 * @return string URI reference reference with dynamic content
+	 */
+	public function css($original_reference)
+	{
+		if (preg_match('/^__pickles\/css\/.+$/', $original_reference) === false)
+		{
+			// Injects .min into the filename
+			$parts = explode('.', $original_reference);
+
+			if (count($parts) == 1)
+			{
+				throw new Exception('Filename must have an extension (e.g. /path/to/file.css)');
+			}
+			else
+			{
+				end($parts);
+				$parts[key($parts)] = 'min.' . current($parts);
+				$minified_reference = implode('.', $parts);
+			}
+
+			$original_filename = '.' . $original_reference;
+			$minified_filename = '.' . $minified_reference;
+
+			$path = dirname($original_filename);
+
+			if (file_exists($original_filename))
+			{
+				$reference = $original_reference;
+
+				if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)))
+				{
+					// Minifies CSS with a few basic character replacements.
+					$stylesheet = file_get_contents($original_filename);
+					$stylesheet = str_replace(array("\t", "\n", ', ', ' {', ': ', ';}'), array('', '', ',', '{', ':', '}'), $stylesheet);
+					$stylesheet = preg_replace('/\/\*.+?\*\//', '', $stylesheet);
+					file_put_contents($minified_filename, $stylesheet);
+
+					$reference = $minified_reference;
+				}
+				elseif (file_exists($minified_filename))
+				{
+					$reference = $minified_reference;
+				}
+				else
+				{
+					Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
+				}
+
+				$reference = $this->reference($reference);
+			}
+			else
+			{
+				throw new Exception('Supplied reference does not exist');
+			}
+		}
+		else
+		{
+			$reference = $this->reference($original_reference);
+		}
+
+		return $reference;
+	}
+
+	/**
 	 * Generate Javascript Reference
 	 *
 	 * Attempts to minify the source with Google's Closure compiler, and then
@@ -119,7 +189,7 @@ class Dynamic extends Object
 	 */
 	public function js($original_reference, $level = 'simple')
 	{
-		if (preg_match('/^__pickles\/(css|js)\/.+$/', $original_reference) === false)
+		if (preg_match('/^__pickles\/js\/.+$/', $original_reference) === false)
 		{
 			$level = strtoupper($level);
 
@@ -198,76 +268,6 @@ class Dynamic extends Object
 				default:
 					throw new Exception('The level "' . $level . '" is invalid. Valid levels include "whitespace", "simple" and "advanced"');
 					break;
-			}
-		}
-		else
-		{
-			$reference = $this->reference($original_reference);
-		}
-
-		return $reference;
-	}
-
-	/**
-	 * Generate Stylesheet Reference
-	 *
-	 * Attempts to minify the stylesheet and then  returns the reference URI
-	 * for the file, minified or not.
-	 *
-	 * @param  string $reference URI reference of the Stylesheet
-	 * @return string URI reference reference with dynamic content
-	 */
-	public function css($original_reference)
-	{
-		if (preg_match('/^__pickles\/(css|js)\/.+$/', $original_reference) === false)
-		{
-			// Injects .min into the filename
-			$parts = explode('.', $original_reference);
-
-			if (count($parts) == 1)
-			{
-				throw new Exception('Filename must have an extension (e.g. /path/to/file.css)');
-			}
-			else
-			{
-				end($parts);
-				$parts[key($parts)] = 'min.' . current($parts);
-				$minified_reference = implode('.', $parts);
-			}
-
-			$original_filename = '.' . $original_reference;
-			$minified_filename = '.' . $minified_reference;
-
-			$path = dirname($original_filename);
-
-			if (file_exists($original_filename))
-			{
-				$reference = $original_reference;
-
-				if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)))
-				{
-					// Minifies CSS with a few basic character replacements.
-					$stylesheet = file_get_contents($original_filename);
-					$stylesheet = str_replace(array("\t", "\n", ', ', ' {', ': ', ';}'), array('', '', ',', '{', ':', '}'), $stylesheet);
-					$stylesheet = preg_replace('/\/\*.+?\*\//', '', $stylesheet);
-					file_put_contents($minified_filename, $stylesheet);
-
-					$reference = $minified_reference;
-				}
-				elseif (file_exists($minified_filename))
-				{
-					$reference = $minified_reference;
-				}
-				else
-				{
-					Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
-				}
-
-				$reference = $this->reference($reference);
-			}
-			else
-			{
-				throw new Exception('Supplied reference does not exist');
 			}
 		}
 		else
