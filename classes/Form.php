@@ -51,7 +51,12 @@ class Form extends Object
 	 */
 	public function input($name, $value = '', $classes = '', $additional = null, $type = 'input')
 	{
-		return '<input type="' . $type . '" name="' . $name . '" id="' . $name . '" value="' . $value . '" class="' . $classes . '" ' . $additional . ' />';
+		if ($additional != null)
+		{
+			$additional = ' ' . $additional;
+		}
+
+		return '<input type="' . $type . '" name="' . $name . '" id="' . $name . '" value="' . $value . '" class="' . $classes . '"' . $additional . ' />' . "\n";
 	}
 
 	/**
@@ -100,7 +105,12 @@ class Form extends Object
 	 */
 	public function textarea($name, $value = '', $classes = '', $additional = null)
 	{
-		return '<textarea name="' . $name . '" id="' . $name . '" class="' . $classes . '" ' . $additional . '>' . $value . '</textarea>';
+		if ($additional != null)
+		{
+			$additional = ' ' . $additional;
+		}
+
+		return '<textarea name="' . $name . '" id="' . $name . '" class="' . $classes . '"' . $additional . '>' . $value . '</textarea>' . "\n";
 	}
 
 	/**
@@ -117,7 +127,12 @@ class Form extends Object
 	 */
 	public function select($name, $options, $selected = null, $classes = '', $additional = null)
 	{
-		return '<select id="' . $name . '" name="' . $name . '" class="' . $classes . '" ' . $additional . '>' . $this->options($options, $selected) . '</select>';
+		if ($additional != null)
+		{
+			$additional = ' ' . $additional;
+		}
+
+		return '<select id="' . $name . '" name="' . $name . '" class="' . $classes . '"' . $additional . '>' . $this->options($options, $selected) . '</select>' . "\n";
 	}
 
 	/**
@@ -414,13 +429,19 @@ class Form extends Object
 			'line_number' => 4
 		);
 
+		if ($additional != null)
+		{
+			$additional = ' ' . $additional;
+		}
+
 		$html = '';
 		foreach ($parts as $part => $size)
 		{
-			$html .= '<input type="input" name="' . $name . '[' . $part . ']" id="' . $name . '[' . $part . ']" value="' . $value[$part] . '" minlength="' . $size . '" maxlength="' . $size . '" class="digits ' . $class . '" /> ';
+			$html .= ($html != '' ? ' ' : '');
+			$html .= '<input type="input" name="' . $name . '[' . $part . ']" id="' . $name . '[' . $part . ']" value="' . $value[$part] . '" minlength="' . $size . '" maxlength="' . $size . '" class="digits ' . $class . '"' . $additional . ' />';
 		}
 
-		return $html;
+		return $html . "\n";
 	}
 }
 
