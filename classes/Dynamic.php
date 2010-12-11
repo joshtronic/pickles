@@ -118,7 +118,7 @@ class Dynamic extends Object
 	 */
 	public function css($original_reference)
 	{
-		if (preg_match('/^__pickles\/css\/.+$/', $original_reference) === false)
+		if (preg_match('/^\/__pickles\/css\/.+$/', $original_reference) == false)
 		{
 			// Injects .min into the filename
 			$parts = explode('.', $original_reference);
@@ -189,7 +189,7 @@ class Dynamic extends Object
 	 */
 	public function js($original_reference, $level = 'simple')
 	{
-		if (preg_match('/^__pickles\/js\/.+$/', $original_reference) === false)
+		if (preg_match('/^\/__pickles\/js\/.+$/', $original_reference) == false)
 		{
 			$level = strtoupper($level);
 
