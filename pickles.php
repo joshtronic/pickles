@@ -233,9 +233,10 @@ function __handleException($exception)
 		<table style="border-collapse:separate;border-spacing:1px;border-radius:10px;text-shadow:1px 1px 1px #000;text-align:center">
 			<tr><td style="background-color:#480000;padding:10px">
 				<div style="font-size:1.5em;font-style:italic"><?php echo $exception->getMessage(); ?></div>
+			</td></tr>
+			<tr><td style="background-color:#552200;padding:10px">
 				<div style="font-size:1.2em"><?php echo $exception->getFile(); ?> on line <?php echo $exception->getLine(); ?></div>
-				</td>
-			</tr>
+			</td></tr>
 		</table>
 
 		<table>
