@@ -282,12 +282,9 @@ class Model extends Object
 							break;
 
 						// Adds the rest of the query
+						case 'all':
 						case 'list':
 							$this->generateQuery();
-							break;
-
-						// Leaves the query as is
-						case 'all':
 							break;
 
 						// Throws an error
