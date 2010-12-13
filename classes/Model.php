@@ -525,10 +525,15 @@ class Model extends Object
 				}
 
 				// Checks for our keywords to control the flow
-				$operator      = preg_match('/(<|<=|=|>=|>|!=|!|<>| LIKE)$/i', $key);
-				$between       = preg_match('/ BETWEEN$/i', $key);
-				$null_operator = preg_match('/( IS| IS NOT)$/i', $key);
-				$null          = ($value === null);
+				$operator  = preg_match('/(<|<=|=|>=|>|!=|!|<>| LIKE)$/i', $key);
+				$between   = preg_match('/ BETWEEN$/i', $key);
+				$is_is_not = preg_match('/( IS| IS NOT)$/i', $key);
+			
+				// Checks for boolean and null
+				$is_true  = ($value === true);
+				$is_false = ($value === false);
+				$is_null  = ($value === null);
+
 
 				// Generates an IN statement
 				if (is_array($value) && $between == false)
@@ -557,18 +562,31 @@ class Model extends Object
 					else
 					{
 						// Omits the operator as the operator is there
-						if ($operator == true || $null_operator == true)
+						if ($operator == true || $is_is_not == true)
 						{
-							if ($null)
+							if ($is_true || $is_false || $is_null)
 							{
 								// Scrubs the operator if someone doesn't use IS / IS NOT
 								if ($operator == true)
 								{
-									$key = preg_replace('/ ?(!=|!|<>)$/i', ' IS NOT', $key);
-									$key = preg_replace('/ ?(<|<=|=|>=| LIKE)$/i', ' IS', $key);
+									$key = preg_replace('/ ?(!=|!|<>)$/i',         ' IS NOT', $key);
+									$key = preg_replace('/ ?(<|<=|=|>=| LIKE)$/i', ' IS',     $key);
 								}
 
-								$sql .= $key . ' NULL';
+								$sql .= $key . ' ';
+								
+								if ($is_true)
+								{
+									$sql .= 'TRUE';
+								}
+								elseif ($is_false)
+								{
+									$sql .= 'FALSE';
+								}
+								else
+								{
+									$sql .= 'NULL';
+								}
 							}
 							else
 							{
@@ -620,7 +638,15 @@ class Model extends Object
 							$sql .= $key . ' ';
 
 							// Checks if we're working with NULL values
-							if ($null)
+							if ($is_true)
+							{
+								$sql .= 'IS TRUE';
+							}
+							elseif ($is_false)
+							{
+								$sql .= 'IS FALSE';
+							}
+							elseif ($is_null)
 							{
 								$sql .= 'IS NULL';
 							}
