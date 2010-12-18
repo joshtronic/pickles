@@ -55,7 +55,7 @@ class Controller extends Object
 			$lowercase_reqest = strtolower($_REQUEST['request']);
 			if ($_REQUEST['request'] != $lowercase_reqest)
 			{
-				header('Location: ' . str_replace('/' . $_REQUEST['request'], '/' . $lowercase_reqest, $_SERVER['REQUEST_URI']));
+				header('Location: ' . substr_replace($_SERVER['REQUEST_URI'], $lowercase_reqest, 1, strlen($lowercase_reqest)));
 				exit;
 			}
 
