@@ -131,13 +131,26 @@ function __autoload($class)
 
 	$filename = preg_replace('/_/', '/', $class) . '.php';
 
-	$paths = array(PICKLES_CLASS_PATH, SITE_CLASS_PATH, SITE_MODEL_PATH, SITE_MODULE_PATH);
+	// Path as the key, boolean value is whether ot not to convert back to hyphenated
+	$paths = array(
+		PICKLES_CLASS_PATH => false,
+		SITE_CLASS_PATH    => false,
+		SITE_MODEL_PATH    => false,
+		SITE_MODULE_PATH   => true,
+	);
 
-	foreach ($paths as $path)
+	foreach ($paths as $path => $hyphenated)
 	{
+		// Converts the filename back to hypenated
+		if ($hyphenated == true)
+		{
+			$filename = strtolower(preg_replace('/([A-Z]{1})/', '-$1', $filename));;
+		}
+
 		if (file_exists($path . $filename))
 		{
 			$loaded = require_once $path . $filename;
+			break;
 		}
 	}
 

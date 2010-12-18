@@ -108,7 +108,7 @@ class Controller extends Object
 				$request[key($request)] = $last_part;
 			}
 
-			list($basename, $module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables(implode('/', $request));
+			list($module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables(implode('/', $request));
 
 			unset($last_part, $request);
 		}
@@ -117,10 +117,8 @@ class Controller extends Object
 		{
 			$default_module = isset($this->config->pickles['module']) ? $this->config->pickles['module'] : 'home';
 
-			list($basename, $module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($default_module);
+			list($module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($default_module);
 		}
-
-		unset($basename);
 
 		$module_exists = (isset($module_filename) && $module_filename != null && file_exists($module_filename));
 
@@ -265,7 +263,6 @@ class Controller extends Object
 
 				// Redirect to login page, potentially configured in the config, else /login
 				header('Location: /' . (isset($this->config->security['login']) ? $this->config->security['login'] : 'login'));
-
 				exit;
 			}
 		}
@@ -458,19 +455,25 @@ class Controller extends Object
 	 * Processes the request variable and creates all the variables that the
 	 * Controller needs to load the page.
 	 *
-	 * @param  string $request the requested page
+	 * @param  string $basename the requested page
 	 * @return array the resulting variables
 	 */
-	public function prepareVariables($request)
+	public function prepareVariables($basename)
 	{
-		$basename          = strtr($request, '-', '_');
+		// Sets up all of our variables
 		$module_class      = strtr($basename, '/', '_');
 		$module_filename   = SITE_MODULE_PATH . $basename . '.php';
 		$template_basename = $basename;
-		$css_class         = str_replace(array('_', '/', ' '), '-', $basename);
+		$css_class         = $module_class; 
 		$js_basename       = $basename;
 
-		return array($basename, $module_class, $module_filename, $template_basename, $css_class, $js_basename);
+		// Scrubs class names with hyphens
+		if (strpos($module_class, '-') !== false)
+		{
+			$module_class = preg_replace('/(-(.{1}))/e', 'strtoupper("$2")', $module_class);
+		}
+		
+		return array($module_class, $module_filename, $template_basename, $css_class, $js_basename);
 	}
 }
 
