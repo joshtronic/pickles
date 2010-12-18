@@ -436,6 +436,11 @@ class Controller extends Object
 		}
 	}
 
+	/**
+	 * Destructor
+	 *
+	 * Dumps out the Profiler's report if applicable.
+	 */
 	public function __destruct()
 	{
 		parent::__destruct();
@@ -447,6 +452,15 @@ class Controller extends Object
 		}
 	}
 
+	/**
+	 * Prepare Variables
+	 *
+	 * Processes the request variable and creates all the variables that the
+	 * Controller needs to load the page.
+	 *
+	 * @param  string $request the requested page
+	 * @return array the resulting variables
+	 */
 	public function prepareVariables($request)
 	{
 		$basename          = strtr($request, '-', '_');
