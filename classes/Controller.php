@@ -51,6 +51,14 @@ class Controller extends Object
 
 		if (isset($_REQUEST['request']))
 		{
+			// Catches requests that aren't lowercase
+			$lowercase_reqest = strtolower($_REQUEST['request']);
+			if ($_REQUEST['request'] != $lowercase_reqest)
+			{
+				header('Location: ' . str_replace('/' . $_REQUEST['request'], '/' . $lowercase_reqest, $_SERVER['REQUEST_URI']));
+				exit;
+			}
+
 			// Catches requests to PICKLES core files and passes them through
 			if (preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']))
 			{
