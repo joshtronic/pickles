@@ -882,10 +882,9 @@ class Model extends Object
 				// Clean up the variable just in case
 				$key = trim(strtolower($key));
 
-				if (isset($this->$key))
+				if (in_array($key, array('fields', 'table', 'joins', 'hints', 'conditions', 'group', 'having', 'order', 'limit', 'offset')))
 				{
 					$this->$key = $value;
-
 					$conditions = false;
 				}
 			}
