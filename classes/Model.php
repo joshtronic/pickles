@@ -882,6 +882,7 @@ class Model extends Object
 				// Clean up the variable just in case
 				$key = trim(strtolower($key));
 
+				// Assigns valid keys to the appropriate class property
 				if (in_array($key, array('fields', 'table', 'joins', 'hints', 'conditions', 'group', 'having', 'order', 'limit', 'offset')))
 				{
 					$this->$key = $value;
@@ -889,6 +890,7 @@ class Model extends Object
 				}
 			}
 
+			// If no valid properties were found, assume it's the conditionals
 			if ($conditions == true)
 			{
 				$this->conditions = $parameters;
