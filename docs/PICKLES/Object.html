@@ -52,15 +52,9 @@
 					<th class="class-table-header">Description</th>
 				</tr>
 								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Display_Common.html">Display_Common</a></td>
+					<td style="padding-right: 2em"><a href="../PICKLES/Form.html">Form</a></td>
 					<td>
-											Common Display Class
-										</td>
-				</tr>
-								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Database_Common.html">Database_Common</a></td>
-					<td>
-											Common Database Abstraction Layer
+											Form Class
 										</td>
 				</tr>
 								<tr>
@@ -70,15 +64,9 @@
 										</td>
 				</tr>
 								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Controller.html">Controller</a></td>
+					<td style="padding-right: 2em"><a href="../PICKLES/Dynamic.html">Dynamic</a></td>
 					<td>
-											Controller Class
-										</td>
-				</tr>
-								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Database.html">Database</a></td>
-					<td>
-											Database Factory
+											Dynamic Class
 										</td>
 				</tr>
 								<tr>
@@ -88,9 +76,9 @@
 										</td>
 				</tr>
 								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Form.html">Form</a></td>
+					<td style="padding-right: 2em"><a href="../PICKLES/Display_Common.html">Display_Common</a></td>
 					<td>
-											Form Class
+											Common Display Class
 										</td>
 				</tr>
 								<tr>
@@ -100,9 +88,21 @@
 										</td>
 				</tr>
 								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Dynamic.html">Dynamic</a></td>
+					<td style="padding-right: 2em"><a href="../PICKLES/Controller.html">Controller</a></td>
 					<td>
-											Dynamic Class
+											Controller Class
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Database_Common.html">Database_Common</a></td>
+					<td>
+											Common Database Abstraction Layer
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Database.html">Database</a></td>
+					<td>
+											Database Factory
 										</td>
 				</tr>
 							</table>
@@ -183,7 +183,7 @@
 					</div>
 		<div class="info-box-body">
 			<a name="var$instances" id="$instances"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -205,7 +205,7 @@
 
 </div>
 <a name="var$config" id="$config"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
@@ -243,7 +243,7 @@
 		<div class="info-box-body">
 			<A NAME='method_detail'></A>
 <a name="methodgetInstance" id="getInstance"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<span class="method-title">static method getInstance</span> (line <span class="line-number">91</span>)
@@ -277,22 +277,22 @@
 		<div class="notes">Redefined in descendants as:</div>
 		<ul class="redefinitions">
 					<li>
-				<a href="../PICKLES/Database.html#methodgetInstance">Database::getInstance()</a>
-								: Get instance
+				<a href="../PICKLES/Form.html#methodgetInstance">Form::getInstance()</a>
+								: Get Instance
 							</li>
 					<li>
 				<a href="../PICKLES/Config.html#methodgetInstance">Config::getInstance()</a>
 								: Get instance of the object
 							</li>
 					<li>
-				<a href="../PICKLES/Form.html#methodgetInstance">Form::getInstance()</a>
-								: Get Instance
+				<a href="../PICKLES/Database.html#methodgetInstance">Database::getInstance()</a>
+								: Get instance
 							</li>
 				</ul>
 	</div>
 
 <a name="method__construct" id="__construct"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<span class="method-title">Constructor __construct</span> (line <span class="line-number">58</span>)
@@ -319,7 +319,23 @@
 		<div class="notes">Redefined in descendants as:</div>
 		<ul class="redefinitions">
 					<li>
+				<a href="../PICKLES/Module.html#method__construct">Module::__construct()</a>
+								: Constructor
+							</li>
+					<li>
+				<a href="../PICKLES/Config.html#method__construct">Config::__construct()</a>
+								: Constructor
+							</li>
+					<li>
 				<a href="../PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a>
+								: Constructor
+							</li>
+					<li>
+				<a href="../PICKLES/Model.html#method__construct">Model::__construct()</a>
+								: Constructor
+							</li>
+					<li>
+				<a href="../PICKLES/Controller.html#method__construct">Controller::__construct()</a>
 								: Constructor
 							</li>
 					<li>
@@ -331,29 +347,13 @@
 								: Constructor
 							</li>
 					<li>
-				<a href="../PICKLES/Module.html#method__construct">Module::__construct()</a>
-								: Constructor
-							</li>
-					<li>
-				<a href="../PICKLES/Controller.html#method__construct">Controller::__construct()</a>
-								: Constructor
-							</li>
-					<li>
 				<a href="../PICKLES/Database.html#method__construct">Database::__construct()</a>
-								: Constructor
-							</li>
-					<li>
-				<a href="../PICKLES/Config.html#method__construct">Config::__construct()</a>
-								: Constructor
-							</li>
-					<li>
-				<a href="../PICKLES/Model.html#method__construct">Model::__construct()</a>
 								: Constructor
 							</li>
 				</ul>
 	</div>
 <a name="method__destruct" id="__destruct"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<span class="method-title">Destructor __destruct</span> (line <span class="line-number">112</span>)
@@ -380,6 +380,7 @@
 		<ul class="redefinitions">
 					<li>
 				<a href="../PICKLES/Controller.html#method__destruct">Controller::__destruct()</a>
+								: Destructor
 							</li>
 				</ul>
 	</div>
@@ -389,7 +390,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sat, 04 Dec 2010 14:31:17 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Fri, 24 Dec 2010 19:43:54 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

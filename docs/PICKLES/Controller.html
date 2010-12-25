@@ -67,9 +67,9 @@
 										()
 									</div>
 																<div class="method-definition">
-											<span class="method-result">void</span>
+											<span class="method-result">array</span>
 										<a href="#prepareVariables" title="details" class="method-name">prepareVariables</a>
-											(<span class="var-type"></span>&nbsp;<span class="var-name">$request</span>)
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$basename</span>)
 									</div>
 								</div>
 		</div>
@@ -150,10 +150,12 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">Destructor __destruct</span> (line <span class="line-number">421</span>)
+		<span class="method-title">Destructor __destruct</span> (line <span class="line-number">441</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Destructor</p>
+<p class="description"><p>Dumps out the Profiler's report if applicable.</p></p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -179,26 +181,29 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">prepareVariables</span> (line <span class="line-number">432</span>)
+		<span class="method-title">prepareVariables</span> (line <span class="line-number">461</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Prepare Variables</p>
+<p class="description"><p>Processes the request variable and creates all the variables that the  Controller needs to load the page.</p></p>
 	<ul class="tags">
+				<li><span class="field">return:</span> the resulting variables</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">void</span>
+		<span class="method-result">array</span>
 		<span class="method-name">
 			prepareVariables
 		</span>
-					(<span class="var-type"></span>&nbsp;<span class="var-name">$request</span>)
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$basename</span>)
 			</div>
 	
 			<ul class="parameters">
 					<li>
-				<span class="var-type"></span>
-				<span class="var-name">$request</span>			</li>
+				<span class="var-type">string</span>
+				<span class="var-name">$basename</span><span class="var-description">: the requested page</span>			</li>
 				</ul>
 		
 			
@@ -218,7 +223,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sat, 04 Dec 2010 14:31:16 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Fri, 24 Dec 2010 19:43:54 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>
