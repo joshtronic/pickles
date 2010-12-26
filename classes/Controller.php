@@ -85,40 +85,21 @@ class Controller extends Object
 			Error::fatal($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
 		}
 
-		// Loads the requested module's information
+		// Checks the passed request for validity
 		if (isset($_REQUEST['request']) && trim($_REQUEST['request']) != '')
 		{
-			$request   = explode('/', $_REQUEST['request']);
-			$last_part = end($request);
-
-			// Checks if a return type was passed in
-			if (strpos($last_part, '.') !== false)
-			{
-				list($last_part, $return_type) = explode('.', $last_part);
-			}
-
-			// Checks if an ID (integer) was passed in
-			if (preg_match('/^\d*$/', $last_part) == 1)
-			{
-				$requested_id = $last_part;
-				array_pop($request);
-			}
-			else
-			{
-				$request[key($request)] = $last_part;
-			}
-
-			list($module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables(implode('/', $request));
-
-			unset($last_part, $request);
+			$request = $_REQUEST['request'];
 		}
-		// Loads the default module information (if any)
+		// Loads the default module information if we don't have a valid request
 		else
 		{
-			$default_module = isset($this->config->pickles['module']) ? $this->config->pickles['module'] : 'home';
-
-			list($module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($default_module);
+			$request = isset($this->config->pickles['module']) ? $this->config->pickles['module'] : 'home';
 		}
+
+		// Loads the module's information
+		list($module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($request);
+
+		unset($request);
 
 		$module_exists = (isset($module_filename) && $module_filename != null && file_exists($module_filename));
 
