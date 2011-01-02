@@ -45,7 +45,6 @@ class String
 	}
 
 	// }}}
-
 	// {{{ Generate Gravatar Hash
 
 	/**
@@ -65,7 +64,6 @@ class String
 	}
 
 	// }}}
-
 	// {{{ Is Empty
 
 	/**
@@ -94,7 +92,6 @@ class String
 	}
 
 	// }}}
-
 	// {{{ Random
 
 	/**
@@ -156,7 +153,6 @@ class String
 	}
 
 	// }}}
-
 	// {{{ Truncate
 
 	/**
@@ -189,7 +185,6 @@ class String
 	}
 
 	// }}}
-
 	// {{{ Upper Words
 
 	/**

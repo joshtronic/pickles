@@ -205,7 +205,6 @@ class Model extends Object
 	private $original = null;
 
 	// }}}
-
 	// {{{ Class Constructor
 
 	/**
@@ -342,7 +341,6 @@ class Model extends Object
 	}
 
 	// }}}
-
 	// {{{ SQL Generation Methods
 
 	/**
@@ -672,7 +670,6 @@ class Model extends Object
 	}
 
 	// }}}
-
 	// {{{ Record Interaction Methods
 
 	/**
@@ -788,7 +785,6 @@ class Model extends Object
 	}
 
 	// }}}
-
 	// {{{ Record Manipulation Methods
 
 	/**
@@ -858,7 +854,6 @@ class Model extends Object
 	}
 
 	// }}}
-
 	// {{{ Utility Methods
 
 	/**
