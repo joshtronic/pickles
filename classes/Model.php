@@ -809,30 +809,34 @@ class Model extends Object
 			// Limits the columns being updated
 			$record = ($update === true ? array_diff_assoc($this->record, $this->original[$this->index]) : $this->record);
 
-			// Loops through all the columns and assembles the query
-			foreach ($record as $column => $value)
+			// Makes sure there's something to INSERT or UPDATE
+			if (count($record) > 0)
 			{
-				if ($column != $this->id)
+				// Loops through all the columns and assembles the query
+				foreach ($record as $column => $value)
 				{
-					if ($input_parameters != null)
+					if ($column != $this->id)
 					{
-						$sql .= ', ';
+						if ($input_parameters != null)
+						{
+							$sql .= ', ';
+						}
+
+						$sql .= $column . ' = :' . $column;
+						$input_parameters[':' . $column] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
 					}
-
-					$sql .= $column . ' = :' . $column;
-					$input_parameters[':' . $column] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
 				}
-			}
 
-			// If it's an UPDATE tack on the ID
-			if ($update === true)
-			{
-				$sql .= ' WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
-				$input_parameters[':' . $this->id] = $this->record[$this->id];
-			}
+				// If it's an UPDATE tack on the ID
+				if ($update === true)
+				{
+					$sql .= ' WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
+					$input_parameters[':' . $this->id] = $this->record[$this->id];
+				}
 
-			// Executes the query
-			return $this->db->execute($sql, $input_parameters);
+				// Executes the query
+				return $this->db->execute($sql, $input_parameters);
+			}
 		}
 
 		return false;
