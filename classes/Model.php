@@ -264,7 +264,7 @@ class Model extends Object
 					$this->generateQuery();
 				}
 				// Pulls by ID
-				elseif (ctype_digit($type_or_parameters))
+				elseif (ctype_digit((string)$type_or_parameters))
 				{
 					$this->sql[] = 'WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
 
