@@ -49,7 +49,7 @@ class Form extends Object
 	 * @param  string $type optional type of input
 	 * @return string HTML for the input
 	 */
-	public function input($name, $value = '', $classes = '', $additional = null, $type = 'input')
+	public function input($name, $value = '', $classes = '', $additional = null, $type = 'text')
 	{
 		if ($additional != null)
 		{
