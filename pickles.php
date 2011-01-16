@@ -14,7 +14,7 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2010, Gravity Boulevard, LLC
+ * @copyright Copyright 2007-2011, Gravity Boulevard, LLC
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      http://p.ickl.es
@@ -51,7 +51,6 @@ define('DISPLAY_XML',  'XML');
 define('JSON_AVAILABLE', function_exists('json_encode'));
 
 // }}}
-
 // {{{ Defaults some important configuration options
 
 // Error reporting is not modified initially
@@ -70,49 +69,37 @@ if (ini_get('date.timezone') == '')
 }
 
 // }}}
-
 // {{{ Loads the configuration file and sets any configuration options
 
 // Loads the base config
 $config = Config::getInstance();
 
 // Configures any available PHP configuration options
-if (isset($config->php['display_errors']))
+if (is_array($config->php) && count($config->php) > 0)
 {
-	ini_set('display_errors', (boolean)$config->php['display_errors']);
-}
-
-if (isset($config->php['error_reporting']))
-{
-	error_reporting($config->php['error_reporting']);
-}
-
-// Sets the timezone
-if (isset($config->php['date.timezone']))
-{
-	ini_set('date.timezone', $config->php['date.timezone']);
-}
-
-// Sets the error handler
-if (isset($config->php['error_handler']))
-{
-	set_error_handler($config->php['error_handler']);
-}
-
-// Sets the exception handler
-if (isset($config->php['exception_handler']))
-{
-	set_exception_handler($config->php['exception_handler']);
+	foreach ($config->php as $variable => $value)
+	{
+		ini_set($variable, $value);
+	}
 }
 
 // Starts session handling
-if (isset($config->pickles['session']) && $config->pickles['session'] == true && session_id() == '')
+if (isset($config->pickles['session']))
 {
-	session_start();
+	if ($config->pickles['session'] === true && session_id() == '')
+	{
+		session_start();
+	}
+	elseif (is_array($config->pickles['session']))
+	{
+		if (isset($_REQUEST['request']) == false || preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']) == false)
+		{
+			$session = new Session();
+		}
+	}
 }
 
 // }}}
-
 // {{{ Auto[magical] Loader
 
 /**
@@ -158,7 +145,6 @@ function __autoload($class)
 }
 
 // }}}
-
 // {{{ Error Handler
 
 /**
@@ -191,7 +177,6 @@ function __handleError($errno, $errstr, $errfile, $errline, array $errcontext)
 }
 
 // }}}
-
 // {{{ Exception Handler
 
 /**
