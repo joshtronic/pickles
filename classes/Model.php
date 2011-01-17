@@ -283,6 +283,7 @@ class Model extends Object
 						// Adds the rest of the query
 						case 'all':
 						case 'list':
+						case 'indexed':
 							$this->generateQuery();
 							break;
 
@@ -300,17 +301,26 @@ class Model extends Object
 			{
 				throw new Exception('Sorry, Mongo support in the PICKLES Model is not quite ready yet');
 			}
-
-			$list_type = ($type_or_parameters == 'list');
+			
+			$index_records = in_array($type_or_parameters, array('list', 'indexed'));
 
 			// Flattens the data into a list
-			if ($list_type == true)
+			if ($index_records == true)
 			{
 				$list = array();
 
 				foreach ($this->records as $record)
 				{
-					$list[array_shift($record)] = array_shift($record);
+					// Users the first value as the key and the second as the value
+					if ($type_or_parameters == 'list')
+					{
+						$list[array_shift($record)] = array_shift($record);
+					}
+					// Uses the first value as the key
+					else
+					{
+						$list[current($record)] = $record;
+					}
 				}
 
 				$this->records = $list;
@@ -323,7 +333,7 @@ class Model extends Object
 			}
 			else
 			{
-				if ($list_type == true)
+				if ($index_records == true)
 				{
 					$this->record[key($this->records)] = current($this->records);
 				}
