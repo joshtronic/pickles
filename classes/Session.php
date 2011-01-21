@@ -108,9 +108,9 @@ class Session extends Object
 	 * Constructor
 	 *
 	 * All of our set up logic for the session in contained here. This object
-	 * is initially instantiated from pickles.php and does nothing more than
-	 * the instantiation. All variables are driven from php.ini and/or the
-	 * site config. Once configured, the session is started
+	 * is initially instantiated and the event handler is set from pickles.php
+	 * All variables are driven from php.ini and/or the site config. Once
+	 * configured, the session is started automatically.
 	 */
 	public function __construct()
 	{
@@ -129,16 +129,6 @@ class Session extends Object
 
 		// Gets a database instance
 		$this->db = Database::getInstance($this->datasource);
-
-		// Sets up the session handler
-		session_set_save_handler(
-			array($this, 'open'),
-			array($this, 'close'),
-			array($this, 'read'),
-			array($this, 'write'),
-			array($this, 'destroy'),
-			array($this, 'gc')
-		);
 
 		register_shutdown_function('session_write_close');
 		session_start();
