@@ -83,15 +83,15 @@ $(document).ready(function()
 							{
 								parent.location.href = data.url;
 							}
-
-							if (typeof(data.callback) != 'undefined')
-							{
-								window[data.callback](data);
-							}
 						}
 						else
 						{
 							injectMessage(form, data, 'error');
+						}
+
+						if (typeof(data.callback) != 'undefined')
+						{
+							window[data.callback](data);
 						}
 
 						// Removes READONLY status
