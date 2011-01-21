@@ -108,9 +108,9 @@ class Session extends Object
 	 * Constructor
 	 *
 	 * All of our set up logic for the session in contained here. This object
-	 * is initially instantiated and the event handler is set from pickles.php
-	 * All variables are driven from php.ini and/or the site config. Once
-	 * configured, the session is started automatically.
+	 * is initially instantiated from pickles.php and the session callbacks are
+	 * established here. All variables are driven from php.ini and/or the site
+	 * config. Once configured, the session is started automatically.
 	 */
 	public function __construct()
 	{
@@ -130,7 +130,9 @@ class Session extends Object
 		// Gets a database instance
 		$this->db = Database::getInstance($this->datasource);
 
-		register_shutdown_function('session_write_close');
+		// Initializes the session
+		$this->initialize();
+		
 		session_start();
 	}
 
@@ -149,6 +151,28 @@ class Session extends Object
 	}
 
 	/**
+	 * Initializes the Session
+	 *
+	 * This method exists to combat the fact that calling session_destroy()
+	 * also clears out the save handler. Upon destorying a session this method
+	 * is called again so the save handler is all set.
+	 */
+	public function initialize()
+	{
+		// Sets up the session handler
+		session_set_save_handler(
+			array($this, 'open'),
+			array($this, 'close'),
+			array($this, 'read'),
+			array($this, 'write'),
+			array($this, 'destroy'),
+			array($this, 'gc')
+		);
+
+		register_shutdown_function('session_write_close');
+	}
+
+	/**
 	 * Opens the Session
 	 *
 	 * Since the session is in the database, opens the database connection.
@@ -157,6 +181,8 @@ class Session extends Object
 	 */
 	public function open()
 	{
+		session_regenerate_id();
+		
 		return $this->db->open();
 	}
 
@@ -216,6 +242,8 @@ class Session extends Object
 	public function destroy($id)
 	{
 		$sql = 'DELETE FROM `' . $this->table . '` WHERE id = ?;';
+
+		$this->initialize();
 
 		return $this->db->execute($sql, array($id));
 	}

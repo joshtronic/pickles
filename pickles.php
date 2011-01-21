@@ -95,16 +95,6 @@ if (isset($config->pickles['session']))
 		if (isset($_REQUEST['request']) == false || preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']) == false)
 		{
 			$session = new Session();
-
-			// Sets up the session handler
-			session_set_save_handler(
-				array($session, 'open'),
-				array($session, 'close'),
-				array($session, 'read'),
-				array($session, 'write'),
-				array($session, 'destroy'),
-				array($session, 'gc')
-			);
 		}
 	}
 }
