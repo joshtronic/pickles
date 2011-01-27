@@ -235,12 +235,20 @@ class Controller extends Object
 
 			if ($is_authenticated == false)
 			{
-				// Sets variable for the destination
-				$_SESSION['__pickles']['login']['destination'] = $_REQUEST['request'];
+				if ($_SERVER['REQUEST_METHOD'] == 'POST')
+				{
+					exit('{ "status": "error", "message": "You are not properly authenticated" }');
+				}
+				else
+				{
+					// Sets variable for the destination
+					$_SESSION['__pickles']['login']['destination'] = $_REQUEST['request'];
 
-				// Redirect to login page, potentially configured in the config, else /login
-				header('Location: /' . (isset($this->config->security['login']) ? $this->config->security['login'] : 'login'));
-				exit;
+					// Redirect to login page, potentially configured in the config, else /login
+					header('Location: /' . (isset($this->config->security['login']) ? $this->config->security['login'] : 'login'));
+
+					exit;
+				}
 			}
 		}
 
@@ -441,7 +449,7 @@ class Controller extends Object
 		$module_class      = strtr($basename, '/', '_');
 		$module_filename   = SITE_MODULE_PATH . $basename . '.php';
 		$template_basename = $basename;
-		$css_class         = $module_class; 
+		$css_class         = $module_class;
 		$js_basename       = $basename;
 
 		// Scrubs class names with hyphens
@@ -449,7 +457,7 @@ class Controller extends Object
 		{
 			$module_class = preg_replace('/(-(.{1}))/e', 'strtoupper("$2")', $module_class);
 		}
-		
+
 		return array($module_class, $module_filename, $template_basename, $css_class, $js_basename);
 	}
 }
