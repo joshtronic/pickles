@@ -329,8 +329,9 @@ class Controller extends Object
 				Profiler::timer('module __default');
 			}
 
-			$valid_request = false;
-			$error_message = 'An unexpected error has occurred';
+			$valid_request       = false;
+			$valid_security_hash = false;
+			$error_message       = 'An unexpected error has occurred';
 
 			// Determines if the request method is valid for this request
 			if ($module->method != false)
@@ -357,33 +358,35 @@ class Controller extends Object
 			}
 			else
 			{
-				// Validates the hash if applicable
-				if ($module->hash != false)
+				$valid_request = true;
+			}
+
+			// Validates the hash if applicable
+			if ($module->hash != false)
+			{
+				if (isset($_REQUEST['security_hash']))
 				{
-					if (isset($_REQUEST['security_hash']))
+					$hash_value = ($module->hash === true ? get_class($module) : $module->hash);
+
+					if (Security::generateHash($hash_value) == $_REQUEST['security_hash'])
 					{
-						$hash_value = ($module->hash === true ? get_class($module) : $module->hash);
-
-						if (Security::generateHash($hash_value) == $_REQUEST['security_hash'])
-						{
-							$valid_request = true;
-						}
-						else
-						{
-							$error_message = 'Invalid security hash';
-						}
-
-						unset($hash_value);
+						$valid_security_hash = true;
 					}
 					else
 					{
-						$error_message = 'Missing security hash';
+						$error_message = 'Invalid security hash';
 					}
+
+					unset($hash_value);
 				}
 				else
 				{
-					$valid_request = true;
+					$error_message = 'Missing security hash';
 				}
+			}
+			else
+			{
+				$valid_security_hash = true;
 			}
 
 			/**
@@ -391,7 +394,7 @@ class Controller extends Object
 			 * module know to use the cache, either passing in a variable
 			 * or setting it on the object
 			 */
-			$display->setModuleReturn($valid_request == true ? $module->__default() : array('status' => 'error', 'message' => $error_message));
+			$display->setModuleReturn($valid_request && $valid_security_hash ? $module->__default() : array('status' => 'error', 'message' => $error_message));
 
 			unset($error_message);
 
