@@ -129,7 +129,7 @@ $(document).ready(function()
 });
 
 // Injects a div before the passed element
-function injectMessage(element, message, type)
+function injectMessage(element, message, type, duration)
 {
 	if (typeof type == 'undefined')
 	{
@@ -157,6 +157,11 @@ function injectMessage(element, message, type)
 	$('.' + class_name, element).remove();
 	$(element).prepend('<div class="' + class_name + '" style="' + style + '" generated="true">' + message + '</div>');
 	$('.' + class_name, element).fadeIn();
+
+	if (typeof duration != 'undefined')
+	{
+		$('.' + class_name, element).delay(duration).fadeOut();
+	}
 
 	return $('.' + class_name, element);
 }
