@@ -14,7 +14,7 @@ $config = array(
 		'error_reporting' => -1,
 		'date.timezone'   => 'America/New_York',
 	),
-	
+
 	// PICKLES configuration options
 	'pickles' => array(
 		// Disable with a "site down" message
@@ -22,7 +22,7 @@ $config = array(
 		// Use sessions
 		'session'         => true,
 		// Force HTTPS
-		'secure'          => true,
+		'secure'          => false,
 		// Name of the parent template
 		'template'        => 'index',
 		// Name of the default module
@@ -49,7 +49,7 @@ $config = array(
 			'database' => 'test'
 		),
 	),
-	
+
 	// Security configuration
 	'security' => array(
 		// Login page
