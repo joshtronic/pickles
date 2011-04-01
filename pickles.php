@@ -53,10 +53,9 @@ define('JSON_AVAILABLE', function_exists('json_encode'));
 // }}}
 // {{{ Defaults some important configuration options
 
-// Error reporting is not modified initially
-// Feel free to uncomment these lines if you want error reporting on before the config is loaded
-// ini_set('display_errors', true);
-// error_reporting(-1);
+// Turns on error before the config is loaded to help catch parse errors
+ini_set('display_errors', true);
+error_reporting(-1);
 
 // Sets the error and exception handlers
 set_error_handler('__handleError');
