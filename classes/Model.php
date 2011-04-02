@@ -204,6 +204,16 @@ class Model extends Object
 	 */
 	private $original = null;
 
+	/**
+	 * Iterate
+	 *
+	 * Used to hold the status during a walk()
+	 *
+	 * @access private
+	 * @var    boolean
+	 */
+	private $iterate = false;
+
 	// }}}
 	// {{{ Class Constructor
 
@@ -301,7 +311,7 @@ class Model extends Object
 			{
 				throw new Exception('Sorry, Mongo support in the PICKLES Model is not quite ready yet');
 			}
-			
+
 			$index_records = in_array($type_or_parameters, array('list', 'indexed'));
 
 			// Flattens the data into a list
@@ -536,7 +546,7 @@ class Model extends Object
 				$operator  = preg_match('/(<|<=|=|>=|>|!=|!|<>| LIKE)$/i', $key);
 				$between   = preg_match('/ BETWEEN$/i', $key);
 				$is_is_not = preg_match('/( IS| IS NOT)$/i', $key);
-			
+
 				// Checks for boolean and null
 				$is_true  = ($value === true);
 				$is_false = ($value === false);
@@ -582,7 +592,7 @@ class Model extends Object
 								}
 
 								$sql .= $key . ' ';
-								
+
 								if ($is_true)
 								{
 									$sql .= 'TRUE';
@@ -693,6 +703,34 @@ class Model extends Object
 	}
 
 	/**
+	 * Sort Records
+	 *
+	 * Sorts the records by the specified index in the specified order.
+	 *
+	 * @param  string $index the index to be sorted on
+	 * @param  string $order the direction to order
+	 * @return boolean true
+	 * @todo   Implement this method
+	 */
+	public function sort($index, $order = 'ASC')
+	{
+		return true;
+	}
+
+	/**
+	 * Shuffle Records
+	 *
+	 * Sorts the records in a pseudo-random order.
+	 *
+	 * @return boolean true
+	 * @todo   Implement this method
+	 */
+	public function shuffle()
+	{
+		return true;
+	}
+
+	/**
 	 * Next Record
 	 *
 	 * Increment the record array to the next member of the record set.
@@ -792,6 +830,29 @@ class Model extends Object
 	public function last()
 	{
 		return $this->end();
+	}
+
+	/**
+	 * Walk Records
+	 *
+	 * Returns the current record and advances to the next. Built to allow for
+	 * simplified code when looping through a record set.
+	 *
+	 * @return mixed either an array of the current record or false
+	 * @todo   Does not currently support "indexed" or "list" return types
+	 */
+	public function walk()
+	{
+		if ($this->iterate == false)
+		{
+			$this->iterate = true;
+		}
+		else
+		{
+			$this->next();
+		}
+
+		return $this->record;
 	}
 
 	// }}}
