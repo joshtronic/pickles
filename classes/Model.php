@@ -843,9 +843,13 @@ class Model extends Object
 	 */
 	public function walk()
 	{
+		// Checks if we should start iterating, solves off by one issues with next()
 		if ($this->iterate == false)
 		{
 			$this->iterate = true;
+			
+			// Resets the records, saves calling reset() when walking multiple times
+			$this->reset();
 		}
 		else
 		{
