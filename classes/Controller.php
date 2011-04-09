@@ -60,14 +60,18 @@ class Controller extends Object
 			}
 
 			// Catches requests to PICKLES core files and passes them through
-			if (preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']))
+			if (preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request'], $matches))
 			{
 				// Checks that the file exists
-				$file = str_replace('__pickles', PICKLES_PATH, $_REQUEST['request']);
+				$file = str_replace('__pickles/', PICKLES_PATH, $_REQUEST['request']);
 				if (file_exists($file))
 				{
 					// Sets the pass thru flag and dumps the data
 					$this->passthru = true;
+
+					// This is somewhat hacky, but mime_content_type() is deprecated and finfo_file() is only 5.3+
+					header('Content-Type: text/' . ($matches[1] == 'js' ? 'javascript' : $matches[1]));
+
 					exit(file_get_contents($file));
 				}
 			}
