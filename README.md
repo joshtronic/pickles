@@ -39,7 +39,7 @@ Installation is quite simple as there is no installer to run, and all server con
 
 2. Place the code anywhere you'd like (that's at least 2 directories up from the root of your website). I recommend using /usr/share/pickles
 
-3.     Open the boilerplate directory and you will find a sample site ready to be copied and pasted to wherever the site you set up is located.
+3. Open the boilerplate directory and you will find a sample site ready to be copied and pasted to wherever the site you set up is located.
 
        - The directory public will need to be renamed to whatever you've set up your document root as.
 
