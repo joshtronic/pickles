@@ -50,6 +50,9 @@ define('DISPLAY_XML',  'XML');
 // Creates a constant as to whether or not we have JSON available
 define('JSON_AVAILABLE', function_exists('json_encode'));
 
+// Creates a variable to flag if we're on the command line
+define('IS_CLI', !isset($_SERVER['REQUEST_METHOD']));
+
 // }}}
 // {{{ Defaults some important configuration options
 
@@ -187,89 +190,163 @@ function __handleError($errno, $errstr, $errfile, $errline, array $errcontext)
  */
 function __handleException($exception)
 {
-	?>
-	<style>
-		#pickles-exception
-		{
-			background: #212121;
-			width: 800px;
-			margin: 0 auto;
-			margin-top: 20px;
-			margin-bottom: 20px;
-			border-radius: 20px;
-			-moz-border-radius: 20px;
-			-webkit-border-radius: 20px;
-			box-shadow: 0 3px 4px #000;
-			-moz-box-shadow: 0 3px 4px #000;
-			-webkit-box-shadow: 0 3px 4px #000;
-			border: 6px solid #666;
-			padding: 10px 20px 20px;
-			font-family: monospace;
-			font-size: 12px;
-			text-align: left;
-		}
-		#pickles-exception table
-		{
-			width: 100%;
-		}
-		#pickles-exception table tr th, #pickles-exception table tr td
-		{
-			padding: 10px;
-		}
-		#pickles-exception .even
-		{
-			background-color: #323232;
-		}
-		#pickles-exception, #pickles-exception table tr td, #pickles-exception table tr th
-		{
-			color: #efefe8;
-		}
-	</style>
-	<div id="pickles-exception">
-		<strong style="font-size:1.5em">Uncaught Exception</strong><br /><br />
-		<table style="border-collapse:separate;border-spacing:1px;border-radius:10px;text-shadow:1px 1px 1px #000;text-align:center">
-			<tr><td style="background-color:#480000;padding:10px">
-				<div style="font-size:1.5em;font-style:italic"><?php echo $exception->getMessage(); ?></div>
-			</td></tr>
-			<tr><td style="background-color:#552200;padding:10px">
-				<div style="font-size:1.2em"><?php echo $exception->getFile(); ?> on line <?php echo $exception->getLine(); ?></div>
-			</td></tr>
-		</table>
+	if (IS_CLI == true)
+	{
+		$lines = array();
+		$maxes = array('key' => 0, 'method' => 0, 'file' => 0, 'line' => 4);
 
-		<table>
-			<tr>
-				<th style="text-align:left" colspan="2">Trace</th>
-				<th style="text-align:left">File</th>
-				<th style="text-align:right">Line</th>
-			</tr>
-			<?php
-			$trace = $exception->getTrace();
-			rsort($trace);
+		$trace = $exception->getTrace();
+		rsort($trace);
 
-			foreach ($trace as $key => $data)
+		foreach ($trace as $key => $data)
+		{
+			$method = '';
+
+			if (isset($data['class']))
 			{
-				$method = '';
+				$method .= $data['class'] . $data['type'];
+			}
 
-				if (isset($data['class']))
+			$method .= $data['function'] . '()';
+			
+			$line = array(
+				'key'    => $key + 1 . '.',
+				'method' => $method,
+				'file'   => (isset($data['file']) ? $data['file'] : __FILE__),
+				'line'   => (isset($data['line']) ? $data['line'] : '0')
+			);
+
+			foreach (array_keys($maxes) as $variable)
+			{
+				$length = strlen($line[$variable]);
+
+				if ($length > $maxes[$variable])
 				{
-					$method .= $data['class'] . $data['type'];
+					$maxes[$variable] = $length;
 				}
+			}
 
-				$method .= $data['function'] . '()';
-				?>
+			$lines[] = $line;
+		}
+
+		$max_length        = array_sum($maxes) + 11;
+		$horizontal_border = '+' . str_repeat('-', $max_length) . '+' . "\n";
+		
+		echo $horizontal_border;
+		echo '|' . str_pad('Uncaught Exception', $max_length, ' ', STR_PAD_BOTH) . '|' . "\n";
+		echo $horizontal_border;
+		echo '|' . str_pad(' ' . $exception->getMessage(), $max_length) . '|' . "\n";
+		echo '|' . str_pad(' in ' . $exception->getFile() . ' on line ' . $exception->getLine(), $max_length) . '|' . "\n";
+
+		echo $horizontal_border;
+		echo '| '  . str_pad('Trace', $maxes['key'] + $maxes['method'] + 3) . ' | ' . str_pad('File', $maxes['file']) . ' | ' . str_pad('Line', $maxes['line']) . ' |' . "\n";
+		echo $horizontal_border;
+
+		foreach ($lines as $line)
+		{
+			echo '| ';
+			
+			echo implode(
+				array(
+					str_pad($line['key'],    $maxes['key'], ' ', STR_PAD_LEFT),
+					str_pad($line['method'], $maxes['method']),
+					str_pad($line['file'],   $maxes['file']),
+					str_pad($line['line'],   $maxes['line'], ' ', STR_PAD_LEFT)
+				),
+				' | '
+			);
+
+			echo ' |' . "\n";
+		}
+
+		echo $horizontal_border;
+	}
+	else
+	{
+		?>
+		<style>
+			#pickles-exception
+			{
+				background: #212121;
+				width: 800px;
+				margin: 0 auto;
+				margin-top: 20px;
+				margin-bottom: 20px;
+				border-radius: 20px;
+				-moz-border-radius: 20px;
+				-webkit-border-radius: 20px;
+				box-shadow: 0 3px 4px #000;
+				-moz-box-shadow: 0 3px 4px #000;
+				-webkit-box-shadow: 0 3px 4px #000;
+				border: 6px solid #666;
+				padding: 10px 20px 20px;
+				font-family: monospace;
+				font-size: 12px;
+				text-align: left;
+			}
+			#pickles-exception table
+			{
+				width: 100%;
+			}
+			#pickles-exception table tr th, #pickles-exception table tr td
+			{
+				padding: 10px;
+			}
+			#pickles-exception .even
+			{
+				background-color: #323232;
+			}
+			#pickles-exception, #pickles-exception table tr td, #pickles-exception table tr th
+			{
+				color: #efefe8;
+			}
+		</style>
+		<div id="pickles-exception">
+			<strong style="font-size:1.5em">Uncaught Exception</strong><br /><br />
+			<table style="border-collapse:separate;border-spacing:1px;border-radius:10px;text-shadow:1px 1px 1px #000;text-align:center">
+				<tr><td style="background-color:#480000;padding:10px">
+					<div style="font-size:1.5em;font-style:italic"><?php echo $exception->getMessage(); ?></div>
+				</td></tr>
+				<tr><td style="background-color:#552200;padding:10px">
+					<div style="font-size:1.2em"><?php echo $exception->getFile(); ?> on line <?php echo $exception->getLine(); ?></div>
+				</td></tr>
+			</table>
+
+			<table>
 				<tr>
-					<td style="font-weight:bold;color:#999"><?php echo $key + 1; ?>.</td>
-					<td><?php echo $method; ?></td>
-					<td><?php echo isset($data['file']) ? $data['file'] : __FILE__; ?></td>
-					<td style="text-align:right"><?php echo isset($data['line']) ? $data['line'] : '0'; ?></td>
+					<th style="text-align:left" colspan="2">Trace</th>
+					<th style="text-align:left">File</th>
+					<th style="text-align:right">Line</th>
 				</tr>
 				<?php
-			}
-			?>
-		</table>
-	</div>
-	<br /><br />
-	<?php
+				$trace = $exception->getTrace();
+				rsort($trace);
+
+				foreach ($trace as $key => $data)
+				{
+					$method = '';
+
+					if (isset($data['class']))
+					{
+						$method .= $data['class'] . $data['type'];
+					}
+
+					$method .= $data['function'] . '()';
+					?>
+					<tr>
+						<td style="font-weight:bold;color:#999"><?php echo $key + 1; ?>.</td>
+						<td><?php echo $method; ?></td>
+						<td><?php echo isset($data['file']) ? $data['file'] : __FILE__; ?></td>
+						<td style="text-align:right"><?php echo isset($data['line']) ? $data['line'] : '0'; ?></td>
+					</tr>
+					<?php
+				}
+				?>
+			</table>
+		</div>
+		<br /><br />
+		<?php
+	}
 }
 
 // }}}

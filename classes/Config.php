@@ -78,11 +78,8 @@ class Config extends Object
 				{
 					$environments = $config['environments'];
 
-					// Is this a CLI script
-					$is_cli = !isset($_SERVER['REQUEST_METHOD']);
-
 					// If we're on the CLI, check an environment was even passed in
-					if ($is_cli == true && $_SERVER['argc'] < 2)
+					if (IS_CLI == true && $_SERVER['argc'] < 2)
 					{
 						throw new Exception('You must pass an environment (e.g. php script.php <environment>)');
 					}
@@ -98,7 +95,7 @@ class Config extends Object
 						// Tries to determine the environment name
 						foreach ($hosts as $host)
 						{
-							if ($is_cli)
+							if (IS_CLI == true)
 							{
 								// Checks the first argument on the command line
 								if ($_SERVER['argv'][1] == $name)
