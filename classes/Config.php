@@ -44,11 +44,36 @@ class Config extends Object
 	 *
 	 * @param string $filename optional Filename of the config
 	 */
-	public function __construct($filename = '../config.php')
+	public function __construct($filename = null)
 	{
 		parent::__construct();
 
-		$this->load($filename);
+		// Try to fine the configuration
+		if ($filename == null)
+		{
+			$filename = 'config.php';
+			$loaded   = false;
+			$cwd      = getcwd();
+
+			while ($loaded == false)
+			{
+				chdir(dirname($filename));
+
+				if (getcwd() == '/')
+				{
+					throw new Exception('Unable to load configuration.');
+				}
+
+				chdir($cwd);
+
+				$filename = '../' . $filename;
+				$loaded   = $this->load($filename);
+			}
+		}
+		else
+		{
+			$this->load($filename);
+		}
 	}
 
 	/**
