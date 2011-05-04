@@ -151,7 +151,7 @@ class Database_PDO_Common extends Database_Common
 					// Explains the query
 					if ($explaining == false && Profiler::enabled('explains'))
 					{
-						$explain = $this->fetchAll('EXPLAIN ' . $sql);
+						$explain = $this->fetch('EXPLAIN ' . $sql);
 					}
 
 					$start_time = microtime(true);
@@ -163,7 +163,7 @@ class Database_PDO_Common extends Database_Common
 					// Explains the query
 					if ($explaining == false && Profiler::enabled('explains'))
 					{
-						$explain = $this->fetchAll('EXPLAIN ' . $sql, $input_parameters);
+						$explain = $this->fetch('EXPLAIN ' . $sql, $input_parameters);
 					}
 
 					$start_time = microtime(true);
