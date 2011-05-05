@@ -278,18 +278,6 @@ class Profiler
 	 */
 	public static function report()
 	{
-		$start_time = PICKLES_START_TIME;
-		$peak_usage = self::formatSize(memory_get_peak_usage());
-		$end_time   = self::$profile[count(self::$profile) - 1]['time'];
-		$duration   = ($end_time - $start_time);
-
-		$logs  = count(self::$profile);
-		$logs .= ' Log' . ($logs == 1 ? '' : 's');
-
-		$files  = count(get_included_files());
-		$files .= ' File' . ($files == 1 ? '' : 's');
-
-		$queries = self::$queries . ' Quer'. (self::$queries == 1 ? 'y' : 'ies');
 		?>
 		<style>
 			#pickles-profiler
@@ -299,12 +287,12 @@ class Profiler
 				margin: 0 auto;
 				margin-top: 20px;
 				margin-bottom: 20px;
-				border-radius: 20px;
 				-moz-border-radius: 20px;
 				-webkit-border-radius: 20px;
-				box-shadow: 0 3px 4px #000;
-				-moz-box-shadow: 0 3px 4px #000;
-				-webkit-box-shadow: 0 3px 4px #000;
+				border-radius: 20px;
+				-moz-box-shadow: 0 3px 4px rgba(0,0,0,0.5);
+				-webkit-box-shadow: 0 3px 4px rgba(0,0,0,0.5);
+				box-shadow: 0 3px 4px rgba(0,0,0,0.5);
 				border: 6px solid #666;
 				padding: 10px 20px 20px;
 				font-family: monospace;
@@ -330,50 +318,73 @@ class Profiler
 		</style>
 		<div id="pickles-profiler">
 			<strong style="font-size:1.5em">PICKLES Profiler</strong><br /><br />
-			<table style="border-collapse:separate;border-spacing:1px;border-radius:10px;text-shadow:1px 1px 1px #000">
-				<tr>
-					<td style="text-align:center;background:#480000">
-						<span style="font-weight:bold;">Console</span>
-						<div style="color:#ff7f7f;font-size:1.2em;padding-top:10px"><?php echo $logs; ?></div>
-					</td>
-					<td style="text-align:center;background:#552200">
-						<span style="font-weight:bold;">Load Time</span>
-						<div style="color:#ffa366;font-size:1.2em;padding-top:10px"><?php echo number_format($duration * 100, 3) . ' ms / ' . ini_get('max_execution_time'); ?></div>
-					</td>
-					<td style="text-align:center;background:#545500">
-						<span style="font-weight:bold;">Memory Usage</span>
-						<div style="color:#ffff6d;font-size:1.2em;padding-top:10px"><?php echo $peak_usage . ' / ' . ini_get('memory_limit'); ?></div>
-					</td>
-					<td style="text-align:center;background:#004200">
-						<span style="font-weight:bold;">Database</span>
-						<div style="color:#7dff7d;font-size:1.2em;padding-top:10px"><?php echo $queries; ?></div>
-					</td>
-					<td style="text-align:center;background:#000048">
-						<span style="font-weight:bold;">Includes</span>
-						<div style="color:#c4c4ff;font-size:1.2em;padding-top:10px"><?php echo $files; ?></div>
-					</td>
-				</tr>
-			</table>
-			<table>
-				<tr>
-					<th style="text-align:left" colspan="2">Console</th>
-					<th style="text-align:right">Memory</th>
-					<th style="text-align:right">Time</th>
-				</tr>
-				<?php
-				foreach (self::$profile as $key => $entry)
-				{
-					?>
+	 		<?php
+			if (count(self::$profile) == 0)
+			{
+				echo '<em style="line-height:18px">There is nothing to profile. This often happens when the profiler configuration is set to either "queries" or "explains" and there are no database queries on the page (common on pages that only have a template). You may want to set the profiler to boolean true to ensure you get a profile of the page.</em>';
+			}
+			else
+			{
+				$start_time = PICKLES_START_TIME;
+				$peak_usage = self::formatSize(memory_get_peak_usage());
+				$end_time   = self::$profile[count(self::$profile) - 1]['time']; // TODO
+				$duration   = ($end_time - $start_time);
+
+				$logs  = count(self::$profile);
+				$logs .= ' Log' . ($logs == 1 ? '' : 's');
+
+				$files  = count(get_included_files());
+				$files .= ' File' . ($files == 1 ? '' : 's');
+
+				$queries = self::$queries . ' Quer'. (self::$queries == 1 ? 'y' : 'ies');
+				?>
+				<table style="border-collapse:separate;border-spacing:1px;border-radius:10px;text-shadow:1px 1px 1px #000">
 					<tr>
-						<td style="font-weight:bold;color:#999"><?php echo $entry['type']; ?></td>
-						<td><?php echo $entry['log']; ?></td>
-						<td style="text-align:right" nowrap="nowrap"><?php echo self::formatSize($entry['memory']); ?></td>
-						<td style="text-align:right" nowrap="nowrap"><?php echo number_format($entry['elapsed'] * 100, 3); ?> ms</td>
+						<td style="text-align:center;background:#480000">
+							<span style="font-weight:bold;">Console</span>
+							<div style="color:#ff7f7f;font-size:1.2em;padding-top:10px"><?php echo $logs; ?></div>
+						</td>
+						<td style="text-align:center;background:#552200">
+							<span style="font-weight:bold;">Load Time</span>
+							<div style="color:#ffa366;font-size:1.2em;padding-top:10px"><?php echo number_format($duration * 100, 3) . ' ms / ' . ini_get('max_execution_time'); ?></div>
+						</td>
+						<td style="text-align:center;background:#545500">
+							<span style="font-weight:bold;">Memory Usage</span>
+							<div style="color:#ffff6d;font-size:1.2em;padding-top:10px"><?php echo $peak_usage . ' / ' . ini_get('memory_limit'); ?></div>
+						</td>
+						<td style="text-align:center;background:#004200">
+							<span style="font-weight:bold;">Database</span>
+							<div style="color:#7dff7d;font-size:1.2em;padding-top:10px"><?php echo $queries; ?></div>
+						</td>
+						<td style="text-align:center;background:#000048">
+							<span style="font-weight:bold;">Includes</span>
+							<div style="color:#c4c4ff;font-size:1.2em;padding-top:10px"><?php echo $files; ?></div>
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<th style="text-align:left" colspan="2">Console</th>
+						<th style="text-align:right">Memory</th>
+						<th style="text-align:right">Time</th>
 					</tr>
 					<?php
-				}
-				?>
-			</table>
+					foreach (self::$profile as $key => $entry)
+					{
+						?>
+						<tr>
+							<td style="font-weight:bold;color:#999"><?php echo $entry['type']; ?></td>
+							<td><?php echo $entry['log']; ?></td>
+							<td style="text-align:right" nowrap="nowrap"><?php echo self::formatSize($entry['memory']); ?></td>
+							<td style="text-align:right" nowrap="nowrap"><?php echo number_format($entry['elapsed'] * 100, 3); ?> ms</td>
+						</tr>
+						<?php
+					}
+					?>
+				</table>
+				<?php
+			}
+			?>
 		</div>
 		<br /><br />
 		<?php
