@@ -137,19 +137,30 @@ class Database_PDO_Common extends Database_Common
 
 		Log::query($loggable_query);
 
+		$sql = trim($sql);
+
 		// Checks if the query is blank
-		if (trim($sql) != '')
+		if ($sql != '')
 		{
 			try
 			{
 				// Establishes if we're working on an EXPLAIN
-				$explaining = preg_match('/^EXPLAIN /i', $sql);
+				if (Profiler::enabled('explains') == true)
+				{
+					$explaining = preg_match('/^EXPLAIN /i', $sql);
+					$selecting  = preg_match('/^SELECT /i', $sql);
+				}
+				else
+				{
+					$explaining = null;
+					$selecting  = null;
+				}
 
 				// Executes a standard query
 				if ($input_parameters === null)
 				{
 					// Explains the query
-					if ($explaining == false && Profiler::enabled('explains'))
+					if ($selecting == true && $explaining == false)
 					{
 						$explain = $this->fetch('EXPLAIN ' . $sql);
 					}
@@ -161,7 +172,7 @@ class Database_PDO_Common extends Database_Common
 				else
 				{
 					// Explains the query
-					if ($explaining == false && Profiler::enabled('explains'))
+					if ($selecting == true && $explaining == false)
 					{
 						$explain = $this->fetch('EXPLAIN ' . $sql, $input_parameters);
 					}
