@@ -49,7 +49,7 @@ $(document).ready(function()
 				injectMessage(form, 'Form element lacks action attribute', 'error');
 
 				// Removes READONLY status
-				$('button, input, textarea', form).attr('readonly', '');
+				$('button, input, textarea', form).removeAttr('readonly');
 
 				// Returns the cursor to normal... but is anyone really normal?
 				document.body.style.cursor = 'default';
@@ -95,7 +95,7 @@ $(document).ready(function()
 						}
 
 						// Removes READONLY status
-						$('button, input, textarea', form).attr('readonly', '');
+						$('button, input, textarea', form).removeAttr('readonly');
 
 						// Returns the cursor to normal... but is anyone really normal?
 						document.body.style.cursor = 'default';
@@ -106,7 +106,7 @@ $(document).ready(function()
 						injectMessage(form, errorThrown, 'error');
 
 						// Removes READONLY status
-						$('button, input, textarea', form).attr('readonly', '');
+						$('button, input, textarea', form).removeAttr('readonly');
 
 						// Returns the cursor to normal... but is anyone really normal?
 						document.body.style.cursor = 'default';
