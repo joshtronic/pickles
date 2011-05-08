@@ -76,6 +76,22 @@ class Form extends Object
 	}
 
 	/**
+	 * Password Input
+	 *
+	 * Shorthand method to generate a password input.
+	 *
+	 * @param  string $name name (and ID) for the select element
+	 * @param  string $value optional preset value
+	 * @param  string $classes optional class names
+	 * @param  string $additional optional additional parameters
+	 * @return string HTML for the input
+	 */
+	public function passwordInput($name, $value = '', $classes = '', $additional = null)
+	{
+		return $this->input($name, $value, $classes, $additional, 'password');
+	}
+
+	/**
 	 * Security Input
 	 *
 	 * Generates a hidden input with an SHA1 hash as the value. The name of the
