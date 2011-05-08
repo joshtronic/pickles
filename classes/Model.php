@@ -252,6 +252,14 @@ class Model extends Object
 			{
 				$this->loadParameters($parameters);
 			}
+			elseif (ctype_digit((string)$type_or_parameters))
+			{
+				$this->loadParameters(array($this->id => $type_or_parameters));
+			}
+			elseif (ctype_digit((string)$parameters))
+			{
+				$this->loadParameters(array($this->id => $parameters));
+			}
 
 			// Overwrites the table name with the available collection name
 			if ($this->collection != false)
@@ -268,41 +276,21 @@ class Model extends Object
 					'FROM '   . $this->table,
 				);
 
-				// Pulls based on parameters
-				if (is_array($type_or_parameters))
+				switch ($type_or_parameters)
 				{
-					$this->generateQuery();
-				}
-				// Pulls by ID
-				elseif (ctype_digit((string)$type_or_parameters))
-				{
-					$this->sql[] = 'WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
+					// Updates query to use COUNT syntax
+					case 'count':
+						$this->sql[0] = 'SELECT COUNT(*) AS count';
+						$this->generateQuery();
+						break;
 
-					$this->input_parameters = array($this->id => $type_or_parameters);
-				}
-				else
-				{
-					switch ($type_or_parameters)
-					{
-						// Updates query to use COUNT syntax
-						case 'count':
-							$this->sql[0] = 'SELECT COUNT(*) AS count';
-							$this->generateQuery();
-							break;
-
-						// Adds the rest of the query
-						case 'all':
-						case 'list':
-						case 'indexed':
-							$this->generateQuery();
-							break;
-
-						// Throws an error
-						default:
-							print_r($this->sql);
-							throw new Exception('Unknown query type');
-							break;
-					}
+					// Adds the rest of the query
+					case 'all':
+					case 'list':
+					case 'indexed':
+					default:
+						$this->generateQuery();
+						break;
 				}
 
 				$this->records = $this->db->fetch(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
