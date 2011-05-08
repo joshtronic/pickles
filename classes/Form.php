@@ -281,7 +281,7 @@ class Form extends Object
 			'AP' => 'Armed Forces Pacific'
 		);
 
-		return $this->select($name, $options, $selected, $additional);
+		return $this->select($name, $options, $selected, $classes, $additional);
 	}
 
 	/**
