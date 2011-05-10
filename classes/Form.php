@@ -9,7 +9,7 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman 
+ * @copyright Copyright 2007-2011, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      http://p.ickl.es
@@ -23,6 +23,8 @@
  */
 class Form extends Object
 {
+	// {{{ Get Instance
+
 	/**
 	 * Get Instance
 	 *
@@ -36,6 +38,9 @@ class Form extends Object
 	{
 		return parent::getInstance($class);
 	}
+
+	// }}}
+	// {{{ Input
 
 	/**
 	 * Input
@@ -59,6 +64,9 @@ class Form extends Object
 		return '<input type="' . $type . '" name="' . $name . '" id="' . $name . '" value="' . $value . '" class="' . $classes . '"' . $additional . ' />' . "\n";
 	}
 
+	// }}}
+	// {{{ Hidden Input
+
 	/**
 	 * Hidden Input
 	 *
@@ -74,6 +82,9 @@ class Form extends Object
 	{
 		return $this->input($name, $value, $classes, $additional, 'hidden');
 	}
+
+	// }}}
+	// {{{ Password Input
 
 	/**
 	 * Password Input
@@ -91,6 +102,9 @@ class Form extends Object
 		return $this->input($name, $value, $classes, $additional, 'password');
 	}
 
+	// }}}
+	// {{{ Security Input
+
 	/**
 	 * Security Input
 	 *
@@ -106,6 +120,9 @@ class Form extends Object
 		// Returns the hidden input
 		return $this->hiddenInput('security_hash', Security::generateHash($value));
 	}
+
+	// }}}
+	// {{{ Text Area
 
 	/**
 	 * Text Area
@@ -129,6 +146,9 @@ class Form extends Object
 		return '<textarea name="' . $name . '" id="' . $name . '" class="' . $classes . '"' . $additional . '>' . $value . '</textarea>' . "\n";
 	}
 
+	// }}}
+	// {{{ Select
+
 	/**
 	 * Select
 	 *
@@ -150,6 +170,9 @@ class Form extends Object
 
 		return '<select id="' . $name . '" name="' . $name . '" class="' . $classes . '"' . $additional . '>' . $this->options($options, $selected) . '</select>' . "\n";
 	}
+
+	// }}}
+	// {{{ Options
 
 	/**
 	 * Options
@@ -214,6 +237,9 @@ class Form extends Object
 
 		return $options_html;
 	}
+
+	// }}}
+	// {{{ State Select
 
 	/**
 	 * State Select
@@ -300,6 +326,9 @@ class Form extends Object
 		return $this->select($name, $options, $selected, $classes, $additional);
 	}
 
+	// }}}
+	// {{{ Date Select
+
 	/**
 	 * Date Select
 	 *
@@ -375,6 +404,9 @@ class Form extends Object
 		return $html;
 	}
 
+	// }}}
+	// {{{ Date of Birth Select
+
 	/**
 	 * Date of Birth Select
 	 *
@@ -393,6 +425,9 @@ class Form extends Object
 		return $this->dateSelect($name, $selected, $classes, $additional, date('Y'), 1896);
 	}
 
+	// }}}
+	// {{{ Polar Select
+
 	/**
 	 * Polar Select
 	 *
@@ -409,6 +444,9 @@ class Form extends Object
 
 		return $this->select($name, $options, $selected, $classes, $additional);
 	}
+
+	// }}}
+	// {{{ Phone Input
 
 	/**
 	 * Phone Input
@@ -459,6 +497,8 @@ class Form extends Object
 
 		return $html . "\n";
 	}
+
+	// }}}
 }
 
 ?>
