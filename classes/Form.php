@@ -52,13 +52,19 @@ class Form extends Object
 	 * @param  string $classes optional class names
 	 * @param  string $additional optional additional parameters
 	 * @param  string $type optional type of input
+	 * @param  boolean $checked optional whether the input is checked
 	 * @return string HTML for the input
 	 */
-	public function input($name, $value = '', $classes = '', $additional = null, $type = 'text')
+	public function input($name, $value = '', $classes = '', $additional = null, $type = 'text', $checked = false)
 	{
 		if ($additional != null)
 		{
 			$additional = ' ' . $additional;
+		}
+
+		if (in_array($type, array('checkbox', 'radio')) && $checked == true)
+		{
+			$additional .= ' checked="checked"';
 		}
 
 		return '<input type="' . $type . '" name="' . $name . '" id="' . $name . '" value="' . $value . '" class="' . $classes . '"' . $additional . ' />' . "\n";
@@ -122,10 +128,60 @@ class Form extends Object
 	}
 
 	// }}}
+	// {{{ Checkbox
+
+	/**
+	 * Checkbox
+	 *
+	 * Generates a checkbox input with the passed data.
+	 *
+	 * @param  string $name name (and ID) for the select element
+	 * @param  string $value optional preset value
+	 * @param  boolean $checked optional whether the checkbox is checked
+	 * @param  string $classes optional class names
+	 * @param  string $additional optional additional parameters
+	 * @return string HTML for the input
+	 */
+	public function checkbox($name, $value = '', $checked = false, $classes = '', $additional = null)
+	{
+		return $this->input($name, $value, $classes, $additional, 'checkbox', $checked);
+	}
+
+	// }}}
+	// {{{ Checkboxes
+
+	// @todo
+
+	// }}}
+	// {{{ Radio Button
+
+	/**
+	 * Radio Button
+	 *
+	 * Generates a radio input with the passed data.
+	 *
+	 * @param  string $name name (and ID) for the select element
+	 * @param  string $value optional preset value
+	 * @param  boolean $checked optional whether the checkbox is checked
+	 * @param  string $classes optional class names
+	 * @param  string $additional optional additional parameters
+	 * @return string HTML for the input
+	 */
+	public function radio($name, $value = '', $checked = false, $classes = '', $additional = null)
+	{
+		return $this->input($name, $value, $classes, $additional, 'radio', $checked);
+	}
+
+	// }}}
+	// {{{ Radio Buttons
+
+	// @todo
+
+	// }}}
 	// {{{ Text Area
 
 	/**
-	 * Text Area
+	 * Textarea
 	 *
 	 * Generates a textarea with the passed data.
 	 *
