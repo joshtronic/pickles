@@ -870,7 +870,7 @@ class Model extends Object
 			$input_parameters = null;
 
 			// Limits the columns being updated
-			$record = ($update === true ? array_diff_assoc($this->record, $this->original[$this->index]) : $this->record);
+			$record = ($update === true ? array_diff_assoc($this->record, isset($this->original[$this->index]) ? $this->original[$this->index] : array()) : $this->record);
 
 			// Makes sure there's something to INSERT or UPDATE
 			if (count($record) > 0)
