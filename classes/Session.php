@@ -226,7 +226,7 @@ class Session extends Object
 	{
 		$sql = 'REPLACE INTO `' . $this->table . '` VALUES (?, ? ,?);';
 
-		$parameters = array($id, $session, date('Y-m-d H:i:s', $this->accessed_at));
+		$parameters = array($id, $session, date('Y-m-d H:i:s', strtotime('+' . $this->time_to_live . ' seconds')));
 
 		return $this->db->execute($sql, $parameters);
 	}
@@ -242,8 +242,6 @@ class Session extends Object
 	public function destroy($id)
 	{
 		$sql = 'DELETE FROM `' . $this->table . '` WHERE id = ?;';
-
-		$this->initialize();
 
 		return $this->db->execute($sql, array($id));
 	}
