@@ -246,7 +246,7 @@ class Controller extends Object
 				else
 				{
 					// Sets variable for the destination
-					$_SESSION['__pickles']['login']['destination'] = $_REQUEST['request'];
+					$_SESSION['__pickles']['login']['destination'] = isset($_REQUEST['request']) ? $_REQUEST['request'] : '/';
 
 					// Redirect to login page, potentially configured in the config, else /login
 					header('Location: /' . (isset($this->config->security['login']) ? $this->config->security['login'] : 'login'));
