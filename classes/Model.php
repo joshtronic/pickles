@@ -29,10 +29,10 @@ class Model extends Object
 	/**
 	 * Database Object
 	 *
-	 * @access private
+	 * @access protected
 	 * @var    object
 	 */
-	private $db = null;
+	protected $db = null;
 
 	/**
 	 * SQL Array
