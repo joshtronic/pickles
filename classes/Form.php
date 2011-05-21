@@ -47,7 +47,7 @@ class Form extends Object
 	 *
 	 * Generates an input with the passed data.
 	 *
-	 * @param  string $name name (and ID) for the select element
+	 * @param  string $name name (and ID) for the element
 	 * @param  string $value optional preset value
 	 * @param  string $classes optional class names
 	 * @param  string $additional optional additional parameters
@@ -71,14 +71,32 @@ class Form extends Object
 	}
 
 	// }}}
-	// {{{ Hidden Input
+	// {{{ Hidden
 
+	/**
+	 * Hidden
+	 *
+	 * Shorthand method to generate a hidden input.
+	 *
+	 * @param  string $name name (and ID) for the element
+	 * @param  string $value optional preset value
+	 * @param  string $classes optional class names
+	 * @param  string $additional optional additional parameters
+	 * @return string HTML for the input
+	 */
+	public function hidden($name, $value = '', $classes = '', $additional = null)
+	{
+		return $this->input($name, $value, $classes, $additional, 'hidden');
+	}
+	
 	/**
 	 * Hidden Input
 	 *
 	 * Shorthand method to generate a hidden input.
 	 *
-	 * @param  string $name name (and ID) for the select element
+	 * @deprecated Use hidden() instead
+	 *
+	 * @param  string $name name (and ID) for the element
 	 * @param  string $value optional preset value
 	 * @param  string $classes optional class names
 	 * @param  string $additional optional additional parameters
@@ -90,14 +108,32 @@ class Form extends Object
 	}
 
 	// }}}
-	// {{{ Password Input
+	// {{{ Password
+
+	/**
+	 * Password
+	 *
+	 * Shorthand method to generate a password input.
+	 *
+	 * @param  string $name name (and ID) for the element
+	 * @param  string $value optional preset value
+	 * @param  string $classes optional class names
+	 * @param  string $additional optional additional parameters
+	 * @return string HTML for the input
+	 */
+	public function password($name, $value = '', $classes = '', $additional = null)
+	{
+		return $this->input($name, $value, $classes, $additional, 'password');
+	}
 
 	/**
 	 * Password Input
 	 *
 	 * Shorthand method to generate a password input.
 	 *
-	 * @param  string $name name (and ID) for the select element
+	 * @deprecated Use password() instead
+	 *
+	 * @param  string $name name (and ID) for the element
 	 * @param  string $value optional preset value
 	 * @param  string $classes optional class names
 	 * @param  string $additional optional additional parameters
@@ -109,7 +145,60 @@ class Form extends Object
 	}
 
 	// }}}
-	// {{{ Security Input
+	// {{{ Submit
+
+	/**
+	 * Submit
+	 *
+	 * Shorthand method to generate a submit input (button).
+	 *
+	 * @param  string $name name (and ID) for the input element
+	 * @param  string $value optional preset value
+	 * @param  string $classes optional class names
+	 * @param  string $additional optional additional parameters
+	 * @return string HTML for the input
+	 */
+	public function submit($name, $value = '', $classes = '', $additional = null)
+	{
+		return $this->input($name, $value, $classes, $additional, 'submit');
+	}
+
+	/**
+	 * Submit Input
+	 *
+	 * Shorthand method to generate a submit input (button).
+	 *
+	 * @deprecated Use submit() instead
+	 *
+	 * @param  string $name name (and ID) for the input element
+	 * @param  string $value optional preset value
+	 * @param  string $classes optional class names
+	 * @param  string $additional optional additional parameters
+	 * @return string HTML for the input
+	 */
+	public function submitInput($name, $value = '', $classes = '', $additional = null)
+	{
+		return $this->input($name, $value, $classes, $additional, 'submit');
+	}
+
+	// }}}
+	// {{{ Security
+
+	/**
+	 * Security
+	 *
+	 * Generates a hidden input with an SHA1 hash as the value. The name of the
+	 * field is cannot be changed as this method was only intended for use with
+	 * forms that are submitted via AJAX to provide better security.
+	 *
+	 * @param  string $value value to hash
+	 * @return string HTML for the input
+	 */
+	public function security($value)
+	{
+		// Returns the hidden input
+		return $this->hiddenInput('security_hash', Security::generateHash($value));
+	}
 
 	/**
 	 * Security Input
@@ -117,6 +206,8 @@ class Form extends Object
 	 * Generates a hidden input with an SHA1 hash as the value. The name of the
 	 * field is cannot be changed as this method was only intended for use with
 	 * forms that are submitted via AJAX to provide better security.
+	 *
+	 * @deprecated Use security() instead
 	 *
 	 * @param  string $value value to hash
 	 * @return string HTML for the input
