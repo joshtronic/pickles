@@ -263,3 +263,5 @@ class Session extends Object
 		return $this->db->execute($sql, $parameters);
 	}
 }
+
+?>
