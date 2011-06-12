@@ -306,9 +306,6 @@ class Controller extends Object
 			}
 		}
 
-		$meta_data     = null;
-		$module_return = null;
-
 		// Gets the profiler status
 		$profiler = $this->config->pickles['profiler'];
 
