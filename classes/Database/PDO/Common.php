@@ -128,14 +128,17 @@ class Database_PDO_Common extends Database_Common
 	{
 		$this->open();
 
-		$loggable_query = $sql;
-
-		if ($input_parameters != null)
+		if ($this->config->pickles['logging'] === true)
 		{
-			$loggable_query .= ' -- ' . (JSON_AVAILABLE ? json_encode($input_parameters) : serialize($input_parameters));
-		}
+			$loggable_query = $sql;
 
-		Log::query($loggable_query);
+			if ($input_parameters != null)
+			{
+				$loggable_query .= ' -- ' . (JSON_AVAILABLE ? json_encode($input_parameters) : serialize($input_parameters));
+			}
+
+			Log::query($loggable_query);
+		}
 
 		$sql = trim($sql);
 
@@ -185,7 +188,7 @@ class Database_PDO_Common extends Database_Common
 				$end_time = microtime(true);
 				$duration = $end_time - $start_time;
 
-				if ($duration >= 1)
+				if ($this->config->pickles['logging'] === true && $duration >= 1)
 				{
 					Log::slowQuery($duration . ' seconds: ' . $loggable_query);
 				}

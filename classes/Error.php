@@ -32,11 +32,13 @@ class Error
 	 */
 	public static function fatal($message)
 	{
-		if (Log::error($message) == false)
+		if ($this->config->pickles['logging'] === true)
 		{
-			$message .= '<br /><br />This error message could not be logged as the log path or log file is not writable';
+			if (Log::error($message) == false)
+			{
+				$message .= '<br /><br />This error message could not be logged as the log path or log file is not writable';
+			}
 		}
-
 		?>
 		<!DOCTYPE html>
 		<html>

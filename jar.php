@@ -181,6 +181,12 @@ class Config extends Object
 				$this->data['pickles']['profiler'] = false;
 			}
 
+			// Defaults logging to false if it doesn't exist
+			if (!isset($this->data['pickles']['logging']))
+			{
+				$this->data['pickles']['logging'] = false;
+			}
+
 			// Creates constants for the security levels
 			if (isset($this->data['security']['levels']) && is_array($this->data['security']['levels']))
 			{
@@ -406,7 +412,10 @@ class Controller extends Object
 			}
 			else
 			{
-				Log::warning('Class named ' . $module_class . ' was not found in ' . $module_filename);
+				if ($this->config->pickles['logging'] === true)
+				{
+					Log::warning('Class named ' . $module_class . ' was not found in ' . $module_filename);
+				}
 			}
 		}
 
@@ -1350,14 +1359,17 @@ class Database_PDO_Common extends Database_Common
 	{
 		$this->open();
 
-		$loggable_query = $sql;
-
-		if ($input_parameters != null)
+		if ($this->config->pickles['logging'] === true)
 		{
-			$loggable_query .= ' -- ' . (JSON_AVAILABLE ? json_encode($input_parameters) : serialize($input_parameters));
-		}
+			$loggable_query = $sql;
 
-		Log::query($loggable_query);
+			if ($input_parameters != null)
+			{
+				$loggable_query .= ' -- ' . (JSON_AVAILABLE ? json_encode($input_parameters) : serialize($input_parameters));
+			}
+
+			Log::query($loggable_query);
+		}
 
 		$sql = trim($sql);
 
@@ -1407,7 +1419,7 @@ class Database_PDO_Common extends Database_Common
 				$end_time = microtime(true);
 				$duration = $end_time - $start_time;
 
-				if ($duration >= 1)
+				if ($this->config->pickles['logging'] === true && $duration >= 1)
 				{
 					Log::slowQuery($duration . ' seconds: ' . $loggable_query);
 				}
@@ -2455,7 +2467,10 @@ class Dynamic extends Object
 				}
 				else
 				{
-					Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
+					if ($this->config->pickles['logging'] === true)
+					{
+						Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
+					}
 				}
 
 				$reference = $this->reference($reference);
@@ -2549,7 +2564,10 @@ class Dynamic extends Object
 						}
 						else
 						{
-							Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
+							if ($this->config->pickles['logging'] === true)
+							{
+								Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
+							}
 						}
 
 						$reference = $this->reference($reference);
@@ -2607,11 +2625,13 @@ class Error
 	 */
 	public static function fatal($message)
 	{
-		if (Log::error($message) == false)
+		if ($this->config->pickles['logging'] === true)
 		{
-			$message .= '<br /><br />This error message could not be logged as the log path or log file is not writable';
+			if (Log::error($message) == false)
+			{
+				$message .= '<br /><br />This error message could not be logged as the log path or log file is not writable';
+			}
 		}
-
 		?>
 		<!DOCTYPE html>
 		<html>

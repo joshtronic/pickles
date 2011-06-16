@@ -119,7 +119,10 @@ class Controller extends Object
 			}
 			else
 			{
-				Log::warning('Class named ' . $module_class . ' was not found in ' . $module_filename);
+				if ($this->config->pickles['logging'] === true)
+				{
+					Log::warning('Class named ' . $module_class . ' was not found in ' . $module_filename);
+				}
 			}
 		}
 

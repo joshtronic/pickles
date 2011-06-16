@@ -181,6 +181,12 @@ class Config extends Object
 				$this->data['pickles']['profiler'] = false;
 			}
 
+			// Defaults logging to false if it doesn't exist
+			if (!isset($this->data['pickles']['logging']))
+			{
+				$this->data['pickles']['logging'] = false;
+			}
+
 			// Creates constants for the security levels
 			if (isset($this->data['security']['levels']) && is_array($this->data['security']['levels']))
 			{
