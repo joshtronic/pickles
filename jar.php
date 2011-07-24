@@ -5702,7 +5702,7 @@ class Security
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman 
+ * @copyright Copyright 2007-2011, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      http://p.ickl.es
@@ -5743,6 +5743,16 @@ class Security
  */
 class Session extends Object
 {
+	/**
+	 * Handler
+	 *
+	 * What the session is being handled by.
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $handler = false;
+
 	/**
 	 * Accessed At
 	 *
@@ -5807,26 +5817,103 @@ class Session extends Object
 	 */
 	public function __construct()
 	{
-		// Sets our access time and time to live
-		$this->accessed_at  = time();
-		$this->time_to_live = ini_get('session.gc_maxlifetime');
+		if (isset($_REQUEST['request']) == false || preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']) == false)
+		{
+			parent::__construct();
 
-		// Gets the config into scope
-		parent::__construct();
+			// Sets up our configuration variables
+			$session     = $this->config->pickles['session'];
+			$datasources = $this->config->datasources;
 
-		// Sets up our configuration variables
-		$config = $this->config->pickles['session'];
+			$datasource = false;
+			$table      = 'sessions';
 
-		$this->datasource = (isset($config['datasource']) ? $config['datasource'] : $this->config->pickles['datasource']);
-		$this->table      = (isset($config['table'])      ? $config['table']      : 'sessions'                          );
+			if (is_array($session))
+			{
+				if (isset($session['handler']) && in_array($session['handler'], array('files', 'memcache', 'mysql')))
+				{
+					$this->handler = $session['handler'];
 
-		// Gets a database instance
-		$this->db = Database::getInstance($this->datasource);
+					if ($this->handler != 'files')
+					{
+						if (isset($session['datasource']))
+						{
+							$datasource = $session['datasource'];
+						}
 
-		// Initializes the session
-		$this->initialize();
-		
-		session_start();
+						if (isset($session['table']))
+						{
+							$table = $session['table'];
+						}
+					}
+				}
+			}
+			else
+			{
+				if ($session === true || $session == 'files')
+				{
+					$this->handler = 'files';
+				}
+				elseif ($session == 'memcache')
+				{
+					$this->handler = 'memcache';
+					$datasource    = 'memcached';
+				}
+				elseif ($session == 'mysql')
+				{
+					$this->handler = 'mysql';
+					$datasource    = 'mysql';
+				}
+			}
+
+			switch ($this->handler)
+			{
+				case 'files':
+					ini_set('session.save_handler', 'files');
+					session_start();
+					break;
+
+				case 'memcache':
+					$hostname = 'localhost';
+					$port     = 11211;
+
+					if ($datasource !== false && isset($datasources[$datasource]))
+					{
+						$hostname = $datasources[$datasource]['hostname'];
+						$port     = $datasources[$datasource]['port'];
+					}
+
+					ini_set('session.save_handler', 'memcache');
+					ini_set('session.save_path',    'tcp://' . $hostname . ':' . $port . '?persistent=1&amp;weight=1&amp;timeout=1&amp;retry_interval=15');
+					session_start();
+					break;
+
+				case 'mysql':
+					if ($datasource !== false && isset($datasources[$datasource]))
+					{
+						// Sets our access time and time to live
+						$this->accessed_at  = time();
+						$this->time_to_live = ini_get('session.gc_maxlifetime');
+
+						$this->datasource = $datasource;
+						$this->table      = $table;
+
+						// Gets a database instance
+						$this->db = Database::getInstance($this->datasource);
+
+						// Initializes the session
+						$this->initialize();
+
+						session_start();
+					}
+					else
+					{
+						throw new Exception('Unable to determine which datasource to use');
+					}
+
+					break;
+			}
+		}
 	}
 
 	/**
@@ -5839,8 +5926,11 @@ class Session extends Object
 	 */
 	public function __destruct()
 	{
-		$this->gc($this->time_to_live);
-		session_write_close();
+		if ($this->handler == 'mysql')
+		{
+			$this->gc($this->time_to_live);
+			session_write_close();
+		}
 	}
 
 	/**
@@ -5875,7 +5965,7 @@ class Session extends Object
 	public function open()
 	{
 		session_regenerate_id();
-		
+
 		return $this->db->open();
 	}
 

@@ -129,16 +129,9 @@ if (is_array($config->php) && count($config->php) > 0)
 // Starts session handling
 if (isset($config->pickles['session']))
 {
-	if ($config->pickles['session'] === true && session_id() == '')
+	if (session_id() == '' && $config->pickles['session'] !== false)
 	{
-		session_start();
-	}
-	elseif (is_array($config->pickles['session']))
-	{
-		if (isset($_REQUEST['request']) == false || preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']) == false)
-		{
-			$session = new Session();
-		}
+		new Session();
 	}
 }
 
@@ -249,7 +242,7 @@ function __handleException($exception)
 			}
 
 			$method .= $data['function'] . '()';
-			
+
 			$line = array(
 				'key'    => $key + 1 . '.',
 				'method' => $method,
@@ -272,7 +265,7 @@ function __handleException($exception)
 
 		$max_length        = array_sum($maxes) + 11;
 		$horizontal_border = '+' . str_repeat('-', $max_length) . '+' . "\n";
-		
+
 		echo $horizontal_border;
 		echo '|' . str_pad('Uncaught Exception', $max_length, ' ', STR_PAD_BOTH) . '|' . "\n";
 		echo $horizontal_border;
@@ -286,7 +279,7 @@ function __handleException($exception)
 		foreach ($lines as $line)
 		{
 			echo '| ';
-			
+
 			echo implode(
 				array(
 					str_pad($line['key'],    $maxes['key'], ' ', STR_PAD_LEFT),
