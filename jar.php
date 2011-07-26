@@ -5457,13 +5457,16 @@ class Security
 	 *
 	 * Creates a session variable containing the user ID and generated token.
 	 * The token is also assigned to a cookie to be used when validating the
-	 * security level.
+	 * security level. When the level value is present, the class will by pass
+	 * the database look up and simply use that value when validating (the less
+	 * paranoid scenario).
 	 *
 	 * @static
-	 * @param  $user_id ID of the user that's been logged in
+	 * @param  integer $user_id ID of the user that's been logged in
+	 * @param  integer $level optional level for the user being logged in
 	 * @return boolean whether or not the login could be completed
 	 */
-	public static function login($user_id)
+	public static function login($user_id, $level = null)
 	{
 		if (self::checkSession())
 		{
@@ -5472,6 +5475,7 @@ class Security
 			$_SESSION['__pickles']['security'] = array(
 				'token'   => $token,
 				'user_id' => (int)$user_id,
+				'level'   => $level
 			);
 
 			setcookie('pickles_security_token', $token);
@@ -5510,7 +5514,8 @@ class Security
 	 *
 	 * Looks up the user level in the database and caches it. Cache is used
 	 * for any subsequent look ups for the user. Also validates the session
-	 * variable against the cookie to ensure everything is legit.
+	 * variable against the cookie to ensure everything is legit. If the user
+	 * level is set in the session, that value will take precedence.
 	 *
 	 * return integer user level or false
 	 */
@@ -5523,6 +5528,10 @@ class Security
 				&& $_SESSION['__pickles']['security']['token'] != $_COOKIE['pickles_security_token'])
 			{
 				Security::logout();
+			}
+			elseif (isset($_SESSION['__pickles']['security']['level']) && $_SESSION['__pickles']['security']['level'] != null)
+			{
+				return $_SESSION['__pickles']['security']['level'];
 			}
 			// Hits the database to determine the user's level
 			else
