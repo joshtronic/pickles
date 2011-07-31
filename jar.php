@@ -3623,6 +3623,14 @@ class Model extends Object
 	protected $delayed = false;
 
 	/**
+	 * Replace instead of Insert/Update?
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $replace = false;
+
+	/**
 	 * Field List
 	 *
 	 * @access protected
@@ -4422,7 +4430,14 @@ class Model extends Object
 			$update = (isset($this->record[$this->id]) && trim($this->record[$this->id]) != '');
 
 			// Establishes the query, optionally uses DELAYED INSERTS
-			$sql = ($update === true ? 'UPDATE' : 'INSERT' . ($this->delayed == true ? ' DELAYED' : '') . ' INTO') . ' ' . $this->table . ' SET ';
+			if ($this->replace === true)
+			{
+				$sql = 'REPLACE' . ($this->delayed == true ? ' DELAYED' : '') . ' INTO ' . $this->table . ' SET ';
+			}
+			else
+			{
+				$sql = ($update === true ? 'UPDATE' : 'INSERT' . ($this->delayed == true ? ' DELAYED' : '') . ' INTO') . ' ' . $this->table . ' SET ';
+			}
 			$input_parameters = null;
 
 			// Limits the columns being updated
