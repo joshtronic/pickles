@@ -63,7 +63,7 @@ function readFileContents($directory)
 
 	foreach ($files as $file)
 	{
-		if (!in_array($file, array('.', '..')))
+		if (strpos($file, '.') != 0)
 		{
 			$file = $directory . '/' . $file;
 
