@@ -1204,7 +1204,7 @@ class Dynamic extends Object
 				}
 				else
 				{
-					throw new Exception('Supplied reference does not exist');
+					throw new Exception('Supplied reference does not exist (' . $reference . ')');
 				}
 			}
 		}
