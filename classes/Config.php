@@ -131,7 +131,9 @@ class Config extends Object
 							}
 							else
 							{
-								if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host) && $_SERVER['SERVER_ADDR'] == $host) || $_SERVER['SERVER_NAME'] == $host)
+								if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host)
+									&& $_SERVER['SERVER_ADDR'] == $host)
+									|| $_SERVER['HTTP_HOST'] == $host)
 								{
 									// Sets the environment and makes a run for it
 									$environment = $name;
