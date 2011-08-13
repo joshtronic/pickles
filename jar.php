@@ -1,5 +1,105 @@
 <?php
 
+class API_Common extends Object
+{
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
+	public function __destruct()
+	{
+		parent::__destruct();
+	}
+}
+
+class API_Tinychat extends API_Common
+{
+	private $public_key = null;
+	private $secret_key = null;
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		if (isset($this->config->api['tinychat'], $this->config->api['tinychat']['public_key'], $this->config->api['tinychat']['secret_key']))
+		{
+			$this->public_key = $this->config->api['tinychat']['public_key'];
+			$this->secret_key = $this->config->api['tinychat']['secret_key'];
+		}
+		else
+		{
+			throw new Exception('Unable to load TinyChat configuration.');
+		}
+	}
+
+	private function execute($codephrase, $authentication, $parameters = null)
+	{
+		$authentication = md5($this->secret_key . ':' . $authentication);
+		
+		$additional = '';
+
+		if ($parameters && is_array($parameters))
+		{
+			foreach ($parameters as $key => $value)
+			{
+				$additional .= '&' . $key . '=' . $value;
+			}
+		}
+
+		$results = file_get_contents('http://tinychat.apigee.com/' . $codephrase . '?result=json&key=' . $this->public_key . '&auth=' . $authentication . $additional);
+
+		return json_decode($results, true);
+	}
+
+	public function listRooms()
+	{
+		return $this->execute('roomlist', 'roomlist');
+	}
+
+	public function roomInfo($room, $with_ip = false)
+	{
+		return $this->execute('roominfo', $room . ':roominfo', array('room' => $room, 'with_ip' => ($with_ip ? 1 : 0)));
+	}
+
+	public function setRoomPassword($room, $password = '')
+	{
+		return $this->execute('setroompassword', $room . ':setroompassword', array('room' => $room, 'password' => $password));
+	}
+
+	public function setBroadcastPassword($room, $password = '')
+	{
+		return $this->execute('setbroadcastpassword', $room . ':setbroadcastpassword', array('room' => $room, 'password' => $password));
+	}
+
+	public function generateHTML($room, $join = false, $nick = false, $change = false, $login = false, $oper = false, $owner = false, $bcast = false, $api = false, $colorbk = false, $tcdisplay = false, $autoop = false, $urlsuper = false, $langdefault = false)
+	{
+		return '
+			<script type="text/javascript"> 
+				var tinychat = {'
+					. 'room: "' . $room . '",'
+					. ($join        ? 'join: "auto",'                        : '')
+					. ($nick        ? 'nick: "' . $nick . '",'               : '')
+					. ($change      ? 'change: "none",'                      : '')
+					. ($login       ? 'login: "' . $login . '",'             : '')
+					. ($oper        ? 'oper: "none",'                        : '')
+					. ($owner       ? 'owner: "none",'                       : '')
+					. ($bcast       ? 'bcast: "restrict",'                   : '')
+					. ($api         ? 'api: "' . $api . '",'                 : '')
+					. ($colorbk     ? 'colorbk: "' . $colorbk . '",'         : '')
+					. ($tcdisplay   ? 'tcdisplay: "vidonly",'                : '')
+					/* @todo Implement $autoop, it's an array and needs validated */
+					. ($urlsuper    ? 'urlsuper: "' . $urlsuper . '",'       : '')
+					. ($langdefault ? 'langdefault: "' . $langdefault . '",' : '')
+					. 'key: "' . $this->public_key . '"'
+				. '};
+			</script> 
+			<script src="http://tinychat.com/js/embed.js"></script> 
+			<div id="client"></div>
+		';
+	}
+}
+
 /**
  * Configuration Class File for PICKLES
  *
@@ -908,6 +1008,695 @@ class Convert
 }
 
 /**
+ * Common Database Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * Common Database Abstraction Layer
+ *
+ * Parent class that our database driver classes should be extending. Contains
+ * basic functionality for instantiation and interfacing.
+ */
+abstract class Database_Common extends Object
+{
+	/**
+	 * Driver
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $driver;
+
+	/**
+	 * Hostname for the server
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $hostname = 'localhost';
+
+	/**
+	 * Port number for the server
+	 *
+	 * @access protected
+	 * @var    integer
+	 */
+	protected $port = null;
+
+	/**
+	 * UNIX socket for the server
+	 *
+	 * @access protected
+	 * @var    integer
+	 */
+	protected $socket = null;
+
+	/**
+	 * Username for the server
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $username = null;
+
+	/**
+	 * Password for the server
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $password = null;
+
+	/**
+	 * Database name for the server
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $database = null;
+
+	/**
+	 * Connection resource
+	 *
+	 * @access protected
+	 * @var    object
+	 */
+	protected $connection = null;
+
+	/**
+	 * Results object for the executed statement
+	 *
+	 * @access protected
+	 * @var    object
+	 */
+	protected $results = null;
+
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		// Checks the driver is set and available
+		if ($this->driver == null)
+		{
+			throw new Exception('Driver name is not set');
+		}
+		else
+		{
+			if (extension_loaded($this->driver) == false)
+			{
+				throw new Exception('Driver "' . $this->driver . '" is not loaded');
+			}
+		}
+	}
+
+	/**
+	 * Set Hostname
+	 *
+	 * @param string $hostname hostname for the database
+	 */
+	public function setHostname($hostname)
+	{
+		return $this->hostname = $hostname;
+	}
+
+	/**
+	 * Set Port
+	 *
+	 * @param integer $port port for the database
+	 */
+	public function setPort($port)
+	{
+		return $this->port = $port;
+	}
+
+	/**
+	 * Set Socket
+	 *
+	 * @param string $socket name of the UNIX socket
+	 */
+	public function setSocket($socket)
+	{
+		return $this->socket = $socket;
+	}
+
+	/**
+	 * Set Username
+	 *
+	 * @param string $username username for the database
+	 */
+	public function setUsername($username)
+	{
+		return $this->username = $username;
+	}
+
+	/**
+	 * Set Password
+	 *
+	 * @param string $password password for the database
+	 */
+	public function setPassword($password)
+	{
+		return $this->password = $password;
+	}
+
+	/**
+	 * Set Database
+	 *
+	 * @param string $database database for the database
+	 */
+	public function setDatabase($database)
+	{
+		return $this->database = $database;
+	}
+
+	/**
+	 * Get Driver
+	 *
+	 * Returns the name of the driver in use. Used by the Model class to
+	 * determine which path to take when interfacing with the Database object.
+	 *
+	 * @return string name of the driver in use
+	 */
+	public function getDriver()
+	{
+		return $this->driver;
+	}
+
+	/**
+	 * Opens database connection
+	 *
+	 * Establishes a connection to the MySQL database based on the
+	 * configuration options that are available in the Config object.
+	 *
+	 * @abstract
+	 * @return   boolean true on success, throws an exception overwise
+	 */
+	abstract public function open();
+
+	/**
+	 * Closes database connection
+	 *
+	 * Sets the connection to null regardless of state.
+	 *
+	 * @return boolean always true
+	 */
+	abstract public function close();
+}
+
+/**
+ * Mongo Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * Mongo Database Abstraction Layer
+ *
+ * This database class is still considered incomplete and very experimental.
+ */
+class Database_Mongo extends Database_Common
+{
+	/**
+	 * Driver
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $driver = 'mongo';
+
+	/**
+	 * Opens database connection
+	 *
+	 * Establishes a connection to the database based on the set configuration
+	 * options.
+	 *
+	 * @return boolean true on success, throws an exception overwise
+	 */
+	public function open()
+	{
+		if ($this->connection === null)
+		{
+			// Assembles the server string
+			$server = 'mongodb://';
+
+			if (isset($this->username))
+			{
+				$server .= $this->username;
+
+				if (isset($this->password))
+				{
+					$server .= ':' . $this->password;
+				}
+
+				$server .= '@';
+			}
+
+			$server .= $this->hostname . ':' . $this->port . '/' . $this->database;
+
+			// Attempts to connect
+			try
+			{
+				$this->connection = new Mongo($server, array('persist' => 'pickles'));
+
+				// If we have database and collection, attempt to assign them
+				if (isset($this->database))
+				{
+					$this->connection = $this->connection->selectDB($this->database);
+				}
+			}
+			catch (Exception $exception)
+			{
+				throw new Exception('Unable to connect to Mongo database');
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Closes database connection
+	 *
+	 * Sets the connection to null regardless of state.
+	 *
+	 * @return boolean always true
+	 */
+	public function close()
+	{
+		try
+		{
+			$this->connection->close();
+		}
+		catch (Exception $exception)
+		{
+			// Trapping error
+		}
+
+		$this->connection = null;
+
+		return true;
+	}
+
+	/**
+	 * Fetch records from the database
+	 */
+	public function fetch($collection, $query = array(), $fields = array())
+	{
+		$this->open();
+
+		// Pulls the results based on the type
+		$results = $this->connection->$collection->find($query, $fields);
+
+		return $results;
+	}
+}
+
+/**
+ * PDO Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * PDO Abstraction Layer
+ *
+ * Parent class for any of our database classes that use PDO.
+ */
+class Database_PDO_Common extends Database_Common
+{
+	/**
+	 * DSN format
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $dsn;
+
+	/**
+	 * PDO Attributes
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $attributes = array(
+		PDO::ATTR_PERSISTENT   => true,
+		PDO::ATTR_ERRMODE      => PDO::ERRMODE_EXCEPTION,
+		PDO::NULL_EMPTY_STRING => true
+	);
+
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		// Checks that the prefix is set
+		if ($this->dsn == null)
+		{
+			throw new Exception('Data source name is not defined');
+		}
+	}
+
+	/**
+	 * Opens database connection
+	 *
+	 * Establishes a connection to the database based on the set configuration
+	 * options.
+	 *
+	 * @return boolean true on success, throws an exception overwise
+	 */
+	public function open()
+	{
+		if ($this->connection === null)
+		{
+			if (isset($this->username, $this->password, $this->database))
+			{
+				// Creates a new PDO database object (persistent)
+				try
+				{
+					// Swaps out any variables with values in the DSN
+					$this->dsn = str_replace(
+						array('[[hostname]]', '[[port]]', '[[socket]]', '[[username]]', '[[password]]', '[[database]]'),
+						array($this->hostname, $this->port, $this->socket, $this->username, $this->password, $this->database),
+						$this->dsn
+					);
+
+					// Strips any empty parameters in the DSN
+					$this->dsn = str_replace(array('host=;', 'port=;', 'unix_socket=;'), '', $this->dsn);
+
+					// Attempts to establish a connection
+					$this->connection = new PDO($this->dsn,	$this->username, $this->password, $this->attributes);
+				}
+				catch (PDOException $e)
+				{
+					throw new Exception($e);
+				}
+			}
+			else
+			{
+				throw new Exception('There was an error loading the database configuration');
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Closes database connection
+	 *
+	 * Sets the connection to null regardless of state.
+	 *
+	 * @return boolean always true
+	 */
+	public function close()
+	{
+		$this->connection = null;
+		return true;
+	}
+
+	/**
+	 * Executes an SQL Statement
+	 *
+	 * Executes a standard or prepared query based on passed parameters. All
+	 * queries are logged to a file as well as timed and logged in the
+	 * execution time is over 1 second.
+	 *
+	 * @param  string $sql statement to execute
+	 * @param  array $input_parameters optional key/values to be bound
+	 * @return integer ID of the last inserted row or sequence number
+	 */
+	public function execute($sql, $input_parameters = null)
+	{
+		$this->open();
+
+		if ($this->config->pickles['logging'] === true)
+		{
+			$loggable_query = $sql;
+
+			if ($input_parameters != null)
+			{
+				$loggable_query .= ' -- ' . (JSON_AVAILABLE ? json_encode($input_parameters) : serialize($input_parameters));
+			}
+
+			Log::query($loggable_query);
+		}
+
+		$sql = trim($sql);
+
+		// Checks if the query is blank
+		if ($sql != '')
+		{
+			try
+			{
+				// Establishes if we're working on an EXPLAIN
+				if (Profiler::enabled('explains') == true)
+				{
+					$explaining = preg_match('/^EXPLAIN /i', $sql);
+					$selecting  = preg_match('/^SELECT /i', $sql);
+				}
+				else
+				{
+					$explaining = null;
+					$selecting  = null;
+				}
+
+				// Executes a standard query
+				if ($input_parameters === null)
+				{
+					// Explains the query
+					if ($selecting == true && $explaining == false)
+					{
+						$explain = $this->fetch('EXPLAIN ' . $sql);
+					}
+
+					$start_time = microtime(true);
+					$this->results = $this->connection->query($sql);
+				}
+				// Executes a prepared statement
+				else
+				{
+					// Explains the query
+					if ($selecting == true && $explaining == false)
+					{
+						$explain = $this->fetch('EXPLAIN ' . $sql, $input_parameters);
+					}
+
+					$start_time = microtime(true);
+					$this->results = $this->connection->prepare($sql);
+					$this->results->execute($input_parameters);
+				}
+
+				$end_time = microtime(true);
+				$duration = $end_time - $start_time;
+
+				if ($this->config->pickles['logging'] === true && $duration >= 1)
+				{
+					Log::slowQuery($duration . ' seconds: ' . $loggable_query);
+				}
+
+				// Logs the information to the profiler
+				if ($explaining == false && Profiler::enabled('explains', 'queries'))
+				{
+					Profiler::logQuery($sql, $input_parameters, (isset($explain) ? $explain : false), $duration);
+				}
+			}
+			catch (PDOException $e)
+			{
+				throw new Exception($e);
+			}
+		}
+		else
+		{
+			throw new Exception('No query to execute');
+		}
+
+		return $this->connection->lastInsertId();
+	}
+
+	/**
+	 * Fetch records from the database
+	 *
+	 * @param  string $sql statement to be executed
+	 * @param  array $input_parameters optional key/values to be bound
+	 * @param  string $return_type optional type of return set
+	 * @return mixed based on return type
+	 */
+	public function fetch($sql = null, $input_parameters = null)
+	{
+		$this->open();
+
+		if ($sql !== null)
+		{
+			$this->execute($sql, $input_parameters);
+		}
+
+		// Pulls the results based on the type
+		$results = $this->results->fetchAll(PDO::FETCH_ASSOC);
+
+		return $results;
+	}
+}
+
+/**
+ * MySQL Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * MySQL Database Abstraction Layer
+ */
+class Database_PDO_MySQL extends Database_PDO_Common
+{
+	/**
+	 * Driver
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $driver = 'pdo_mysql';
+
+	/**
+	 * DSN format
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $dsn = 'mysql:host=[[hostname]];port=[[port]];unix_socket=[[socket]];dbname=[[database]]';
+
+	/**
+	 * Default port
+	 *
+	 * @access proceted
+	 * @var    integer
+	 */
+	protected $port = 3306;
+}
+
+/**
+ * PostgreSQL Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * PostgreSQL Database Abstraction Layer
+ */
+class Database_PDO_PostgreSQL extends Database_PDO_Common
+{
+	/**
+	 * Driver
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $driver = 'pdo_pgsql';
+
+	/**
+	 * DSN format
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $dsn = 'pgsql:host=[[hostname]];port=[[port]];dbname=[[database]];user=[[username]];password=[[password]]';
+
+	/**
+	 * Default port
+	 *
+	 * @access proceted
+	 * @var    integer
+	 */
+	protected $port = 5432;
+}
+
+/**
+ * SQLite Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * SQLite Database Abstraction Layer
+ */
+class Database_PDO_SQLite extends Database_PDO_Common
+{
+	/**
+	 * Driver
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $driver = 'pdo_sqlite';
+
+	/**
+	 * DSN format
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $dsn = 'sqlite:[[hostname]]';
+}
+
+/**
  * Database Class File for PICKLES
  *
  * PHP version 5
@@ -1107,6 +1896,518 @@ class Date
 	}
 
 	// }}}
+}
+
+/**
+ * Common Display Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * Common Display Class
+ *
+ * This is the parent class class that each display class should be
+ * extending and executing parent::render()
+ */
+abstract class Display_Common extends Object
+{
+	/**
+	 * Template Extension
+	 *
+	 * @access protected
+	 * @var    string $extension file extension for the template files
+	 */
+	protected $extension = null;
+
+	/**
+	 * Parent Template
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $parent_template = null;
+
+	/**
+	 * Child (sub) Template
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $child_template = null;
+
+	/**
+	 * CSS Class Name
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $css_class = '';
+
+	/**
+	 * Javascript [Path and] Basename
+	 *
+	 * @access protected
+	 * @var    array
+	 */
+	protected $js_basename = '';
+
+	/**
+	 * Meta Data
+	 *
+	 * @access protected
+	 * @var    array
+	 */
+	protected $meta_data = null;
+
+	/**
+	 * Module Return Data
+	 *
+	 * @access protected
+	 * @var    array
+	 */
+	protected $module_return = null;
+
+	/**
+	 * Constructor
+	 *
+	 * Gets those headers working
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		// Obliterates any passed in PHPSESSID (thanks Google)
+		if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') !== false)
+		{
+			list($request_uri, $phpsessid) = explode('?PHPSESSID=', $_SERVER['REQUEST_URI'], 2);
+			header('HTTP/1.1 301 Moved Permanently');
+			header('Location: ' . $request_uri);
+			exit;
+		}
+		else
+		{
+			// XHTML compliancy stuff
+			ini_set('arg_separator.output', '&amp;');
+			ini_set('url_rewriter.tags',    'a=href,area=href,frame=src,input=src,fieldset=');
+
+			header('Content-type: text/html; charset=UTF-8');
+		}
+	}
+
+	/**
+	 * Set Template
+	 *
+	 * Sets the template file based on passed template type. Adds path and
+	 * extension if applicable.
+	 *
+	 * @param string $template template file's basename
+	 * @param string $type template file's type (either parent or child)
+	 */
+	private function setTemplate($template, $type)
+	{
+		if ($template != null)
+		{
+			$template_name = $type . '_template';
+			$template_path = SITE_TEMPLATE_PATH . ($type == 'parent' ? '__shared/' : '');
+			$template_file = $template_path . $template . ($this->extension != false ? '.' . $this->extension : '');
+
+			if (file_exists($template_file))
+			{
+				$this->$template_name = $template_file;
+			}
+		}
+	}
+
+	/**
+	 * Set Template Variables
+	 *
+	 * Sets the variables used by the templates
+	 *
+	 * @param string $parent_template parent template
+	 * @param string $child_template child (sub) template
+	 * @param string $css_class name of the CSS class for the module
+	 * @param string $js_basename basename for the javascript file for the module
+	 */
+	public function setTemplateVariables($parent_template, $child_template, $css_class, $js_basename)
+	{
+		$this->setTemplate($parent_template, 'parent');
+		$this->setTemplate($child_template,  'child');
+
+		$this->css_class   = $css_class;
+		$this->js_basename = $js_basename;
+	}
+
+	/**
+	 * Set Meta Data
+	 *
+	 * Sets the meta data from the module so the display class can use it
+	 *
+	 * @param array $meta_data key/value array of data
+	 */
+	public function setMetaData($meta_data)
+	{
+		$this->meta_data = $meta_data;
+	}
+
+	/**
+	 * Set Module Return
+	 *
+	 * Sets the return data from the module so the display class can display it
+	 *
+	 * @param array $module_return key / value pairs for the data
+	 */
+	public function setModuleReturn($module_return)
+	{
+		$this->module_return = $module_return;
+	}
+
+	/**
+	 * Template Exists
+	 *
+	 * Checks the templates for validity, not required by every display type so
+	 * the return defaults to true.
+	 *
+	 * @return boolean whether or not the template exists
+	 */
+	public function templateExists()
+	{
+		return true;
+	}
+
+	/**
+	 * Rendering Method
+	 *
+	 * @abstract
+	 */
+	abstract public function render();
+}
+
+/**
+ * JSON Display Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * JSON Display
+ *
+ * Displays data in JavaScript Object Notation.
+ */
+class Display_JSON extends Display_Common
+{
+	/**
+	 * Renders the data in JSON format
+	 */
+	public function render()
+	{
+		echo Convert::toJSON($this->module_return);
+	}
+}
+
+/**
+ * PHP Display Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * PHP Display
+ *
+ * Displays the associated PHP templates for the Model.
+ */
+class Display_PHP extends Display_Common
+{
+	/**
+	 * Template Extension
+	 *
+	 * I know there's some controversy amoungst my peers concerning the
+	 * usage of the .phtml extension for these PHP template files. If you
+	 * would prefer .php or .tpl extensions, feel free to void your
+	 * warranty and change it here.
+	 *
+	 * @access protected
+	 * @var    string $extension file extension for the template files
+	 */
+	protected $extension = 'phtml';
+
+	/**
+	 * Template Exists
+	 *
+	 * @return integer the number of templates defined
+	 */
+	public function templateExists()
+	{
+		if ($this->parent_template != null)
+		{
+			return file_exists($this->parent_template) && file_exists($this->child_template);
+		}
+		else
+		{
+			return file_exists($this->child_template);
+		}
+	}
+
+	/**
+	 * Renders the PHP templated pages
+	 */
+	public function render()
+	{
+		if ($this->templateExists())
+		{
+			// Starts up the buffer
+			ob_start();
+
+			// Puts the class variables in local scope of the template
+			$__config    = $this->config;
+			$__meta      = $this->meta_data;
+			$__module    = $this->module_return;
+			$__css_class = $this->css_class;
+			$__js_file   = $this->js_basename;
+
+			// Creates (possibly overwritten) objects
+			$form_class    = (class_exists('CustomForm')    ? 'CustomForm'    : 'Form');
+			$dynamic_class = (class_exists('CustomDynamic') ? 'CustomDynamic' : 'Dynamic');
+
+			$__form    = new $form_class();
+			$__dynamic = new $dynamic_class();
+
+			// Loads the template
+			if ($this->parent_template != null)
+			{
+				if ($this->child_template == null)
+				{
+					$__template = $this->parent_template;
+				}
+				else
+				{
+					$__template = $this->child_template;
+				}
+
+				require_once $this->parent_template;
+			}
+			elseif ($this->child_template != null)
+			{
+				$__template = $this->child_template;
+
+				require_once $__template;
+			}
+
+			// Grabs the buffer contents and clears it out
+			$buffer = ob_get_clean();
+
+			// Kills any whitespace and HTML comments
+			$buffer = preg_replace(array('/^[\s]+/m', '/<!--.*-->/U'), '', $buffer);
+
+			// Note, this doesn't exit in case you want to run code after the display of the page
+			echo $buffer;
+		}
+		else
+		{
+			echo Convert::toJSON($this->module_return);
+		}
+	}
+}
+
+/**
+ * RSS Display Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * RSS Display
+ *
+ * Displays data as an RSS formatted XML string.
+ */
+class Display_RSS extends Display_Common
+{
+	// {{{ Feed Defaults
+
+	/**
+	 * RSS Version
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $version = '2.0';
+
+	/**
+	 * Date Format
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $date_format = 'r';
+
+	// }}}
+
+	// {{{ Channel Defaults
+
+	/**
+	 * Title
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $title = '';
+
+	/**
+	 * Link
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $link = '';
+
+	/**
+	 * Description
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $description = '';
+
+	/**
+	 * Language
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $language = 'en-us';
+
+	/**
+	 * Generator
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $generator = 'http://p.ickl.es';
+
+	// }}}
+
+	/**
+	 * Renders the data in RSS format
+	 */
+	public function render()
+	{
+		// Throws off the syntax highlighter otherwise
+		echo '<' . '?xml version="1.0" ?' . '><rss version="' . $this->version . '"><channel>';
+
+		// Loops through the passable channel variables
+		$channel = array();
+		foreach (array('title', 'link', 'description', 'language') as $variable)
+		{
+			if (isset($this->module_return[$variable]))
+			{
+				$this->$variable = $this->module_return[$variable];
+			}
+
+			$channel[$variable] = $this->$variable;
+		}
+
+		$channel['generator'] = $this->generator;
+
+		// Loops through the items
+		$items      = '';
+		$build_date = '';
+		if (isset($this->module_return['items']) && is_array($this->module_return['items']))
+		{
+			foreach ($this->module_return['items'] as $item)
+			{
+				// Note: time is the equivalent to pubDate, I just don't like camel case variables
+				$publish_date = date($this->date_format, is_numeric($item['time']) ? $item['time'] : strtotime($item['time']));
+
+				if ($build_date == '')
+				{
+					$build_date = $publish_date;
+				}
+
+				if (isset($item['link']))
+				{
+					$item['guid'] = $item['link'];
+				}
+
+				$item['pubDate'] = $publish_date;
+
+				unset($item['time']);
+
+				$items .= Convert::arrayToXML($item);
+			}
+		}
+
+		$channel['pubDate']       = $build_date;
+		$channel['lastBuildDate'] = $build_date;
+
+		echo Convert::arrayToXML($channel) . $items . '</channel></rss>';
+	}
+}
+
+/**
+ * XML Display Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * XML Display
+ *
+ * Displays data in XML format.
+ */
+class Display_XML extends Display_Common
+{
+	/**
+	 * Renders the data in XML format
+	 */
+	public function render()
+	{
+		echo Convert::arrayToXML($this->module_return);
+	}
 }
 
 /**
