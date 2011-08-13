@@ -102,8 +102,8 @@ ini_set('display_errors', true);
 error_reporting(-1);
 
 // Sets the error and exception handlers
-set_error_handler('__handleError');
-set_exception_handler('__handleException');
+// set_error_handler('__handleError');
+// set_exception_handler('__handleException');
 
 // Defaults timezone to UTC if not set
 if (ini_get('date.timezone') == '')
@@ -134,6 +134,8 @@ if (isset($config->pickles['session']))
 		new Session();
 	}
 }
+ini_set('display_errors', true);
+error_reporting(-1);
 
 // }}}
 // {{{ Auto[magical] Loader
