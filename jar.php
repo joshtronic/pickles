@@ -620,24 +620,8 @@ class Controller extends Object
 				exit;
 			}
 
-			// Catches requests to PICKLES core files and passes them through
-			if (preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request'], $matches))
-			{
-				// Checks that the file exists
-				$file = str_replace('__pickles/', PICKLES_PATH, $_REQUEST['request']);
-				if (file_exists($file))
-				{
-					// Sets the pass thru flag and dumps the data
-					$this->passthru = true;
-
-					// This is somewhat hacky, but mime_content_type() is deprecated and finfo_file() is only 5.3+
-					header('Content-Type: text/' . ($matches[1] == 'js' ? 'javascript' : $matches[1]));
-
-					exit(file_get_contents($file));
-				}
-			}
 			// Catches requests to the __shared directory
-			elseif (preg_match('/^__shared/', $_REQUEST['request']))
+			if (preg_match('/^__shared/', $_REQUEST['request']))
 			{
 				header('Location: /');
 				exit;
@@ -2619,9 +2603,6 @@ class Dynamic extends Object
 		// Checks if the URI reference is absolute, and not relative
 		if (substr($reference, 0, 1) == '/')
 		{
-			// Checks if we're working with an internal PICKLES file
-			$is_internal = preg_match('/^\/__pickles\/(css|js)\/.+$/', $reference);
-
 			$query_string = '';
 
 			// Checks for ? and extracts query string
@@ -2630,16 +2611,8 @@ class Dynamic extends Object
 				list($reference, $query_string) = explode('?', $reference);
 			}
 
-			if ($is_internal)
-			{
-				// Sets the path to the actual internal path
-				$file = str_replace('/__pickles/', PICKLES_PATH, $reference);
-			}
-			else
-			{
-				// Adds the dot so the file functions can find the file
-				$file = '.' . $reference;
-			}
+			// Adds the dot so the file functions can find the file
+			$file = '.' . $reference;
 
 			if (file_exists($file))
 			{
@@ -2694,63 +2667,56 @@ class Dynamic extends Object
 	 */
 	public function css($original_reference)
 	{
-		if (preg_match('/^\/__pickles\/css\/.+$/', $original_reference) == false)
+		// Injects .min into the filename
+		$parts = explode('.', $original_reference);
+
+		if (count($parts) == 1)
 		{
-			// Injects .min into the filename
-			$parts = explode('.', $original_reference);
-
-			if (count($parts) == 1)
-			{
-				throw new Exception('Filename must have an extension (e.g. /path/to/file.css)');
-			}
-			else
-			{
-				end($parts);
-				$parts[key($parts)] = 'min.' . current($parts);
-				$minified_reference = implode('.', $parts);
-			}
-
-			$original_filename = '.' . $original_reference;
-			$minified_filename = '.' . $minified_reference;
-
-			$path = dirname($original_filename);
-
-			if (file_exists($original_filename))
-			{
-				$reference = $original_reference;
-
-				if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)))
-				{
-					// Minifies CSS with a few basic character replacements.
-					$stylesheet = file_get_contents($original_filename);
-					$stylesheet = str_replace(array("\t", "\n", ', ', ' {', ': ', ';}'), array('', '', ',', '{', ':', '}'), $stylesheet);
-					$stylesheet = preg_replace('/\/\*.+?\*\//', '', $stylesheet);
-					file_put_contents($minified_filename, $stylesheet);
-
-					$reference = $minified_reference;
-				}
-				elseif (file_exists($minified_filename))
-				{
-					$reference = $minified_reference;
-				}
-				else
-				{
-					if ($this->config->pickles['logging'] === true)
-					{
-						Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
-					}
-				}
-
-				$reference = $this->reference($reference);
-			}
-			else
-			{
-				throw new Exception('Supplied reference does not exist');
-			}
+			throw new Exception('Filename must have an extension (e.g. /path/to/file.css)');
 		}
 		else
 		{
-			$reference = $this->reference($original_reference);
+			end($parts);
+			$parts[key($parts)] = 'min.' . current($parts);
+			$minified_reference = implode('.', $parts);
+		}
+
+		$original_filename = '.' . $original_reference;
+		$minified_filename = '.' . $minified_reference;
+
+		$path = dirname($original_filename);
+
+		if (file_exists($original_filename))
+		{
+			$reference = $original_reference;
+
+			if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)))
+			{
+				// Minifies CSS with a few basic character replacements.
+				$stylesheet = file_get_contents($original_filename);
+				$stylesheet = str_replace(array("\t", "\n", ', ', ' {', ': ', ';}'), array('', '', ',', '{', ':', '}'), $stylesheet);
+				$stylesheet = preg_replace('/\/\*.+?\*\//', '', $stylesheet);
+				file_put_contents($minified_filename, $stylesheet);
+
+				$reference = $minified_reference;
+			}
+			elseif (file_exists($minified_filename))
+			{
+				$reference = $minified_reference;
+			}
+			else
+			{
+				if ($this->config->pickles['logging'] === true)
+				{
+					Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
+				}
+			}
+
+			$reference = $this->reference($reference);
+		}
+		else
+		{
+			throw new Exception('Supplied reference does not exist');
 		}
 
 		return $reference;
@@ -2768,93 +2734,86 @@ class Dynamic extends Object
 	 */
 	public function js($original_reference, $level = 'simple')
 	{
-		if (preg_match('/^\/__pickles\/js\/.+$/', $original_reference) == false)
+		$level = strtoupper($level);
+
+		switch ($level)
 		{
-			$level = strtoupper($level);
+			CASE 'WHITESPACE':
+			CASE 'SIMPLE':
+			CASE 'ADVANCED':
+				// Injects .min into the filename
+				$parts = explode('.', $original_reference);
 
-			switch ($level)
-			{
-				CASE 'WHITESPACE':
-				CASE 'SIMPLE':
-				CASE 'ADVANCED':
-					// Injects .min into the filename
-					$parts = explode('.', $original_reference);
+				if (count($parts) == 1)
+				{
+					throw new Exception('Filename must have an extension (e.g. /path/to/file.js)');
+				}
+				else
+				{
+					end($parts);
+					$parts[key($parts)] = 'min.' . current($parts);
+					$minified_reference = implode('.', $parts);
+				}
 
-					if (count($parts) == 1)
+				$original_filename = '.' . $original_reference;
+				$minified_filename = '.' . $minified_reference;
+
+				$path = dirname($original_filename);
+
+				if (file_exists($original_filename))
+				{
+					$reference = $original_reference;
+
+					if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)) && extension_loaded('curl'))
 					{
-						throw new Exception('Filename must have an extension (e.g. /path/to/file.js)');
-					}
-					else
-					{
-						end($parts);
-						$parts[key($parts)] = 'min.' . current($parts);
-						$minified_reference = implode('.', $parts);
-					}
+						// Sets up the options list
+						$options = array(
+							CURLOPT_URL             => 'http://closure-compiler.appspot.com/compile',
+							CURLOPT_RETURNTRANSFER  => true,
+							CURLOPT_HTTPHEADER      => array('Content-Type: application/x-www-form-urlencoded; charset=utf-8'),
+							CURLOPT_POST            => true,
+							CURLOPT_POSTFIELDS      => 'js_code=' . urlencode(file_get_contents($original_filename)) . '&compilation_level=' . ($level . '_' . ($level == 'WHITESPACE' ? 'ONLY' : 'OPTIMIZATIONS')) . '&output_format=text&output_info=compiled_code'
+						);
 
-					$original_filename = '.' . $original_reference;
-					$minified_filename = '.' . $minified_reference;
-
-					$path = dirname($original_filename);
-
-					if (file_exists($original_filename))
-					{
-						$reference = $original_reference;
-
-						if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)) && extension_loaded('curl'))
+						try
 						{
-							// Sets up the options list
-							$options = array(
-								CURLOPT_URL             => 'http://closure-compiler.appspot.com/compile',
-								CURLOPT_RETURNTRANSFER  => true,
-								CURLOPT_HTTPHEADER      => array('Content-Type: application/x-www-form-urlencoded; charset=utf-8'),
-								CURLOPT_POST            => true,
-								CURLOPT_POSTFIELDS      => 'js_code=' . urlencode(file_get_contents($original_filename)) . '&compilation_level=' . ($level . '_' . ($level == 'WHITESPACE' ? 'ONLY' : 'OPTIMIZATIONS')) . '&output_format=text&output_info=compiled_code'
-							);
+							// Executes the request
+							$curl = curl_init();
+							curl_setopt_array($curl, $options);
+							file_put_contents($minified_filename, curl_exec($curl));
+							curl_close($curl);
 
-							try
-							{
-								// Executes the request
-								$curl = curl_init();
-								curl_setopt_array($curl, $options);
-								file_put_contents($minified_filename, curl_exec($curl));
-								curl_close($curl);
-
-								$reference = $minified_reference;
-							}
-							catch (Exception $exception)
-							{
-								$reference = $original_reference;
-							}
-						}
-						elseif (file_exists($minified_filename))
-						{
 							$reference = $minified_reference;
 						}
-						else
+						catch (Exception $exception)
 						{
-							if ($this->config->pickles['logging'] === true)
-							{
-								Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
-							}
+							$reference = $original_reference;
 						}
-
-						$reference = $this->reference($reference);
+					}
+					elseif (file_exists($minified_filename))
+					{
+						$reference = $minified_reference;
 					}
 					else
 					{
-						throw new Exception('Supplied reference does not exist');
+						if ($this->config->pickles['logging'] === true)
+						{
+							Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
+						}
 					}
 
-					break;
+					$reference = $this->reference($reference);
+				}
+				else
+				{
+					throw new Exception('Supplied reference does not exist');
+				}
 
-				default:
-					throw new Exception('The level "' . $level . '" is invalid. Valid levels include "whitespace", "simple" and "advanced"');
-					break;
-			}
-		}
-		else
-		{
-			$reference = $this->reference($original_reference);
+				break;
+
+			default:
+				throw new Exception('The level "' . $level . '" is invalid. Valid levels include "whitespace", "simple" and "advanced"');
+				break;
 		}
 
 		return $reference;
