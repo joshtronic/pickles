@@ -4052,6 +4052,14 @@ class Model extends Object
 	protected $db = null;
 
 	/**
+	 * Cache Object
+	 *
+	 * @access protected
+	 * @var    object
+	 */
+	protected $cache = null;
+
+	/**
 	 * SQL Array
 	 *
 	 * @access private
@@ -4257,8 +4265,9 @@ class Model extends Object
 		// Runs the parent constructor so we have the config
 		parent::__construct();
 
-		// Gets an instance of the database
-		$this->db = Database::getInstance($this->datasource != '' ? $this->datasource : null);
+		// Gets an instance of the cache and database
+		$this->db    = Database::getInstance($this->datasource != '' ? $this->datasource : null);
+		$this->cache = Cache::getInstance();
 
 		// Builds out the query
 		if ($type_or_parameters != null)
@@ -5046,7 +5055,7 @@ class Model extends Object
 class Module extends Object
 {
 	/**
-	 * Cache object
+	 * Cache Object
 	 *
 	 * @access protected
 	 * @var    object
@@ -5054,7 +5063,7 @@ class Module extends Object
 	protected $cache = null;
 
 	/**
-	 * Database object
+	 * Database Object
 	 *
 	 * @access protected
 	 * @var    object
@@ -5062,7 +5071,7 @@ class Module extends Object
 	protected $db = null;
 
 	/**
-	 * Page title
+	 * Page Title
 	 *
 	 * @access protected
 	 * @var    string, null by default
@@ -5070,7 +5079,7 @@ class Module extends Object
 	protected $title = null;
 
 	/**
-	 * Meta description
+	 * Meta Description
 	 *
 	 * @access protected
 	 * @var    string, null by default
@@ -5078,7 +5087,7 @@ class Module extends Object
 	protected $description = null;
 
 	/**
-	 * Meta keywords (comma separated)
+	 * Meta Keywords (comma separated)
 	 *
 	 * @access protected
 	 * @var    string, null by default
@@ -5106,7 +5115,7 @@ class Module extends Object
 	protected $private = false;
 
 	/**
-	 * Security settings of the page
+	 * Security Settings
 	 *
 	 * @access protected
 	 * @var    boolean, null by default
@@ -5146,7 +5155,7 @@ class Module extends Object
 	protected $hash = null;
 
 	/**
-	 * Default display engine
+	 * Default Display Engine
 	 *
 	 * Defaults to PHP but could be set to JSON, XML or RSS. Value is
 	 * overwritten by the config value if not set by the module.
@@ -5157,7 +5166,7 @@ class Module extends Object
 	protected $engine = DISPLAY_PHP;
 
 	/**
-	 * Default template
+	 * Default Template
 	 *
 	 * Defaults to null but could be set to any valid template basename. The
 	 * value is overwritten by the config value if not set by the module. The

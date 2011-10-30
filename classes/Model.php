@@ -35,6 +35,14 @@ class Model extends Object
 	protected $db = null;
 
 	/**
+	 * Cache Object
+	 *
+	 * @access protected
+	 * @var    object
+	 */
+	protected $cache = null;
+
+	/**
 	 * SQL Array
 	 *
 	 * @access private
@@ -240,8 +248,9 @@ class Model extends Object
 		// Runs the parent constructor so we have the config
 		parent::__construct();
 
-		// Gets an instance of the database
-		$this->db = Database::getInstance($this->datasource != '' ? $this->datasource : null);
+		// Gets an instance of the cache and database
+		$this->db    = Database::getInstance($this->datasource != '' ? $this->datasource : null);
+		$this->cache = Cache::getInstance();
 
 		// Builds out the query
 		if ($type_or_parameters != null)
