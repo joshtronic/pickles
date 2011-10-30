@@ -415,10 +415,11 @@ class Cache extends Object
 	/**
 	 * Set Key
 	 *
-	 * Sets key to the specified value. I've found that compression can lead to issues
-	 * with integers and can slow down the storage and retrieval of data (defeats the
-	 * purpose of caching if you ask me) and isn't supported. I've also been burned by
-	 * data inadvertantly being cached for infinity, hence the 5 minute default.
+	 * Sets key to the specified value. I've found that compression can lead to
+	 * issues with integers and can slow down the storage and retrieval of data
+	 * (defeats the purpose of caching if you ask me) and isn't supported. I've
+	 * also been burned by data inadvertantly being cached for infinity, hence
+	 * the 5 minute default.
 	 *
 	 * @param  string  $key key to set
 	 * @param  mixed   $value value to set
@@ -1396,7 +1397,7 @@ abstract class Database_Common extends Object
 	 * @access protected
 	 * @var    string
 	 */
-	protected $driver;
+	protected $driver = null;
 
 	/**
 	 * Hostname for the server
@@ -1445,6 +1446,14 @@ abstract class Database_Common extends Object
 	 * @var    string
 	 */
 	protected $database = null;
+
+	/**
+	 * Whether or not to use caching
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $caching = false;
 
 	/**
 	 * Connection resource
@@ -1541,6 +1550,16 @@ abstract class Database_Common extends Object
 	public function setDatabase($database)
 	{
 		return $this->database = $database;
+	}
+
+	/**
+	 * Set Caching
+	 *
+	 * @param boolean whether or not to use cache
+	 */
+	public function setCaching($caching)
+	{
+		return $this->caching = $caching;
 	}
 
 	/**
@@ -2065,7 +2084,7 @@ class Database_PDO_SQLite extends Database_PDO_Common
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman 
+ * @copyright Copyright 2007-2011, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      http://p.ickl.es
@@ -2184,6 +2203,11 @@ class Database extends Object
 					if (isset($datasource['database']))
 					{
 						$instance->setDatabase($datasource['database']);
+					}
+
+					if (isset($datasource['caching']))
+					{
+						$instance->setCaching($datasource['caching']);
 					}
 				}
 
@@ -5022,6 +5046,14 @@ class Model extends Object
 class Module extends Object
 {
 	/**
+	 * Cache object
+	 *
+	 * @access protected
+	 * @var    object
+	 */
+	protected $cache = null;
+
+	/**
 	 * Database object
 	 *
 	 * @access protected
@@ -5150,7 +5182,8 @@ class Module extends Object
 	{
 		parent::__construct();
 
-		$this->db = Database::getInstance();
+		$this->cache = Cache::getInstance();
+		$this->db    = Database::getInstance();
 
 		if ($autorun === true)
 		{

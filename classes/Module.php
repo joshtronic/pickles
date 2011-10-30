@@ -28,6 +28,14 @@
 class Module extends Object
 {
 	/**
+	 * Cache object
+	 *
+	 * @access protected
+	 * @var    object
+	 */
+	protected $cache = null;
+
+	/**
 	 * Database object
 	 *
 	 * @access protected
@@ -156,7 +164,8 @@ class Module extends Object
 	{
 		parent::__construct();
 
-		$this->db = Database::getInstance();
+		$this->cache = Cache::getInstance();
+		$this->db    = Database::getInstance();
 
 		if ($autorun === true)
 		{

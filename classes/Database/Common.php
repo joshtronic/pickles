@@ -29,7 +29,7 @@ abstract class Database_Common extends Object
 	 * @access protected
 	 * @var    string
 	 */
-	protected $driver;
+	protected $driver = null;
 
 	/**
 	 * Hostname for the server
@@ -78,6 +78,14 @@ abstract class Database_Common extends Object
 	 * @var    string
 	 */
 	protected $database = null;
+
+	/**
+	 * Whether or not to use caching
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $caching = false;
 
 	/**
 	 * Connection resource
@@ -174,6 +182,16 @@ abstract class Database_Common extends Object
 	public function setDatabase($database)
 	{
 		return $this->database = $database;
+	}
+
+	/**
+	 * Set Caching
+	 *
+	 * @param boolean whether or not to use cache
+	 */
+	public function setCaching($caching)
+	{
+		return $this->caching = $caching;
 	}
 
 	/**
