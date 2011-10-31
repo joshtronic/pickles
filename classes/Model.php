@@ -286,7 +286,7 @@ class Model extends Object
 			elseif (ctype_digit((string)$type_or_parameters))
 			{
 				$this->loadParameters(array($this->id => $type_or_parameters));
-				$cache_key = sha1('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $type_or_parameters);
+				$cache_key = 'PICKLES-' . $this->datasource . '-' . $this->table . '-' . $type_or_parameters;
 			}
 			elseif (ctype_digit((string)$parameters))
 			{
@@ -956,7 +956,7 @@ class Model extends Object
 			
 					if ($this->caching)
 					{
-						$this->cache->delete(sha1('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $this->record[$this->id]));
+						$this->cache->delete('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $this->record[$this->id]);
 					}
 				}
 
