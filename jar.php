@@ -1453,7 +1453,7 @@ abstract class Database_Common extends Object
 	 * @access protected
 	 * @var    boolean
 	 */
-	protected $caching = false;
+	protected $cache = false;
 
 	/**
 	 * Connection resource
@@ -1553,13 +1553,13 @@ abstract class Database_Common extends Object
 	}
 
 	/**
-	 * Set Caching
+	 * Set Cache
 	 *
 	 * @param boolean whether or not to use cache
 	 */
-	public function setCaching($caching)
+	public function setCache($cache)
 	{
-		return $this->caching = $caching;
+		return $this->cache = $cache;
 	}
 
 	/**
@@ -1573,6 +1573,18 @@ abstract class Database_Common extends Object
 	public function getDriver()
 	{
 		return $this->driver;
+	}
+
+	/**
+	 * Get Cache
+	 *
+	 * Returns the status of caching for this datasource.
+	 *
+	 * @return string whether or not to use the cache
+	 */
+	public function getCache()
+	{
+		return $this->cache;
 	}
 
 	/**
@@ -2205,9 +2217,9 @@ class Database extends Object
 						$instance->setDatabase($datasource['database']);
 					}
 
-					if (isset($datasource['caching']))
+					if (isset($datasource['cache']))
 					{
-						$instance->setCaching($datasource['caching']);
+						$instance->setCache($datasource['cache']);
 					}
 				}
 
@@ -4060,6 +4072,14 @@ class Model extends Object
 	protected $cache = null;
 
 	/**
+	 * Whether or not to use cache
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $use_cache = false;
+
+	/**
 	 * SQL Array
 	 *
 	 * @access private
@@ -4266,8 +4286,14 @@ class Model extends Object
 		parent::__construct();
 
 		// Gets an instance of the cache and database
-		$this->db    = Database::getInstance($this->datasource != '' ? $this->datasource : null);
-		$this->cache = Cache::getInstance();
+		// @todo Datasource has no way of being set
+		$this->db      = Database::getInstance($this->datasource != '' ? $this->datasource : null);
+		$this->caching = $this->db->getCache();
+	
+		if ($this->caching)
+		{
+			$this->cache = Cache::getInstance();
+		}
 
 		// Builds out the query
 		if ($type_or_parameters != null)
@@ -4289,6 +4315,7 @@ class Model extends Object
 			elseif (ctype_digit((string)$type_or_parameters))
 			{
 				$this->loadParameters(array($this->id => $type_or_parameters));
+				$cache_key = sha1('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $type_or_parameters);
 			}
 			elseif (ctype_digit((string)$parameters))
 			{
@@ -4327,7 +4354,26 @@ class Model extends Object
 						break;
 				}
 
-				$this->records = $this->db->fetch(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
+				$query_database = true;
+
+				if (isset($cache_key))
+				{
+					$cached = $this->cache->get($cache_key);
+				}
+
+				if (isset($cached) && $cached)
+				{
+					$this->records = $cached;
+				}
+				else
+				{
+					$this->records = $this->db->fetch(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
+
+					if (isset($cache_key))
+					{
+						$this->cache->set($cache_key, $this->records);
+					}
+				}
 			}
 			else
 			{
@@ -4936,6 +4982,11 @@ class Model extends Object
 				{
 					$sql .= ' WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
 					$input_parameters[':' . $this->id] = $this->record[$this->id];
+			
+					if ($this->caching)
+					{
+						$this->cache->delete(sha1('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $this->record[$this->id]));
+					}
 				}
 
 				// Executes the query

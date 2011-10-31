@@ -130,9 +130,9 @@ class Database extends Object
 						$instance->setDatabase($datasource['database']);
 					}
 
-					if (isset($datasource['caching']))
+					if (isset($datasource['cache']))
 					{
-						$instance->setCaching($datasource['caching']);
+						$instance->setCache($datasource['cache']);
 					}
 				}
 
