@@ -91,7 +91,7 @@ if (is_writable(PICKLES_PATH))
 
 if (file_exists($jar_file))
 {
-	require $jar_file;
+//	require $jar_file;
 }
 
 // }}}

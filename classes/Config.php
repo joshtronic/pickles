@@ -183,10 +183,13 @@ class Config extends Object
 				$this->data['pickles']['profiler'] = false;
 			}
 
-			// Defaults logging to false if it doesn't exist
-			if (!isset($this->data['pickles']['logging']))
+			// Defaults expected PICKLES options to false
+			foreach (array('cache', 'logging') as $variable)
 			{
-				$this->data['pickles']['logging'] = false;
+				if (!isset($this->data['pickles'][$variable]))
+				{
+					$this->data['pickles'][$variable] = false;
+				}
 			}
 
 			// Creates constants for the security levels
