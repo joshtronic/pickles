@@ -4358,7 +4358,7 @@ class Model extends Object
 
 				if (isset($cache_key))
 				{
-					$cached = $this->cache->get($cache_key);
+					//$cached = $this->cache->get($cache_key);
 				}
 
 				if (isset($cached) && $cached)
@@ -4371,7 +4371,7 @@ class Model extends Object
 
 					if (isset($cache_key))
 					{
-						$this->cache->set($cache_key, $this->records);
+						//$this->cache->set($cache_key, $this->records);
 					}
 				}
 			}
@@ -4985,7 +4985,7 @@ class Model extends Object
 			
 					if ($this->caching)
 					{
-						$this->cache->delete('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $this->record[$this->id]);
+						//$this->cache->delete('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $this->record[$this->id]);
 					}
 				}
 
