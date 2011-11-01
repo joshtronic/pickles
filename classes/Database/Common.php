@@ -29,7 +29,7 @@ abstract class Database_Common extends Object
 	 * @access protected
 	 * @var    string
 	 */
-	protected $driver;
+	protected $driver = null;
 
 	/**
 	 * Hostname for the server
@@ -78,6 +78,14 @@ abstract class Database_Common extends Object
 	 * @var    string
 	 */
 	protected $database = null;
+
+	/**
+	 * Whether or not to use caching
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $cache = false;
 
 	/**
 	 * Connection resource
@@ -177,6 +185,16 @@ abstract class Database_Common extends Object
 	}
 
 	/**
+	 * Set Cache
+	 *
+	 * @param boolean whether or not to use cache
+	 */
+	public function setCache($cache)
+	{
+		return $this->cache = $cache;
+	}
+
+	/**
 	 * Get Driver
 	 *
 	 * Returns the name of the driver in use. Used by the Model class to
@@ -187,6 +205,18 @@ abstract class Database_Common extends Object
 	public function getDriver()
 	{
 		return $this->driver;
+	}
+
+	/**
+	 * Get Cache
+	 *
+	 * Returns the status of caching for this datasource.
+	 *
+	 * @return string whether or not to use the cache
+	 */
+	public function getCache()
+	{
+		return $this->cache;
 	}
 
 	/**
