@@ -41,6 +41,50 @@ abstract class API_Common extends Object
 }
 
 /**
+ * Google Profanity Class File for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * Google Profanity API Interface 
+ */
+class API_Google_Profanity extends API_Common
+{
+	/**
+	 * Check
+	 *
+	 * Checks if a word is considered profanity.
+	 *
+	 * @usage API_Google_Profanity::check('fuck'); // returns true
+	 * @param string $word word to check
+	 * @return boolean whether or not the word is profanity
+	 */
+	public static function check($word)
+	{
+		$response = json_decode(file_get_contents('http://www.wdyl.com/profanity?q=' . $word), true);
+
+		if ($response == null || !isset($response['response']) || !in_array($response['response'], array('true', 'false')))
+		{
+			throw new Exception('Invalid response from API.');
+		}
+		else
+		{
+			return $response['response'] == 'true';
+		}
+	}
+}
+
+/**
  * Tinychat Class File for PICKLES
  *
  * PHP version 5
@@ -219,6 +263,214 @@ class API_Tinychat extends API_Common
 			<script src="http://tinychat.com/js/embed.js"></script> 
 			<div id="client"></div>
 		';
+	}
+}
+
+/**
+ * Caching System for PICKLES
+ *
+ * PHP version 5
+ *
+ * Licensed under The MIT License
+ * Redistribution of these files must retain the above copyright notice.
+ *
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2011, Josh Sherman
+ * @license   http://www.opensource.org/licenses/mit-license.html
+ * @package   PICKLES
+ * @link      http://p.ickl.es
+ */
+
+/**
+ * Cache Class
+ *
+ * Wrapper class for Memcache() to allow for better error handling when the
+ * Memcached server is unavailable. Designed around the syntax for Memcached()
+ * to allow for an easier transistion to the aforementioned in the future. I
+ * don't entirely remember specifics, but the reason for not using Memcached()
+ * was due to an unexplainable bug in the version in the repository for Ubuntu
+ * 10.04 LTS. Memcached() does support more of the memcached protocol and will
+ * eventually be what PICKLES uses.
+ *
+ * Requires php5-memcache
+ *
+ * @link http://us.php.net/manual/en/book.memcache.php
+ * @link http://packages.ubuntu.com/lucid/php5-memcache
+ * @link http://www.memcached.org/
+ */
+class Cache extends Object
+{
+	/**
+	 * Hostname for the Memcached Server
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $hostname = null;
+
+	/**
+	 * Port to use to connect
+	 *
+	 * @access private
+	 * @var    integer
+	 */
+	private $port = null;
+
+	/**
+	 * Connection resource to Memcached
+	 *
+	 * @access private
+	 * @var    object
+	 */
+	private $connection = null;
+
+	/**
+	 * Constructor
+	 *
+	 * Sets up our connection variables.
+	 *
+	 * @param string $hostname optional hostname to connect to
+	 * @param string $database optional port to use
+	 */
+	public function __construct($hostname = null, $port = null)
+	{
+		parent::__construct();
+
+		if ($this->config->pickles['cache'])
+		{
+			if (isset($this->config->datasources[$this->config->pickles['cache']]))
+			{
+				$datasource = $this->config->datasources[$this->config->pickles['cache']];
+
+				if (isset($datasource['hostname'], $datasource['port']))
+				{
+					$this->hostname = $datasource['hostname'];
+					$this->port     = $datasource['port'];
+				}
+			}
+		}
+	}
+
+	/**
+	 * Destructor
+	 *
+	 * Closes the connection when the object dies.
+	 */
+	public function __destruct()
+	{
+		if ($this->connection)
+		{
+			$this->connection->close();
+		}
+	}
+
+	/**
+	 * Get Instance
+	 *
+	 * Let's the parent class do all the work.
+	 *
+	 * @static
+	 * @param  string $class name of the class to instantiate
+	 * @return object self::$instance instance of the Cache class
+	 */
+	public static function getInstance($class = 'Cache')
+	{
+		return parent::getInstance($class);
+	}
+
+	/**
+	 * Opens Connection
+	 *
+	 * Establishes a connection to the memcached server.
+	 */
+	public function open()
+	{
+		if ($this->connection === null)
+		{
+			$this->connection = new Memcache();
+			$this->connection->connect($this->hostname, $this->port);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Get Key
+	 *
+	 * Gets the value of the key and returns it.
+	 *
+	 * @param  string $key key to retrieve
+	 * @return mixed  value of the requested key, false if not set
+	 */
+	public function get($key)
+	{
+		if ($this->open())
+		{
+			return $this->connection->get($key);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Set Key
+	 *
+	 * Sets key to the specified value. I've found that compression can lead to
+	 * issues with integers and can slow down the storage and retrieval of data
+	 * (defeats the purpose of caching if you ask me) and isn't supported. I've
+	 * also been burned by data inadvertantly being cached for infinity, hence
+	 * the 5 minute default.
+	 *
+	 * @param  string  $key key to set
+	 * @param  mixed   $value value to set
+	 * @param  integer $expiration optional expiration, defaults to 5 minutes
+	 * @return boolean status of writing the data to the key
+	 */
+	public function set($key, $value, $expire = 300)
+	{
+		if ($this->open())
+		{
+			return $this->connection->set($key, $value, 0, $expire);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Delete Key
+	 *
+	 * Deletes the specified key.
+	 *
+	 * @param  string $key key to delete
+	 * @return boolean status of deleting the key
+	 */
+	public function delete($key)
+	{
+		if ($this->open())
+		{
+			return $this->connection->delete($key);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Increment Key
+	 *
+	 * Increments the value of an existing key.
+	 *
+	 * @param  string $key key to increment
+	 * @return boolean status of incrementing the key
+	 * @todo   Wondering if I should check the key and set to 1 if it's new
+	 */
+	public function increment($key)
+	{
+		if ($this->open())
+		{
+			return $this->connection->increment($key);
+		}
+
+		return false;
 	}
 }
 
@@ -405,10 +657,13 @@ class Config extends Object
 				$this->data['pickles']['profiler'] = false;
 			}
 
-			// Defaults logging to false if it doesn't exist
-			if (!isset($this->data['pickles']['logging']))
+			// Defaults expected PICKLES options to false
+			foreach (array('cache', 'logging') as $variable)
 			{
-				$this->data['pickles']['logging'] = false;
+				if (!isset($this->data['pickles'][$variable]))
+				{
+					$this->data['pickles'][$variable] = false;
+				}
 			}
 
 			// Creates constants for the security levels
@@ -576,24 +831,8 @@ class Controller extends Object
 				exit;
 			}
 
-			// Catches requests to PICKLES core files and passes them through
-			if (preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request'], $matches))
-			{
-				// Checks that the file exists
-				$file = str_replace('__pickles/', PICKLES_PATH, $_REQUEST['request']);
-				if (file_exists($file))
-				{
-					// Sets the pass thru flag and dumps the data
-					$this->passthru = true;
-
-					// This is somewhat hacky, but mime_content_type() is deprecated and finfo_file() is only 5.3+
-					header('Content-Type: text/' . ($matches[1] == 'js' ? 'javascript' : $matches[1]));
-
-					exit(file_get_contents($file));
-				}
-			}
 			// Catches requests to the __shared directory
-			elseif (preg_match('/^__shared/', $_REQUEST['request']))
+			if (preg_match('/^__shared/', $_REQUEST['request']))
 			{
 				header('Location: /');
 				exit;
@@ -1158,7 +1397,7 @@ abstract class Database_Common extends Object
 	 * @access protected
 	 * @var    string
 	 */
-	protected $driver;
+	protected $driver = null;
 
 	/**
 	 * Hostname for the server
@@ -1207,6 +1446,14 @@ abstract class Database_Common extends Object
 	 * @var    string
 	 */
 	protected $database = null;
+
+	/**
+	 * Whether or not to use caching
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $cache = false;
 
 	/**
 	 * Connection resource
@@ -1306,6 +1553,16 @@ abstract class Database_Common extends Object
 	}
 
 	/**
+	 * Set Cache
+	 *
+	 * @param boolean whether or not to use cache
+	 */
+	public function setCache($cache)
+	{
+		return $this->cache = $cache;
+	}
+
+	/**
 	 * Get Driver
 	 *
 	 * Returns the name of the driver in use. Used by the Model class to
@@ -1316,6 +1573,18 @@ abstract class Database_Common extends Object
 	public function getDriver()
 	{
 		return $this->driver;
+	}
+
+	/**
+	 * Get Cache
+	 *
+	 * Returns the status of caching for this datasource.
+	 *
+	 * @return string whether or not to use the cache
+	 */
+	public function getCache()
+	{
+		return $this->cache;
 	}
 
 	/**
@@ -1827,7 +2096,7 @@ class Database_PDO_SQLite extends Database_PDO_Common
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman 
+ * @copyright Copyright 2007-2011, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      http://p.ickl.es
@@ -1946,6 +2215,11 @@ class Database extends Object
 					if (isset($datasource['database']))
 					{
 						$instance->setDatabase($datasource['database']);
+					}
+
+					if (isset($datasource['cache']))
+					{
+						$instance->setCache($datasource['cache']);
 					}
 				}
 
@@ -2575,9 +2849,6 @@ class Dynamic extends Object
 		// Checks if the URI reference is absolute, and not relative
 		if (substr($reference, 0, 1) == '/')
 		{
-			// Checks if we're working with an internal PICKLES file
-			$is_internal = preg_match('/^\/__pickles\/(css|js)\/.+$/', $reference);
-
 			$query_string = '';
 
 			// Checks for ? and extracts query string
@@ -2586,16 +2857,8 @@ class Dynamic extends Object
 				list($reference, $query_string) = explode('?', $reference);
 			}
 
-			if ($is_internal)
-			{
-				// Sets the path to the actual internal path
-				$file = str_replace('/__pickles/', PICKLES_PATH, $reference);
-			}
-			else
-			{
-				// Adds the dot so the file functions can find the file
-				$file = '.' . $reference;
-			}
+			// Adds the dot so the file functions can find the file
+			$file = '.' . $reference;
 
 			if (file_exists($file))
 			{
@@ -2650,63 +2913,56 @@ class Dynamic extends Object
 	 */
 	public function css($original_reference)
 	{
-		if (preg_match('/^\/__pickles\/css\/.+$/', $original_reference) == false)
+		// Injects .min into the filename
+		$parts = explode('.', $original_reference);
+
+		if (count($parts) == 1)
 		{
-			// Injects .min into the filename
-			$parts = explode('.', $original_reference);
-
-			if (count($parts) == 1)
-			{
-				throw new Exception('Filename must have an extension (e.g. /path/to/file.css)');
-			}
-			else
-			{
-				end($parts);
-				$parts[key($parts)] = 'min.' . current($parts);
-				$minified_reference = implode('.', $parts);
-			}
-
-			$original_filename = '.' . $original_reference;
-			$minified_filename = '.' . $minified_reference;
-
-			$path = dirname($original_filename);
-
-			if (file_exists($original_filename))
-			{
-				$reference = $original_reference;
-
-				if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)))
-				{
-					// Minifies CSS with a few basic character replacements.
-					$stylesheet = file_get_contents($original_filename);
-					$stylesheet = str_replace(array("\t", "\n", ', ', ' {', ': ', ';}'), array('', '', ',', '{', ':', '}'), $stylesheet);
-					$stylesheet = preg_replace('/\/\*.+?\*\//', '', $stylesheet);
-					file_put_contents($minified_filename, $stylesheet);
-
-					$reference = $minified_reference;
-				}
-				elseif (file_exists($minified_filename))
-				{
-					$reference = $minified_reference;
-				}
-				else
-				{
-					if ($this->config->pickles['logging'] === true)
-					{
-						Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
-					}
-				}
-
-				$reference = $this->reference($reference);
-			}
-			else
-			{
-				throw new Exception('Supplied reference does not exist');
-			}
+			throw new Exception('Filename must have an extension (e.g. /path/to/file.css)');
 		}
 		else
 		{
-			$reference = $this->reference($original_reference);
+			end($parts);
+			$parts[key($parts)] = 'min.' . current($parts);
+			$minified_reference = implode('.', $parts);
+		}
+
+		$original_filename = '.' . $original_reference;
+		$minified_filename = '.' . $minified_reference;
+
+		$path = dirname($original_filename);
+
+		if (file_exists($original_filename))
+		{
+			$reference = $original_reference;
+
+			if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)))
+			{
+				// Minifies CSS with a few basic character replacements.
+				$stylesheet = file_get_contents($original_filename);
+				$stylesheet = str_replace(array("\t", "\n", ', ', ' {', ': ', ';}'), array('', '', ',', '{', ':', '}'), $stylesheet);
+				$stylesheet = preg_replace('/\/\*.+?\*\//', '', $stylesheet);
+				file_put_contents($minified_filename, $stylesheet);
+
+				$reference = $minified_reference;
+			}
+			elseif (file_exists($minified_filename))
+			{
+				$reference = $minified_reference;
+			}
+			else
+			{
+				if ($this->config->pickles['logging'] === true)
+				{
+					Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
+				}
+			}
+
+			$reference = $this->reference($reference);
+		}
+		else
+		{
+			throw new Exception('Supplied reference does not exist');
 		}
 
 		return $reference;
@@ -2724,93 +2980,86 @@ class Dynamic extends Object
 	 */
 	public function js($original_reference, $level = 'simple')
 	{
-		if (preg_match('/^\/__pickles\/js\/.+$/', $original_reference) == false)
+		$level = strtoupper($level);
+
+		switch ($level)
 		{
-			$level = strtoupper($level);
+			CASE 'WHITESPACE':
+			CASE 'SIMPLE':
+			CASE 'ADVANCED':
+				// Injects .min into the filename
+				$parts = explode('.', $original_reference);
 
-			switch ($level)
-			{
-				CASE 'WHITESPACE':
-				CASE 'SIMPLE':
-				CASE 'ADVANCED':
-					// Injects .min into the filename
-					$parts = explode('.', $original_reference);
+				if (count($parts) == 1)
+				{
+					throw new Exception('Filename must have an extension (e.g. /path/to/file.js)');
+				}
+				else
+				{
+					end($parts);
+					$parts[key($parts)] = 'min.' . current($parts);
+					$minified_reference = implode('.', $parts);
+				}
 
-					if (count($parts) == 1)
+				$original_filename = '.' . $original_reference;
+				$minified_filename = '.' . $minified_reference;
+
+				$path = dirname($original_filename);
+
+				if (file_exists($original_filename))
+				{
+					$reference = $original_reference;
+
+					if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)) && extension_loaded('curl'))
 					{
-						throw new Exception('Filename must have an extension (e.g. /path/to/file.js)');
-					}
-					else
-					{
-						end($parts);
-						$parts[key($parts)] = 'min.' . current($parts);
-						$minified_reference = implode('.', $parts);
-					}
+						// Sets up the options list
+						$options = array(
+							CURLOPT_URL             => 'http://closure-compiler.appspot.com/compile',
+							CURLOPT_RETURNTRANSFER  => true,
+							CURLOPT_HTTPHEADER      => array('Content-Type: application/x-www-form-urlencoded; charset=utf-8'),
+							CURLOPT_POST            => true,
+							CURLOPT_POSTFIELDS      => 'js_code=' . urlencode(file_get_contents($original_filename)) . '&compilation_level=' . ($level . '_' . ($level == 'WHITESPACE' ? 'ONLY' : 'OPTIMIZATIONS')) . '&output_format=text&output_info=compiled_code'
+						);
 
-					$original_filename = '.' . $original_reference;
-					$minified_filename = '.' . $minified_reference;
-
-					$path = dirname($original_filename);
-
-					if (file_exists($original_filename))
-					{
-						$reference = $original_reference;
-
-						if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)) && extension_loaded('curl'))
+						try
 						{
-							// Sets up the options list
-							$options = array(
-								CURLOPT_URL             => 'http://closure-compiler.appspot.com/compile',
-								CURLOPT_RETURNTRANSFER  => true,
-								CURLOPT_HTTPHEADER      => array('Content-Type: application/x-www-form-urlencoded; charset=utf-8'),
-								CURLOPT_POST            => true,
-								CURLOPT_POSTFIELDS      => 'js_code=' . urlencode(file_get_contents($original_filename)) . '&compilation_level=' . ($level . '_' . ($level == 'WHITESPACE' ? 'ONLY' : 'OPTIMIZATIONS')) . '&output_format=text&output_info=compiled_code'
-							);
+							// Executes the request
+							$curl = curl_init();
+							curl_setopt_array($curl, $options);
+							file_put_contents($minified_filename, curl_exec($curl));
+							curl_close($curl);
 
-							try
-							{
-								// Executes the request
-								$curl = curl_init();
-								curl_setopt_array($curl, $options);
-								file_put_contents($minified_filename, curl_exec($curl));
-								curl_close($curl);
-
-								$reference = $minified_reference;
-							}
-							catch (Exception $exception)
-							{
-								$reference = $original_reference;
-							}
-						}
-						elseif (file_exists($minified_filename))
-						{
 							$reference = $minified_reference;
 						}
-						else
+						catch (Exception $exception)
 						{
-							if ($this->config->pickles['logging'] === true)
-							{
-								Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
-							}
+							$reference = $original_reference;
 						}
-
-						$reference = $this->reference($reference);
+					}
+					elseif (file_exists($minified_filename))
+					{
+						$reference = $minified_reference;
 					}
 					else
 					{
-						throw new Exception('Supplied reference does not exist');
+						if ($this->config->pickles['logging'] === true)
+						{
+							Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
+						}
 					}
 
-					break;
+					$reference = $this->reference($reference);
+				}
+				else
+				{
+					throw new Exception('Supplied reference does not exist');
+				}
 
-				default:
-					throw new Exception('The level "' . $level . '" is invalid. Valid levels include "whitespace", "simple" and "advanced"');
-					break;
-			}
-		}
-		else
-		{
-			$reference = $this->reference($original_reference);
+				break;
+
+			default:
+				throw new Exception('The level "' . $level . '" is invalid. Valid levels include "whitespace", "simple" and "advanced"');
+				break;
 		}
 
 		return $reference;
@@ -3815,6 +4064,22 @@ class Model extends Object
 	protected $db = null;
 
 	/**
+	 * Cache Object
+	 *
+	 * @access protected
+	 * @var    object
+	 */
+	protected $cache = null;
+
+	/**
+	 * Whether or not to use cache
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $use_cache = false;
+
+	/**
 	 * SQL Array
 	 *
 	 * @access private
@@ -4020,8 +4285,15 @@ class Model extends Object
 		// Runs the parent constructor so we have the config
 		parent::__construct();
 
-		// Gets an instance of the database
-		$this->db = Database::getInstance($this->datasource != '' ? $this->datasource : null);
+		// Gets an instance of the cache and database
+		// @todo Datasource has no way of being set
+		$this->db      = Database::getInstance($this->datasource != '' ? $this->datasource : null);
+		$this->caching = $this->db->getCache();
+	
+		if ($this->caching)
+		{
+			$this->cache = Cache::getInstance();
+		}
 
 		// Builds out the query
 		if ($type_or_parameters != null)
@@ -4043,6 +4315,7 @@ class Model extends Object
 			elseif (ctype_digit((string)$type_or_parameters))
 			{
 				$this->loadParameters(array($this->id => $type_or_parameters));
+				$cache_key = 'PICKLES-' . $this->datasource . '-' . $this->table . '-' . $type_or_parameters;
 			}
 			elseif (ctype_digit((string)$parameters))
 			{
@@ -4081,7 +4354,26 @@ class Model extends Object
 						break;
 				}
 
-				$this->records = $this->db->fetch(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
+				$query_database = true;
+
+				if (isset($cache_key))
+				{
+					//$cached = $this->cache->get($cache_key);
+				}
+
+				if (isset($cached) && $cached)
+				{
+					$this->records = $cached;
+				}
+				else
+				{
+					$this->records = $this->db->fetch(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
+
+					if (isset($cache_key))
+					{
+						//$this->cache->set($cache_key, $this->records);
+					}
+				}
 			}
 			else
 			{
@@ -4690,6 +4982,11 @@ class Model extends Object
 				{
 					$sql .= ' WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
 					$input_parameters[':' . $this->id] = $this->record[$this->id];
+			
+					if ($this->caching)
+					{
+						//$this->cache->delete('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $this->record[$this->id]);
+					}
 				}
 
 				// Executes the query
@@ -4809,7 +5106,15 @@ class Model extends Object
 class Module extends Object
 {
 	/**
-	 * Database object
+	 * Cache Object
+	 *
+	 * @access protected
+	 * @var    object
+	 */
+	protected $cache = null;
+
+	/**
+	 * Database Object
 	 *
 	 * @access protected
 	 * @var    object
@@ -4817,7 +5122,7 @@ class Module extends Object
 	protected $db = null;
 
 	/**
-	 * Page title
+	 * Page Title
 	 *
 	 * @access protected
 	 * @var    string, null by default
@@ -4825,7 +5130,7 @@ class Module extends Object
 	protected $title = null;
 
 	/**
-	 * Meta description
+	 * Meta Description
 	 *
 	 * @access protected
 	 * @var    string, null by default
@@ -4833,7 +5138,7 @@ class Module extends Object
 	protected $description = null;
 
 	/**
-	 * Meta keywords (comma separated)
+	 * Meta Keywords (comma separated)
 	 *
 	 * @access protected
 	 * @var    string, null by default
@@ -4861,7 +5166,7 @@ class Module extends Object
 	protected $private = false;
 
 	/**
-	 * Security settings of the page
+	 * Security Settings
 	 *
 	 * @access protected
 	 * @var    boolean, null by default
@@ -4901,7 +5206,7 @@ class Module extends Object
 	protected $hash = null;
 
 	/**
-	 * Default display engine
+	 * Default Display Engine
 	 *
 	 * Defaults to PHP but could be set to JSON, XML or RSS. Value is
 	 * overwritten by the config value if not set by the module.
@@ -4912,7 +5217,7 @@ class Module extends Object
 	protected $engine = DISPLAY_PHP;
 
 	/**
-	 * Default template
+	 * Default Template
 	 *
 	 * Defaults to null but could be set to any valid template basename. The
 	 * value is overwritten by the config value if not set by the module. The
@@ -4937,7 +5242,8 @@ class Module extends Object
 	{
 		parent::__construct();
 
-		$this->db = Database::getInstance();
+		$this->cache = Cache::getInstance();
+		$this->db    = Database::getInstance();
 
 		if ($autorun === true)
 		{
