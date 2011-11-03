@@ -238,6 +238,16 @@ class Model extends Object
 	 */
 	private $iterate = false;
 
+	/**
+	 * Snapshot
+	 *
+	 * Snapshot of the object properties
+	 *
+	 * @access private
+	 * @var    array
+	 */
+	private $snapshot = array();
+
 	// }}}
 	// {{{ Class Constructor
 
@@ -264,6 +274,15 @@ class Model extends Object
 			$this->cache = Cache::getInstance();
 		}
 
+		// Takes a snapshot of the [non-object] object properties
+		foreach ($this as $variable => $value)
+		{
+			if (!in_array($variable, array('db', 'cache', 'config', 'snapshot')))
+			{
+				$this->snapshot[$variable] = $value;
+			}
+		}
+
 		return $this->execute($type_or_parameters, $parameters);
 	}
 
@@ -280,6 +299,12 @@ class Model extends Object
 	 */
 	public function execute($type_or_parameters = null, $parameters = null)
 	{
+		// Resets internal properties
+		foreach ($this->snapshot as $variable => $value)
+		{
+			$this->$variable = $value;
+		}
+
 		// Builds out the query
 		if ($type_or_parameters != null)
 		{
