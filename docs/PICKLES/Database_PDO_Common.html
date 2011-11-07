@@ -26,7 +26,7 @@
 <p class="short-description">PDO Abstraction Layer</p>
 <p class="description"><p>Parent class for any of our database classes that use PDO.</p></p>
 		<p class="notes">
-			Located in <a class="field" href="_classes---Database---PDO---Common.php.html">/classes/Database/PDO/Common.php</a> (line <span class="field">23</span>)
+			Located in <a class="field" href="_jar.php.html">/jar.php</a> (line <span class="field">1631</span>)
 		</p>
 		
 				
@@ -62,15 +62,15 @@
 										</td>
 				</tr>
 								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Database_PDO_SQLite.html">Database_PDO_SQLite</a></td>
-					<td>
-											SQLite Database Abstraction Layer
-										</td>
-				</tr>
-								<tr>
 					<td style="padding-right: 2em"><a href="../PICKLES/Database_PDO_PostgreSQL.html">Database_PDO_PostgreSQL</a></td>
 					<td>
 											PostgreSQL Database Abstraction Layer
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Database_PDO_SQLite.html">Database_PDO_SQLite</a></td>
+					<td>
+											SQLite Database Abstraction Layer
 										</td>
 				</tr>
 							</table>
@@ -167,7 +167,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$attributes</span>
-			 = <span class="var-default">array(<br />		PDO::ATTR_PERSISTENT   =&gt; true,<br />		PDO::ATTR_ERRMODE      =&gt; PDO::ERRMODE_EXCEPTION,<br />		PDO::NULL_EMPTY_STRING =&gt; true<br />	)</span>			(line <span class="line-number">39</span>)
+			 = <span class="var-default">array(<br />		PDO::ATTR_PERSISTENT   =&gt; true,<br />		PDO::ATTR_ERRMODE      =&gt; PDO::ERRMODE_EXCEPTION,<br />		PDO::NULL_EMPTY_STRING =&gt; true<br />	)</span>			(line <span class="line-number">1647</span>)
 		</span>
 	</div>
 
@@ -189,7 +189,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$dsn</span>
-						(line <span class="line-number">31</span>)
+						(line <span class="line-number">1639</span>)
 		</span>
 	</div>
 
@@ -209,11 +209,11 @@
 								: DSN format
 							</li>
 					<li>
-				<a href="../PICKLES/Database_PDO_SQLite.html#var$dsn">Database_PDO_SQLite::$dsn</a>
+				<a href="../PICKLES/Database_PDO_PostgreSQL.html#var$dsn">Database_PDO_PostgreSQL::$dsn</a>
 								: DSN format
 							</li>
 					<li>
-				<a href="../PICKLES/Database_PDO_PostgreSQL.html#var$dsn">Database_PDO_PostgreSQL::$dsn</a>
+				<a href="../PICKLES/Database_PDO_SQLite.html#var$dsn">Database_PDO_SQLite::$dsn</a>
 								: DSN format
 							</li>
 				</ul>
@@ -224,6 +224,9 @@
 				<A NAME='inherited_vars'><!-- --></A>
 									<p>Inherited from <span class="classname"><a href="../PICKLES/Database_Common.html">Database_Common</a></span></p>
 					<blockquote>
+													<span class="var-title">
+								<span class="var-name"><a href="../PICKLES/Database_Common.html#var$cache">Database_Common::$cache</a></span><br>
+							</span>
 													<span class="var-title">
 								<span class="var-name"><a href="../PICKLES/Database_Common.html#var$connection">Database_Common::$connection</a></span><br>
 							</span>
@@ -282,7 +285,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">48</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">1656</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -312,7 +315,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">close</span> (line <span class="line-number">110</span>)
+		<span class="method-title">close</span> (line <span class="line-number">1718</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -344,7 +347,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">execute</span> (line <span class="line-number">127</span>)
+		<span class="method-title">execute</span> (line <span class="line-number">1735</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -378,7 +381,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">fetch</span> (line <span class="line-number">220</span>)
+		<span class="method-title">fetch</span> (line <span class="line-number">1831</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -414,7 +417,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">open</span> (line <span class="line-number">67</span>)
+		<span class="method-title">open</span> (line <span class="line-number">1675</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -449,8 +452,10 @@
 					<blockquote>
 													<span class="method-name"><a href="../PICKLES/Database_Common.html#method__construct">Database_Common::__construct()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodclose">Database_Common::close()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodgetCache">Database_Common::getCache()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodgetDriver">Database_Common::getDriver()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodopen">Database_Common::open()</a></span><br>
+													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodsetCache">Database_Common::setCache()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodsetDatabase">Database_Common::setDatabase()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodsetHostname">Database_Common::setHostname()</a></span><br>
 													<span class="method-name"><a href="../PICKLES/Database_Common.html#methodsetPassword">Database_Common::setPassword()</a></span><br>
@@ -471,7 +476,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Mon, 09 May 2011 22:14:40 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sun, 06 Nov 2011 20:54:20 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>
