@@ -338,56 +338,48 @@ class Model extends Object
 				$this->table = $this->collection;
 			}
 
-			// If we're using an RDBMS (not Mongo) proceed with using SQL to pull the data
-			if ($this->db->getDriver() != 'mongo')
+			// Starts with a basic SELECT ... FROM
+			$this->sql = array(
+				'SELECT ' . (is_array($this->fields) ? implode(', ', $this->fields) : $this->fields),
+				'FROM '   . $this->table,
+			);
+
+			switch ($type_or_parameters)
 			{
-				// Starts with a basic SELECT ... FROM
-				$this->sql = array(
-					'SELECT ' . (is_array($this->fields) ? implode(', ', $this->fields) : $this->fields),
-					'FROM '   . $this->table,
-				);
+				// Updates query to use COUNT syntax
+				case 'count':
+					$this->sql[0] = 'SELECT COUNT(*) AS count';
+					$this->generateQuery();
+					break;
 
-				switch ($type_or_parameters)
-				{
-					// Updates query to use COUNT syntax
-					case 'count':
-						$this->sql[0] = 'SELECT COUNT(*) AS count';
-						$this->generateQuery();
-						break;
+				// Adds the rest of the query
+				case 'all':
+				case 'list':
+				case 'indexed':
+				default:
+					$this->generateQuery();
+					break;
+			}
 
-					// Adds the rest of the query
-					case 'all':
-					case 'list':
-					case 'indexed':
-					default:
-						$this->generateQuery();
-						break;
-				}
+			$query_database = true;
 
-				$query_database = true;
+			if (isset($cache_key))
+			{
+				//$cached = $this->cache->get($cache_key);
+			}
 
-				if (isset($cache_key))
-				{
-					//$cached = $this->cache->get($cache_key);
-				}
-
-				if (isset($cached) && $cached)
-				{
-					$this->records = $cached;
-				}
-				else
-				{
-					$this->records = $this->db->fetch(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
-
-					if (isset($cache_key))
-					{
-						//$this->cache->set($cache_key, $this->records);
-					}
-				}
+			if (isset($cached) && $cached)
+			{
+				$this->records = $cached;
 			}
 			else
 			{
-				throw new Exception('Sorry, Mongo support in the PICKLES Model is not quite ready yet');
+				$this->records = $this->db->fetch(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
+
+				if (isset($cache_key))
+				{
+					//$this->cache->set($cache_key, $this->records);
+				}
 			}
 
 			$index_records = in_array($type_or_parameters, array('list', 'indexed'));
