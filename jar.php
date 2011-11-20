@@ -1609,122 +1609,6 @@ abstract class Database_Common extends Object
 }
 
 /**
- * Mongo Class File for PICKLES
- *
- * PHP version 5
- *
- * Licensed under The MIT License
- * Redistribution of these files must retain the above copyright notice.
- *
- * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman
- * @license   http://www.opensource.org/licenses/mit-license.html
- * @package   PICKLES
- * @link      http://p.ickl.es
- */
-
-/**
- * Mongo Database Abstraction Layer
- *
- * This database class is still considered incomplete and very experimental.
- */
-class Database_Mongo extends Database_Common
-{
-	/**
-	 * Driver
-	 *
-	 * @access protected
-	 * @var    string
-	 */
-	protected $driver = 'mongo';
-
-	/**
-	 * Opens database connection
-	 *
-	 * Establishes a connection to the database based on the set configuration
-	 * options.
-	 *
-	 * @return boolean true on success, throws an exception overwise
-	 */
-	public function open()
-	{
-		if ($this->connection === null)
-		{
-			// Assembles the server string
-			$server = 'mongodb://';
-
-			if (isset($this->username))
-			{
-				$server .= $this->username;
-
-				if (isset($this->password))
-				{
-					$server .= ':' . $this->password;
-				}
-
-				$server .= '@';
-			}
-
-			$server .= $this->hostname . ':' . $this->port . '/' . $this->database;
-
-			// Attempts to connect
-			try
-			{
-				$this->connection = new Mongo($server, array('persist' => 'pickles'));
-
-				// If we have database and collection, attempt to assign them
-				if (isset($this->database))
-				{
-					$this->connection = $this->connection->selectDB($this->database);
-				}
-			}
-			catch (Exception $exception)
-			{
-				throw new Exception('Unable to connect to Mongo database');
-			}
-		}
-
-		return true;
-	}
-
-	/**
-	 * Closes database connection
-	 *
-	 * Sets the connection to null regardless of state.
-	 *
-	 * @return boolean always true
-	 */
-	public function close()
-	{
-		try
-		{
-			$this->connection->close();
-		}
-		catch (Exception $exception)
-		{
-			// Trapping error
-		}
-
-		$this->connection = null;
-
-		return true;
-	}
-
-	/**
-	 * Fetch records from the database
-	 */
-	public function fetch($collection, $query = array(), $fields = array())
-	{
-		$this->open();
-
-		// Pulls the results based on the type
-		$results = $this->connection->$collection->find($query, $fields);
-
-		return $results;
-	}
-}
-
-/**
  * PDO Class File for PICKLES
  *
  * PHP version 5
@@ -2172,7 +2056,6 @@ class Database extends Object
 					// Checks the driver is legit and scrubs the name
 					switch ($datasource['driver'])
 					{
-						case 'mongo':      $class = 'Mongo';          break;
 						case 'pdo_mysql':  $class = 'PDO_MySQL';      break;
 						case 'pdo_pgsql':  $class = 'PDO_PostgreSQL'; break;
 						case 'pdo_sqlite': $class = 'PDO_SQLite';     break;
@@ -4038,7 +3921,7 @@ class Log
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman 
+ * @copyright Copyright 2007-2011, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      http://p.ickl.es
@@ -4267,15 +4150,23 @@ class Model extends Object
 	 */
 	private $iterate = false;
 
+	/**
+	 * Snapshot
+	 *
+	 * Snapshot of the object properties
+	 *
+	 * @access private
+	 * @var    array
+	 */
+	private $snapshot = array();
+
 	// }}}
 	// {{{ Class Constructor
 
 	/**
 	 * Constructor
 	 *
-	 * Creates a new (empty) object or creates the record set from the passed
-	 * arguments. The record and records arrays are populated as well as the
-	 * count variable.
+	 * Creates a new (empty) object or populates the record set.
 	 *
 	 * @param mixed $type_or_parameters optional type of query or parameters
 	 * @param array $parameters optional data to create a query from
@@ -4289,10 +4180,41 @@ class Model extends Object
 		// @todo Datasource has no way of being set
 		$this->db      = Database::getInstance($this->datasource != '' ? $this->datasource : null);
 		$this->caching = $this->db->getCache();
-	
+
 		if ($this->caching)
 		{
 			$this->cache = Cache::getInstance();
+		}
+
+		// Takes a snapshot of the [non-object] object properties
+		foreach ($this as $variable => $value)
+		{
+			if (!in_array($variable, array('db', 'cache', 'config', 'snapshot')))
+			{
+				$this->snapshot[$variable] = $value;
+			}
+		}
+
+		return $this->execute($type_or_parameters, $parameters);
+	}
+
+	// }}}
+	// {{{ Database Execution Methods
+
+	/**
+	 * Execute
+	 *
+	 * Potentially populates the record set from the passed arguments.
+	 *
+	 * @param mixed $type_or_parameters optional type of query or parameters
+	 * @param array $parameters optional data to create a query from
+	 */
+	public function execute($type_or_parameters = null, $parameters = null)
+	{
+		// Resets internal properties
+		foreach ($this->snapshot as $variable => $value)
+		{
+			$this->$variable = $value;
 		}
 
 		// Builds out the query
@@ -4328,56 +4250,48 @@ class Model extends Object
 				$this->table = $this->collection;
 			}
 
-			// If we're using an RDBMS (not Mongo) proceed with using SQL to pull the data
-			if ($this->db->getDriver() != 'mongo')
+			// Starts with a basic SELECT ... FROM
+			$this->sql = array(
+				'SELECT ' . (is_array($this->fields) ? implode(', ', $this->fields) : $this->fields),
+				'FROM '   . $this->table,
+			);
+
+			switch ($type_or_parameters)
 			{
-				// Starts with a basic SELECT ... FROM
-				$this->sql = array(
-					'SELECT ' . (is_array($this->fields) ? implode(', ', $this->fields) : $this->fields),
-					'FROM '   . $this->table,
-				);
+				// Updates query to use COUNT syntax
+				case 'count':
+					$this->sql[0] = 'SELECT COUNT(*) AS count';
+					$this->generateQuery();
+					break;
 
-				switch ($type_or_parameters)
-				{
-					// Updates query to use COUNT syntax
-					case 'count':
-						$this->sql[0] = 'SELECT COUNT(*) AS count';
-						$this->generateQuery();
-						break;
+				// Adds the rest of the query
+				case 'all':
+				case 'list':
+				case 'indexed':
+				default:
+					$this->generateQuery();
+					break;
+			}
 
-					// Adds the rest of the query
-					case 'all':
-					case 'list':
-					case 'indexed':
-					default:
-						$this->generateQuery();
-						break;
-				}
+			$query_database = true;
 
-				$query_database = true;
+			if (isset($cache_key))
+			{
+				//$cached = $this->cache->get($cache_key);
+			}
 
-				if (isset($cache_key))
-				{
-					//$cached = $this->cache->get($cache_key);
-				}
-
-				if (isset($cached) && $cached)
-				{
-					$this->records = $cached;
-				}
-				else
-				{
-					$this->records = $this->db->fetch(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
-
-					if (isset($cache_key))
-					{
-						//$this->cache->set($cache_key, $this->records);
-					}
-				}
+			if (isset($cached) && $cached)
+			{
+				$this->records = $cached;
 			}
 			else
 			{
-				throw new Exception('Sorry, Mongo support in the PICKLES Model is not quite ready yet');
+				$this->records = $this->db->fetch(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
+
+				if (isset($cache_key))
+				{
+					//$this->cache->set($cache_key, $this->records);
+				}
 			}
 
 			$index_records = in_array($type_or_parameters, array('list', 'indexed'));
@@ -4915,7 +4829,7 @@ class Model extends Object
 		if ($this->iterate == false)
 		{
 			$this->iterate = true;
-			
+
 			// Resets the records, saves calling reset() when walking multiple times
 			$this->reset();
 		}
@@ -4982,7 +4896,7 @@ class Model extends Object
 				{
 					$sql .= ' WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
 					$input_parameters[':' . $this->id] = $this->record[$this->id];
-			
+
 					if ($this->caching)
 					{
 						//$this->cache->delete('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $this->record[$this->id]);

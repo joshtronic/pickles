@@ -85,7 +85,6 @@ class Database extends Object
 					// Checks the driver is legit and scrubs the name
 					switch ($datasource['driver'])
 					{
-						case 'mongo':      $class = 'Mongo';          break;
 						case 'pdo_mysql':  $class = 'PDO_MySQL';      break;
 						case 'pdo_pgsql':  $class = 'PDO_PostgreSQL'; break;
 						case 'pdo_sqlite': $class = 'PDO_SQLite';     break;

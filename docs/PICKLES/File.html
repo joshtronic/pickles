@@ -3,13 +3,13 @@
   <html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
 			<!-- template designed by Marco Von Ballmoos -->
-			<title>Docs For Class Error</title>
+			<title>Docs For Class File</title>
 			<link rel="stylesheet" href="../media/stylesheet.css" />
 			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
 		</head>
 		<body>
 			<div class="page-body">			
-<h2 class="class-name">Class Error</h2>
+<h2 class="class-name">Class File</h2>
 
 <a name="sec-description"></a>
 <div class="info-box">
@@ -21,10 +21,10 @@
 					</div>
 	<div class="info-box-body">
         		<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Error Class</p>
-<p class="description"><p>Standardized error reporting, mostly used to display fatal errors.</p></p>
+<p class="short-description">File Class</p>
+<p class="description"><p>Just a simple collection of static functions to accomplish some of the more  redundant file related manipulation.</p></p>
 		<p class="notes">
-			Located in <a class="field" href="_jar.php.html">/jar.php</a> (line <span class="field">2972</span>)
+			Located in <a class="field" href="_jar.php.html">/jar.php</a> (line <span class="field">3072</span>)
 		</p>
 		
 				
@@ -46,9 +46,9 @@
 		<div class="info-box-body">			
 			<div class="method-summary">
 												<div class="method-definition">
-					static 						<span class="method-result">void</span>
-										<a href="#fatal" title="details" class="method-name">fatal</a>
-											(<span class="var-type">string</span>&nbsp;<span class="var-name">$message</span>)
+					static 						<span class="method-result">boolean</span>
+										<a href="#removeDirectory" title="details" class="method-name">removeDirectory</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$directory</span>)
 									</div>
 								
 												</div>
@@ -66,33 +66,34 @@
 		</div>
 		<div class="info-box-body">
 			<A NAME='method_detail'></A>
-<a name="methodfatal" id="fatal"><!-- --></a>
-<div class="oddrow">
+<a name="methodremoveDirectory" id="removeDirectory"><!-- --></a>
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">static method fatal</span> (line <span class="line-number">2982</span>)
+		<span class="method-title">static method removeDirectory</span> (line <span class="line-number">3085</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Fatal Error</p>
-<p class="description"><p>Displays a friendly error to the user via HTML, logs it then exits.</p></p>
+<p class="short-description">Remove a Directory, Recursively</p>
+<p class="description"><p>Removes a directory by emptying all of the contents recursively and then  removing the directory, as PHP will not let you rmdir() on ain non-empty  directory. Use with caution, seriously.</p></p>
 	<ul class="tags">
+				<li><span class="field">return:</span> status of the final rmdir();</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
 	    static
-		<span class="method-result">void</span>
+		<span class="method-result">boolean</span>
 		<span class="method-name">
-			fatal
+			removeDirectory
 		</span>
-					(<span class="var-type">string</span>&nbsp;<span class="var-name">$message</span>)
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$directory</span>)
 			</div>
 	
 			<ul class="parameters">
 					<li>
 				<span class="var-type">string</span>
-				<span class="var-name">$message</span><span class="var-description">: the message to be displayed to the user</span>			</li>
+				<span class="var-name">$directory</span><span class="var-description">: directory to remove</span>			</li>
 				</ul>
 		
 			
