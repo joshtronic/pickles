@@ -26,7 +26,7 @@
 <p class="short-description">Object Class</p>
 <p class="description"><p>Every instantiated class in PICKLES should be extending this class. By doing  so the class is automatically hooked into the profiler, and the object will  have access to some common components as well.</p></p>
 		<p class="notes">
-			Located in <a class="field" href="_classes---Object.php.html">/classes/Object.php</a> (line <span class="field">25</span>)
+			Located in <a class="field" href="_jar.php.html">/jar.php</a> (line <span class="field">5265</span>)
 		</p>
 		
 				
@@ -52,33 +52,15 @@
 					<th class="class-table-header">Description</th>
 				</tr>
 								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Display_Common.html">Display_Common</a></td>
+					<td style="padding-right: 2em"><a href="../PICKLES/API_Common.html">API_Common</a></td>
 					<td>
-											Common Display Class
+											Common API Interface
 										</td>
 				</tr>
 								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Database_Common.html">Database_Common</a></td>
+					<td style="padding-right: 2em"><a href="../PICKLES/Cache.html">Cache</a></td>
 					<td>
-											Common Database Abstraction Layer
-										</td>
-				</tr>
-								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Module.html">Module</a></td>
-					<td>
-											Module Class
-										</td>
-				</tr>
-								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Controller.html">Controller</a></td>
-					<td>
-											Controller Class
-										</td>
-				</tr>
-								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Database.html">Database</a></td>
-					<td>
-											Database Factory
+											Cache Class
 										</td>
 				</tr>
 								<tr>
@@ -88,9 +70,33 @@
 										</td>
 				</tr>
 								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Session.html">Session</a></td>
+					<td style="padding-right: 2em"><a href="../PICKLES/Controller.html">Controller</a></td>
 					<td>
-											Session Class
+											Controller Class
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Database_Common.html">Database_Common</a></td>
+					<td>
+											Common Database Abstraction Layer
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Database.html">Database</a></td>
+					<td>
+											Database Factory
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Display_Common.html">Display_Common</a></td>
+					<td>
+											Common Display Class
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Dynamic.html">Dynamic</a></td>
+					<td>
+											Dynamic Class
 										</td>
 				</tr>
 								<tr>
@@ -106,9 +112,15 @@
 										</td>
 				</tr>
 								<tr>
-					<td style="padding-right: 2em"><a href="../PICKLES/Dynamic.html">Dynamic</a></td>
+					<td style="padding-right: 2em"><a href="../PICKLES/Module.html">Module</a></td>
 					<td>
-											Dynamic Class
+											Module Class
+										</td>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em"><a href="../PICKLES/Session.html">Session</a></td>
+					<td>
+											Session Class
 										</td>
 				</tr>
 							</table>
@@ -189,13 +201,13 @@
 					</div>
 		<div class="info-box-body">
 			<a name="var$instances" id="$instances"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			static <span class="var-type">mixed</span>
 			<span class="var-name">$instances</span>
-			 = <span class="var-default">array()</span>			(line <span class="line-number">34</span>)
+			 = <span class="var-default">array()</span>			(line <span class="line-number">5274</span>)
 		</span>
 	</div>
 
@@ -211,13 +223,13 @@
 
 </div>
 <a name="var$config" id="$config"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">object</span>
 			<span class="var-name">$config</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">42</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">5282</span>)
 		</span>
 	</div>
 
@@ -249,10 +261,10 @@
 		<div class="info-box-body">
 			<A NAME='method_detail'></A>
 <a name="methodgetInstance" id="getInstance"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">static method getInstance</span> (line <span class="line-number">91</span>)
+		<span class="method-title">static method getInstance</span> (line <span class="line-number">5331</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -283,12 +295,16 @@
 		<div class="notes">Redefined in descendants as:</div>
 		<ul class="redefinitions">
 					<li>
-				<a href="../PICKLES/Database.html#methodgetInstance">Database::getInstance()</a>
-								: Get instance
+				<a href="../PICKLES/Cache.html#methodgetInstance">Cache::getInstance()</a>
+								: Get Instance
 							</li>
 					<li>
 				<a href="../PICKLES/Config.html#methodgetInstance">Config::getInstance()</a>
 								: Get instance of the object
+							</li>
+					<li>
+				<a href="../PICKLES/Database.html#methodgetInstance">Database::getInstance()</a>
+								: Get instance
 							</li>
 					<li>
 				<a href="../PICKLES/Form.html#methodgetInstance">Form::getInstance()</a>
@@ -298,10 +314,10 @@
 	</div>
 
 <a name="method__construct" id="__construct"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">58</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">5298</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -325,7 +341,23 @@
 		<div class="notes">Redefined in descendants as:</div>
 		<ul class="redefinitions">
 					<li>
-				<a href="../PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a>
+				<a href="../PICKLES/API_Common.html#method__construct">API_Common::__construct()</a>
+								: Constructor
+							</li>
+					<li>
+				<a href="../PICKLES/API_Tinychat.html#method__construct">API_Tinychat::__construct()</a>
+								: Constructor
+							</li>
+					<li>
+				<a href="../PICKLES/Cache.html#method__construct">Cache::__construct()</a>
+								: Constructor
+							</li>
+					<li>
+				<a href="../PICKLES/Config.html#method__construct">Config::__construct()</a>
+								: Constructor
+							</li>
+					<li>
+				<a href="../PICKLES/Controller.html#method__construct">Controller::__construct()</a>
 								: Constructor
 							</li>
 					<li>
@@ -337,36 +369,32 @@
 								: Constructor
 							</li>
 					<li>
-				<a href="../PICKLES/Module.html#method__construct">Module::__construct()</a>
-								: Constructor
-							</li>
-					<li>
-				<a href="../PICKLES/Controller.html#method__construct">Controller::__construct()</a>
-								: Constructor
-							</li>
-					<li>
 				<a href="../PICKLES/Database.html#method__construct">Database::__construct()</a>
 								: Constructor
 							</li>
 					<li>
-				<a href="../PICKLES/Config.html#method__construct">Config::__construct()</a>
-								: Constructor
-							</li>
-					<li>
-				<a href="../PICKLES/Session.html#method__construct">Session::__construct()</a>
+				<a href="../PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a>
 								: Constructor
 							</li>
 					<li>
 				<a href="../PICKLES/Model.html#method__construct">Model::__construct()</a>
 								: Constructor
 							</li>
+					<li>
+				<a href="../PICKLES/Module.html#method__construct">Module::__construct()</a>
+								: Constructor
+							</li>
+					<li>
+				<a href="../PICKLES/Session.html#method__construct">Session::__construct()</a>
+								: Constructor
+							</li>
 				</ul>
 	</div>
 <a name="method__destruct" id="__destruct"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">Destructor __destruct</span> (line <span class="line-number">112</span>)
+		<span class="method-title">Destructor __destruct</span> (line <span class="line-number">5352</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -389,6 +417,14 @@
 		<div class="notes">Redefined in descendants as:</div>
 		<ul class="redefinitions">
 					<li>
+				<a href="../PICKLES/API_Common.html#method__destruct">API_Common::__destruct()</a>
+								: Destructor
+							</li>
+					<li>
+				<a href="../PICKLES/Cache.html#method__destruct">Cache::__destruct()</a>
+								: Destructor
+							</li>
+					<li>
 				<a href="../PICKLES/Controller.html#method__destruct">Controller::__destruct()</a>
 								: Destructor
 							</li>
@@ -404,7 +440,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Mon, 09 May 2011 22:14:41 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sun, 06 Nov 2011 20:54:21 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

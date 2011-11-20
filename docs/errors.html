@@ -9,47 +9,186 @@
 		</head>
 		<body>
 						<a href="#Post-parsing">Post-parsing</a><br>
+<a href="#Common.php">Common.php</a><br>
 <a href="#Config.php">Config.php</a><br>
-<a href="#config.php">config.php</a><br>
 <a href="#Controller.php">Controller.php</a><br>
 <a href="#Convert.php">Convert.php</a><br>
 <a href="#Database.php">Database.php</a><br>
+<a href="#Date.php">Date.php</a><br>
 <a href="#Dynamic.php">Dynamic.php</a><br>
 <a href="#Error.php">Error.php</a><br>
+<a href="#File.php">File.php</a><br>
 <a href="#Form.php">Form.php</a><br>
-<a href="#home.php">home.php</a><br>
-<a href="#home.phtml">home.phtml</a><br>
-<a href="#index.php">index.php</a><br>
-<a href="#index.phtml">index.phtml</a><br>
+<a href="#jar.php">jar.php</a><br>
 <a href="#JSON.php">JSON.php</a><br>
 <a href="#Log.php">Log.php</a><br>
 <a href="#Model.php">Model.php</a><br>
 <a href="#Module.php">Module.php</a><br>
-<a href="#Mongo.php">Mongo.php</a><br>
 <a href="#MySQL.php">MySQL.php</a><br>
 <a href="#Object.php">Object.php</a><br>
 <a href="#PHP.php">PHP.php</a><br>
 <a href="#pickles.php">pickles.php</a><br>
 <a href="#PostgreSQL.php">PostgreSQL.php</a><br>
+<a href="#Profanity.php">Profanity.php</a><br>
 <a href="#Profiler.php">Profiler.php</a><br>
 <a href="#RSS.php">RSS.php</a><br>
-<a href="#SampleModel.php">SampleModel.php</a><br>
-<a href="#scripts.php">scripts.php</a><br>
 <a href="#Security.php">Security.php</a><br>
 <a href="#Session.php">Session.php</a><br>
 <a href="#SQLite.php">SQLite.php</a><br>
 <a href="#String.php">String.php</a><br>
+<a href="#Tinychat.php">Tinychat.php</a><br>
 <a href="#XML.php">XML.php</a><br>
+<a name="Post-parsing"></a>
+<h1>Post-parsing</h1>
+<h2>Warnings:</h2><br>
+<b>Warning</b> - Class Database in file /home/josh/Source/pickles/classes/Database.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Config in file /home/josh/Source/pickles/classes/Config.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Controller in file /home/josh/Source/pickles/classes/Controller.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Module in file /home/josh/Source/pickles/classes/Module.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Database_Common in file /home/josh/Source/pickles/classes/Database/Common.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Session in file /home/josh/Source/pickles/classes/Session.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Form in file /home/josh/Source/pickles/classes/Form.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Dynamic in file /home/josh/Source/pickles/classes/Dynamic.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Model in file /home/josh/Source/pickles/classes/Model.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Cache in file /home/josh/Source/pickles/classes/Cache.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class API_Common in file /home/josh/Source/pickles/classes/API/Common.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Display_Common in file /home/josh/Source/pickles/classes/Display/Common.php has multiple possible parents named Object.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Display_XML in file /home/josh/Source/pickles/classes/Display/XML.php has multiple possible parents named Display_Common.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class API_Google_Profanity in file /home/josh/Source/pickles/classes/API/Google/Profanity.php has multiple possible parents named API_Common.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Database_PDO_MySQL in file /home/josh/Source/pickles/classes/Database/PDO/MySQL.php has multiple possible parents named Database_PDO_Common.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class API_Tinychat in file /home/josh/Source/pickles/classes/API/Tinychat.php has multiple possible parents named API_Common.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - 
+duplicate class element "Module" in file /home/josh/Source/pickles/classes/Module.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Model" in file /home/josh/Source/pickles/classes/Model.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - Class Database_PDO_SQLite in file /home/josh/Source/pickles/classes/Database/PDO/SQLite.php has multiple possible parents named Database_PDO_Common.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Database_PDO_PostgreSQL in file /home/josh/Source/pickles/classes/Database/PDO/PostgreSQL.php has multiple possible parents named Database_PDO_Common.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Display_JSON in file /home/josh/Source/pickles/classes/Display/JSON.php has multiple possible parents named Display_Common.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Display_PHP in file /home/josh/Source/pickles/classes/Display/PHP.php has multiple possible parents named Display_Common.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Display_RSS in file /home/josh/Source/pickles/classes/Display/RSS.php has multiple possible parents named Display_Common.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - Class Database_PDO_Common in file /home/josh/Source/pickles/classes/Database/PDO/Common.php has multiple possible parents named Database_Common.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
+<b>Warning</b> - 
+duplicate class element "Convert" in file /home/josh/Source/pickles/classes/Convert.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Date" in file /home/josh/Source/pickles/classes/Date.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Database" in file /home/josh/Source/pickles/classes/Database.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Display_Common" in file /home/josh/Source/pickles/classes/Display/Common.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Database_PDO_SQLite" in file /home/josh/Source/pickles/classes/Database/PDO/SQLite.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Database_PDO_PostgreSQL" in file /home/josh/Source/pickles/classes/Database/PDO/PostgreSQL.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Database_PDO_MySQL" in file /home/josh/Source/pickles/classes/Database/PDO/MySQL.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Display_JSON" in file /home/josh/Source/pickles/classes/Display/JSON.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Display_PHP" in file /home/josh/Source/pickles/classes/Display/PHP.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Form" in file /home/josh/Source/pickles/classes/Form.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Dynamic" in file /home/josh/Source/pickles/classes/Dynamic.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Display_XML" in file /home/josh/Source/pickles/classes/Display/XML.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Display_RSS" in file /home/josh/Source/pickles/classes/Display/RSS.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Database_PDO_Common" in file /home/josh/Source/pickles/classes/Database/PDO/Common.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Database_Common" in file /home/josh/Source/pickles/classes/Database/Common.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Object" in file /home/josh/Source/pickles/classes/Object.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Log" in file /home/josh/Source/pickles/classes/Log.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "File" in file /home/josh/Source/pickles/classes/File.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Error" in file /home/josh/Source/pickles/classes/Error.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "API_Common" in file /home/josh/Source/pickles/classes/API/Common.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "API_Google_Profanity" in file /home/josh/Source/pickles/classes/API/Google/Profanity.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Controller" in file /home/josh/Source/pickles/classes/Controller.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Config" in file /home/josh/Source/pickles/classes/Config.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Cache" in file /home/josh/Source/pickles/classes/Cache.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "API_Tinychat" in file /home/josh/Source/pickles/classes/API/Tinychat.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Profiler" in file /home/josh/Source/pickles/classes/Profiler.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Session" in file /home/josh/Source/pickles/classes/Session.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "Security" in file /home/josh/Source/pickles/classes/Security.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<b>Warning</b> - 
+duplicate class element "String" in file /home/josh/Source/pickles/classes/String.php will be ignored.
+Use an @ignore tag on the original if you want this case to be documented.<br>
+<a name="Cache.php"></a>
+<h1>Cache.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 35</b> - no @package tag was used in a DocBlock for class Cache<br>
 <a name="Common.php"></a>
 <h1>Common.php</h1>
 <h2>Warnings:</h2><br>
 <b>Warning on line 23</b> - no @package tag was used in a DocBlock for class Database_PDO_Common<br>
 <b>Warning on line 24</b> - no @package tag was used in a DocBlock for class Display_Common<br>
 <b>Warning on line 24</b> - no @package tag was used in a DocBlock for class Database_Common<br>
-<a name="config.php"></a>
-<h1>config.php</h1>
-<h2>Warnings:</h2><br>
-<b>Warning on line 80</b> - File "/home/josh/Source/pickles/boilerplate/config.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<b>Warning on line 24</b> - no @package tag was used in a DocBlock for class API_Common<br>
 <a name="Config.php"></a>
 <h1>Config.php</h1>
 <h2>Warnings:</h2><br>
@@ -66,6 +205,10 @@
 <h1>Database.php</h1>
 <h2>Warnings:</h2><br>
 <b>Warning on line 25</b> - no @package tag was used in a DocBlock for class Database<br>
+<a name="Date.php"></a>
+<h1>Date.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 24</b> - no @package tag was used in a DocBlock for class Date<br>
 <a name="Dynamic.php"></a>
 <h1>Dynamic.php</h1>
 <h2>Warnings:</h2><br>
@@ -74,27 +217,51 @@
 <h1>Error.php</h1>
 <h2>Warnings:</h2><br>
 <b>Warning on line 23</b> - no @package tag was used in a DocBlock for class Error<br>
+<a name="File.php"></a>
+<h1>File.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 24</b> - no @package tag was used in a DocBlock for class File<br>
 <a name="Form.php"></a>
 <h1>Form.php</h1>
 <h2>Warnings:</h2><br>
 <b>Warning on line 24</b> - no @package tag was used in a DocBlock for class Form<br>
-<a name="home.php"></a>
-<h1>home.php</h1>
+<a name="jar.php"></a>
+<h1>jar.php</h1>
 <h2>Warnings:</h2><br>
-<b>Warning on line 3</b> - no @package tag was used in a DocBlock for class home<br>
-<b>Warning on line 18</b> - File "/home/josh/Source/pickles/boilerplate/modules/home.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
-<a name="home.phtml"></a>
-<h1>home.phtml</h1>
-<h2>Warnings:</h2><br>
-<b>Warning on line 10</b> - File "/home/josh/Source/pickles/boilerplate/templates/home.phtml" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
-<a name="index.php"></a>
-<h1>index.php</h1>
-<h2>Warnings:</h2><br>
-<b>Warning on line 7</b> - File "/home/josh/Source/pickles/boilerplate/public/index.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
-<a name="index.phtml"></a>
-<h1>index.phtml</h1>
-<h2>Warnings:</h2><br>
-<b>Warning on line 15</b> - File "/home/josh/Source/pickles/boilerplate/templates/__shared/index.phtml" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<b>Warning on line 24</b> - no @package tag was used in a DocBlock for class API_Common<br>
+<b>Warning on line 61</b> - no @package tag was used in a DocBlock for class API_Google_Profanity<br>
+<b>Warning on line 107</b> - no @package tag was used in a DocBlock for class API_Tinychat<br>
+<b>Warning on line 301</b> - no @package tag was used in a DocBlock for class Cache<br>
+<b>Warning on line 504</b> - no @package tag was used in a DocBlock for class Config<br>
+<b>Warning on line 800</b> - no @package tag was used in a DocBlock for class Controller<br>
+<b>Warning on line 1248</b> - no @package tag was used in a DocBlock for class Convert<br>
+<b>Warning on line 1392</b> - no @package tag was used in a DocBlock for class Database_Common<br>
+<b>Warning on line 1631</b> - no @package tag was used in a DocBlock for class Database_PDO_Common<br>
+<b>Warning on line 1865</b> - no @package tag was used in a DocBlock for class Database_PDO_MySQL<br>
+<b>Warning on line 1910</b> - no @package tag was used in a DocBlock for class Database_PDO_PostgreSQL<br>
+<b>Warning on line 1955</b> - no @package tag was used in a DocBlock for class Database_PDO_SQLite<br>
+<b>Warning on line 1996</b> - no @package tag was used in a DocBlock for class Database<br>
+<b>Warning on line 2145</b> - no @package tag was used in a DocBlock for class Date<br>
+<b>Warning on line 2201</b> - no @package tag was used in a DocBlock for class Display_Common<br>
+<b>Warning on line 2394</b> - no @package tag was used in a DocBlock for class Display_JSON<br>
+<b>Warning on line 2425</b> - no @package tag was used in a DocBlock for class Display_PHP<br>
+<b>Warning on line 2538</b> - no @package tag was used in a DocBlock for class Display_RSS<br>
+<b>Warning on line 2681</b> - no @package tag was used in a DocBlock for class Display_XML<br>
+<b>Warning on line 2718</b> - no @package tag was used in a DocBlock for class Dynamic<br>
+<b>Warning on line 2972</b> - no @package tag was used in a DocBlock for class Error<br>
+<b>Warning on line 3072</b> - no @package tag was used in a DocBlock for class File<br>
+<b>Warning on line 3139</b> - no @package tag was used in a DocBlock for class Form<br>
+<b>Warning on line 3786</b> - no @package tag was used in a DocBlock for class Log<br>
+<b>Warning on line 3937</b> - no @package tag was used in a DocBlock for class Model<br>
+<b>Warning on line 5020</b> - no @package tag was used in a DocBlock for class Module<br>
+<b>Warning on line 5265</b> - no @package tag was used in a DocBlock for class Object<br>
+<b>Warning on line 5393</b> - no @package tag was used in a DocBlock for class Profiler<br>
+<b>Warning on line 5794</b> - no @package tag was used in a DocBlock for class Security<br>
+<b>Warning on line 6212</b> - no @package tag was used in a DocBlock for class Session<br>
+<b>Warning on line 6539</b> - no @package tag was used in a DocBlock for class String<br>
+<h2>Errors:</h2><br>
+<b>Error on line 1888</b> - @access was passed neither "public" nor "private."  Was passed: "proceted"<br>
+<b>Error on line 1933</b> - @access was passed neither "public" nor "private."  Was passed: "proceted"<br>
 <a name="JSON.php"></a>
 <h1>JSON.php</h1>
 <h2>Warnings:</h2><br>
@@ -111,10 +278,6 @@
 <h1>Module.php</h1>
 <h2>Warnings:</h2><br>
 <b>Warning on line 28</b> - no @package tag was used in a DocBlock for class Module<br>
-<a name="Mongo.php"></a>
-<h1>Mongo.php</h1>
-<h2>Warnings:</h2><br>
-<b>Warning on line 23</b> - no @package tag was used in a DocBlock for class Database_Mongo<br>
 <a name="MySQL.php"></a>
 <h1>MySQL.php</h1>
 <h2>Warnings:</h2><br>
@@ -139,6 +302,10 @@
 <b>Warning on line 21</b> - no @package tag was used in a DocBlock for class Database_PDO_PostgreSQL<br>
 <h2>Errors:</h2><br>
 <b>Error on line 44</b> - @access was passed neither "public" nor "private."  Was passed: "proceted"<br>
+<a name="Profanity.php"></a>
+<h1>Profanity.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 21</b> - no @package tag was used in a DocBlock for class API_Google_Profanity<br>
 <a name="Profiler.php"></a>
 <h1>Profiler.php</h1>
 <h2>Warnings:</h2><br>
@@ -147,15 +314,6 @@
 <h1>RSS.php</h1>
 <h2>Warnings:</h2><br>
 <b>Warning on line 23</b> - no @package tag was used in a DocBlock for class Display_RSS<br>
-<a name="SampleModel.php"></a>
-<h1>SampleModel.php</h1>
-<h2>Warnings:</h2><br>
-<b>Warning on line 6</b> - no @package tag was used in a DocBlock for class SampleModel<br>
-<b>Warning on line 12</b> - File "/home/josh/Source/pickles/boilerplate/models/SampleModel.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
-<a name="scripts.php"></a>
-<h1>scripts.php</h1>
-<h2>Warnings:</h2><br>
-<b>Warning on line 10</b> - File "/home/josh/Source/pickles/boilerplate/scripts/scripts.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
 <a name="Security.php"></a>
 <h1>Security.php</h1>
 <h2>Warnings:</h2><br>
@@ -172,12 +330,16 @@
 <h1>String.php</h1>
 <h2>Warnings:</h2><br>
 <b>Warning on line 24</b> - no @package tag was used in a DocBlock for class String<br>
+<a name="Tinychat.php"></a>
+<h1>Tinychat.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 23</b> - no @package tag was used in a DocBlock for class API_Tinychat<br>
 <a name="XML.php"></a>
 <h1>XML.php</h1>
 <h2>Warnings:</h2><br>
 <b>Warning on line 23</b> - no @package tag was used in a DocBlock for class Display_XML<br>
 	<p class="notes" id="credit">
-		Documentation generated on Mon, 09 May 2011 22:14:42 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sun, 06 Nov 2011 20:54:21 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</body>
 </html>

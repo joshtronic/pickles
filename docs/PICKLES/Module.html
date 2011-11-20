@@ -25,7 +25,7 @@
 <p class="short-description">Module Class</p>
 <p class="description"><p>This is a parent class that all PICKLES modules should be extending. Each  module can specify it's own meta data and whether or not a user must be  properly authenticated to view the page. Currently any pages without a  template are treated as pages being requested via AJAX and the return will  be JSON encoded. In the future this may need to be changed out for logic  that allows the requested module to specify what display type(s) it can use.</p></p>
 		<p class="notes">
-			Located in <a class="field" href="_classes---Module.php.html">/classes/Module.php</a> (line <span class="field">28</span>)
+			Located in <a class="field" href="_jar.php.html">/jar.php</a> (line <span class="field">5020</span>)
 		</p>
 		
 				
@@ -50,7 +50,11 @@
 								</div>
 		<div class="info-box-body">
 			<div class="var-summary">
-																																																																																																																<div class="var-title">
+																																																																																																																								<div class="var-title">
+					<span class="var-type">object</span>
+					<a href="#$cache" title="details" class="var-name">$cache</a>
+				</div>
+																<div class="var-title">
 					<span class="var-type">object</span>
 					<a href="#$db" title="details" class="var-name">$db</a>
 				</div>
@@ -157,19 +161,41 @@
 							
 					</div>
 		<div class="info-box-body">
-			<a name="var$db" id="$db"><!-- --></A>
+			<a name="var$cache" id="$cache"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">object</span>
+			<span class="var-name">$cache</span>
+			 = <span class="var-default"> null</span>			(line <span class="line-number">5028</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Cache Object</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$db" id="$db"><!-- --></A>
 <div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">object</span>
 			<span class="var-name">$db</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">36</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">5036</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Database object</p>
+<p class="short-description">Database Object</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> protected</li>
 			</ul>
@@ -186,12 +212,12 @@
 		<span class="var-title">
 			<span class="var-type">string,</span>
 			<span class="var-name">$description</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">52</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">5052</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Meta description</p>
+<p class="short-description">Meta Description</p>
 	<ul class="tags">
 				<li><span class="field">var:</span> null by default</li>
 				<li><span class="field">access:</span> protected</li>
@@ -209,12 +235,12 @@
 		<span class="var-title">
 			<span class="var-type">string,</span>
 			<span class="var-name">$engine</span>
-			 = <span class="var-default"> DISPLAY_PHP</span>			(line <span class="line-number">131</span>)
+			 = <span class="var-default"> DISPLAY_PHP</span>			(line <span class="line-number">5131</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Default display engine</p>
+<p class="short-description">Default Display Engine</p>
 <p class="description"><p>Defaults to PHP but could be set to JSON, XML or RSS. Value is  overwritten by the config value if not set by the module.</p></p>
 	<ul class="tags">
 				<li><span class="field">var:</span> null by default</li>
@@ -233,7 +259,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$hash</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">120</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">5120</span>)
 		</span>
 	</div>
 
@@ -257,12 +283,12 @@
 		<span class="var-title">
 			<span class="var-type">string,</span>
 			<span class="var-name">$keywords</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">60</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">5060</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Meta keywords (comma separated)</p>
+<p class="short-description">Meta Keywords (comma separated)</p>
 	<ul class="tags">
 				<li><span class="field">var:</span> null by default</li>
 				<li><span class="field">access:</span> protected</li>
@@ -280,7 +306,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$method</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">108</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">5108</span>)
 		</span>
 	</div>
 
@@ -304,7 +330,7 @@
 		<span class="var-title">
 			<span class="var-type">boolean,</span>
 			<span class="var-name">$private</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">80</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">5080</span>)
 		</span>
 	</div>
 
@@ -328,7 +354,7 @@
 		<span class="var-title">
 			<span class="var-type">boolean,</span>
 			<span class="var-name">$secure</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">70</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">5070</span>)
 		</span>
 	</div>
 
@@ -352,12 +378,12 @@
 		<span class="var-title">
 			<span class="var-type">boolean,</span>
 			<span class="var-name">$security</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">88</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">5088</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Security settings of the page</p>
+<p class="short-description">Security Settings</p>
 	<ul class="tags">
 				<li><span class="field">var:</span> null by default</li>
 				<li><span class="field">access:</span> protected</li>
@@ -375,7 +401,7 @@
 		<span class="var-title">
 			<span class="var-type">boolean,</span>
 			<span class="var-name">$session</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">98</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">5098</span>)
 		</span>
 	</div>
 
@@ -399,12 +425,12 @@
 		<span class="var-title">
 			<span class="var-type">string,</span>
 			<span class="var-name">$template</span>
-			 = <span class="var-default"> 'index'</span>			(line <span class="line-number">143</span>)
+			 = <span class="var-default"> 'index'</span>			(line <span class="line-number">5143</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Default template</p>
+<p class="short-description">Default Template</p>
 <p class="description"><p>Defaults to null but could be set to any valid template basename. The  value is overwritten by the config value if not set by the module. The  display engine determines what the file extension should be.</p></p>
 	<ul class="tags">
 				<li><span class="field">var:</span> null by default</li>
@@ -423,12 +449,12 @@
 		<span class="var-title">
 			<span class="var-type">string,</span>
 			<span class="var-name">$title</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">44</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">5044</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Page title</p>
+<p class="short-description">Page Title</p>
 	<ul class="tags">
 				<li><span class="field">var:</span> null by default</li>
 				<li><span class="field">access:</span> protected</li>
@@ -470,7 +496,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">155</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">5155</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -506,7 +532,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">setRequest</span> (line <span class="line-number">226</span>)
+		<span class="method-title">setRequest</span> (line <span class="line-number">5227</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -536,7 +562,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">__default</span> (line <span class="line-number">176</span>)
+		<span class="method-title">__default</span> (line <span class="line-number">5177</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -561,7 +587,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">__get</span> (line <span class="line-number">203</span>)
+		<span class="method-title">__get</span> (line <span class="line-number">5204</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -592,7 +618,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">__set</span> (line <span class="line-number">189</span>)
+		<span class="method-title">__set</span> (line <span class="line-number">5190</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -636,7 +662,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Mon, 09 May 2011 22:14:41 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sun, 06 Nov 2011 20:54:21 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>
