@@ -75,12 +75,30 @@ class Model extends Object
 	protected $datasource;
 
 	/**
+	 * Insert Priority
+	 *
+	 * Defaults to false (normal priority) but can be set to "low" or "high"
+	 *
+	 * @access protected
+	 * @var    string
+	 */
+	protected $priority = false;
+
+	/**
 	 * Delayed Insert
 	 *
 	 * @access protected
 	 * @var    boolean
 	 */
 	protected $delayed = false;
+
+	/**
+	 * Ignore Unique Index
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $ignore = false;
 
 	/**
 	 * Replace instead of Insert/Update?
@@ -947,15 +965,53 @@ class Model extends Object
 			// Determines if it's an UPDATE or INSERT
 			$update = (isset($this->record[$this->id]) && trim($this->record[$this->id]) != '');
 
-			// Establishes the query, optionally uses DELAYED INSERTS
+			// Starts to build the query, optionally sets PRIORITY, DELAYED and IGNORE syntax 
 			if ($this->replace === true)
 			{
-				$sql = 'REPLACE' . ($this->delayed == true ? ' DELAYED' : '') . ' INTO ' . $this->table . ' SET ';
+				$sql = 'REPLACE';
+
+				if (strtoupper($this->priority) == 'LOW')
+				{
+					$sql .= ' LOW_PRIORITY';
+				}
+				elseif ($this->delayed == true)
+				{
+					$sql .= ' DELAYED';
+				}
+
+				$sql .= ' INTO ' . $this->table . ' SET ';
 			}
 			else
 			{
-				$sql = ($update === true ? 'UPDATE' : 'INSERT' . ($this->delayed == true ? ' DELAYED' : '') . ' INTO') . ' ' . $this->table . ' SET ';
+				if ($update === true)
+				{
+					$sql = 'UPDATE';
+				}
+				else
+				{
+					$sql = 'INSERT';
+
+					// PRIORITY syntax takes priority over DELAYED 
+					if ($this->priority !== false && in_array(strtoupper($this->priority), array('LOW', 'HIGH')))
+					{
+						$sql .= ' ' . strtoupper($this->priority) . '_PRIORITY';
+					}
+					elseif ($this->delayed == true)
+					{
+						$sql .= ' DELAYED';
+					}
+					
+					if ($this->ignore == true)
+					{
+						$sql .= ' IGNORE';
+					}
+					
+					$sql .= ' INTO';
+				}
+
+				$sql .= ' ' . $this->table . ' SET ';
 			}
+
 			$input_parameters = null;
 
 			// Limits the columns being updated
@@ -995,6 +1051,8 @@ class Model extends Object
 				return $this->db->execute($sql, $input_parameters);
 			}
 		}
+
+		echo $sql;
 
 		return false;
 	}
