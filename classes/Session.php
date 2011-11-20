@@ -124,7 +124,7 @@ class Session extends Object
 	 */
 	public function __construct()
 	{
-		if (isset($_REQUEST['request']) == false || preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']) == false)
+		if (!IS_CLI && (isset($_REQUEST['request']) == false || preg_match('/^__pickles\/(css|js)\/.+$/', $_REQUEST['request']) == false))
 		{
 			parent::__construct();
 
