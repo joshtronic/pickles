@@ -81,6 +81,7 @@ function readFileContents($directory)
 	return $contents;
 }
 
+/*
 $jar_file = PICKLES_PATH . 'jar.php';
 
 // The PICKLES path should only be writable in a development environment, never on a production server
@@ -93,6 +94,7 @@ if (file_exists($jar_file))
 {
 	require $jar_file;
 }
+*/
 
 // }}}
 // {{{ Defaults some important configuration options
@@ -134,8 +136,6 @@ if (isset($config->pickles['session']))
 		new Session();
 	}
 }
-ini_set('display_errors', true);
-error_reporting(-1);
 
 // }}}
 // {{{ Auto[magical] Loader
