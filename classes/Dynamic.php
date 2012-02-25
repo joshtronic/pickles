@@ -9,7 +9,7 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman 
+ * @copyright Copyright 2007-2011, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      http://p.ickl.es
@@ -130,7 +130,7 @@ class Dynamic extends Object
 		{
 			$reference = $original_reference;
 
-			if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)))
+			if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)) && $this->config->pickles['minify'] === true)
 			{
 				// Minifies CSS with a few basic character replacements.
 				$stylesheet = file_get_contents($original_filename);
@@ -204,7 +204,7 @@ class Dynamic extends Object
 				{
 					$reference = $original_reference;
 
-					if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)) && extension_loaded('curl'))
+					if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)) && extension_loaded('curl') && $this->config->pickles['minify'] === true)
 					{
 						// Sets up the options list
 						$options = array(

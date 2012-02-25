@@ -184,7 +184,7 @@ class Config extends Object
 			}
 
 			// Defaults expected PICKLES options to false
-			foreach (array('cache', 'logging') as $variable)
+			foreach (array('cache', 'logging', 'minify') as $variable)
 			{
 				if (!isset($this->data['pickles'][$variable]))
 				{
