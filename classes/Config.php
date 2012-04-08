@@ -9,7 +9,7 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman 
+ * @copyright Copyright 2007-2011, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      http://p.ickl.es
@@ -131,12 +131,20 @@ class Config extends Object
 							}
 							else
 							{
+								// Exact match
 								if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host)
 									&& $_SERVER['SERVER_ADDR'] == $host)
 									|| $_SERVER['HTTP_HOST'] == $host)
 								{
-									// Sets the environment and makes a run for it
 									$environment = $name;
+									break;
+								}
+								// Fuzzy match
+								elseif (substr($host,0,1) == '/' && (preg_match($host, $_SERVER['SERVER_NAME'], $matches) > 0 || preg_match($host, $_SERVER['HTTP_HOST'], $matches) > 0))
+								{
+									$environments[$name]           = $matches[0];
+									$environment                   = $name;
+									$config['environments'][$name] = $matches[0];
 									break;
 								}
 							}
