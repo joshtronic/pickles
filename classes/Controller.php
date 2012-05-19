@@ -9,10 +9,10 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman 
+ * @copyright Copyright 2007-2012, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
- * @link      http://p.ickl.es
+ * @link      http://github.com/joshtronic/pickles
  */
 
 /**
@@ -304,13 +304,6 @@ class Controller extends Object
 				$module->setRequest(array('id' => $requested_id));
 			}
 
-			// Sets meta data from the module
-			$display->setMetaData(array(
-				'title'       => $module->title,
-				'description' => $module->description,
-				'keywords'    => $module->keywords
-			));
-
 			// Starts a timer before the module is executed
 			if ($profiler === true || stripos($profiler, 'timers') !== false)
 			{
@@ -391,6 +384,13 @@ class Controller extends Object
 			{
 				Profiler::timer('module __default');
 			}
+
+			// Sets meta data from the module
+			$display->setMetaData(array(
+				'title'       => $module->title,
+				'description' => $module->description,
+				'keywords'    => $module->keywords
+			));
 		}
 
 		// Starts a timer for the display rendering
