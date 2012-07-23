@@ -145,7 +145,7 @@ class String
 
 			for ($i = 0; $i < $length; $i++)
 			{
-				$string .= $characters[$i];
+				$string .= $characters[array_rand($characters)];
 			}
 		}
 
