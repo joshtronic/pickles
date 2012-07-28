@@ -200,7 +200,7 @@ function __autoload($class)
  * @param  string  $errstr the error message
  * @param  string  $errfile filename that the error was raised in
  * @param  integer $errline line number the error was raised at
- * @param  array   $errcontext array of every vairable that existed in scope
+ * @param  array   $errcontext array of every variable that existed in scope
  * @return ErrorException not really returned, but worth documenting
  */
 function __handleError($errno, $errstr, $errfile, $errline, array $errcontext)
