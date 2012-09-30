@@ -21,6 +21,9 @@
  * @usage     <code>require_once 'pickles.php';</code>
  */
 
+// Set to true while working on PICKLES to pack the JAR
+$pickling = false;
+
 // {{{ PICKLES Constants
 
 // Grabs the start time in case we're profiling
@@ -81,20 +84,17 @@ function readFileContents($directory)
 	return $contents;
 }
 
-/*
 $jar_file = PICKLES_PATH . 'jar.php';
 
-// The PICKLES path should only be writable in a development environment, never on a production server
-if (is_writable(PICKLES_PATH))
+if (is_writable(PICKLES_PATH) && $pickling)
 {
-	file_put_contents(dirname(__FILE__) . '/jar.php', str_replace("\n?>\n<?php\n", '', readFileContents(PICKLES_CLASS_PATH)));
+	file_put_contents(dirname(__FILE__) . '/jar.php', str_replace("\n?" . ">\n<" . "?php\n", '', readFileContents(PICKLES_CLASS_PATH)));
 }
 
 if (file_exists($jar_file))
 {
 	require $jar_file;
 }
-*/
 
 // }}}
 // {{{ Defaults some important configuration options
