@@ -9,14 +9,14 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman
+ * @copyright Copyright 2007-2012, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
- * @link      http://p.ickl.es
+ * @link      https://github.com/joshtronic/pickles
  */
 
 /**
- * Tinychat API Interface 
+ * Tinychat API Interface
  *
  * @link http://tinychat.com/developer/docs
  */
@@ -29,7 +29,7 @@ class API_Tinychat extends API_Common
 	 * @var    string
 	 */
 	private $public_key = null;
-	
+
 	/**
 	 * Secret Key
 	 *
@@ -72,7 +72,7 @@ class API_Tinychat extends API_Common
 	{
 		// Assembles and hashes the authentication token
 		$authentication = md5($this->secret_key . ':' . $authentication);
-		
+
 		// Assembles any additional parameters
 		$additional = '';
 
@@ -157,7 +157,7 @@ class API_Tinychat extends API_Common
 	public function generateHTML($room, $join = false, $nick = false, $change = false, $login = false, $oper = false, $owner = false, $bcast = false, $api = false, $colorbk = false, $tcdisplay = false, $autoop = false, $urlsuper = false, $langdefault = false)
 	{
 		return '
-			<script type="text/javascript"> 
+			<script type="text/javascript">
 				var tinychat = {'
 					. 'room: "' . $room . '",'
 					. ($join        ? 'join: "auto",'                        : '')
@@ -175,8 +175,8 @@ class API_Tinychat extends API_Common
 					. ($langdefault ? 'langdefault: "' . $langdefault . '",' : '')
 					. 'key: "' . $this->public_key . '"'
 				. '};
-			</script> 
-			<script src="http://tinychat.com/js/embed.js"></script> 
+			</script>
+			<script src="http://tinychat.com/js/embed.js"></script>
 			<div id="client"></div>
 		';
 	}

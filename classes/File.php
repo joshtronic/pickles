@@ -9,10 +9,10 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman 
+ * @copyright Copyright 2007-2012, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
- * @link      http://p.ickl.es
+ * @link      https://github.com/joshtronic/pickles
  */
 
 /**
@@ -45,7 +45,7 @@ class File
 		if (is_dir($directory))
 		{
 			$files = scandir($directory);
-			
+
 			// Loop through said files, check for directories, and unlink files
 			foreach ($files as $file)
 			{
