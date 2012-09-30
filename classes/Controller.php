@@ -8,11 +8,11 @@
  * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
- * @author    Josh Sherman <josh@gravityblvd.com>
+ * @author    Josh Sherman <pickles@joshtronic.com>
  * @copyright Copyright 2007-2012, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
- * @link      http://github.com/joshtronic/pickles
+ * @link      https://github.com/joshtronic/pickles
  */
 
 /**
