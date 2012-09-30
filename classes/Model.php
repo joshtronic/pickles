@@ -9,10 +9,10 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman
+ * @copyright Copyright 2007-2012, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
- * @link      http://p.ickl.es
+ * @link      https://github.com/joshtronic/pickles
  */
 
 /**
@@ -266,6 +266,26 @@ class Model extends Object
 	 */
 	private $snapshot = array();
 
+	/**
+	 * MySQL?
+	 *
+	 * Whether or not we're using MySQL
+	 *
+	 * @access private
+	 * @var    boolean
+	 */
+	private $mysql = false;
+
+	/**
+	 * PostgreSQL?
+	 *
+	 * Whether or not we're using PostgreSQL
+	 *
+	 * @access private
+	 * @var    boolean
+	 */
+	private $postgresql = false;
+
 	// }}}
 	// {{{ Class Constructor
 
@@ -284,8 +304,10 @@ class Model extends Object
 
 		// Gets an instance of the cache and database
 		// @todo Datasource has no way of being set
-		$this->db      = Database::getInstance($this->datasource != '' ? $this->datasource : null);
-		$this->caching = $this->db->getCache();
+		$this->db         = Database::getInstance($this->datasource != '' ? $this->datasource : null);
+		$this->caching    = $this->db->getCache();
+		$this->mysql      = ($this->db->getDriver() == 'pdo_mysql');
+		$this->postgresql = ($this->db->getDriver() == 'pdo_pgsql');
 
 		if ($this->caching)
 		{
@@ -965,8 +987,8 @@ class Model extends Object
 			// Determines if it's an UPDATE or INSERT
 			$update = (isset($this->record[$this->id]) && trim($this->record[$this->id]) != '');
 
-			// Starts to build the query, optionally sets PRIORITY, DELAYED and IGNORE syntax 
-			if ($this->replace === true)
+			// Starts to build the query, optionally sets PRIORITY, DELAYED and IGNORE syntax
+			if ($this->replace === true && $this->mysql)
 			{
 				$sql = 'REPLACE';
 
@@ -991,25 +1013,28 @@ class Model extends Object
 				{
 					$sql = 'INSERT';
 
-					// PRIORITY syntax takes priority over DELAYED 
-					if ($this->priority !== false && in_array(strtoupper($this->priority), array('LOW', 'HIGH')))
+					// PRIORITY syntax takes priority over DELAYED
+					if ($this->mysql)
 					{
-						$sql .= ' ' . strtoupper($this->priority) . '_PRIORITY';
+						if ($this->priority !== false && in_array(strtoupper($this->priority), array('LOW', 'HIGH')))
+						{
+							$sql .= ' ' . strtoupper($this->priority) . '_PRIORITY';
+						}
+						elseif ($this->delayed == true)
+						{
+							$sql .= ' DELAYED';
+						}
+
+						if ($this->ignore == true)
+						{
+							$sql .= ' IGNORE';
+						}
 					}
-					elseif ($this->delayed == true)
-					{
-						$sql .= ' DELAYED';
-					}
-					
-					if ($this->ignore == true)
-					{
-						$sql .= ' IGNORE';
-					}
-					
+
 					$sql .= ' INTO';
 				}
 
-				$sql .= ' ' . $this->table . ' SET ';
+				$sql .= ' ' . $this->table . ($update === true ? ' SET ' : ' ');
 			}
 
 			$input_parameters = null;
@@ -1020,17 +1045,27 @@ class Model extends Object
 			// Makes sure there's something to INSERT or UPDATE
 			if (count($record) > 0)
 			{
+				$insert_fields = array();
+
 				// Loops through all the columns and assembles the query
 				foreach ($record as $column => $value)
 				{
 					if ($column != $this->id)
 					{
-						if ($input_parameters != null)
+						if ($update === true)
 						{
-							$sql .= ', ';
+							if ($input_parameters != null)
+							{
+								$sql .= ', ';
+							}
+
+							$sql .= $column . ' = :' . $column;
+						}
+						else
+						{
+							$insert_fields[] = $column;
 						}
 
-						$sql .= $column . ' = :' . $column;
 						$input_parameters[':' . $column] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
 					}
 				}
@@ -1038,7 +1073,7 @@ class Model extends Object
 				// If it's an UPDATE tack on the ID
 				if ($update === true)
 				{
-					$sql .= ' WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
+					$sql .= ' WHERE ' . $this->id . ' = :' . $this->id . ($this->mysql ? ' LIMIT 1' : '') . ';';
 					$input_parameters[':' . $this->id] = $this->record[$this->id];
 
 					if ($this->caching)
@@ -1046,13 +1081,32 @@ class Model extends Object
 						//$this->cache->delete('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $this->record[$this->id]);
 					}
 				}
+				else
+				{
+					$sql .= '(' . implode(', ', $insert_fields) . ') VALUES (' . implode(', ', array_keys($input_parameters)) . ')';
+
+					// PDO::lastInsertId() doesn't work so we return the ID with the query
+					if ($this->postgresql)
+					{
+						$sql .= ' RETURNING ' . $this->id;
+					}
+
+					$sql .= ';';
+				}
 
 				// Executes the query
-				return $this->db->execute($sql, $input_parameters);
+				if ($this->postgresql && $update === false)
+				{
+					$results = $this->db->fetch($sql, $input_parameters);
+
+					return $results[0][$this->id];
+				}
+				else
+				{
+					return $this->db->execute($sql, $input_parameters);
+				}
 			}
 		}
-
-		echo $sql;
 
 		return false;
 	}
@@ -1066,7 +1120,7 @@ class Model extends Object
 	 */
 	public function delete()
 	{
-		$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $this->id . ' = :' . $this->id . ' LIMIT 1;';
+		$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $this->id . ' = :' . $this->id . ($this->mysql ? ' LIMIT 1' : '') . ';';
 		$input_parameters[':' . $this->id] = $this->record[$this->id];
 
 		return $this->db->execute($sql, $input_parameters);

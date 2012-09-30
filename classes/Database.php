@@ -9,10 +9,10 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2011, Josh Sherman
+ * @copyright Copyright 2007-2012, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
- * @link      http://p.ickl.es
+ * @link      https://github.com/joshtronic/pickles
  */
 
 /**
@@ -40,7 +40,7 @@ class Database extends Object
 	}
 
 	/**
-	 * Get instance
+	 * Get Instance
 	 *
 	 * Looks up the datasource using the passed name and gets an instance of
 	 * it. Allows for easy sharing of certain classes within the system to
