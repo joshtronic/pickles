@@ -91,7 +91,7 @@ if (is_writable(PICKLES_PATH) && $pickling)
 	file_put_contents(dirname(__FILE__) . '/jar.php', str_replace("\n?" . ">\n<" . "?php\n", '', readFileContents(PICKLES_CLASS_PATH)));
 }
 
-if (file_exists($jar_file))
+if (file_exists($jar_file) && !$pickling)
 {
 	require $jar_file;
 }
