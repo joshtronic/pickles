@@ -26,8 +26,8 @@
 <p class="description"><p>This is the file that you include on the page you're instantiating the  controller from (typically index.php).  The path to the PICKLES code  base is established as well as the path that Smarty will use to store  the compiled pages.</p><p>PHP version 5</p><p>Licensed under The MIT License  Redistribution of these files must retain the above copyright notice.</p></p>
 	<ul class="tags">
 				<li><span class="field">author:</span> Josh Sherman &lt;<a href="mailto:josh@gravityblvd.com">josh@gravityblvd.com</a>&gt;</li>
-				<li><span class="field">copyright:</span> Copyright 2007-2011, Josh Sherman</li>
-				<li><span class="field">link:</span> <a href="http://p.ickl.es">http://p.ickl.es</a></li>
+				<li><span class="field">copyright:</span> Copyright 2007-2012, Josh Sherman</li>
+				<li><span class="field">link:</span> <a href="https://github.com/joshtronic/pickles">https://github.com/joshtronic/pickles</a></li>
 				<li><span class="field">usage:</span> <div class="src-code"><ol><li><div class="src-line"><span class="src-inc">require_once&nbsp;</span><span class="src-str">'pickles.php'</span><span class="src-sym">;</span></div></li>
 </ol></div></li>
 				<li><span class="field">license:</span> <a href="http://www.opensource.org/licenses/mit-license.html">http://www.opensource.org/licenses/mit-license.html</a></li>
@@ -47,14 +47,18 @@
 				|													<a href="#sec-functions">Functions</a>
 					</div>
 		<div class="info-box-body">	
-			<a name="_$jar_file"><!-- --></a>
+			
+Strict Standards: Only variables should be passed by reference in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 712
+
+Warning: strftime(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'America/New_York' for 'EDT/-4.0/DST' instead in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 370
+<a name="_$jar_file"><!-- --></a>
 <div class="oddrow">
 	
 	<div>
 		<span class="include-title">
 			<span class="include-type">require</span>
 			(<span class="include-name">$jar_file</span>)
-			(line <span class="line-number">94</span>)
+			(line <span class="line-number">96</span>)
 		</span>
 	</div>
 
@@ -74,13 +78,17 @@
 			|										<a href="#sec-functions">Functions</a>
 					</div>
 		<div class="info-box-body">	
-			<a name="defineDISPLAY_JSON"><!-- --></a>
+			
+Strict Standards: Only variables should be passed by reference in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 712
+
+Warning: strftime(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'America/New_York' for 'EDT/-4.0/DST' instead in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 370
+<a name="defineDISPLAY_JSON"><!-- --></a>
 <div class="evenrow">
 	
 	<div>
 		<span class="const-title">
 			<span class="const-name">DISPLAY_JSON</span> = 'JSON'
-			(line <span class="line-number">45</span>)
+			(line <span class="line-number">48</span>)
 		</span>
 	</div>
 	
@@ -94,7 +102,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">DISPLAY_PHP</span> = 'PHP'
-			(line <span class="line-number">46</span>)
+			(line <span class="line-number">49</span>)
 		</span>
 	</div>
 	
@@ -108,7 +116,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">DISPLAY_RSS</span> = 'RSS'
-			(line <span class="line-number">47</span>)
+			(line <span class="line-number">50</span>)
 		</span>
 	</div>
 	
@@ -122,7 +130,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">DISPLAY_XML</span> = 'XML'
-			(line <span class="line-number">48</span>)
+			(line <span class="line-number">51</span>)
 		</span>
 	</div>
 	
@@ -136,7 +144,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">IS_CLI</span> = !isset($_SERVER['REQUEST_METHOD'])
-			(line <span class="line-number">54</span>)
+			(line <span class="line-number">57</span>)
 		</span>
 	</div>
 	
@@ -150,7 +158,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">JSON_AVAILABLE</span> = function_exists('json_encode')
-			(line <span class="line-number">51</span>)
+			(line <span class="line-number">54</span>)
 		</span>
 	</div>
 	
@@ -164,7 +172,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">LOG_PATH</span> = PRIVATE_PATH.'logs/'
-			(line <span class="line-number">42</span>)
+			(line <span class="line-number">45</span>)
 		</span>
 	</div>
 	
@@ -178,7 +186,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">PICKLES_CLASS_PATH</span> = PICKLES_PATH.'classes/'
-			(line <span class="line-number">31</span>)
+			(line <span class="line-number">34</span>)
 		</span>
 	</div>
 	
@@ -192,7 +200,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">PICKLES_PATH</span> = dirname(__FILE__).'/'
-			(line <span class="line-number">30</span>)
+			(line <span class="line-number">33</span>)
 		</span>
 	</div>
 	
@@ -206,7 +214,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">PICKLES_START_TIME</span> = microtime(true)
-			(line <span class="line-number">27</span>)
+			(line <span class="line-number">30</span>)
 		</span>
 	</div>
 	
@@ -220,7 +228,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">PRIVATE_PATH</span> = SITE_PATH.'private/'
-			(line <span class="line-number">41</span>)
+			(line <span class="line-number">44</span>)
 		</span>
 	</div>
 	
@@ -234,7 +242,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">SITE_CLASS_PATH</span> = SITE_PATH.'classes/'
-			(line <span class="line-number">36</span>)
+			(line <span class="line-number">39</span>)
 		</span>
 	</div>
 	
@@ -248,7 +256,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">SITE_MODEL_PATH</span> = SITE_PATH.'models/'
-			(line <span class="line-number">37</span>)
+			(line <span class="line-number">40</span>)
 		</span>
 	</div>
 	
@@ -262,7 +270,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">SITE_MODULE_PATH</span> = SITE_PATH.'modules/'
-			(line <span class="line-number">38</span>)
+			(line <span class="line-number">41</span>)
 		</span>
 	</div>
 	
@@ -276,7 +284,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">SITE_PATH</span> = getcwd().'/../'
-			(line <span class="line-number">34</span>)
+			(line <span class="line-number">37</span>)
 		</span>
 	</div>
 	
@@ -290,7 +298,7 @@
 	<div>
 		<span class="const-title">
 			<span class="const-name">SITE_TEMPLATE_PATH</span> = SITE_PATH.'templates/'
-			(line <span class="line-number">39</span>)
+			(line <span class="line-number">42</span>)
 		</span>
 	</div>
 	
@@ -312,11 +320,15 @@
 				|									<span class="disabled">Functions</span>
 		</div>
 		<div class="info-box-body">	
-			<a name="functionreadFileContents" id="functionreadFileContents"><!-- --></a>
+			
+Strict Standards: Only variables should be passed by reference in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 712
+
+Warning: strftime(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'America/New_York' for 'EDT/-4.0/DST' instead in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 370
+<a name="functionreadFileContents" id="functionreadFileContents"><!-- --></a>
 <div class="evenrow">
 	
 	<div>
-		<span class="method-title">readFileContents</span> (line <span class="line-number">59</span>)
+		<span class="method-title">readFileContents</span> (line <span class="line-number">62</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
@@ -341,7 +353,7 @@
 <div class="oddrow">
 	
 	<div>
-		<span class="method-title">__autoload</span> (line <span class="line-number">151</span>)
+		<span class="method-title">__autoload</span> (line <span class="line-number">153</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
@@ -371,7 +383,7 @@
 <div class="evenrow">
 	
 	<div>
-		<span class="method-title">__handleError</span> (line <span class="line-number">204</span>)
+		<span class="method-title">__handleError</span> (line <span class="line-number">206</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
@@ -386,7 +398,7 @@
 		<span class="method-name">
 			__handleError
 		</span>
-					(<span class="var-type">integer</span>&nbsp;<span class="var-name">$errno</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$errstr</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$errfile</span>, <span class="var-type">integer</span>&nbsp;<span class="var-name">$errline</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$errcontext</span>)
+					(<span class="var-type">integer</span>&nbsp;<span class="var-name">$errno</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$errstr</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$errfile</span>, <span class="var-type">integer</span>&nbsp;<span class="var-name">$errline</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$errcontext</span>)
 			</div>
 
 			<ul class="parameters">
@@ -404,7 +416,7 @@
 				<span class="var-name">$errline</span><span class="var-description">: line number the error was raised at</span>			</li>
 					<li>
 				<span class="var-type">array</span>
-				<span class="var-name">$errcontext</span><span class="var-description">: array of every vairable that existed in scope</span>			</li>
+				<span class="var-name">$errcontext</span><span class="var-description">: array of every variable that existed in scope</span>			</li>
 				</ul>
 		
 	
@@ -413,7 +425,7 @@
 <div class="oddrow">
 	
 	<div>
-		<span class="method-title">__handleException</span> (line <span class="line-number">225</span>)
+		<span class="method-title">__handleException</span> (line <span class="line-number">227</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
@@ -440,7 +452,7 @@
 	</div>
 	
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 06 Nov 2011 20:54:21 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Wed, 03 Oct 2012 17:46:06 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

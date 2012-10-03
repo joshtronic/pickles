@@ -25,11 +25,11 @@
 <p class="short-description">Model Class</p>
 <p class="description"><p>This is a parent class that all PICKLES data models should be extending.  When using the class as designed, objects will function as active record  pattern objects.</p></p>
 		<p class="notes">
-			Located in <a class="field" href="_jar.php.html">/jar.php</a> (line <span class="field">3937</span>)
+			Located in <a class="field" href="_classes---Model.php.html">/classes/Model.php</a> (line <span class="field">25</span>)
 		</p>
 		
 				
-		<pre><a href="../PICKLES/Object.html">Object</a>
+		<pre>Object
    |
    --Model</pre>
 	
@@ -50,7 +50,7 @@
 								</div>
 		<div class="info-box-body">
 			<div class="var-summary">
-																																																																																																																																																																																								<div class="var-title">
+																																																																																																																																																																																																								<div class="var-title">
 					<span class="var-type">object</span>
 					<a href="#$cache" title="details" class="var-name">$cache</a>
 				</div>
@@ -95,6 +95,10 @@
 					<a href="#$id" title="details" class="var-name">$id</a>
 				</div>
 																<div class="var-title">
+					<span class="var-type">boolean</span>
+					<a href="#$ignore" title="details" class="var-name">$ignore</a>
+				</div>
+																<div class="var-title">
 					<span class="var-type">mixed</span>
 					<a href="#$joins" title="details" class="var-name">$joins</a>
 				</div>
@@ -109,6 +113,10 @@
 																<div class="var-title">
 					<span class="var-type">mixed</span>
 					<a href="#$order" title="details" class="var-name">$order</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$priority" title="details" class="var-name">$priority</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">array</span>
@@ -250,7 +258,7 @@
 		<span class="var-title">
 			<span class="var-type">object</span>
 			<span class="var-name">$cache</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">3955</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">43</span>)
 		</span>
 	</div>
 
@@ -272,7 +280,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$collection</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">4039</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">145</span>)
 		</span>
 	</div>
 
@@ -295,7 +303,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$conditions</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">4063</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">169</span>)
 		</span>
 	</div>
 
@@ -317,7 +325,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$datasource</span>
-						(line <span class="line-number">3987</span>)
+						(line <span class="line-number">75</span>)
 		</span>
 	</div>
 
@@ -339,7 +347,7 @@
 		<span class="var-title">
 			<span class="var-type">object</span>
 			<span class="var-name">$db</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">3947</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">35</span>)
 		</span>
 	</div>
 
@@ -361,7 +369,7 @@
 		<span class="var-title">
 			<span class="var-type">boolean</span>
 			<span class="var-name">$delayed</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">3995</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">93</span>)
 		</span>
 	</div>
 
@@ -383,7 +391,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$fields</span>
-			 = <span class="var-default"> '*'</span>			(line <span class="line-number">4011</span>)
+			 = <span class="var-default"> '*'</span>			(line <span class="line-number">117</span>)
 		</span>
 	</div>
 
@@ -405,7 +413,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$group</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">4071</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">177</span>)
 		</span>
 	</div>
 
@@ -427,7 +435,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$having</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">4079</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">185</span>)
 		</span>
 	</div>
 
@@ -449,7 +457,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$hints</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">4055</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">161</span>)
 		</span>
 	</div>
 
@@ -471,7 +479,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$id</span>
-			 = <span class="var-default"> 'id'</span>			(line <span class="line-number">4027</span>)
+			 = <span class="var-default"> 'id'</span>			(line <span class="line-number">133</span>)
 		</span>
 	</div>
 
@@ -486,14 +494,36 @@
 		
 
 </div>
-<a name="var$joins" id="$joins"><!-- --></A>
+<a name="var$ignore" id="$ignore"><!-- --></A>
 <div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">boolean</span>
+			<span class="var-name">$ignore</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">101</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Ignore Unique Index</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$joins" id="$joins"><!-- --></A>
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$joins</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">4047</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">153</span>)
 		</span>
 	</div>
 
@@ -509,13 +539,13 @@
 
 </div>
 <a name="var$limit" id="$limit"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$limit</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">4095</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">201</span>)
 		</span>
 	</div>
 
@@ -531,13 +561,13 @@
 
 </div>
 <a name="var$offset" id="$offset"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$offset</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">4103</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">209</span>)
 		</span>
 	</div>
 
@@ -554,18 +584,41 @@
 
 </div>
 <a name="var$order" id="$order"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$order</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">4087</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">193</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Order</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$priority" id="$priority"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$priority</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">85</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Insert Priority</p>
+<p class="description"><p>Defaults to false (normal priority) but can be set to &quot;low&quot; or &quot;high&quot;</p></p>
 	<ul class="tags">
 				<li><span class="field">access:</span> protected</li>
 			</ul>
@@ -582,7 +635,7 @@
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$record</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">4126</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">232</span>)
 		</span>
 	</div>
 
@@ -604,7 +657,7 @@
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$records</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">4133</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">239</span>)
 		</span>
 	</div>
 
@@ -626,7 +679,7 @@
 		<span class="var-title">
 			<span class="var-type">boolean</span>
 			<span class="var-name">$replace</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">4003</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">109</span>)
 		</span>
 	</div>
 
@@ -648,7 +701,7 @@
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$results</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">4111</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">217</span>)
 		</span>
 	</div>
 
@@ -670,7 +723,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$table</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">4019</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">125</span>)
 		</span>
 	</div>
 
@@ -692,7 +745,7 @@
 		<span class="var-title">
 			<span class="var-type">boolean</span>
 			<span class="var-name">$use_cache</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">3963</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">51</span>)
 		</span>
 	</div>
 
@@ -707,18 +760,7 @@
 		
 
 </div>
-							<h4>Inherited Variables</h4>
-				<A NAME='inherited_vars'><!-- --></A>
-									<p>Inherited from <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
-					<blockquote>
-													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Object.html#var$config">Object::$config</a></span><br>
-							</span>
-													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Object.html#var$instances">Object::$instances</a></span><br>
-							</span>
-											</blockquote> 
-										
+						
 		</div>
 	</div>
 	
@@ -738,7 +780,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">4174</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">300</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -765,19 +807,13 @@
 				<span class="var-name">$parameters</span><span class="var-description">: optional data to create a query from</span>			</li>
 				</ul>
 		
-			<hr class="separator" />
-		<div class="notes">Redefinition of:</div>
-		<dl>
-			<dt><a href="../PICKLES/Object.html#method__construct">Object::__construct()</a></dt>
-						<dd>Constructor</dd>
-					</dl>
 			
 	</div>
 <a name="methodcommit" id="commit"><!-- --></a>
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">commit</span> (line <span class="line-number">4854</span>)
+		<span class="method-title">commit</span> (line <span class="line-number">982</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -803,7 +839,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">count</span> (line <span class="line-number">4682</span>)
+		<span class="method-title">count</span> (line <span class="line-number">810</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -828,7 +864,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">delete</span> (line <span class="line-number">4921</span>)
+		<span class="method-title">delete</span> (line <span class="line-number">1121</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -854,7 +890,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">end</span> (line <span class="line-number">4792</span>)
+		<span class="method-title">end</span> (line <span class="line-number">920</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -880,7 +916,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">execute</span> (line <span class="line-number">4212</span>)
+		<span class="method-title">execute</span> (line <span class="line-number">340</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -913,7 +949,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">first</span> (line <span class="line-number">4780</span>)
+		<span class="method-title">first</span> (line <span class="line-number">908</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -939,7 +975,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">last</span> (line <span class="line-number">4812</span>)
+		<span class="method-title">last</span> (line <span class="line-number">940</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -965,7 +1001,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">next</span> (line <span class="line-number">4722</span>)
+		<span class="method-title">next</span> (line <span class="line-number">850</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -991,7 +1027,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">prev</span> (line <span class="line-number">4741</span>)
+		<span class="method-title">prev</span> (line <span class="line-number">869</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1017,7 +1053,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">reset</span> (line <span class="line-number">4760</span>)
+		<span class="method-title">reset</span> (line <span class="line-number">888</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1043,7 +1079,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">shuffle</span> (line <span class="line-number">4710</span>)
+		<span class="method-title">shuffle</span> (line <span class="line-number">838</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1070,7 +1106,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">sort</span> (line <span class="line-number">4697</span>)
+		<span class="method-title">sort</span> (line <span class="line-number">825</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1105,7 +1141,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">unescape</span> (line <span class="line-number">4982</span>)
+		<span class="method-title">unescape</span> (line <span class="line-number">1182</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1136,7 +1172,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">walk</span> (line <span class="line-number">4826</span>)
+		<span class="method-title">walk</span> (line <span class="line-number">954</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1159,22 +1195,13 @@
 		
 			
 	</div>
-							<h4>Inherited Methods</h4>
-				<a name='inherited_methods'><!-- --></a>	
-									<!-- =========== Summary =========== -->
-					<p>Inherited From <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
-					<blockquote>
-													<span class="method-name"><a href="../PICKLES/Object.html#method__construct">Object::__construct()</a></span><br>
-													<span class="method-name"><a href="../PICKLES/Object.html#methodgetInstance">Object::getInstance()</a></span><br>
-													<span class="method-name"><a href="../PICKLES/Object.html#method__destruct">Object::__destruct()</a></span><br>
-											</blockquote>
-										
+						
 		</div>
 	</div>
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 06 Nov 2011 20:54:20 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Wed, 03 Oct 2012 17:46:05 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

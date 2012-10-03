@@ -82,7 +82,7 @@ class Display_RSS extends Display_Common
 	 * @access private
 	 * @var    string
 	 */
-	private $generator = 'http://p.ickl.es';
+	private $generator = 'https://github.com/joshtronic/pickles';
 
 	// }}}
 

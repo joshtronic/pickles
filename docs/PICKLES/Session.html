@@ -16,8 +16,7 @@
 	<div class="info-box-title">Description</div>
 	<div class="nav-bar">
 					<span class="disabled">Description</span> |
-													<a href="#sec-vars">Vars</a>
-						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
 						
 					</div>
 	<div class="info-box-body">
@@ -25,11 +24,11 @@
 <p class="short-description">Session Class</p>
 <p class="description"><p>Provides session handling via database instead of the file based session  handling built into PHP. Using this class requires an array to be defined  in place of the boolean true/false (on/off). If simply array(), the  datasource will default to the value in $config['pickles']['datasource'] and  if the table will default to &quot;sessions&quot;. The format is as follows:</p><p>$config = array(          'pickles' =&gt; array(              'session' =&gt; array(                  'datasource' =&gt; 'mysql',                  'table'      =&gt; 'sessions',              )          )      );</p><p>In addition to the configuration variables, a table in your database must  be created. The [MySQL] table schema is as follows:</p><p>CREATE TABLE sessions (          id varchar(32) COLLATE utf8_unicode_ci NOT NULL,          session text COLLATE utf8_unicode_ci NOT NULL,          expires_at datetime NOT NULL,          PRIMARY KEY (id)      ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;</p><p>Note: The reason for not using a model class was to avoid a naming conflict  between the Session model and the Session class itself. This will eventually  be resolved when I abandon full 5.x support and migrate to 5.3+ (assuming  that ever happens).</p></p>
 		<p class="notes">
-			Located in <a class="field" href="_jar.php.html">/jar.php</a> (line <span class="field">6212</span>)
+			Located in <a class="field" href="_classes---Session.php.html">/classes/Session.php</a> (line <span class="field">51</span>)
 		</p>
 		
 				
-		<pre><a href="../PICKLES/Object.html">Object</a>
+		<pre>Object
    |
    --Session</pre>
 	
@@ -44,10 +43,7 @@
 		<div class="info-box-title">Method Summary</span></div>
 		<div class="nav-bar">
 			<a href="#sec-description">Description</a> |
-																		<a href="#sec-vars">Vars</a>
-				 
-				|
-						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+												<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
@@ -101,41 +97,13 @@
 		</div>
 	</div>		
 
-	<a name="sec-vars"></a>
-	<div class="info-box">
-		<div class="info-box-title">Variables</div>
-		<div class="nav-bar">
-			<a href="#sec-description">Description</a> |
-										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
-						
-			
-										| 
-									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
-							
-					</div>
-		<div class="info-box-body">
-										<h4>Inherited Variables</h4>
-				<A NAME='inherited_vars'><!-- --></A>
-									<p>Inherited from <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
-					<blockquote>
-													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Object.html#var$config">Object::$config</a></span><br>
-							</span>
-													<span class="var-title">
-								<span class="var-name"><a href="../PICKLES/Object.html#var$instances">Object::$instances</a></span><br>
-							</span>
-											</blockquote> 
-										
-		</div>
-	</div>
 	
 	<a name="sec-methods"></a>
 	<div class="info-box">
 		<div class="info-box-title">Methods</div>
 		<div class="nav-bar">
 			<a href="#sec-description">Description</a> |
-															<a href="#sec-vars">Vars</a>
-																	<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+																<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
 						
 		</div>
 		<div class="info-box-body">
@@ -145,7 +113,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">6286</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">125</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -164,19 +132,13 @@
 			</div>
 	
 		
-			<hr class="separator" />
-		<div class="notes">Redefinition of:</div>
-		<dl>
-			<dt><a href="../PICKLES/Object.html#method__construct">Object::__construct()</a></dt>
-						<dd>Constructor</dd>
-					</dl>
 			
 	</div>
 <a name="method__destruct" id="__destruct"><!-- --></a>
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">Destructor __destruct</span> (line <span class="line-number">6395</span>)
+		<span class="method-title">Destructor __destruct</span> (line <span class="line-number">234</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -195,19 +157,13 @@
 			</div>
 	
 		
-			<hr class="separator" />
-		<div class="notes">Redefinition of:</div>
-		<dl>
-			<dt><a href="../PICKLES/Object.html#method__destruct">Object::__destruct()</a></dt>
-						<dd>Destructor</dd>
-					</dl>
 			
 	</div>
 <a name="methodclose" id="close"><!-- --></a>
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">close</span> (line <span class="line-number">6445</span>)
+		<span class="method-title">close</span> (line <span class="line-number">284</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -232,7 +188,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">destroy</span> (line <span class="line-number">6493</span>)
+		<span class="method-title">destroy</span> (line <span class="line-number">332</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -263,7 +219,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">gc</span> (line <span class="line-number">6508</span>)
+		<span class="method-title">gc</span> (line <span class="line-number">347</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -294,7 +250,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">initialize</span> (line <span class="line-number">6411</span>)
+		<span class="method-title">initialize</span> (line <span class="line-number">250</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -319,7 +275,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">open</span> (line <span class="line-number">6433</span>)
+		<span class="method-title">open</span> (line <span class="line-number">272</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -344,7 +300,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">read</span> (line <span class="line-number">6458</span>)
+		<span class="method-title">read</span> (line <span class="line-number">297</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -375,7 +331,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">write</span> (line <span class="line-number">6476</span>)
+		<span class="method-title">write</span> (line <span class="line-number">315</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -405,22 +361,13 @@
 		
 			
 	</div>
-							<h4>Inherited Methods</h4>
-				<a name='inherited_methods'><!-- --></a>	
-									<!-- =========== Summary =========== -->
-					<p>Inherited From <span class="classname"><a href="../PICKLES/Object.html">Object</a></span></p>
-					<blockquote>
-													<span class="method-name"><a href="../PICKLES/Object.html#method__construct">Object::__construct()</a></span><br>
-													<span class="method-name"><a href="../PICKLES/Object.html#methodgetInstance">Object::getInstance()</a></span><br>
-													<span class="method-name"><a href="../PICKLES/Object.html#method__destruct">Object::__destruct()</a></span><br>
-											</blockquote>
-										
+						
 		</div>
 	</div>
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 06 Nov 2011 20:54:21 -0500 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Wed, 03 Oct 2012 17:46:06 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

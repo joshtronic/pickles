@@ -91,7 +91,7 @@ class Error
 			<body>
 				<h1><?php echo $_SERVER['SERVER_NAME']; ?></h1>
 				<div><?php echo $message; ?></div>
-				<a href="http://p.ickl.es" target="_blank">Powered by PICKLES</a>
+				<a href="https://github.com/joshtronic/pickles" target="_blank">Powered by PICKLES</a>
 			</body>
 		</html>
 		<?php
