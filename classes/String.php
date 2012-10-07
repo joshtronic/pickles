@@ -118,11 +118,11 @@ class String
 		{
 			if ($similar == true)
 			{
-				$characters = array_merge($characters, range('A', 'Z'));
+				$characters = array_merge($characters, range('a', 'z'));
 			}
 			else
 			{
-				$characters = array_merge($characters, range('A', 'H'), range('J', 'N'), range('P', 'Z'));
+				$characters = array_merge($characters, range('a', 'h'), range('j', 'n'), range('p', 'z'));
 			}
 		}
 

@@ -40,13 +40,13 @@ class Security
 	/**
 	 * Generate Hash
 	 *
-	 * Generates an SHA1 hash from the provided string. Optionally can be salted.
+	 * Generates an SHA1 hash from the provided string. Salt optional.
 	 *
-	 * @param  string $value value to hash
+	 * @param  string $source value to hash
 	 * @param  mixed $salts optional salt or salts
-	 * @return string SHA1 has
+	 * @return string SHA1 hash
 	 */
-	public static function generateHash($value, $salts = null)
+	public static function generateHash($source, $salts = null)
 	{
 		// Determines which salt(s) to use
 		if ($salts == null)
@@ -70,13 +70,51 @@ class Security
 		}
 
 		// Loops through the salts, applies them and calculates the hash
-		$hash = $value;
+		$hash = $source;
+
 		foreach ($salts as $salt)
 		{
 			$hash = sha1($salt . $hash);
 		}
 
 		return $hash;
+	}
+
+	/**
+	 * SHA-256
+	 *
+	 * Generates an SHA-256 hash from the provided string.
+	 *
+	 * @param  string $source value to hash
+	 * @return string SHA1 hash
+	 */
+	public static function sha256($source)
+	{
+		return hash('sha256', $source);
+	}
+
+	/**
+	 * Generate SHA-256 Hash
+	 *
+	 * Generates an SHA-256 hash from the provided string and salt. Borrowed the
+	 * large iteration logic from fCryptography::hashWithSalt() as, and I quote,
+	 * "makes rainbow table attacks infesible".
+	 *
+	 * @param  string $source value to hash
+	 * @param  mixed $salt value to use as salt
+	 * @return string SHA-256 hash
+	 * @link   https://github.com/flourishlib/flourish-classes/blob/master/fCryptography.php
+	 */
+	public static function generateSHA256Hash($source, $salt)
+	{
+		$sha256 = sha1($salt . $source);
+
+		for ($i = 0; $i < 1000; $i++)
+		{
+			$sha256 = Security::sha256($sha256 . (($i % 2 == 0) ? $source : $salt));
+		}
+
+		return $sha256;
 	}
 
 	/**
