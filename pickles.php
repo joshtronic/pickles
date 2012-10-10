@@ -113,6 +113,15 @@ if (ini_get('date.timezone') == '')
 	ini_set('date.timezone', 'Etc/UTC');
 }
 
+// Sets the session variables
+ini_set('session.cache_expire',   86400);
+ini_set('session.entropy_file',   '/dev/urandom');
+ini_set('session.entropy_length', 512);
+ini_set('session.gc_maxlifetime', 86400);
+ini_set('session.gc_probability', 1);
+ini_set('session.gc_divisor',     1000);
+ini_set('session.hash_function',  1);
+
 // }}}
 // {{{ Loads the configuration file and sets any configuration options
 
