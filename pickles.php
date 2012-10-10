@@ -22,7 +22,8 @@
  */
 
 // Set to true while working on PICKLES to pack the JAR
-$pickling = false;
+// Assumption, OSX is considered a development platform
+$pickling = (php_uname('s') == 'Darwin' ? true : false);
 
 // {{{ PICKLES Constants
 
