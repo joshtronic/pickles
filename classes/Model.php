@@ -133,18 +133,6 @@ class Model extends Object
 	protected $id = 'id'; // WHERE ___ = ?
 
 	/**
-	 * Collection Name
-	 *
-	 * For compatibility with the naming conventions used by MongoDB, the
-	 * collection name can be specified. If the collection name is set, it will
-	 * set the table name value to it and proceed as normal.
-	 *
-	 * @access protected
-	 * @var    mixed
-	 */
-	protected $collection = false;
-
-	/**
 	 * Joins
 	 *
 	 * @access protected
@@ -370,12 +358,6 @@ class Model extends Object
 			elseif (ctype_digit((string)$parameters))
 			{
 				$this->loadParameters(array($this->id => $parameters));
-			}
-
-			// Overwrites the table name with the available collection name
-			if ($this->collection != false)
-			{
-				$this->table = $this->collection;
 			}
 
 			// Starts with a basic SELECT ... FROM
