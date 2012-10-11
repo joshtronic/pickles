@@ -1,0 +1,29 @@
+# Mostly taken from https://github.com/github/gitignore #
+#########################################################
+
+# Global/Linux.gitignore #
+##########################
+.*
+!.gitignore
+*~
+
+# Global/OSX.gitignore #
+########################
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Global/vim.gitignore #
+########################
+.*.sw[a-z]
+*.un~
+Session.vim
+.netrwhist
