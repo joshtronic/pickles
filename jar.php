@@ -3956,6 +3956,20 @@ class Model extends Object
 	protected $db = null;
 
 	/**
+	 * Columns
+	 *
+	 * Mapping of key columns for the table
+	 *
+	 * @access protected
+	 * @var    array
+	 */
+	protected $columns = array(
+		'id'         => 'id',
+		'created_at' => 'created_at',
+		'updated_at' => 'updated_at',
+	);
+
+	/**
 	 * Cache Object
 	 *
 	 * @access protected
@@ -4044,14 +4058,6 @@ class Model extends Object
 	 * @var    mixed
 	 */
 	protected $table = false; // FROM
-
-	/**
-	 * ID Column
-	 *
-	 * @access protected
-	 * @var    string
-	 */
-	protected $id = 'id'; // WHERE ___ = ?
 
 	/**
 	 * Joins
@@ -4273,12 +4279,12 @@ class Model extends Object
 			}
 			elseif (ctype_digit((string)$type_or_parameters))
 			{
-				$this->loadParameters(array($this->id => $type_or_parameters));
+				$this->loadParameters(array($this->columns['id'] => $type_or_parameters));
 				$cache_key = 'PICKLES-' . $this->datasource . '-' . $this->table . '-' . $type_or_parameters;
 			}
 			elseif (ctype_digit((string)$parameters))
 			{
-				$this->loadParameters(array($this->id => $parameters));
+				$this->loadParameters(array($this->columns['id'] => $parameters));
 			}
 
 			// Starts with a basic SELECT ... FROM
@@ -4888,7 +4894,7 @@ class Model extends Object
 		if (count($this->record) > 0)
 		{
 			// Determines if it's an UPDATE or INSERT
-			$update = (isset($this->record[$this->id]) && trim($this->record[$this->id]) != '');
+			$update = (isset($this->record[$this->columns['id']]) && trim($this->record[$this->columns['id']]) != '');
 
 			// Starts to build the query, optionally sets PRIORITY, DELAYED and IGNORE syntax
 			if ($this->replace === true && $this->mysql)
@@ -4953,7 +4959,7 @@ class Model extends Object
 				// Loops through all the columns and assembles the query
 				foreach ($record as $column => $value)
 				{
-					if ($column != $this->id)
+					if ($column != $this->columns['id'])
 					{
 						if ($update === true)
 						{
@@ -4976,12 +4982,12 @@ class Model extends Object
 				// If it's an UPDATE tack on the ID
 				if ($update === true)
 				{
-					$sql .= ' WHERE ' . $this->id . ' = :' . $this->id . ($this->mysql ? ' LIMIT 1' : '') . ';';
-					$input_parameters[':' . $this->id] = $this->record[$this->id];
+					$sql .= ' WHERE ' . $this->columns['id'] . ' = :' . $this->columns['id'] . ($this->mysql ? ' LIMIT 1' : '') . ';';
+					$input_parameters[':' . $this->columns['id']] = $this->record[$this->columns['id']];
 
 					if ($this->caching)
 					{
-						//$this->cache->delete('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $this->record[$this->id]);
+						//$this->cache->delete('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $this->record[$this->columns['id']]);
 					}
 				}
 				else
@@ -4991,7 +4997,7 @@ class Model extends Object
 					// PDO::lastInsertId() doesn't work so we return the ID with the query
 					if ($this->postgresql)
 					{
-						$sql .= ' RETURNING ' . $this->id;
+						$sql .= ' RETURNING ' . $this->columns['id'];
 					}
 
 					$sql .= ';';
@@ -5002,7 +5008,7 @@ class Model extends Object
 				{
 					$results = $this->db->fetch($sql, $input_parameters);
 
-					return $results[0][$this->id];
+					return $results[0][$this->columns['id']];
 				}
 				else
 				{
@@ -5023,8 +5029,8 @@ class Model extends Object
 	 */
 	public function delete()
 	{
-		$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $this->id . ' = :' . $this->id . ($this->mysql ? ' LIMIT 1' : '') . ';';
-		$input_parameters[':' . $this->id] = $this->record[$this->id];
+		$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $this->columns['id'] . ' = :' . $this->columns['id'] . ($this->mysql ? ' LIMIT 1' : '') . ';';
+		$input_parameters[':' . $this->columns['id']] = $this->record[$this->columns['id']];
 
 		return $this->db->execute($sql, $input_parameters);
 	}
