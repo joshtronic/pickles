@@ -1,3 +1,12 @@
 [submodule "vendors/twitter/bootstrap"]
 	path = vendors/twitter/bootstrap
 	url = git://github.com/twitter/bootstrap
+[submodule "vendors/jquery/jquery"]
+	path = vendors/jquery/jquery
+	url = git://github.com/jquery/jquery.git
+[submodule "vendors/jquery/jquery-ui"]
+	path = vendors/jquery/jquery-ui
+	url = git://github.com/jquery/jquery-ui.git
+[submodule "vendors/jquery/jquery-mobile"]
+	path = vendors/jquery/jquery-mobile
+	url = git://github.com/jquery/jquery-mobile.git
