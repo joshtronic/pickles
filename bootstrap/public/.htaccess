@@ -1,0 +1,56 @@
+# Sets the expires header
+#ExpiresActive on
+#ExpiresDefault "access plus 10 years"
+
+# Sets up ETags
+FileETag MTime Size
+
+# Sets up compression
+SetOutputFilter DEFLATE
+SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+SetEnvIfNoCase Request_URI \.pdf$ no-gzip dont-vary
+
+# Prevent session IDs from appearing
+php_value session.use_only_cookies 1
+php_value session.use_trans_sid 0
+
+# Sets up the mod_rewrite engine
+RewriteEngine on
+RewriteBase /
+
+# Strips the trailing slash
+RewriteRule ^(.+)/$ $1 [R]
+
+# Strips the preceeding subdomain
+# RewriteCond %{SERVER_ADDR} ^74\.207\.225\.243
+# RewriteCond %{HTTP_HOST}   ^(.+).scenekids.com$ [NC]
+# RewriteRule ^(.*)$         http://scenekids.com [R=301,L]
+
+# Doesn't rewrite any files that actually exist
+RewriteCond %{REQUEST_FILENAME} -f [NC,OR]
+RewriteCond %{REQUEST_FILENAME} -d [NC]
+RewriteRule .* - [L]
+
+# Sends error pages to / with a 301
+#RewriteRule ^error$ / [R=301,L]
+
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+
+# Rewrites static content with an appended timestamp
+RewriteRule ^(.+)\.([\d]+)\.(css|js|gif|png|jpg|jpeg)$ /$1.$3 [NC,QSA,L]
+
+# TODO Add additional rewrites for ID's / pagination
+RewriteRule ^(.+)$ index.php?request=$1 [NC,QSA]
+
+# Set up the error documents
+ErrorDocument 400 /error
+ErrorDocument 401 /error
+ErrorDocument 403 /error
+ErrorDocument 404 /error
+ErrorDocument 500 /error
+
+# Blocks access to .htaccess
+<Files .htaccess>
+    order allow,deny
+    deny from all
+</Files>

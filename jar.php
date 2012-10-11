@@ -6895,70 +6895,81 @@ class Time
 	 *
 	 * Seconds in a minute
 	 *
-	 * @static
-	 * @var    integer
+	 * @var integer
 	 */
-	public static $minute = 60;
+	const MINUTE = 60;
 
 	/**
 	 * Hour
 	 *
 	 * Seconds in an hour (minute * 60)
 	 *
-	 * @static
-	 * @var    integer
+	 * @var integer
 	 */
-	public static $hour = 3600;
+	const HOUR = 3600;
 
 	/**
 	 * Day
 	 *
 	 * Seconds in a day (hour * 24)
 	 *
-	 * @static
-	 * @var    integer
+	 * @var integer
 	 */
-	public static $day = 86400;
+	const DAY = 86400;
 
 	/**
 	 * Week
 	 *
 	 * Seconds in a week (day * 7)
 	 *
-	 * @static
-	 * @var    integer
+	 * @var integer
 	 */
-	public static $week = 604800;
+	const WEEK = 604800;
 
 	/**
 	 * Month
 	 *
 	 * Seconds in a month (day * 30)
 	 *
-	 * @static
-	 * @var    integer
+	 * @var integer
 	 */
-	public static $month = 2592000;
+	const MONTH = 2592000;
 
 	/**
 	 * Quarter
 	 *
 	 * Seconds in a quarter (day * 90)
 	 *
-	 * @static
-	 * @var    integer
+	 * @var integer
 	 */
-	public static $quarter = 7776000;
+	const QUARTER = 7776000;
 
 	/**
 	 * Year
 	 *
 	 * Seconds in a year (day * 365)
 	 *
-	 * @static
-	 * @var    integer
+	 * @var integer
 	 */
-	public static $year = 31536000;
+	const YEAR = 31536000;
+
+	/**
+	 * Decade
+	 *
+	 * Seconds in a decade (year * 10)
+	 *
+	 * @var integer
+	 */
+	const DECADE = 315360000;
+
+	/**
+	 * Century
+	 *
+	 * Seconds in a decade (decade * 10)
+	 *
+	 * @var integer
+	 */
+	const CENTURY = 3153600000;
 
 	// }}}
 
