@@ -1,5 +1,20 @@
 
-Warning: strftime(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'America/New_York' for 'EDT/-4.0/DST' instead in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 370
+Warning: strftime(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'America/New_York' for 'EDT/-4.0/DST' instead in /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 370
+
+Call Stack:
+    0.0001     642352   1. {main}() /usr/local/Cellar/php53/5.3.16/bin/phpdoc:0
+    0.0003     658000   2. require('/usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc') /usr/local/Cellar/php53/5.3.16/bin/phpdoc:40
+    0.0820   15420440   3. phpDocumentor_setup->createDocs() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc:65
+    6.3422   97029544   4. phpDocumentor_IntermediateParser->Output() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Setup.inc.php:763
+    6.4874   97095512   5. phpDocumentor_IntermediateParser->Convert() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1867
+    6.4874   97095832   6. Converter->walk() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1654
+    6.6048   99423080   7. HTMLframesConverter->formatIndex() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converter.inc:1848
+    6.6368  100311776   8. Smarty->fetch() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converters/HTML/frames/HTMLframesConverter.inc:637
+    6.6369  100353608   9. Smarty->_compile_resource() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1296
+    6.6370  100356184  10. Smarty->_compile_source() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1458
+    6.6371  100388256  11. Smarty_Compiler->_compile_file() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1523
+    6.6381  100404960  12. strftime() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:370
+
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,6 +56,7 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 	<a class="index-letter" href="elementindex.html#u">u</a>
 	<a class="index-letter" href="elementindex.html#w">w</a>
 	<a class="index-letter" href="elementindex.html#x">x</a>
+	<a class="index-letter" href="elementindex.html#y">y</a>
 	<a class="index-letter" href="elementindex.html#_">_</a>
 </div>
 
@@ -57,6 +73,13 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#var$attributes">Database_PDO_Common::$attributes</a> in Common.php</div>
 							<div class="index-item-description">PDO Attributes</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">age</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Time.html#methodage">Time::age()</a> in Time.php</div>
+							<div class="index-item-description">Age</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">age</span>
@@ -120,6 +143,13 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 						<span class="var-title">$cache</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Module.html#var$cache">Module::$cache</a> in Module.php</div>
+							<div class="index-item-description">Cache Object</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$cache</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Model.html#var$cache">Model::$cache</a> in Model.php</div>
 							<div class="index-item-description">Cache Object</div>
 					</dd>
@@ -131,25 +161,11 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 							<div class="index-item-description">Whether or not to use caching</div>
 					</dd>
 			<dt class="field">
-						<span class="var-title">$cache</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Module.html#var$cache">Module::$cache</a> in Module.php</div>
-							<div class="index-item-description">Cache Object</div>
-					</dd>
-			<dt class="field">
 						<span class="var-title">$child_template</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Display_Common.html#var$child_template">Display_Common::$child_template</a> in Common.php</div>
 							<div class="index-item-description">Child (sub) Template</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$collection</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#var$collection">Model::$collection</a> in Model.php</div>
-							<div class="index-item-description">Collection Name</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$conditions</span>
@@ -185,6 +201,13 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Cache.html">Cache</a> in Cache.php</div>
 							<div class="index-item-description">Cache Class</div>
+					</dd>
+			<dt class="field">
+						CENTURY
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Time.html#constCENTURY">Time::CENTURY</a> in Time.php</div>
+							<div class="index-item-description">Century</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">check</span>
@@ -252,14 +275,14 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 						<span class="method-title">close</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#methodclose">Database_PDO_Common::close()</a> in Common.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#methodclose">Database_Common::close()</a> in Common.php</div>
 							<div class="index-item-description">Closes database connection</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">close</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database_Common.html#methodclose">Database_Common::close()</a> in Common.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#methodclose">Database_PDO_Common::close()</a> in Common.php</div>
 							<div class="index-item-description">Closes database connection</div>
 					</dd>
 			<dt class="field">
@@ -372,14 +395,14 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 						<span class="var-title">$driver</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database_PDO_PostgreSQL.html#var$driver">Database_PDO_PostgreSQL::$driver</a> in PostgreSQL.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_SQLite.html#var$driver">Database_PDO_SQLite::$driver</a> in SQLite.php</div>
 							<div class="index-item-description">Driver</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$driver</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database_PDO_SQLite.html#var$driver">Database_PDO_SQLite::$driver</a> in SQLite.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_PostgreSQL.html#var$driver">Database_PDO_PostgreSQL::$driver</a> in PostgreSQL.php</div>
 							<div class="index-item-description">Driver</div>
 					</dd>
 			<dt class="field">
@@ -393,14 +416,14 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 						<span class="var-title">$dsn</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database_PDO_PostgreSQL.html#var$dsn">Database_PDO_PostgreSQL::$dsn</a> in PostgreSQL.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_MySQL.html#var$dsn">Database_PDO_MySQL::$dsn</a> in MySQL.php</div>
 							<div class="index-item-description">DSN format</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$dsn</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database_PDO_SQLite.html#var$dsn">Database_PDO_SQLite::$dsn</a> in SQLite.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_PostgreSQL.html#var$dsn">Database_PDO_PostgreSQL::$dsn</a> in PostgreSQL.php</div>
 							<div class="index-item-description">DSN format</div>
 					</dd>
 			<dt class="field">
@@ -414,7 +437,7 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 						<span class="var-title">$dsn</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database_PDO_MySQL.html#var$dsn">Database_PDO_MySQL::$dsn</a> in MySQL.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_SQLite.html#var$dsn">Database_PDO_SQLite::$dsn</a> in SQLite.php</div>
 							<div class="index-item-description">DSN format</div>
 					</dd>
 			<dt class="field">
@@ -492,11 +515,18 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 							<div class="index-item-description">Date Select</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">delete</span>
+						DAY
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#methoddelete">Model::delete()</a> in Model.php</div>
-							<div class="index-item-description">Delete Record</div>
+			<div class="index-item-details"><a href="PICKLES/Time.html#constDAY">Time::DAY</a> in Time.php</div>
+							<div class="index-item-description">Day</div>
+					</dd>
+			<dt class="field">
+						DECADE
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Time.html#constDECADE">Time::DECADE</a> in Time.php</div>
+							<div class="index-item-description">Decade</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">delete</span>
@@ -504,6 +534,13 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Cache.html#methoddelete">Cache::delete()</a> in Cache.php</div>
 							<div class="index-item-description">Delete Key</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">delete</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Model.html#methoddelete">Model::delete()</a> in Model.php</div>
+							<div class="index-item-description">Delete Record</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">destroy</span>
@@ -520,12 +557,6 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 							<div class="index-item-description">Common Display Class</div>
 					</dd>
 			<dt class="field">
-						<span class="const-title">DISPLAY_JSON</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#defineDISPLAY_JSON">DISPLAY_JSON</a> in pickles.php</div>
-					</dd>
-			<dt class="field">
 						Display_JSON
 					</dt>
 		<dd class="index-item-body">
@@ -533,10 +564,10 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 							<div class="index-item-description">JSON Display</div>
 					</dd>
 			<dt class="field">
-						<span class="const-title">DISPLAY_PHP</span>
+						<span class="const-title">DISPLAY_JSON</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#defineDISPLAY_PHP">DISPLAY_PHP</a> in pickles.php</div>
+			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#defineDISPLAY_JSON">DISPLAY_JSON</a> in pickles.php</div>
 					</dd>
 			<dt class="field">
 						Display_PHP
@@ -546,10 +577,10 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 							<div class="index-item-description">PHP Display</div>
 					</dd>
 			<dt class="field">
-						<span class="const-title">DISPLAY_RSS</span>
+						<span class="const-title">DISPLAY_PHP</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#defineDISPLAY_RSS">DISPLAY_RSS</a> in pickles.php</div>
+			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#defineDISPLAY_PHP">DISPLAY_PHP</a> in pickles.php</div>
 					</dd>
 			<dt class="field">
 						Display_RSS
@@ -557,6 +588,12 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Display_RSS.html">Display_RSS</a> in RSS.php</div>
 							<div class="index-item-description">RSS Display</div>
+					</dd>
+			<dt class="field">
+						<span class="const-title">DISPLAY_RSS</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#defineDISPLAY_RSS">DISPLAY_RSS</a> in pickles.php</div>
 					</dd>
 			<dt class="field">
 						Display_XML
@@ -775,6 +812,13 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 							<div class="index-item-description">Generate HTML</div>
 					</dd>
 			<dt class="field">
+						<span class="method-title">generateSHA256Hash</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Security.html#methodgenerateSHA256Hash">Security::generateSHA256Hash()</a> in Security.php</div>
+							<div class="index-item-description">Generate SHA-256 Hash</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">get</span>
 					</dt>
 		<dd class="index-item-body">
@@ -886,6 +930,13 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Form.html#methodhiddenInput">Form::hiddenInput()</a> in Form.php</div>
 							<div class="index-item-description">Hidden Input</div>
+					</dd>
+			<dt class="field">
+						HOUR
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Time.html#constHOUR">Time::HOUR</a> in Time.php</div>
+							<div class="index-item-description">Hour</div>
 					</dd>
 		</dl>
 	<a name="i"></a>
@@ -1157,6 +1208,13 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 			<div class="index-item-details"><a href="PICKLES/_classes---Module.php.html">Module.php</a> in Module.php</div>
 					</dd>
 			<dt class="field">
+						MINUTE
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Time.html#constMINUTE">Time::MINUTE</a> in Time.php</div>
+							<div class="index-item-description">Minute</div>
+					</dd>
+			<dt class="field">
 						Model
 					</dt>
 		<dd class="index-item-body">
@@ -1169,6 +1227,13 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Module.html">Module</a> in Module.php</div>
 							<div class="index-item-description">Module Class</div>
+					</dd>
+			<dt class="field">
+						MONTH
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Time.html#constMONTH">Time::MONTH</a> in Time.php</div>
+							<div class="index-item-description">Month</div>
 					</dd>
 		</dl>
 	<a name="n"></a>
@@ -1430,6 +1495,13 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		<div style="clear: both"></div>
 	</div>
 	<dl>
+			<dt class="field">
+						QUARTER
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Time.html#constQUARTER">Time::QUARTER</a> in Time.php</div>
+							<div class="index-item-description">Quarter</div>
+					</dd>
 			<dt class="field">
 						<span class="method-title">query</span>
 					</dt>
@@ -1777,6 +1849,13 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 							<div class="index-item-description">Set Username</div>
 					</dd>
 			<dt class="field">
+						<span class="method-title">sha256</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Security.html#methodsha256">Security::sha256()</a> in Security.php</div>
+							<div class="index-item-description">SHA-256</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">shuffle</span>
 					</dt>
 		<dd class="index-item-body">
@@ -1891,17 +1970,23 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 			<div class="index-item-details"><a href="PICKLES/_classes---API---Tinychat.php.html">Tinychat.php</a> in Tinychat.php</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">templateExists</span>
+						<span class="include-title">Time.php</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Display_Common.html#methodtemplateExists">Display_Common::templateExists()</a> in Common.php</div>
-							<div class="index-item-description">Template Exists</div>
+			<div class="index-item-details"><a href="PICKLES/_classes---Time.php.html">Time.php</a> in Time.php</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">templateExists</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Display_PHP.html#methodtemplateExists">Display_PHP::templateExists()</a> in PHP.php</div>
+							<div class="index-item-description">Template Exists</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">templateExists</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Display_Common.html#methodtemplateExists">Display_Common::templateExists()</a> in Common.php</div>
 							<div class="index-item-description">Template Exists</div>
 					</dd>
 			<dt class="field">
@@ -1912,11 +1997,25 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 							<div class="index-item-description">Textarea</div>
 					</dd>
 			<dt class="field">
+						Time
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Time.html">Time</a> in Time.php</div>
+							<div class="index-item-description">Time Class</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">timer</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Profiler.html#methodtimer">Profiler::timer()</a> in Profiler.php</div>
 							<div class="index-item-description">Timer</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">timestamp</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Time.html#methodtimestamp">Time::timestamp()</a> in Time.php</div>
+							<div class="index-item-description">Timestamp</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">toJSON</span>
@@ -1998,6 +2097,13 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 							<div class="index-item-description">Log Warning</div>
 					</dd>
 			<dt class="field">
+						WEEK
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Time.html#constWEEK">Time::WEEK</a> in Time.php</div>
+							<div class="index-item-description">Week</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">write</span>
 					</dt>
 		<dd class="index-item-body">
@@ -2017,6 +2123,21 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/_classes---Display---XML.php.html">XML.php</a> in XML.php</div>
+					</dd>
+		</dl>
+	<a name="y"></a>
+	<div class="index-letter-section">
+		<div style="float: left" class="index-letter-title">y</div>
+		<div style="float: right"><a href="#top">top</a></div>
+		<div style="clear: both"></div>
+	</div>
+	<dl>
+			<dt class="field">
+						YEAR
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Time.html#constYEAR">Time::YEAR</a> in Time.php</div>
+							<div class="index-item-description">Year</div>
 					</dd>
 		</dl>
 	<a name="_"></a>
@@ -2093,7 +2214,7 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a> in Common.php</div>
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#method__construct">Database_Common::__construct()</a> in Common.php</div>
 							<div class="index-item-description">Constructor</div>
 					</dd>
 			<dt class="field">
@@ -2107,14 +2228,14 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database_Common.html#method__construct">Database_Common::__construct()</a> in Common.php</div>
+			<div class="index-item-details"><a href="PICKLES/Config.html#method__construct">Config::__construct()</a> in Config.php</div>
 							<div class="index-item-description">Constructor</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Config.html#method__construct">Config::__construct()</a> in Config.php</div>
+			<div class="index-item-details"><a href="PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a> in Common.php</div>
 							<div class="index-item-description">Constructor</div>
 					</dd>
 			<dt class="field">
@@ -2142,14 +2263,14 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 						<span class="method-title">__destruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Cache.html#method__destruct">Cache::__destruct()</a> in Cache.php</div>
+			<div class="index-item-details"><a href="PICKLES/API_Common.html#method__destruct">API_Common::__destruct()</a> in Common.php</div>
 							<div class="index-item-description">Destructor</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__destruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/API_Common.html#method__destruct">API_Common::__destruct()</a> in Common.php</div>
+			<div class="index-item-details"><a href="PICKLES/Session.html#method__destruct">Session::__destruct()</a> in Session.php</div>
 							<div class="index-item-description">Destructor</div>
 					</dd>
 			<dt class="field">
@@ -2163,7 +2284,7 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 						<span class="method-title">__destruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Session.html#method__destruct">Session::__destruct()</a> in Session.php</div>
+			<div class="index-item-details"><a href="PICKLES/Cache.html#method__destruct">Cache::__destruct()</a> in Cache.php</div>
 							<div class="index-item-description">Destructor</div>
 					</dd>
 			<dt class="field">
@@ -2234,6 +2355,7 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 	<a class="index-letter" href="elementindex.html#u">u</a>
 	<a class="index-letter" href="elementindex.html#w">w</a>
 	<a class="index-letter" href="elementindex.html#x">x</a>
+	<a class="index-letter" href="elementindex.html#y">y</a>
 	<a class="index-letter" href="elementindex.html#_">_</a>
 </div>	</body>
 </html>

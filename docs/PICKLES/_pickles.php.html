@@ -25,7 +25,7 @@
 <p class="short-description">Core PICKLES Include File</p>
 <p class="description"><p>This is the file that you include on the page you're instantiating the  controller from (typically index.php).  The path to the PICKLES code  base is established as well as the path that Smarty will use to store  the compiled pages.</p><p>PHP version 5</p><p>Licensed under The MIT License  Redistribution of these files must retain the above copyright notice.</p></p>
 	<ul class="tags">
-				<li><span class="field">author:</span> Josh Sherman &lt;<a href="mailto:josh@gravityblvd.com">josh@gravityblvd.com</a>&gt;</li>
+				<li><span class="field">author:</span> Josh Sherman &lt;<a href="mailto:pickles@joshtronic.com">pickles@joshtronic.com</a>&gt;</li>
 				<li><span class="field">copyright:</span> Copyright 2007-2012, Josh Sherman</li>
 				<li><span class="field">link:</span> <a href="https://github.com/joshtronic/pickles">https://github.com/joshtronic/pickles</a></li>
 				<li><span class="field">usage:</span> <div class="src-code"><ol><li><div class="src-line"><span class="src-inc">require_once&nbsp;</span><span class="src-str">'pickles.php'</span><span class="src-sym">;</span></div></li>
@@ -48,17 +48,52 @@
 					</div>
 		<div class="info-box-body">	
 			
-Strict Standards: Only variables should be passed by reference in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 712
+Strict standards: Only variables should be passed by reference in /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 712
 
-Warning: strftime(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'America/New_York' for 'EDT/-4.0/DST' instead in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 370
+Call Stack:
+    0.0001     642352   1. {main}() /usr/local/Cellar/php53/5.3.16/bin/phpdoc:0
+    0.0003     658000   2. require('/usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc') /usr/local/Cellar/php53/5.3.16/bin/phpdoc:40
+    0.0820   15420440   3. phpDocumentor_setup->createDocs() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc:65
+    6.3422   97029544   4. phpDocumentor_IntermediateParser->Output() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Setup.inc.php:763
+    6.4874   97095512   5. phpDocumentor_IntermediateParser->Convert() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1867
+    6.4874   97095832   6. Converter->walk() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1654
+    7.7381  100370176   7. HTMLframesConverter->endPage() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converter.inc:1939
+    7.7382  100373904   8. Smarty->fetch() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converters/HTML/frames/HTMLframesConverter.inc:366
+    7.7390  100596776   9. include('/Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php') /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1298
+    7.7395  100602216  10. Smarty->_smarty_include() /Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php:155
+    7.7395  100606872  11. Smarty->_compile_resource() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1935
+    7.7396  100610080  12. Smarty->_compile_source() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1458
+    7.7397  100642792  13. Smarty_Compiler->_compile_file() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1523
+    7.7402  100662632  14. Smarty_Compiler->_compile_tag() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:316
+    7.7403  100664440  15. Smarty_Compiler->_compile_custom_tag() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:537
+
+
+Warning: strftime(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'America/New_York' for 'EDT/-4.0/DST' instead in /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 370
+
+Call Stack:
+    0.0001     642352   1. {main}() /usr/local/Cellar/php53/5.3.16/bin/phpdoc:0
+    0.0003     658000   2. require('/usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc') /usr/local/Cellar/php53/5.3.16/bin/phpdoc:40
+    0.0820   15420440   3. phpDocumentor_setup->createDocs() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc:65
+    6.3422   97029544   4. phpDocumentor_IntermediateParser->Output() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Setup.inc.php:763
+    6.4874   97095512   5. phpDocumentor_IntermediateParser->Convert() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1867
+    6.4874   97095832   6. Converter->walk() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1654
+    7.7381  100370176   7. HTMLframesConverter->endPage() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converter.inc:1939
+    7.7382  100373904   8. Smarty->fetch() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converters/HTML/frames/HTMLframesConverter.inc:366
+    7.7390  100596776   9. include('/Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php') /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1298
+    7.7395  100602216  10. Smarty->_smarty_include() /Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php:155
+    7.7395  100606872  11. Smarty->_compile_resource() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1935
+    7.7396  100610080  12. Smarty->_compile_source() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1458
+    7.7397  100642792  13. Smarty_Compiler->_compile_file() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1523
+    7.7416  100667688  14. strftime() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:370
+
 <a name="_$jar_file"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div>
 		<span class="include-title">
 			<span class="include-type">require</span>
 			(<span class="include-name">$jar_file</span>)
-			(line <span class="line-number">96</span>)
+			(line <span class="line-number">97</span>)
 		</span>
 	</div>
 
@@ -79,29 +114,50 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 					</div>
 		<div class="info-box-body">	
 			
-Strict Standards: Only variables should be passed by reference in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 712
+Strict standards: Only variables should be passed by reference in /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 712
 
-Warning: strftime(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'America/New_York' for 'EDT/-4.0/DST' instead in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 370
+Call Stack:
+    0.0001     642352   1. {main}() /usr/local/Cellar/php53/5.3.16/bin/phpdoc:0
+    0.0003     658000   2. require('/usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc') /usr/local/Cellar/php53/5.3.16/bin/phpdoc:40
+    0.0820   15420440   3. phpDocumentor_setup->createDocs() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc:65
+    6.3422   97029544   4. phpDocumentor_IntermediateParser->Output() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Setup.inc.php:763
+    6.4874   97095512   5. phpDocumentor_IntermediateParser->Convert() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1867
+    6.4874   97095832   6. Converter->walk() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1654
+    7.7381  100370176   7. HTMLframesConverter->endPage() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converter.inc:1939
+    7.7382  100373904   8. Smarty->fetch() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converters/HTML/frames/HTMLframesConverter.inc:366
+    7.7390  100596776   9. include('/Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php') /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1298
+    7.7429  100609056  10. Smarty->_smarty_include() /Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php:189
+    7.7429  100613616  11. Smarty->_compile_resource() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1935
+    7.7430  100617384  12. Smarty->_compile_source() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1458
+    7.7431  100650200  13. Smarty_Compiler->_compile_file() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1523
+    7.7435  100674848  14. Smarty_Compiler->_compile_tag() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:316
+    7.7436  100676856  15. Smarty_Compiler->_compile_custom_tag() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:537
+
+
+Warning: strftime(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'America/New_York' for 'EDT/-4.0/DST' instead in /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 370
+
+Call Stack:
+    0.0001     642352   1. {main}() /usr/local/Cellar/php53/5.3.16/bin/phpdoc:0
+    0.0003     658000   2. require('/usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc') /usr/local/Cellar/php53/5.3.16/bin/phpdoc:40
+    0.0820   15420440   3. phpDocumentor_setup->createDocs() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc:65
+    6.3422   97029544   4. phpDocumentor_IntermediateParser->Output() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Setup.inc.php:763
+    6.4874   97095512   5. phpDocumentor_IntermediateParser->Convert() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1867
+    6.4874   97095832   6. Converter->walk() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1654
+    7.7381  100370176   7. HTMLframesConverter->endPage() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converter.inc:1939
+    7.7382  100373904   8. Smarty->fetch() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converters/HTML/frames/HTMLframesConverter.inc:366
+    7.7390  100596776   9. include('/Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php') /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1298
+    7.7429  100609056  10. Smarty->_smarty_include() /Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php:189
+    7.7429  100613616  11. Smarty->_compile_resource() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1935
+    7.7430  100617384  12. Smarty->_compile_source() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1458
+    7.7431  100650200  13. Smarty_Compiler->_compile_file() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1523
+    7.7455  100685544  14. strftime() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:370
+
 <a name="defineDISPLAY_JSON"><!-- --></a>
-<div class="evenrow">
-	
-	<div>
-		<span class="const-title">
-			<span class="const-name">DISPLAY_JSON</span> = 'JSON'
-			(line <span class="line-number">48</span>)
-		</span>
-	</div>
-	
-	<!-- ========== Info from phpDoc block ========= -->
-	
-		
-</div>
-<a name="defineDISPLAY_PHP"><!-- --></a>
 <div class="oddrow">
 	
 	<div>
 		<span class="const-title">
-			<span class="const-name">DISPLAY_PHP</span> = 'PHP'
+			<span class="const-name">DISPLAY_JSON</span> = 'JSON'
 			(line <span class="line-number">49</span>)
 		</span>
 	</div>
@@ -110,12 +166,12 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 	
 		
 </div>
-<a name="defineDISPLAY_RSS"><!-- --></a>
+<a name="defineDISPLAY_PHP"><!-- --></a>
 <div class="evenrow">
 	
 	<div>
 		<span class="const-title">
-			<span class="const-name">DISPLAY_RSS</span> = 'RSS'
+			<span class="const-name">DISPLAY_PHP</span> = 'PHP'
 			(line <span class="line-number">50</span>)
 		</span>
 	</div>
@@ -124,12 +180,12 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 	
 		
 </div>
-<a name="defineDISPLAY_XML"><!-- --></a>
+<a name="defineDISPLAY_RSS"><!-- --></a>
 <div class="oddrow">
 	
 	<div>
 		<span class="const-title">
-			<span class="const-name">DISPLAY_XML</span> = 'XML'
+			<span class="const-name">DISPLAY_RSS</span> = 'RSS'
 			(line <span class="line-number">51</span>)
 		</span>
 	</div>
@@ -138,13 +194,27 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 	
 		
 </div>
-<a name="defineIS_CLI"><!-- --></a>
+<a name="defineDISPLAY_XML"><!-- --></a>
 <div class="evenrow">
 	
 	<div>
 		<span class="const-title">
+			<span class="const-name">DISPLAY_XML</span> = 'XML'
+			(line <span class="line-number">52</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="defineIS_CLI"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
 			<span class="const-name">IS_CLI</span> = !isset($_SERVER['REQUEST_METHOD'])
-			(line <span class="line-number">57</span>)
+			(line <span class="line-number">58</span>)
 		</span>
 	</div>
 	
@@ -153,12 +223,12 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		
 </div>
 <a name="defineJSON_AVAILABLE"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div>
 		<span class="const-title">
 			<span class="const-name">JSON_AVAILABLE</span> = function_exists('json_encode')
-			(line <span class="line-number">54</span>)
+			(line <span class="line-number">55</span>)
 		</span>
 	</div>
 	
@@ -167,12 +237,12 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		
 </div>
 <a name="defineLOG_PATH"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div>
 		<span class="const-title">
 			<span class="const-name">LOG_PATH</span> = PRIVATE_PATH.'logs/'
-			(line <span class="line-number">45</span>)
+			(line <span class="line-number">46</span>)
 		</span>
 	</div>
 	
@@ -181,12 +251,12 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		
 </div>
 <a name="definePICKLES_CLASS_PATH"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div>
 		<span class="const-title">
 			<span class="const-name">PICKLES_CLASS_PATH</span> = PICKLES_PATH.'classes/'
-			(line <span class="line-number">34</span>)
+			(line <span class="line-number">35</span>)
 		</span>
 	</div>
 	
@@ -195,12 +265,12 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		
 </div>
 <a name="definePICKLES_PATH"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div>
 		<span class="const-title">
 			<span class="const-name">PICKLES_PATH</span> = dirname(__FILE__).'/'
-			(line <span class="line-number">33</span>)
+			(line <span class="line-number">34</span>)
 		</span>
 	</div>
 	
@@ -209,12 +279,12 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		
 </div>
 <a name="definePICKLES_START_TIME"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div>
 		<span class="const-title">
 			<span class="const-name">PICKLES_START_TIME</span> = microtime(true)
-			(line <span class="line-number">30</span>)
+			(line <span class="line-number">31</span>)
 		</span>
 	</div>
 	
@@ -223,12 +293,12 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		
 </div>
 <a name="definePRIVATE_PATH"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div>
 		<span class="const-title">
 			<span class="const-name">PRIVATE_PATH</span> = SITE_PATH.'private/'
-			(line <span class="line-number">44</span>)
+			(line <span class="line-number">45</span>)
 		</span>
 	</div>
 	
@@ -237,25 +307,11 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		
 </div>
 <a name="defineSITE_CLASS_PATH"><!-- --></a>
-<div class="oddrow">
-	
-	<div>
-		<span class="const-title">
-			<span class="const-name">SITE_CLASS_PATH</span> = SITE_PATH.'classes/'
-			(line <span class="line-number">39</span>)
-		</span>
-	</div>
-	
-	<!-- ========== Info from phpDoc block ========= -->
-	
-		
-</div>
-<a name="defineSITE_MODEL_PATH"><!-- --></a>
 <div class="evenrow">
 	
 	<div>
 		<span class="const-title">
-			<span class="const-name">SITE_MODEL_PATH</span> = SITE_PATH.'models/'
+			<span class="const-name">SITE_CLASS_PATH</span> = SITE_PATH.'classes/'
 			(line <span class="line-number">40</span>)
 		</span>
 	</div>
@@ -264,12 +320,12 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 	
 		
 </div>
-<a name="defineSITE_MODULE_PATH"><!-- --></a>
+<a name="defineSITE_MODEL_PATH"><!-- --></a>
 <div class="oddrow">
 	
 	<div>
 		<span class="const-title">
-			<span class="const-name">SITE_MODULE_PATH</span> = SITE_PATH.'modules/'
+			<span class="const-name">SITE_MODEL_PATH</span> = SITE_PATH.'models/'
 			(line <span class="line-number">41</span>)
 		</span>
 	</div>
@@ -278,13 +334,27 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 	
 		
 </div>
-<a name="defineSITE_PATH"><!-- --></a>
+<a name="defineSITE_MODULE_PATH"><!-- --></a>
 <div class="evenrow">
 	
 	<div>
 		<span class="const-title">
+			<span class="const-name">SITE_MODULE_PATH</span> = SITE_PATH.'modules/'
+			(line <span class="line-number">42</span>)
+		</span>
+	</div>
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	
+		
+</div>
+<a name="defineSITE_PATH"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<span class="const-title">
 			<span class="const-name">SITE_PATH</span> = getcwd().'/../'
-			(line <span class="line-number">37</span>)
+			(line <span class="line-number">38</span>)
 		</span>
 	</div>
 	
@@ -293,12 +363,12 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		
 </div>
 <a name="defineSITE_TEMPLATE_PATH"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div>
 		<span class="const-title">
 			<span class="const-name">SITE_TEMPLATE_PATH</span> = SITE_PATH.'templates/'
-			(line <span class="line-number">42</span>)
+			(line <span class="line-number">43</span>)
 		</span>
 	</div>
 	
@@ -321,14 +391,49 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 		</div>
 		<div class="info-box-body">	
 			
-Strict Standards: Only variables should be passed by reference in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 712
+Strict standards: Only variables should be passed by reference in /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 712
 
-Warning: strftime(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'America/New_York' for 'EDT/-4.0/DST' instead in /usr/local/Cellar/php53/5.3.13/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 370
+Call Stack:
+    0.0001     642352   1. {main}() /usr/local/Cellar/php53/5.3.16/bin/phpdoc:0
+    0.0003     658000   2. require('/usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc') /usr/local/Cellar/php53/5.3.16/bin/phpdoc:40
+    0.0820   15420440   3. phpDocumentor_setup->createDocs() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc:65
+    6.3422   97029544   4. phpDocumentor_IntermediateParser->Output() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Setup.inc.php:763
+    6.4874   97095512   5. phpDocumentor_IntermediateParser->Convert() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1867
+    6.4874   97095832   6. Converter->walk() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1654
+    7.7381  100370176   7. HTMLframesConverter->endPage() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converter.inc:1939
+    7.7382  100373904   8. Smarty->fetch() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converters/HTML/frames/HTMLframesConverter.inc:366
+    7.7390  100596776   9. include('/Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php') /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1298
+    7.7514  100615376  10. Smarty->_smarty_include() /Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php:257
+    7.7515  100620464  11. Smarty->_compile_resource() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1935
+    7.7516  100626936  12. Smarty->_compile_source() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1458
+    7.7517  100661616  13. Smarty_Compiler->_compile_file() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1523
+    7.7527  100713800  14. Smarty_Compiler->_compile_tag() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:316
+    7.7528  100715544  15. Smarty_Compiler->_compile_custom_tag() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:537
+
+
+Warning: strftime(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected 'America/New_York' for 'EDT/-4.0/DST' instead in /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php on line 370
+
+Call Stack:
+    0.0001     642352   1. {main}() /usr/local/Cellar/php53/5.3.16/bin/phpdoc:0
+    0.0003     658000   2. require('/usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc') /usr/local/Cellar/php53/5.3.16/bin/phpdoc:40
+    0.0820   15420440   3. phpDocumentor_setup->createDocs() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc:65
+    6.3422   97029544   4. phpDocumentor_IntermediateParser->Output() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Setup.inc.php:763
+    6.4874   97095512   5. phpDocumentor_IntermediateParser->Convert() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1867
+    6.4874   97095832   6. Converter->walk() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1654
+    7.7381  100370176   7. HTMLframesConverter->endPage() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converter.inc:1939
+    7.7382  100373904   8. Smarty->fetch() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converters/HTML/frames/HTMLframesConverter.inc:366
+    7.7390  100596776   9. include('/Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php') /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1298
+    7.7514  100615376  10. Smarty->_smarty_include() /Users/josh/Source/pickles/docs/PICKLES/26d3399f63abd43a7d72f8c21440dcb0/%%363^%%3636363891^page.tpl.php:257
+    7.7515  100620464  11. Smarty->_compile_resource() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1935
+    7.7516  100626936  12. Smarty->_compile_source() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1458
+    7.7517  100661616  13. Smarty_Compiler->_compile_file() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1523
+    7.7580  100734368  14. strftime() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:370
+
 <a name="functionreadFileContents" id="functionreadFileContents"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div>
-		<span class="method-title">readFileContents</span> (line <span class="line-number">62</span>)
+		<span class="method-title">readFileContents</span> (line <span class="line-number">63</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
@@ -350,10 +455,10 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 	
 </div>
 <a name="function__autoload" id="function__autoload"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div>
-		<span class="method-title">__autoload</span> (line <span class="line-number">153</span>)
+		<span class="method-title">__autoload</span> (line <span class="line-number">163</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
@@ -380,10 +485,10 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 	
 </div>
 <a name="function__handleError" id="function__handleError"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div>
-		<span class="method-title">__handleError</span> (line <span class="line-number">206</span>)
+		<span class="method-title">__handleError</span> (line <span class="line-number">216</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
@@ -422,10 +527,10 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 	
 </div>
 <a name="function__handleException" id="function__handleException"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div>
-		<span class="method-title">__handleException</span> (line <span class="line-number">227</span>)
+		<span class="method-title">__handleException</span> (line <span class="line-number">237</span>)
 	</div> 
 
 	<!-- ========== Info from phpDoc block ========= -->
@@ -452,7 +557,7 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 	</div>
 	
 	<p class="notes" id="credit">
-		Documentation generated on Wed, 03 Oct 2012 17:46:06 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Thu, 11 Oct 2012 18:39:31 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>
