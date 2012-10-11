@@ -23,8 +23,6 @@
  */
 class Date
 {
-	// {{{ Age
-
 	/**
 	 * Age
 	 *
@@ -36,24 +34,8 @@ class Date
 	 */
 	public static function age($date)
 	{
-		if (!preg_match('/\d{4}-\d{2}-\d{2}/', $date))
-		{
-			$date = date('Y-m-d', strtotime($date));
-		}
-
-		list($year, $month, $day) = explode('-', $date, 3);
-
-		$age = date('Y') - $year;
-
-		if (date('md') < $month . $day)
-		{
-			$age--;
-		}
-
-		return $age;
+		return Time::age($date);
 	}
-
-	// }}}
 }
 
 ?>
