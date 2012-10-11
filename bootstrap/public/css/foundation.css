@@ -1,0 +1,42 @@
+.clear       { clear: both }
+.clear-left  { clear: left }
+.clear-right { clear: right }
+
+.pointer     { cursor: pointer }
+
+.hidden      { display: none }
+
+.float-left  { float: left }
+.float-right { float: right }
+
+.italic      { font-style: italic }
+.oblique     { font-style: oblique }
+
+.small-caps  { font-variant: small-caps }
+
+.bold        { font-weight: bold }
+
+.absolute    { position: absolute }
+.fixed       { position: fixed }
+.relative    { position: relative }
+
+.center      { text-align: center }
+.left        { text-align: left }
+.right       { text-align: right }
+
+.underline   { text-decoration: underline }
+.overline    { text-decoration: overline }
+.strike      { text-decoration: line-through }
+.blink       { text-decoration: blink }
+
+.upper       { text-transform: uppercase }
+.lower       { text-transform: lowercase }
+.capitalize  { text-transform: capitalize }
+
+.top         { vertical-align: top }
+.middle      { vertical-align: middle }
+.bottom      { vertical-align: bottom }
+
+.nowrap      { white-space: nowrap }
+
+.normal      { text-transform: none; font-style: normal; font-weight: normal; text-decoration: none }
