@@ -6978,6 +6978,20 @@ class Time
 
 		return $age;
 	}
+
+	/**
+	 * Timestamp
+	 *
+	 * Current Universal Time in the specified format.
+	 *
+	 * @static
+	 * @param  string $format format of the timestamp
+	 * @return string $timestamp formatted timestamp
+	 */
+	public static function timestamp($format = 'Y-m-d H:i:s')
+	{
+		return gmdate($format);
+	}
 }
 
 ?>
