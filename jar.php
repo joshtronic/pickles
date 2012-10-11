@@ -1767,13 +1767,24 @@ class Database_PDO_Common extends Database_Common
 		// Checks if the query is blank
 		if ($sql != '')
 		{
+			$files     = array();
+			$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+			krsort($backtrace);
+
+			foreach ($backtrace as $file)
+			{
+				$files[] = $file['class'] . ':' . $file['line'];
+			}
+
+			$sql .= "\n" . '/* [' . implode('|', $files) . '] */';
+
 			try
 			{
 				// Establishes if we're working on an EXPLAIN
 				if (Profiler::enabled('explains') == true)
 				{
 					$explaining = preg_match('/^EXPLAIN /i', $sql);
-					$selecting  = preg_match('/^SELECT /i', $sql);
+					$selecting  = preg_match('/^SELECT /i',  $sql);
 				}
 				else
 				{
@@ -1790,7 +1801,7 @@ class Database_PDO_Common extends Database_Common
 						$explain = $this->fetch('EXPLAIN ' . $sql);
 					}
 
-					$start_time = microtime(true);
+					$start_time    = microtime(true);
 					$this->results = $this->connection->query($sql);
 				}
 				// Executes a prepared statement
@@ -1802,7 +1813,7 @@ class Database_PDO_Common extends Database_Common
 						$explain = $this->fetch('EXPLAIN ' . $sql, $input_parameters);
 					}
 
-					$start_time = microtime(true);
+					$start_time    = microtime(true);
 					$this->results = $this->connection->prepare($sql);
 					$this->results->execute($input_parameters);
 				}
