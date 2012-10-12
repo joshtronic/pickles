@@ -1061,7 +1061,20 @@ class Model extends Object
 				// If it's an UPDATE tack on the ID
 				if ($update === true)
 				{
+					if ($this->columns['updated_at'] != false && !isset($input_parameters[':' . $this->columns['updated_at']]))
+					{
+						if ($input_parameters != null)
+						{
+							$sql .= ', ';
+						}
+
+						$sql .= $this->columns['updated_at'] . ' = :' . $this->columns['updated_at'];
+
+						$input_parameters[':' . $this->columns['updated_at']] = Time::timestamp();
+					}
+
 					$sql .= ' WHERE ' . $this->columns['id'] . ' = :' . $this->columns['id'] . ($this->mysql ? ' LIMIT 1' : '') . ';';
+
 					$input_parameters[':' . $this->columns['id']] = $this->record[$this->columns['id']];
 
 					if ($this->caching)
@@ -1071,6 +1084,13 @@ class Model extends Object
 				}
 				else
 				{
+					if ($this->columns['created_at'] != false && !isset($input_parameters[':' . $this->columns['created_at']]))
+					{
+						$insert_fields[] = $this->columns['created_at'];
+
+						$input_parameters[':' . $this->columns['created_at']] = Time::timestamp();
+					}
+
 					$sql .= '(' . implode(', ', $insert_fields) . ') VALUES (' . implode(', ', array_keys($input_parameters)) . ')';
 
 					// PDO::lastInsertId() doesn't work so we return the ID with the query
