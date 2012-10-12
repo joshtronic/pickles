@@ -49,33 +49,26 @@ class Controller extends Object
 	{
 		parent::__construct();
 
-		if (isset($_REQUEST['request']))
-		{
-			// Catches requests that aren't lowercase
-			$lowercase_reqest = strtolower($_REQUEST['request']);
-			if ($_REQUEST['request'] != $lowercase_reqest)
-			{
-				header('Location: ' . substr_replace($_SERVER['REQUEST_URI'], $lowercase_reqest, 1, strlen($lowercase_reqest)));
-				exit;
-			}
-
-			// Catches requests to the __shared directory
-			if (preg_match('/^__shared/', $_REQUEST['request']))
-			{
-				header('Location: /');
-				exit;
-			}
-		}
-
 		// Generate a generic "site down" message if the site is set to be disabled
 		if (isset($this->config->pickles['disabled']) && $this->config->pickles['disabled'] == true)
 		{
 			Error::fatal($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
 		}
 
+		$_REQUEST['request'] = trim($_REQUEST['request']);
+
 		// Checks the passed request for validity
-		if (isset($_REQUEST['request']) && trim($_REQUEST['request']) != '')
+		if ($_REQUEST['request'])
 		{
+			// Catches requests that aren't lowercase
+			$lowercase_request = strtolower($_REQUEST['request']);
+
+			if ($_REQUEST['request'] != $lowercase_request)
+			{
+				header('Location: ' . substr_replace($_SERVER['REQUEST_URI'], $lowercase_request, 1, strlen($lowercase_request)), true, 301);
+				exit;
+			}
+
 			$request = $_REQUEST['request'];
 		}
 		// Loads the default module information if we don't have a valid request
@@ -233,7 +226,7 @@ class Controller extends Object
 				else
 				{
 					// Sets variable for the destination
-					$_SESSION['__pickles']['login']['destination'] = isset($_REQUEST['request']) ? $_REQUEST['request'] : '/';
+					$_SESSION['__pickles']['login']['destination'] = $_REQUEST['request'] ? $_REQUEST['request'] : '/';
 
 					// Redirect to login page, potentially configured in the config, else /login
 					header('Location: /' . (isset($this->config->security['login']) ? $this->config->security['login'] : 'login'));
@@ -275,7 +268,7 @@ class Controller extends Object
 		// If there is no valid module or template, then redirect
 		if (!$module_exists && !$template_exists)
 		{
-			if (!isset($_REQUEST['request']))
+			if (!$_REQUEST['request'])
 			{
 				Error::fatal('Way to go, you\'ve successfully created an infinite redirect loop. Good thing I was here or you would have been served with a pretty ugly browser error.<br /><br />So here\'s the deal, no templates were able to be loaded. Make sure your parent and child templates actually exist and if you\'re using non-default values, make sure they\'re defined correctly in your config.');
 			}

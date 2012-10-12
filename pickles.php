@@ -148,6 +148,14 @@ if (isset($config->pickles['session']))
 }
 
 // }}}
+// {{{ Defaults some internals for ease of use
+
+if (!isset($_REQUEST['request']))
+{
+	$_REQUEST['request'] = isset($config->pickles['module']) ? $config->pickles['module'] : '';
+}
+
+// }}}
 // {{{ Auto[magical] Loader
 
 /**
