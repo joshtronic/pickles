@@ -293,6 +293,12 @@ class Model extends Object
 	 */
 	public function __construct($type_or_parameters = null, $parameters = null)
 	{
+		// Errors if a table is not set. You're welcome, Geoff.
+		if ($this->table == false)
+		{
+			throw new Exception('You must set the table variable');
+		}
+
 		// Runs the parent constructor so we have the config
 		parent::__construct();
 
