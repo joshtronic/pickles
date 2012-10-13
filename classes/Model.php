@@ -361,20 +361,48 @@ class Model extends Object
 					throw new Exception('You cannot pass in 2 query parameter arrays');
 				}
 
+				if ($this->columns['is_deleted'])
+				{
+					$type_or_parameters['conditions'][$this->columns['is_deleted']] = '0';
+				}
+
 				$this->loadParameters($type_or_parameters);
 			}
 			elseif (is_array($parameters))
 			{
+				if ($this->columns['is_deleted'])
+				{
+					$parameters['conditions'][$this->columns['is_deleted']] = '0';
+				}
+
 				$this->loadParameters($parameters);
 			}
 			elseif (ctype_digit((string)$type_or_parameters))
 			{
-				$this->loadParameters(array($this->columns['id'] => $type_or_parameters));
+				$parameters = array($this->columns['id'] => $type_or_parameters);
+
+				if ($this->columns['is_deleted'])
+				{
+					$parameters[$this->columns['is_deleted']] = '0';
+				}
+
+				$this->loadParameters($parameters);
 				$cache_key = 'PICKLES-' . $this->datasource . '-' . $this->table . '-' . $type_or_parameters;
 			}
 			elseif (ctype_digit((string)$parameters))
 			{
-				$this->loadParameters(array($this->columns['id'] => $parameters));
+				$parameters = array($this->columns['id'] => $parameters);
+
+				if ($this->columns['is_deleted'])
+				{
+					$parameters[$this->columns['is_deleted']] = '0';
+				}
+
+				$this->loadParameters($parameters);
+			}
+			elseif ($this->columns['is_deleted'])
+			{
+				$this->loadParameters(array($this->columns['is_deleted'] => '0'));
 			}
 
 			// Starts with a basic SELECT ... FROM
