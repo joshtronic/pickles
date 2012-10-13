@@ -45,8 +45,8 @@ $config = array(
 	),
 
 	'site' => array(
-		'name' => 'PICKLES Bootstrap',
-
+		'name'      => 'PICKLES Bootstrap',
+		'analytics' => 'UA-########-#',
 	),
 );
 
