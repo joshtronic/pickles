@@ -3959,7 +3959,12 @@ class Model extends Object
 	protected $columns = array(
 		'id'         => 'id',
 		'created_at' => 'created_at',
+		'created_id' => 'created_id',
 		'updated_at' => 'updated_at',
+		'updated_id' => 'updated_id',
+		'deleted_at' => 'deleted_at',
+		'deleted_id' => 'deleted_id',
+		'is_deleted' => 'is_deleted',
 	);
 
 	/**
@@ -4967,35 +4972,44 @@ class Model extends Object
 								$sql .= ', ';
 							}
 
-							$sql .= $column . ' = :' . $column;
+							$sql .= $column . ' = ?';
 						}
 						else
 						{
 							$insert_fields[] = $column;
 						}
 
-						$input_parameters[':' . $column] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
+						$input_parameters[] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
 					}
 				}
 
 				// If it's an UPDATE tack on the ID
 				if ($update === true)
 				{
-					if ($this->columns['updated_at'] != false && !isset($input_parameters[':' . $this->columns['updated_at']]))
+					if ($this->columns['updated_at'] != false)
 					{
 						if ($input_parameters != null)
 						{
 							$sql .= ', ';
 						}
 
-						$sql .= $this->columns['updated_at'] . ' = :' . $this->columns['updated_at'];
-
-						$input_parameters[':' . $this->columns['updated_at']] = Time::timestamp();
+						$sql                .= $this->columns['updated_at'] . ' = ?';
+						$input_parameters[]  = Time::timestamp();
 					}
 
-					$sql .= ' WHERE ' . $this->columns['id'] . ' = :' . $this->columns['id'] . ($this->mysql ? ' LIMIT 1' : '') . ';';
+					if ($this->columns['updated_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+					{
+						if ($input_parameters != null)
+						{
+							$sql .= ', ';
+						}
 
-					$input_parameters[':' . $this->columns['id']] = $this->record[$this->columns['id']];
+						$sql                .= $this->columns['updated_id'] . ' = ?';
+						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
+					}
+
+					$sql                .= ' WHERE ' . $this->columns['id'] . ' = ?' . ($this->mysql ? ' LIMIT 1' : '') . ';';
+					$input_parameters[]  = $this->record[$this->columns['id']];
 
 					if ($this->caching)
 					{
@@ -5004,14 +5018,19 @@ class Model extends Object
 				}
 				else
 				{
-					if ($this->columns['created_at'] != false && !isset($input_parameters[':' . $this->columns['created_at']]))
+					if ($this->columns['created_at'] != false)
 					{
-						$insert_fields[] = $this->columns['created_at'];
-
-						$input_parameters[':' . $this->columns['created_at']] = Time::timestamp();
+						$insert_fields[]    = $this->columns['created_at'];
+						$input_parameters[] = Time::timestamp();
 					}
 
-					$sql .= '(' . implode(', ', $insert_fields) . ') VALUES (' . implode(', ', array_keys($input_parameters)) . ')';
+					if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+					{
+						$insert_fields[]    = $this->columns['created_id'];
+						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
+					}
+
+					$sql .= '(' . implode(', ', $insert_fields) . ') VALUES (' . implode(', ', array_fill(0, count($input_parameters), '?')) . ')';
 
 					// PDO::lastInsertId() doesn't work so we return the ID with the query
 					if ($this->postgresql)
@@ -5048,10 +5067,42 @@ class Model extends Object
 	 */
 	public function delete()
 	{
-		$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $this->columns['id'] . ' = :' . $this->columns['id'] . ($this->mysql ? ' LIMIT 1' : '') . ';';
-		$input_parameters[':' . $this->columns['id']] = $this->record[$this->columns['id']];
+		if (isset($this->record[$this->columns['id']]))
+		{
+			// Logical deletion
+			if ($this->columns['is_deleted'])
+			{
+				$sql              = 'UPDATE ' . $this->table . ' SET ' . $this->columns['is_deleted'] . ' = ?';
+				$input_parameters = array('1');
 
-		return $this->db->execute($sql, $input_parameters);
+				if ($this->columns['deleted_at'])
+				{
+					$sql                .= ', ' . $this->columns['deleted_at'] . ' = ?';
+					$input_parameters[]  = Time::timestamp();
+				}
+
+				if ($this->columns['deleted_id'] && isset($_SESSION['__pickles']['security']['user_id']))
+				{
+					$sql                .= ', ' . $this->columns['deleted_id'] . ' = ?';
+					$input_parameters[]  = $_SESSION['__pickles']['security']['user_id'];
+				}
+
+				$sql .= ' WHERE ' . $this->columns['id'] . ' = ?';
+			}
+			// For reals deletion
+			else
+			{
+				$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $this->columns['id'] . ' = ?' . ($this->mysql ? ' LIMIT 1' : '') . ';';
+			}
+
+			$input_parameters[] = $this->record[$this->columns['id']];
+
+			return $this->db->execute($sql, $input_parameters);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	// }}}
