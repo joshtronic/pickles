@@ -5345,7 +5345,7 @@ class Module extends Object
 	 * display engine determines what the file extension should be.
 	 *
 	 * @access protected
-	 * @var    string, null by default
+	 * @var    string, 'index' by default
 	 */
 	protected $template = 'index';
 
@@ -5410,7 +5410,7 @@ class Module extends Object
 	 */
 	public function __get($name)
 	{
-		if ($this->$name == null)
+		if (!isset($this->$name))
 		{
 			if (isset($this->config->pickles[$name]))
 			{
