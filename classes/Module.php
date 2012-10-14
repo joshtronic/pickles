@@ -159,6 +159,19 @@ class Module extends Object
 	protected $template = 'index';
 
 	/**
+	 * Return
+	 *
+	 * Array that is returned to the template in the case of the module not
+	 * returning anything itself. This is somewhat of a one way trip as you
+	 * cannot get the variable unless you reference the return array explicitly
+	 * $this->return['variable']
+	 *
+	 * @access protected
+	 * @var    array
+	 */
+	protected $return = array();
+
+	/**
 	 * Constructor
 	 *
 	 * The constructor does nothing by default but can be passed a boolean
@@ -198,14 +211,16 @@ class Module extends Object
 	/**
 	 * Magic Setter Method
 	 *
-	 * Prohibits the direct modification of module variables.
+	 * Places the variables that are being modified in the return array that is
+	 * returned if nothing is returned by the module itself. This also prohibits
+	 * the direct modification of module variables which could cause issues.
 	 *
 	 * @param string $name name of the variable to be set
 	 * @param mixed $value value of the variable to be set
 	 */
 	public function __set($name, $value)
 	{
-		throw new Exception('Cannot set module variables directly');
+		$this->return[$name] = $value;
 	}
 
 	/**

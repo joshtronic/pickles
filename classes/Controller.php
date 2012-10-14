@@ -368,7 +368,17 @@ class Controller extends Object
 			 * module know to use the cache, either passing in a variable
 			 * or setting it on the object
 			 */
-			$display->setModuleReturn($valid_request && $valid_security_hash ? $module->__default() : array('status' => 'error', 'message' => $error_message));
+			if ($valid_request && $valid_security_hash)
+			{
+				$module_return = $module->__default();
+
+				if ($module_return === null)
+				{
+					$module_return = $module->return;
+				}
+			}
+
+			$display->setModuleReturn(isset($module_return) ? $module_return : array('status' => 'error', 'message' => $error_message));
 
 			unset($error_message);
 
