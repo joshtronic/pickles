@@ -194,9 +194,10 @@ class Security
 	 * @static
 	 * @param  integer $user_id ID of the user that's been logged in
 	 * @param  integer $level optional level for the user being logged in
+	 * @param  string $role textual representation of the user's level
 	 * @return boolean whether or not the login could be completed
 	 */
-	public static function login($user_id, $level = null)
+	public static function login($user_id, $level = null, $role = null)
 	{
 		if (self::checkSession())
 		{
@@ -205,7 +206,8 @@ class Security
 			$_SESSION['__pickles']['security'] = array(
 				'token'   => $token,
 				'user_id' => (int)$user_id,
-				'level'   => $level
+				'level'   => $level,
+				'role'    => $role,
 			);
 
 			setcookie('pickles_security_token', $token);

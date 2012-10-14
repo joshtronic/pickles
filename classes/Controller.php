@@ -289,8 +289,21 @@ class Controller extends Object
 		// Gets the profiler status
 		$profiler = $this->config->pickles['profiler'];
 
+		$default_method = '__default';
+		$role_method    = null;
+
+		if (isset($_SESSION['__pickles']['security']['role']) && !String::isEmpty($_SESSION['__pickles']['security']['role']))
+		{
+			$role_method = '__default_' . $_SESSION['__pickles']['security']['role'];
+
+			if (method_exists($module, $role_method))
+			{
+				$default_method = $role_method;
+			}
+		}
+
 		// Attempts to execute the default method
-		if (method_exists($module, '__default'))
+		if ($default_method == $role_method || method_exists($module, $default_method))
 		{
 			if (isset($requested_id))
 			{
@@ -300,7 +313,7 @@ class Controller extends Object
 			// Starts a timer before the module is executed
 			if ($profiler === true || stripos($profiler, 'timers') !== false)
 			{
-				Profiler::timer('module __default');
+				Profiler::timer('module ' . $default_method);
 			}
 
 			$valid_request       = false;
@@ -370,7 +383,7 @@ class Controller extends Object
 			 */
 			if ($valid_request && $valid_security_hash)
 			{
-				$module_return = $module->__default();
+				$module_return = $module->$default_method();
 
 				if ($module_return === null)
 				{
@@ -385,7 +398,7 @@ class Controller extends Object
 			// Stops the module timer
 			if ($profiler === true || stripos($profiler, 'timers') !== false)
 			{
-				Profiler::timer('module __default');
+				Profiler::timer('module ' . $default_method);
 			}
 
 			// Sets meta data from the module
