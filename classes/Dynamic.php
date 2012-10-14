@@ -99,14 +99,18 @@ class Dynamic extends Object
 	/**
 	 * Generate Stylesheet Reference
 	 *
-	 * Attempts to minify the stylesheet and then  returns the reference URI
-	 * for the file, minified or not.
+	 * Attempts to minify the stylesheet and then returns the reference URI for
+	 * the file, minified or not. Supports LESS, pass it a .less file instead
+	 * and it will be compiled before minification.
 	 *
 	 * @param  string $reference URI reference of the Stylesheet
 	 * @return string URI reference reference with dynamic content
+	 * @url    http://lesscss.org
 	 */
 	public function css($original_reference)
 	{
+		$less = false;
+
 		// Injects .min into the filename
 		$parts = explode('.', $original_reference);
 
@@ -117,6 +121,13 @@ class Dynamic extends Object
 		else
 		{
 			end($parts);
+
+			if (current($parts) == 'less')
+			{
+				$less               = true;
+				$parts[key($parts)] = 'css';
+			}
+
 			$parts[key($parts)] = 'min.' . current($parts);
 			$minified_reference = implode('.', $parts);
 		}
@@ -130,11 +141,23 @@ class Dynamic extends Object
 		{
 			$reference = $original_reference;
 
-			if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)) && $this->config->pickles['minify'] === true)
+			if (is_writable($path)
+				&& (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename))
+				&& $this->config->pickles['minify'] === true)
 			{
+				// Compiles LESS to CSS before minifying
+				if ($less)
+				{
+					$compiled_filename = str_replace('.min', '', $minified_filename);
+
+					exec('export PATH=$PATH:/usr/local/bin; ' . PICKLES_PATH . 'vendors/cloudhead/less.js/bin/lessc ' . $original_filename . ' > ' . $compiled_filename);
+
+					$original_filename = $compiled_filename;
+				}
+
 				// Minifies CSS with a few basic character replacements.
 				$stylesheet = file_get_contents($original_filename);
-				$stylesheet = str_replace(array("\t", "\n", ', ', ' {', ': ', ';}'), array('', '', ',', '{', ':', '}'), $stylesheet);
+				$stylesheet = str_replace(array("\t", "\n", ', ', ' {', ': ', ';}', ' '), array('', '', ',', '{', ':', '}', ''), $stylesheet);
 				$stylesheet = preg_replace('/\/\*.+?\*\//', '', $stylesheet);
 				file_put_contents($minified_filename, $stylesheet);
 
@@ -204,7 +227,10 @@ class Dynamic extends Object
 				{
 					$reference = $original_reference;
 
-					if (is_writable($path) && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename)) && extension_loaded('curl') && $this->config->pickles['minify'] === true)
+					if (is_writable($path)
+						&& (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename))
+						&& extension_loaded('curl')
+						&& $this->config->pickles['minify'] === true)
 					{
 						// Sets up the options list
 						$options = array(
