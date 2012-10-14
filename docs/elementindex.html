@@ -3,17 +3,17 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 
 Call Stack:
     0.0001     642352   1. {main}() /usr/local/Cellar/php53/5.3.16/bin/phpdoc:0
-    0.0003     658000   2. require('/usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc') /usr/local/Cellar/php53/5.3.16/bin/phpdoc:40
-    0.0820   15420440   3. phpDocumentor_setup->createDocs() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc:65
-    6.3422   97029544   4. phpDocumentor_IntermediateParser->Output() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Setup.inc.php:763
-    6.4874   97095512   5. phpDocumentor_IntermediateParser->Convert() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1867
-    6.4874   97095832   6. Converter->walk() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1654
-    6.6048   99423080   7. HTMLframesConverter->formatIndex() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converter.inc:1848
-    6.6368  100311776   8. Smarty->fetch() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converters/HTML/frames/HTMLframesConverter.inc:637
-    6.6369  100353608   9. Smarty->_compile_resource() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1296
-    6.6370  100356184  10. Smarty->_compile_source() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1458
-    6.6371  100388256  11. Smarty_Compiler->_compile_file() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1523
-    6.6381  100404960  12. strftime() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:370
+    0.0504     658000   2. require('/usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc') /usr/local/Cellar/php53/5.3.16/bin/phpdoc:40
+    0.2081   15420440   3. phpDocumentor_setup->createDocs() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc:65
+    6.0026  101044048   4. phpDocumentor_IntermediateParser->Output() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Setup.inc.php:763
+    6.1709  101132944   5. phpDocumentor_IntermediateParser->Convert() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1867
+    6.1709  101133256   6. Converter->walk() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1654
+    6.3325  103488896   7. HTMLframesConverter->formatIndex() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converter.inc:1848
+    6.3614  104392360   8. Smarty->fetch() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converters/HTML/frames/HTMLframesConverter.inc:637
+    6.3615  104434272   9. Smarty->_compile_resource() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1296
+    6.3619  104436984  10. Smarty->_compile_source() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1458
+    6.3620  104469176  11. Smarty_Compiler->_compile_file() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1523
+    6.3630  104486256  12. strftime() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:370
 
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -131,6 +131,19 @@ Call Stack:
 			<div class="index-item-details"><a href="PICKLES/Security.html#methodbetweenLevel">Security::betweenLevel()</a> in Security.php</div>
 							<div class="index-item-description">Between Level</div>
 					</dd>
+			<dt class="field">
+						Browser
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Browser.html">Browser</a> in Browser.php</div>
+							<div class="index-item-description">Browser Utility Class</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">Browser.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/_classes---Browser.php.html">Browser.php</a> in Browser.php</div>
+					</dd>
 		</dl>
 	<a name="c"></a>
 	<div class="index-letter-section">
@@ -139,13 +152,6 @@ Call Stack:
 		<div style="clear: both"></div>
 	</div>
 	<dl>
-			<dt class="field">
-						<span class="var-title">$cache</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Module.html#var$cache">Module::$cache</a> in Module.php</div>
-							<div class="index-item-description">Cache Object</div>
-					</dd>
 			<dt class="field">
 						<span class="var-title">$cache</span>
 					</dt>
@@ -161,11 +167,25 @@ Call Stack:
 							<div class="index-item-description">Whether or not to use caching</div>
 					</dd>
 			<dt class="field">
+						<span class="var-title">$cache</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Module.html#var$cache">Module::$cache</a> in Module.php</div>
+							<div class="index-item-description">Cache Object</div>
+					</dd>
+			<dt class="field">
 						<span class="var-title">$child_template</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Display_Common.html#var$child_template">Display_Common::$child_template</a> in Common.php</div>
 							<div class="index-item-description">Child (sub) Template</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$columns</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Model.html#var$columns">Model::$columns</a> in Model.php</div>
+							<div class="index-item-description">Columns</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$conditions</span>
@@ -275,6 +295,13 @@ Call Stack:
 						<span class="method-title">close</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Session.html#methodclose">Session::close()</a> in Session.php</div>
+							<div class="index-item-description">Closes the Session</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">close</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Database_Common.html#methodclose">Database_Common::close()</a> in Common.php</div>
 							<div class="index-item-description">Closes database connection</div>
 					</dd>
@@ -284,13 +311,6 @@ Call Stack:
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Database_PDO_Common.html#methodclose">Database_PDO_Common::close()</a> in Common.php</div>
 							<div class="index-item-description">Closes database connection</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">close</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Session.html#methodclose">Session::close()</a> in Session.php</div>
-							<div class="index-item-description">Closes the Session</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">commit</span>
@@ -947,13 +967,6 @@ Call Stack:
 	</div>
 	<dl>
 			<dt class="field">
-						<span class="var-title">$id</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Model.html#var$id">Model::$id</a> in Model.php</div>
-							<div class="index-item-description">ID Column</div>
-					</dd>
-			<dt class="field">
 						<span class="var-title">$ignore</span>
 					</dt>
 		<dd class="index-item-body">
@@ -1008,6 +1021,13 @@ Call Stack:
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Security.html#methodisLevel">Security::isLevel()</a> in Security.php</div>
 							<div class="index-item-description">Is Level</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">isMobile</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Browser.html#methodisMobile">Browser::isMobile()</a> in Browser.php</div>
+							<div class="index-item-description">Is Mobile</div>
 					</dd>
 			<dt class="field">
 						<span class="const-title">IS_CLI</span>
@@ -1353,15 +1373,15 @@ Call Stack:
 						<span class="var-title">$port</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database_Common.html#var$port">Database_Common::$port</a> in Common.php</div>
-							<div class="index-item-description">Port number for the server</div>
+			<div class="index-item-details"><a href="PICKLES/Database_PDO_PostgreSQL.html#var$port">Database_PDO_PostgreSQL::$port</a> in PostgreSQL.php</div>
+							<div class="index-item-description">Default port</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$port</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Database_PDO_PostgreSQL.html#var$port">Database_PDO_PostgreSQL::$port</a> in PostgreSQL.php</div>
-							<div class="index-item-description">Default port</div>
+			<div class="index-item-details"><a href="PICKLES/Database_Common.html#var$port">Database_Common::$port</a> in Common.php</div>
+							<div class="index-item-description">Port number for the server</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$priority</span>
@@ -1586,6 +1606,13 @@ Call Stack:
 			<div class="index-item-details"><a href="PICKLES/_pickles.php.html#functionreadFileContents">readFileContents()</a> in pickles.php</div>
 					</dd>
 			<dt class="field">
+						<span class="method-title">redirect</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Browser.html#methodredirect">Browser::redirect()</a> in Browser.php</div>
+							<div class="index-item-description">Redirect</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">reference</span>
 					</dt>
 		<dd class="index-item-body">
@@ -1610,20 +1637,6 @@ Call Stack:
 						<span class="method-title">render</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Display_PHP.html#methodrender">Display_PHP::render()</a> in PHP.php</div>
-							<div class="index-item-description">Renders the PHP templated pages</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">render</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Display_JSON.html#methodrender">Display_JSON::render()</a> in JSON.php</div>
-							<div class="index-item-description">Renders the data in JSON format</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">render</span>
-					</dt>
-		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Display_XML.html#methodrender">Display_XML::render()</a> in XML.php</div>
 							<div class="index-item-description">Renders the data in XML format</div>
 					</dd>
@@ -1631,8 +1644,22 @@ Call Stack:
 						<span class="method-title">render</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Display_PHP.html#methodrender">Display_PHP::render()</a> in PHP.php</div>
+							<div class="index-item-description">Renders the PHP templated pages</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">render</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Display_Common.html#methodrender">Display_Common::render()</a> in Common.php</div>
 							<div class="index-item-description">Rendering Method</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">render</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Display_JSON.html#methodrender">Display_JSON::render()</a> in JSON.php</div>
+							<div class="index-item-description">Renders the data in JSON format</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">report</span>
@@ -1912,6 +1939,13 @@ Call Stack:
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="PICKLES/Form.html#methodstateSelect">Form::stateSelect()</a> in Form.php</div>
 							<div class="index-item-description">State Select</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">status</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="PICKLES/Browser.html#methodstatus">Browser::status()</a> in Browser.php</div>
+							<div class="index-item-description">Status</div>
 					</dd>
 			<dt class="field">
 						String
@@ -2228,14 +2262,14 @@ Call Stack:
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Config.html#method__construct">Config::__construct()</a> in Config.php</div>
+			<div class="index-item-details"><a href="PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a> in Common.php</div>
 							<div class="index-item-description">Constructor</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Display_Common.html#method__construct">Display_Common::__construct()</a> in Common.php</div>
+			<div class="index-item-details"><a href="PICKLES/Config.html#method__construct">Config::__construct()</a> in Config.php</div>
 							<div class="index-item-description">Constructor</div>
 					</dd>
 			<dt class="field">
@@ -2263,14 +2297,14 @@ Call Stack:
 						<span class="method-title">__destruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/API_Common.html#method__destruct">API_Common::__destruct()</a> in Common.php</div>
+			<div class="index-item-details"><a href="PICKLES/Cache.html#method__destruct">Cache::__destruct()</a> in Cache.php</div>
 							<div class="index-item-description">Destructor</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__destruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Session.html#method__destruct">Session::__destruct()</a> in Session.php</div>
+			<div class="index-item-details"><a href="PICKLES/API_Common.html#method__destruct">API_Common::__destruct()</a> in Common.php</div>
 							<div class="index-item-description">Destructor</div>
 					</dd>
 			<dt class="field">
@@ -2284,7 +2318,7 @@ Call Stack:
 						<span class="method-title">__destruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="PICKLES/Cache.html#method__destruct">Cache::__destruct()</a> in Cache.php</div>
+			<div class="index-item-details"><a href="PICKLES/Session.html#method__destruct">Session::__destruct()</a> in Session.php</div>
 							<div class="index-item-description">Destructor</div>
 					</dd>
 			<dt class="field">

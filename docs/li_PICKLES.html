@@ -3,17 +3,17 @@ Warning: strftime(): It is not safe to rely on the system's timezone settings. Y
 
 Call Stack:
     0.0001     642352   1. {main}() /usr/local/Cellar/php53/5.3.16/bin/phpdoc:0
-    0.0003     658000   2. require('/usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc') /usr/local/Cellar/php53/5.3.16/bin/phpdoc:40
-    0.0820   15420440   3. phpDocumentor_setup->createDocs() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc:65
-    6.3422   97029544   4. phpDocumentor_IntermediateParser->Output() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Setup.inc.php:763
-    6.4874   97095512   5. phpDocumentor_IntermediateParser->Convert() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1867
-    6.4874   97095832   6. Converter->walk() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1654
-    6.6601   99447576   7. HTMLframesConverter->formatLeftIndex() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converter.inc:1853
-    6.6620   99570672   8. Smarty->fetch() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converters/HTML/frames/HTMLframesConverter.inc:756
-    6.6621   99612520   9. Smarty->_compile_resource() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1296
-    6.6622   99623920  10. Smarty->_compile_source() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1458
-    6.6623   99660296  11. Smarty_Compiler->_compile_file() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1523
-    6.6715   99822592  12. strftime() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:370
+    0.0504     658000   2. require('/usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc') /usr/local/Cellar/php53/5.3.16/bin/phpdoc:40
+    0.2081   15420440   3. phpDocumentor_setup->createDocs() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/phpdoc.inc:65
+    6.0026  101044048   4. phpDocumentor_IntermediateParser->Output() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Setup.inc.php:763
+    6.1709  101132944   5. phpDocumentor_IntermediateParser->Convert() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1867
+    6.1709  101133256   6. Converter->walk() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/IntermediateParser.inc:1654
+    6.4144  103513504   7. HTMLframesConverter->formatLeftIndex() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converter.inc:1853
+    6.4162  103636136   8. Smarty->fetch() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Converters/HTML/frames/HTMLframesConverter.inc:756
+    6.4163  103678056   9. Smarty->_compile_resource() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1296
+    6.4167  103689776  10. Smarty->_compile_source() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1458
+    6.4168  103730312  11. Smarty_Compiler->_compile_file() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php:1523
+    6.4259  103893832  12. strftime() /usr/local/Cellar/php53/5.3.16/lib/php/PhpDocumentor/phpDocumentor/Smarty-2.6.0/libs/Smarty_Compiler.class.php:370
 
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -43,6 +43,7 @@ Call Stack:
 										   						<dd><a href='PICKLES/API_Common.html' target='right'>API_Common</a></dd>
 					   										   						<dd><a href='PICKLES/API_Google_Profanity.html' target='right'>API_Google_Profanity</a></dd>
 					   										   						<dd><a href='PICKLES/API_Tinychat.html' target='right'>API_Tinychat</a></dd>
+					   										   						<dd><a href='PICKLES/Browser.html' target='right'>Browser</a></dd>
 					   										   						<dd><a href='PICKLES/Cache.html' target='right'>Cache</a></dd>
 					   										   						<dd><a href='PICKLES/Config.html' target='right'>Config</a></dd>
 					   										   						<dd><a href='PICKLES/Controller.html' target='right'>Controller</a></dd>
@@ -78,10 +79,11 @@ Call Stack:
 											<dd><a href='PICKLES/_pickles.php.html#function__handleError' target='right'>__handleError</a></dd>
 											<dd><a href='PICKLES/_pickles.php.html#function__handleException' target='right'>__handleException</a></dd>
 																		<dt class="folder-title">Files</dt>
+											<dd><a href='PICKLES/_classes---Browser.php.html' target='right'>Browser.php</a></dd>
 											<dd><a href='PICKLES/_classes---Cache.php.html' target='right'>Cache.php</a></dd>
-											<dd><a href='PICKLES/_classes---Database---Common.php.html' target='right'>Common.php</a></dd>
-											<dd><a href='PICKLES/_classes---Display---Common.php.html' target='right'>Common.php</a></dd>
 											<dd><a href='PICKLES/_classes---API---Common.php.html' target='right'>Common.php</a></dd>
+											<dd><a href='PICKLES/_classes---Display---Common.php.html' target='right'>Common.php</a></dd>
+											<dd><a href='PICKLES/_classes---Database---Common.php.html' target='right'>Common.php</a></dd>
 											<dd><a href='PICKLES/_classes---Database---PDO---Common.php.html' target='right'>Common.php</a></dd>
 											<dd><a href='PICKLES/_classes---Config.php.html' target='right'>Config.php</a></dd>
 											<dd><a href='PICKLES/_classes---Controller.php.html' target='right'>Controller.php</a></dd>

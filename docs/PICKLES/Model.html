@@ -55,6 +55,10 @@
 					<a href="#$cache" title="details" class="var-name">$cache</a>
 				</div>
 																<div class="var-title">
+					<span class="var-type">array</span>
+					<a href="#$columns" title="details" class="var-name">$columns</a>
+				</div>
+																<div class="var-title">
 					<span class="var-type">mixed</span>
 					<a href="#$conditions" title="details" class="var-name">$conditions</a>
 				</div>
@@ -85,10 +89,6 @@
 																<div class="var-title">
 					<span class="var-type">mixed</span>
 					<a href="#$hints" title="details" class="var-name">$hints</a>
-				</div>
-																<div class="var-title">
-					<span class="var-type">string</span>
-					<a href="#$id" title="details" class="var-name">$id</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">boolean</span>
@@ -248,18 +248,41 @@
 					</div>
 		<div class="info-box-body">
 			<a name="var$cache" id="$cache"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">object</span>
 			<span class="var-name">$cache</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">43</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">62</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Cache Object</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$columns" id="$columns"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$columns</span>
+			 = <span class="var-default">array(<br />		'id'         =&gt; 'id',<br />		'created_at' =&gt; 'created_at',<br />		'created_id' =&gt; 'created_id',<br />		'updated_at' =&gt; 'updated_at',<br />		'updated_id' =&gt; 'updated_id',<br />		'deleted_at' =&gt; 'deleted_at',<br />		'deleted_id' =&gt; 'deleted_id',<br />		'is_deleted' =&gt; 'is_deleted',<br />	)</span>			(line <span class="line-number">45</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Columns</p>
+<p class="description"><p>Mapping of key columns for the table</p></p>
 	<ul class="tags">
 				<li><span class="field">access:</span> protected</li>
 			</ul>
@@ -276,7 +299,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$conditions</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">157</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">168</span>)
 		</span>
 	</div>
 
@@ -298,7 +321,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$datasource</span>
-						(line <span class="line-number">75</span>)
+						(line <span class="line-number">94</span>)
 		</span>
 	</div>
 
@@ -342,7 +365,7 @@
 		<span class="var-title">
 			<span class="var-type">boolean</span>
 			<span class="var-name">$delayed</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">93</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">112</span>)
 		</span>
 	</div>
 
@@ -364,7 +387,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$fields</span>
-			 = <span class="var-default"> '*'</span>			(line <span class="line-number">117</span>)
+			 = <span class="var-default"> '*'</span>			(line <span class="line-number">136</span>)
 		</span>
 	</div>
 
@@ -386,7 +409,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$group</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">165</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">176</span>)
 		</span>
 	</div>
 
@@ -408,7 +431,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$having</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">173</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">184</span>)
 		</span>
 	</div>
 
@@ -430,7 +453,7 @@
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$hints</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">149</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">160</span>)
 		</span>
 	</div>
 
@@ -445,36 +468,14 @@
 		
 
 </div>
-<a name="var$id" id="$id"><!-- --></A>
-<div class="oddrow">
-
-	<div class="var-header">
-		<span class="var-title">
-			<span class="var-type">string</span>
-			<span class="var-name">$id</span>
-			 = <span class="var-default"> 'id'</span>			(line <span class="line-number">133</span>)
-		</span>
-	</div>
-
-	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">ID Column</p>
-	<ul class="tags">
-				<li><span class="field">access:</span> protected</li>
-			</ul>
-	
-	
-		
-		
-
-</div>
 <a name="var$ignore" id="$ignore"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">boolean</span>
 			<span class="var-name">$ignore</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">101</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">120</span>)
 		</span>
 	</div>
 
@@ -490,13 +491,13 @@
 
 </div>
 <a name="var$joins" id="$joins"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$joins</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">141</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">152</span>)
 		</span>
 	</div>
 
@@ -512,13 +513,13 @@
 
 </div>
 <a name="var$limit" id="$limit"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$limit</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">189</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">200</span>)
 		</span>
 	</div>
 
@@ -534,13 +535,13 @@
 
 </div>
 <a name="var$offset" id="$offset"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$offset</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">197</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">208</span>)
 		</span>
 	</div>
 
@@ -557,13 +558,13 @@
 
 </div>
 <a name="var$order" id="$order"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$order</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">181</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">192</span>)
 		</span>
 	</div>
 
@@ -579,13 +580,13 @@
 
 </div>
 <a name="var$priority" id="$priority"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$priority</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">85</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">104</span>)
 		</span>
 	</div>
 
@@ -602,13 +603,13 @@
 
 </div>
 <a name="var$record" id="$record"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$record</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">220</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">231</span>)
 		</span>
 	</div>
 
@@ -624,13 +625,13 @@
 
 </div>
 <a name="var$records" id="$records"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$records</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">227</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">238</span>)
 		</span>
 	</div>
 
@@ -646,13 +647,13 @@
 
 </div>
 <a name="var$replace" id="$replace"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">boolean</span>
 			<span class="var-name">$replace</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">109</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">128</span>)
 		</span>
 	</div>
 
@@ -668,13 +669,13 @@
 
 </div>
 <a name="var$results" id="$results"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$results</span>
-			 = <span class="var-default"> null</span>			(line <span class="line-number">205</span>)
+			 = <span class="var-default"> null</span>			(line <span class="line-number">216</span>)
 		</span>
 	</div>
 
@@ -690,13 +691,13 @@
 
 </div>
 <a name="var$table" id="$table"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">mixed</span>
 			<span class="var-name">$table</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">125</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">144</span>)
 		</span>
 	</div>
 
@@ -712,13 +713,13 @@
 
 </div>
 <a name="var$use_cache" id="$use_cache"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">boolean</span>
 			<span class="var-name">$use_cache</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number">51</span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number">70</span>)
 		</span>
 	</div>
 
@@ -750,10 +751,10 @@
 			<A NAME='method_detail'></A>
 
 <a name="method__construct" id="__construct"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number">288</span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">299</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -783,10 +784,10 @@
 			
 	</div>
 <a name="methodcommit" id="commit"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">commit</span> (line <span class="line-number">964</span>)
+		<span class="method-title">commit</span> (line <span class="line-number">1009</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -809,10 +810,10 @@
 			
 	</div>
 <a name="methodcount" id="count"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">count</span> (line <span class="line-number">792</span>)
+		<span class="method-title">count</span> (line <span class="line-number">837</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -834,10 +835,10 @@
 			
 	</div>
 <a name="methoddelete" id="delete"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">delete</span> (line <span class="line-number">1103</span>)
+		<span class="method-title">delete</span> (line <span class="line-number">1182</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -860,10 +861,10 @@
 			
 	</div>
 <a name="methodend" id="end"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">end</span> (line <span class="line-number">902</span>)
+		<span class="method-title">end</span> (line <span class="line-number">947</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -886,10 +887,10 @@
 			
 	</div>
 <a name="methodexecute" id="execute"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">execute</span> (line <span class="line-number">328</span>)
+		<span class="method-title">execute</span> (line <span class="line-number">345</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -919,10 +920,10 @@
 			
 	</div>
 <a name="methodfirst" id="first"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">first</span> (line <span class="line-number">890</span>)
+		<span class="method-title">first</span> (line <span class="line-number">935</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -945,10 +946,10 @@
 			
 	</div>
 <a name="methodlast" id="last"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">last</span> (line <span class="line-number">922</span>)
+		<span class="method-title">last</span> (line <span class="line-number">967</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -971,10 +972,10 @@
 			
 	</div>
 <a name="methodnext" id="next"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">next</span> (line <span class="line-number">832</span>)
+		<span class="method-title">next</span> (line <span class="line-number">877</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -997,10 +998,10 @@
 			
 	</div>
 <a name="methodprev" id="prev"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">prev</span> (line <span class="line-number">851</span>)
+		<span class="method-title">prev</span> (line <span class="line-number">896</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1023,10 +1024,10 @@
 			
 	</div>
 <a name="methodreset" id="reset"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">reset</span> (line <span class="line-number">870</span>)
+		<span class="method-title">reset</span> (line <span class="line-number">915</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1049,10 +1050,10 @@
 			
 	</div>
 <a name="methodshuffle" id="shuffle"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">shuffle</span> (line <span class="line-number">820</span>)
+		<span class="method-title">shuffle</span> (line <span class="line-number">865</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1076,10 +1077,10 @@
 			
 	</div>
 <a name="methodsort" id="sort"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">sort</span> (line <span class="line-number">807</span>)
+		<span class="method-title">sort</span> (line <span class="line-number">852</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1111,10 +1112,10 @@
 			
 	</div>
 <a name="methodunescape" id="unescape"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">unescape</span> (line <span class="line-number">1164</span>)
+		<span class="method-title">unescape</span> (line <span class="line-number">1275</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1142,10 +1143,10 @@
 			
 	</div>
 <a name="methodwalk" id="walk"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">walk</span> (line <span class="line-number">936</span>)
+		<span class="method-title">walk</span> (line <span class="line-number">981</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1174,7 +1175,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Thu, 11 Oct 2012 18:39:31 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Sun, 14 Oct 2012 14:02:18 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>
