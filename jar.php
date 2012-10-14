@@ -1207,7 +1207,7 @@ class Controller extends Object
 		$display       = new $display_class();
 
 		// Assigns the template / template variables
-		$display->setTemplateVariables($module->template, $template_basename, $css_class, $js_basename);
+		$display->setTemplateVariables($module->template, $template_basename, $css_class, $js_basename, $module->fluid);
 
 		// Checks the templates
 		$template_exists = $display->templateExists();
@@ -2482,14 +2482,16 @@ abstract class Display_Common extends Object
 	 * @param string $child_template child (sub) template
 	 * @param string $css_class name of the CSS class for the module
 	 * @param string $js_basename basename for the javascript file for the module
+	 * @param boolean $fluid whether or not use a fluid layout
 	 */
-	public function setTemplateVariables($parent_template, $child_template, $css_class, $js_basename)
+	public function setTemplateVariables($parent_template, $child_template, $css_class, $js_basename, $fluid)
 	{
 		$this->setTemplate($parent_template, 'parent');
 		$this->setTemplate($child_template,  'child');
 
 		$this->css_class   = $css_class;
 		$this->js_basename = $js_basename;
+		$this->fluid       = $fluid;
 	}
 
 	/**
@@ -2636,6 +2638,7 @@ class Display_PHP extends Display_Common
 			$__module    = $this->module_return;
 			$__css_class = $this->css_class;
 			$__js_file   = $this->js_basename;
+			$__fluid     = $this->fluid;
 
 			// Creates (possibly overwritten) objects
 			$form_class    = (class_exists('CustomForm')    ? 'CustomForm'    : 'Form');
@@ -5433,6 +5436,14 @@ class Module extends Object
 	 * @var    object
 	 */
 	protected $db = null;
+
+	/**
+	 * Fluid or Fixed?
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $fluid = false;
 
 	/**
 	 * Page Title

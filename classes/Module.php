@@ -44,6 +44,14 @@ class Module extends Object
 	protected $db = null;
 
 	/**
+	 * Fluid or Fixed?
+	 *
+	 * @access protected
+	 * @var    boolean
+	 */
+	protected $fluid = false;
+
+	/**
 	 * Page Title
 	 *
 	 * @access protected

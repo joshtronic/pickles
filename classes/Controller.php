@@ -260,7 +260,7 @@ class Controller extends Object
 		$display       = new $display_class();
 
 		// Assigns the template / template variables
-		$display->setTemplateVariables($module->template, $template_basename, $css_class, $js_basename);
+		$display->setTemplateVariables($module->template, $template_basename, $css_class, $js_basename, $module->fluid);
 
 		// Checks the templates
 		$template_exists = $display->templateExists();

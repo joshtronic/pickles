@@ -139,14 +139,16 @@ abstract class Display_Common extends Object
 	 * @param string $child_template child (sub) template
 	 * @param string $css_class name of the CSS class for the module
 	 * @param string $js_basename basename for the javascript file for the module
+	 * @param boolean $fluid whether or not use a fluid layout
 	 */
-	public function setTemplateVariables($parent_template, $child_template, $css_class, $js_basename)
+	public function setTemplateVariables($parent_template, $child_template, $css_class, $js_basename, $fluid)
 	{
 		$this->setTemplate($parent_template, 'parent');
 		$this->setTemplate($child_template,  'child');
 
 		$this->css_class   = $css_class;
 		$this->js_basename = $js_basename;
+		$this->fluid       = $fluid;
 	}
 
 	/**

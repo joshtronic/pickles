@@ -68,6 +68,7 @@ class Display_PHP extends Display_Common
 			$__module    = $this->module_return;
 			$__css_class = $this->css_class;
 			$__js_file   = $this->js_basename;
+			$__fluid     = $this->fluid;
 
 			// Creates (possibly overwritten) objects
 			$form_class    = (class_exists('CustomForm')    ? 'CustomForm'    : 'Form');
