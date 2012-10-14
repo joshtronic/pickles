@@ -10,3 +10,6 @@
 [submodule "vendors/jquery/jquery-mobile"]
 	path = vendors/jquery/jquery-mobile
 	url = git://github.com/jquery/jquery-mobile.git
+[submodule "vendors/cloudhead/less.js"]
+	path = vendors/cloudhead/less.js
+	url = git@github.com:cloudhead/less.js.git
