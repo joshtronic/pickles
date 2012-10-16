@@ -473,7 +473,7 @@ class Cache extends Object
 	 * @access private
 	 * @var    string
 	 */
-	private $hostname = null;
+	private $hostname = 'localhost';
 
 	/**
 	 * Port to use to connect
@@ -481,7 +481,15 @@ class Cache extends Object
 	 * @access private
 	 * @var    integer
 	 */
-	private $port = null;
+	private $port = 11211;
+
+	/**
+	 * Namespace (prefix)
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $namespace = '';
 
 	/**
 	 * Connection resource to Memcached
@@ -509,12 +517,19 @@ class Cache extends Object
 			{
 				$datasource = $this->config->datasources[$this->config->pickles['cache']];
 
-				if (isset($datasource['hostname'], $datasource['port']))
+				foreach (array('hostname', 'port', 'namespace') as $variable)
 				{
-					$this->hostname = $datasource['hostname'];
-					$this->port     = $datasource['port'];
+					if (isset($datasource[$variable]))
+					{
+						$this->$variable = $datasource[$variable];
+					}
 				}
 			}
+		}
+
+		if ($this->namespace != '')
+		{
+			$this->namespace .= '-';
 		}
 	}
 
@@ -573,7 +588,7 @@ class Cache extends Object
 	{
 		if ($this->open())
 		{
-			return $this->connection->get($key);
+			return $this->connection->get($this->namespace . $key);
 		}
 
 		return false;
@@ -597,7 +612,7 @@ class Cache extends Object
 	{
 		if ($this->open())
 		{
-			return $this->connection->set($key, $value, 0, $expire);
+			return $this->connection->set($this->namespace . $key, $value, 0, $expire);
 		}
 
 		return false;
@@ -615,7 +630,7 @@ class Cache extends Object
 	{
 		if ($this->open())
 		{
-			return $this->connection->delete($key);
+			return $this->connection->delete($this->namespace . $key);
 		}
 
 		return false;
@@ -634,7 +649,7 @@ class Cache extends Object
 	{
 		if ($this->open())
 		{
-			return $this->connection->increment($key);
+			return $this->connection->increment($this->namespace . $key);
 		}
 
 		return false;
