@@ -157,7 +157,10 @@ class Database_PDO_Common extends Database_Common
 
 			foreach ($backtrace as $file)
 			{
-				$files[] = $file['class'] . ':' . $file['line'];
+				if (isset($file['class']))
+				{
+					$files[] = $file['class'] . ':' . $file['line'];
+				}
 			}
 
 			$sql .= "\n" . '/* [' . implode('|', $files) . '] */';
