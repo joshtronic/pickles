@@ -76,8 +76,7 @@ class Database extends Object
 		{
 			if (isset($config->datasources[$name]))
 			{
-				$datasource = $config->datasources[$name];
-
+				$datasource           = $config->datasources[$name];
 				$datasource['driver'] = strtolower($datasource['driver']);
 
 				if (!isset(self::$instances['Database'][$name]))
@@ -99,39 +98,12 @@ class Database extends Object
 					$instance = new $class();
 
 					// Sets our database parameters
-					if (isset($datasource['hostname']))
+					if (is_array($datasource))
 					{
-						$instance->setHostname($datasource['hostname']);
-					}
-
-					if (isset($datasource['port']))
-					{
-						$instance->setPort($datasource['port']);
-					}
-
-					if (isset($datasource['socket']))
-					{
-						$instance->setSocket($datasource['socket']);
-					}
-
-					if (isset($datasource['username']))
-					{
-						$instance->setUsername($datasource['username']);
-					}
-
-					if (isset($datasource['password']))
-					{
-						$instance->setPassword($datasource['password']);
-					}
-
-					if (isset($datasource['database']))
-					{
-						$instance->setDatabase($datasource['database']);
-					}
-
-					if (isset($datasource['cache']))
-					{
-						$instance->setCache($datasource['cache']);
+						foreach ($datasource as $variable => $value)
+						{
+							$instance->$variable = $value;
+						}
 					}
 				}
 

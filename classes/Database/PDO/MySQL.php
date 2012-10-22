@@ -23,26 +23,23 @@ class Database_PDO_MySQL extends Database_PDO_Common
 	/**
 	 * Driver
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $driver = 'pdo_mysql';
+	public $driver = 'pdo_mysql';
 
 	/**
 	 * DSN format
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $dsn = 'mysql:host=[[hostname]];port=[[port]];unix_socket=[[socket]];dbname=[[database]]';
+	public $dsn = 'mysql:host=[[hostname]];port=[[port]];unix_socket=[[socket]];dbname=[[database]]';
 
 	/**
 	 * Default port
 	 *
-	 * @access proceted
-	 * @var    integer
+	 * @var integer
 	 */
-	protected $port = 3306;
+	public $port = 3306;
 }
 
 ?>

@@ -26,82 +26,72 @@ abstract class Database_Common extends Object
 	/**
 	 * Driver
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $driver = null;
+	public $driver = null;
 
 	/**
 	 * Hostname for the server
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $hostname = 'localhost';
+	public $hostname = 'localhost';
 
 	/**
 	 * Port number for the server
 	 *
-	 * @access protected
-	 * @var    integer
+	 * @var integer
 	 */
-	protected $port = null;
+	public $port = null;
 
 	/**
 	 * UNIX socket for the server
 	 *
-	 * @access protected
-	 * @var    integer
+	 * @var integer
 	 */
-	protected $socket = null;
+	public $socket = null;
 
 	/**
 	 * Username for the server
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $username = null;
+	public $username = null;
 
 	/**
 	 * Password for the server
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $password = null;
+	public $password = null;
 
 	/**
 	 * Database name for the server
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $database = null;
+	public $database = null;
 
 	/**
 	 * Whether or not to use caching
 	 *
-	 * @access protected
-	 * @var    boolean
+	 * @var boolean
 	 */
-	protected $cache = false;
+	public $cache = false;
 
 	/**
 	 * Connection resource
 	 *
-	 * @access protected
-	 * @var    object
+	 * @var object
 	 */
-	protected $connection = null;
+	public $connection = null;
 
 	/**
 	 * Results object for the executed statement
 	 *
-	 * @access protected
-	 * @var    object
+	 * @var object
 	 */
-	protected $results = null;
+	public $results = null;
 
 	/**
 	 * Constructor
@@ -125,105 +115,10 @@ abstract class Database_Common extends Object
 	}
 
 	/**
-	 * Set Hostname
+	 * Open Database Connection
 	 *
-	 * @param string $hostname hostname for the database
-	 */
-	public function setHostname($hostname)
-	{
-		return $this->hostname = $hostname;
-	}
-
-	/**
-	 * Set Port
-	 *
-	 * @param integer $port port for the database
-	 */
-	public function setPort($port)
-	{
-		return $this->port = $port;
-	}
-
-	/**
-	 * Set Socket
-	 *
-	 * @param string $socket name of the UNIX socket
-	 */
-	public function setSocket($socket)
-	{
-		return $this->socket = $socket;
-	}
-
-	/**
-	 * Set Username
-	 *
-	 * @param string $username username for the database
-	 */
-	public function setUsername($username)
-	{
-		return $this->username = $username;
-	}
-
-	/**
-	 * Set Password
-	 *
-	 * @param string $password password for the database
-	 */
-	public function setPassword($password)
-	{
-		return $this->password = $password;
-	}
-
-	/**
-	 * Set Database
-	 *
-	 * @param string $database database for the database
-	 */
-	public function setDatabase($database)
-	{
-		return $this->database = $database;
-	}
-
-	/**
-	 * Set Cache
-	 *
-	 * @param boolean whether or not to use cache
-	 */
-	public function setCache($cache)
-	{
-		return $this->cache = $cache;
-	}
-
-	/**
-	 * Get Driver
-	 *
-	 * Returns the name of the driver in use. Used by the Model class to
-	 * determine which path to take when interfacing with the Database object.
-	 *
-	 * @return string name of the driver in use
-	 */
-	public function getDriver()
-	{
-		return $this->driver;
-	}
-
-	/**
-	 * Get Cache
-	 *
-	 * Returns the status of caching for this datasource.
-	 *
-	 * @return string whether or not to use the cache
-	 */
-	public function getCache()
-	{
-		return $this->cache;
-	}
-
-	/**
-	 * Opens database connection
-	 *
-	 * Establishes a connection to the MySQL database based on the
-	 * configuration options that are available in the Config object.
+	 * Establishes a connection to the MySQL database based on the configuration
+	 * options that are available in the Config object.
 	 *
 	 * @abstract
 	 * @return   boolean true on success, throws an exception overwise
@@ -231,11 +126,12 @@ abstract class Database_Common extends Object
 	abstract public function open();
 
 	/**
-	 * Closes database connection
+	 * Close Database Connection
 	 *
 	 * Sets the connection to null regardless of state.
 	 *
-	 * @return boolean always true
+	 * @abstract
+	 * @return   boolean always true
 	 */
 	abstract public function close();
 }

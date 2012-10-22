@@ -23,26 +23,23 @@ class Database_PDO_PostgreSQL extends Database_PDO_Common
 	/**
 	 * Driver
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $driver = 'pdo_pgsql';
+	public $driver = 'pdo_pgsql';
 
 	/**
 	 * DSN format
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $dsn = 'pgsql:host=[[hostname]];port=[[port]];dbname=[[database]];user=[[username]];password=[[password]]';
+	public $dsn = 'pgsql:host=[[hostname]];port=[[port]];dbname=[[database]];user=[[username]];password=[[password]]';
 
 	/**
 	 * Default port
 	 *
-	 * @access proceted
-	 * @var    integer
+	 * @var integer
 	 */
-	protected $port = 5432;
+	public $port = 5432;
 }
 
 ?>

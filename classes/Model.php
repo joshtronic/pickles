@@ -18,9 +18,9 @@
 /**
  * Model Class
  *
- * This is a parent class that all PICKLES data models should be extending.
- * When using the class as designed, objects will function as active record
- * pattern objects.
+ * This is a parent class that all PICKLES data models should be extending. When
+ * using the class as designed, objects will function as active record pattern
+ * objects.
  */
 class Model extends Object
 {
@@ -37,26 +37,17 @@ class Model extends Object
 	/**
 	 * Columns
 	 *
-	 * Mapping of key columns for the table
+	 * Mapping of key columns for the table.
 	 *
 	 * @access protected
 	 * @var    array
 	 */
-	protected $columns = array(
-		'id'         => 'id',
-		'created_at' => 'created_at',
-		'created_id' => 'created_id',
-		'updated_at' => 'updated_at',
-		'updated_id' => 'updated_id',
-		'deleted_at' => 'deleted_at',
-		'deleted_id' => 'deleted_id',
-		'is_deleted' => 'is_deleted',
-	);
+	protected $columns = null;
 
 	/**
 	 * Cache Object
 	 *
-	 * @access protected
+	 * @access
 	 * @var    object
 	 */
 	protected $cache = null;
@@ -310,9 +301,48 @@ class Model extends Object
 		// Gets an instance of the cache and database
 		// @todo Datasource has no way of being set
 		$this->db         = Database::getInstance($this->datasource != '' ? $this->datasource : null);
-		$this->caching    = $this->db->getCache();
-		$this->mysql      = ($this->db->getDriver() == 'pdo_mysql');
-		$this->postgresql = ($this->db->getDriver() == 'pdo_pgsql');
+		$this->caching    = $this->db->cache;
+		$this->mysql      = ($this->db->driver == 'pdo_mysql');
+		$this->postgresql = ($this->db->driver == 'pdo_pgsql');
+
+		$columns = array(
+			'id'         => 'id',
+			'created_at' => 'created_at',
+			'created_id' => 'created_id',
+			'updated_at' => 'updated_at',
+			'updated_id' => 'updated_id',
+			'deleted_at' => 'deleted_at',
+			'deleted_id' => 'deleted_id',
+			'is_deleted' => 'is_deleted',
+		);
+
+		// Grabs the config columns if no columns are set
+		if ($this->columns === null && isset($this->db->columns))
+		{
+			$this->columns = $this->db->columns;
+		}
+
+		// Sets all but the `id` column to false
+		if ($this->columns === false)
+		{
+			foreach ($columns as $column => $field)
+			{
+				if ($column != 'id')
+				{
+					$columns[$column] = false;
+				}
+			}
+		}
+		// Merges the model's columns with the defaults
+		elseif (is_array($this->columns))
+		{
+			foreach ($this->columns as $column => $field)
+			{
+				$columns[$column] = $field;
+			}
+		}
+
+		$this->db->columns = $columns;
 
 		if ($this->caching)
 		{
@@ -928,7 +958,8 @@ class Model extends Object
 	 * First Record
 	 *
 	 * Alias of reset(). "first" is more intuitive to me, but reset stays in
-	 * line with the built in PHP functions.
+	 * line with the built in PHP functions. Not sure why I'd want to add some
+	 * consistency to one of the most inconsistent languages.
 	 *
 	 * @return boolean whether or not records is an array (and could be reset)
 	 */
@@ -1175,7 +1206,7 @@ class Model extends Object
 	/**
 	 * Delete Record
 	 *
-	 * Deletes the current record from the database
+	 * Deletes the current record from the database.
 	 *
 	 * @return boolean status of the query
 	 */
@@ -1266,7 +1297,7 @@ class Model extends Object
 	/**
 	 * Unescape String
 	 *
-	 * Assuming magic quotes is turned on, strips slashes from the string
+	 * Assuming magic quotes is turned on, strips slashes from the string.
 	 *
 	 * @access protected
 	 * @param  string $value string to be unescaped

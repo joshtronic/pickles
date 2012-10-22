@@ -1599,82 +1599,72 @@ abstract class Database_Common extends Object
 	/**
 	 * Driver
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $driver = null;
+	public $driver = null;
 
 	/**
 	 * Hostname for the server
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $hostname = 'localhost';
+	public $hostname = 'localhost';
 
 	/**
 	 * Port number for the server
 	 *
-	 * @access protected
-	 * @var    integer
+	 * @var integer
 	 */
-	protected $port = null;
+	public $port = null;
 
 	/**
 	 * UNIX socket for the server
 	 *
-	 * @access protected
-	 * @var    integer
+	 * @var integer
 	 */
-	protected $socket = null;
+	public $socket = null;
 
 	/**
 	 * Username for the server
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $username = null;
+	public $username = null;
 
 	/**
 	 * Password for the server
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $password = null;
+	public $password = null;
 
 	/**
 	 * Database name for the server
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $database = null;
+	public $database = null;
 
 	/**
 	 * Whether or not to use caching
 	 *
-	 * @access protected
-	 * @var    boolean
+	 * @var boolean
 	 */
-	protected $cache = false;
+	public $cache = false;
 
 	/**
 	 * Connection resource
 	 *
-	 * @access protected
-	 * @var    object
+	 * @var object
 	 */
-	protected $connection = null;
+	public $connection = null;
 
 	/**
 	 * Results object for the executed statement
 	 *
-	 * @access protected
-	 * @var    object
+	 * @var object
 	 */
-	protected $results = null;
+	public $results = null;
 
 	/**
 	 * Constructor
@@ -1698,105 +1688,10 @@ abstract class Database_Common extends Object
 	}
 
 	/**
-	 * Set Hostname
+	 * Open Database Connection
 	 *
-	 * @param string $hostname hostname for the database
-	 */
-	public function setHostname($hostname)
-	{
-		return $this->hostname = $hostname;
-	}
-
-	/**
-	 * Set Port
-	 *
-	 * @param integer $port port for the database
-	 */
-	public function setPort($port)
-	{
-		return $this->port = $port;
-	}
-
-	/**
-	 * Set Socket
-	 *
-	 * @param string $socket name of the UNIX socket
-	 */
-	public function setSocket($socket)
-	{
-		return $this->socket = $socket;
-	}
-
-	/**
-	 * Set Username
-	 *
-	 * @param string $username username for the database
-	 */
-	public function setUsername($username)
-	{
-		return $this->username = $username;
-	}
-
-	/**
-	 * Set Password
-	 *
-	 * @param string $password password for the database
-	 */
-	public function setPassword($password)
-	{
-		return $this->password = $password;
-	}
-
-	/**
-	 * Set Database
-	 *
-	 * @param string $database database for the database
-	 */
-	public function setDatabase($database)
-	{
-		return $this->database = $database;
-	}
-
-	/**
-	 * Set Cache
-	 *
-	 * @param boolean whether or not to use cache
-	 */
-	public function setCache($cache)
-	{
-		return $this->cache = $cache;
-	}
-
-	/**
-	 * Get Driver
-	 *
-	 * Returns the name of the driver in use. Used by the Model class to
-	 * determine which path to take when interfacing with the Database object.
-	 *
-	 * @return string name of the driver in use
-	 */
-	public function getDriver()
-	{
-		return $this->driver;
-	}
-
-	/**
-	 * Get Cache
-	 *
-	 * Returns the status of caching for this datasource.
-	 *
-	 * @return string whether or not to use the cache
-	 */
-	public function getCache()
-	{
-		return $this->cache;
-	}
-
-	/**
-	 * Opens database connection
-	 *
-	 * Establishes a connection to the MySQL database based on the
-	 * configuration options that are available in the Config object.
+	 * Establishes a connection to the MySQL database based on the configuration
+	 * options that are available in the Config object.
 	 *
 	 * @abstract
 	 * @return   boolean true on success, throws an exception overwise
@@ -1804,11 +1699,12 @@ abstract class Database_Common extends Object
 	abstract public function open();
 
 	/**
-	 * Closes database connection
+	 * Close Database Connection
 	 *
 	 * Sets the connection to null regardless of state.
 	 *
-	 * @return boolean always true
+	 * @abstract
+	 * @return   boolean always true
 	 */
 	abstract public function close();
 }
@@ -2092,26 +1988,23 @@ class Database_PDO_MySQL extends Database_PDO_Common
 	/**
 	 * Driver
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $driver = 'pdo_mysql';
+	public $driver = 'pdo_mysql';
 
 	/**
 	 * DSN format
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $dsn = 'mysql:host=[[hostname]];port=[[port]];unix_socket=[[socket]];dbname=[[database]]';
+	public $dsn = 'mysql:host=[[hostname]];port=[[port]];unix_socket=[[socket]];dbname=[[database]]';
 
 	/**
 	 * Default port
 	 *
-	 * @access proceted
-	 * @var    integer
+	 * @var integer
 	 */
-	protected $port = 3306;
+	public $port = 3306;
 }
 
 /**
@@ -2137,26 +2030,23 @@ class Database_PDO_PostgreSQL extends Database_PDO_Common
 	/**
 	 * Driver
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $driver = 'pdo_pgsql';
+	public $driver = 'pdo_pgsql';
 
 	/**
 	 * DSN format
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $dsn = 'pgsql:host=[[hostname]];port=[[port]];dbname=[[database]];user=[[username]];password=[[password]]';
+	public $dsn = 'pgsql:host=[[hostname]];port=[[port]];dbname=[[database]];user=[[username]];password=[[password]]';
 
 	/**
 	 * Default port
 	 *
-	 * @access proceted
-	 * @var    integer
+	 * @var integer
 	 */
-	protected $port = 5432;
+	public $port = 5432;
 }
 
 /**
@@ -2182,18 +2072,16 @@ class Database_PDO_SQLite extends Database_PDO_Common
 	/**
 	 * Driver
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $driver = 'pdo_sqlite';
+	public $driver = 'pdo_sqlite';
 
 	/**
 	 * DSN format
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $dsn = 'sqlite:[[hostname]]';
+	public $dsn = 'sqlite:[[hostname]]';
 }
 
 /**
@@ -2272,8 +2160,7 @@ class Database extends Object
 		{
 			if (isset($config->datasources[$name]))
 			{
-				$datasource = $config->datasources[$name];
-
+				$datasource           = $config->datasources[$name];
 				$datasource['driver'] = strtolower($datasource['driver']);
 
 				if (!isset(self::$instances['Database'][$name]))
@@ -2295,39 +2182,12 @@ class Database extends Object
 					$instance = new $class();
 
 					// Sets our database parameters
-					if (isset($datasource['hostname']))
+					if (is_array($datasource))
 					{
-						$instance->setHostname($datasource['hostname']);
-					}
-
-					if (isset($datasource['port']))
-					{
-						$instance->setPort($datasource['port']);
-					}
-
-					if (isset($datasource['socket']))
-					{
-						$instance->setSocket($datasource['socket']);
-					}
-
-					if (isset($datasource['username']))
-					{
-						$instance->setUsername($datasource['username']);
-					}
-
-					if (isset($datasource['password']))
-					{
-						$instance->setPassword($datasource['password']);
-					}
-
-					if (isset($datasource['database']))
-					{
-						$instance->setDatabase($datasource['database']);
-					}
-
-					if (isset($datasource['cache']))
-					{
-						$instance->setCache($datasource['cache']);
+						foreach ($datasource as $variable => $value)
+						{
+							$instance->$variable = $value;
+						}
 					}
 				}
 
@@ -4168,9 +4028,9 @@ class Log
 /**
  * Model Class
  *
- * This is a parent class that all PICKLES data models should be extending.
- * When using the class as designed, objects will function as active record
- * pattern objects.
+ * This is a parent class that all PICKLES data models should be extending. When
+ * using the class as designed, objects will function as active record pattern
+ * objects.
  */
 class Model extends Object
 {
@@ -4187,26 +4047,17 @@ class Model extends Object
 	/**
 	 * Columns
 	 *
-	 * Mapping of key columns for the table
+	 * Mapping of key columns for the table.
 	 *
 	 * @access protected
 	 * @var    array
 	 */
-	protected $columns = array(
-		'id'         => 'id',
-		'created_at' => 'created_at',
-		'created_id' => 'created_id',
-		'updated_at' => 'updated_at',
-		'updated_id' => 'updated_id',
-		'deleted_at' => 'deleted_at',
-		'deleted_id' => 'deleted_id',
-		'is_deleted' => 'is_deleted',
-	);
+	protected $columns = null;
 
 	/**
 	 * Cache Object
 	 *
-	 * @access protected
+	 * @access
 	 * @var    object
 	 */
 	protected $cache = null;
@@ -4460,9 +4311,48 @@ class Model extends Object
 		// Gets an instance of the cache and database
 		// @todo Datasource has no way of being set
 		$this->db         = Database::getInstance($this->datasource != '' ? $this->datasource : null);
-		$this->caching    = $this->db->getCache();
-		$this->mysql      = ($this->db->getDriver() == 'pdo_mysql');
-		$this->postgresql = ($this->db->getDriver() == 'pdo_pgsql');
+		$this->caching    = $this->db->cache;
+		$this->mysql      = ($this->db->driver == 'pdo_mysql');
+		$this->postgresql = ($this->db->driver == 'pdo_pgsql');
+
+		$columns = array(
+			'id'         => 'id',
+			'created_at' => 'created_at',
+			'created_id' => 'created_id',
+			'updated_at' => 'updated_at',
+			'updated_id' => 'updated_id',
+			'deleted_at' => 'deleted_at',
+			'deleted_id' => 'deleted_id',
+			'is_deleted' => 'is_deleted',
+		);
+
+		// Grabs the config columns if no columns are set
+		if ($this->columns === null && isset($this->db->columns))
+		{
+			$this->columns = $this->db->columns;
+		}
+
+		// Sets all but the `id` column to false
+		if ($this->columns === false)
+		{
+			foreach ($columns as $column => $field)
+			{
+				if ($column != 'id')
+				{
+					$columns[$column] = false;
+				}
+			}
+		}
+		// Merges the model's columns with the defaults
+		elseif (is_array($this->columns))
+		{
+			foreach ($this->columns as $column => $field)
+			{
+				$columns[$column] = $field;
+			}
+		}
+
+		$this->db->columns = $columns;
 
 		if ($this->caching)
 		{
@@ -5078,7 +4968,8 @@ class Model extends Object
 	 * First Record
 	 *
 	 * Alias of reset(). "first" is more intuitive to me, but reset stays in
-	 * line with the built in PHP functions.
+	 * line with the built in PHP functions. Not sure why I'd want to add some
+	 * consistency to one of the most inconsistent languages.
 	 *
 	 * @return boolean whether or not records is an array (and could be reset)
 	 */
@@ -5325,7 +5216,7 @@ class Model extends Object
 	/**
 	 * Delete Record
 	 *
-	 * Deletes the current record from the database
+	 * Deletes the current record from the database.
 	 *
 	 * @return boolean status of the query
 	 */
@@ -5416,7 +5307,7 @@ class Model extends Object
 	/**
 	 * Unescape String
 	 *
-	 * Assuming magic quotes is turned on, strips slashes from the string
+	 * Assuming magic quotes is turned on, strips slashes from the string.
 	 *
 	 * @access protected
 	 * @param  string $value string to be unescaped
