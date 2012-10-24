@@ -24,7 +24,9 @@
  * don't entirely remember specifics, but the reason for not using Memcached()
  * was due to an unexplainable bug in the version in the repository for Ubuntu
  * 10.04 LTS. Memcached() does support more of the memcached protocol and will
- * eventually be what PICKLES uses.
+ * eventually be what PICKLES uses. Keys are forced to be uppercase for
+ * consistencies sake as I've been burned by the case sensitivity due to typos
+ * in my code.
  *
  * Requires php5-memcache
  *
@@ -155,7 +157,7 @@ class Cache extends Object
 	{
 		if ($this->open())
 		{
-			return $this->connection->get($this->namespace . $key);
+			return $this->connection->get(strtoupper($this->namespace . $key));
 		}
 
 		return false;
@@ -177,9 +179,11 @@ class Cache extends Object
 	 */
 	public function set($key, $value, $expire = 300)
 	{
+		$key = strtoupper($key);
+
 		if ($this->open())
 		{
-			return $this->connection->set($this->namespace . $key, $value, 0, $expire);
+			return $this->connection->set(strtoupper($this->namespace . $key), $value, 0, $expire);
 		}
 
 		return false;
@@ -197,7 +201,7 @@ class Cache extends Object
 	{
 		if ($this->open())
 		{
-			return $this->connection->delete($this->namespace . $key);
+			return $this->connection->delete(strtoupper($this->namespace . $key));
 		}
 
 		return false;
@@ -216,7 +220,7 @@ class Cache extends Object
 	{
 		if ($this->open())
 		{
-			return $this->connection->increment($this->namespace . $key);
+			return $this->connection->increment(strtoupper($this->namespace . $key));
 		}
 
 		return false;

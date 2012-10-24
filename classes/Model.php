@@ -27,6 +27,14 @@ class Model extends Object
 	// {{{ Properties
 
 	/**
+	 * Model Name
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $model = null;
+
+	/**
 	 * Database Object
 	 *
 	 * @access protected
@@ -75,14 +83,6 @@ class Model extends Object
 	 * @var    array
 	 */
 	private $input_parameters = array();
-
-	/**
-	 * Datasource
-	 *
-	 * @access protected
-	 * @var    string
-	 */
-	protected $datasource;
 
 	/**
 	 * Insert Priority
@@ -298,13 +298,16 @@ class Model extends Object
 		// Runs the parent constructor so we have the config
 		parent::__construct();
 
-		// Gets an instance of the cache and database
-		// @todo Datasource has no way of being set
-		$this->db         = Database::getInstance($this->datasource != '' ? $this->datasource : null);
-		$this->caching    = $this->db->cache;
+		// Gets an instance of the database and check which it is
+		$this->db         = Database::getInstance();
 		$this->mysql      = ($this->db->driver == 'pdo_mysql');
 		$this->postgresql = ($this->db->driver == 'pdo_pgsql');
 
+		// Sets up the cache object and grabs the class name to use in our cache keys
+		$this->cache = Cache::getInstance();
+		$this->model = get_class($this);
+
+		// Default column mapping
 		$columns = array(
 			'id'         => 'id',
 			'created_at' => 'created_at',
@@ -342,12 +345,7 @@ class Model extends Object
 			}
 		}
 
-		$this->db->columns = $columns;
-
-		if ($this->caching)
-		{
-			$this->cache = Cache::getInstance();
-		}
+		$this->columns = $columns;
 
 		// Takes a snapshot of the [non-object] object properties
 		foreach ($this as $variable => $value)
@@ -409,6 +407,7 @@ class Model extends Object
 			}
 			elseif (ctype_digit((string)$type_or_parameters))
 			{
+				$cache_key  = $this->model . '-' . $type_or_parameters;
 				$parameters = array($this->columns['id'] => $type_or_parameters);
 
 				if ($this->columns['is_deleted'])
@@ -417,10 +416,10 @@ class Model extends Object
 				}
 
 				$this->loadParameters($parameters);
-				$cache_key = 'PICKLES-' . $this->datasource . '-' . $this->table . '-' . $type_or_parameters;
 			}
 			elseif (ctype_digit((string)$parameters))
 			{
+				$cache_key  = $this->model . '-' . $parameters;
 				$parameters = array($this->columns['id'] => $parameters);
 
 				if ($this->columns['is_deleted'])
@@ -462,7 +461,7 @@ class Model extends Object
 
 			if (isset($cache_key))
 			{
-				//$cached = $this->cache->get($cache_key);
+				$cached = $this->cache->get($cache_key);
 			}
 
 			if (isset($cached) && $cached)
@@ -471,11 +470,14 @@ class Model extends Object
 			}
 			else
 			{
-				$this->records = $this->db->fetch(implode(' ', $this->sql), (count($this->input_parameters) == 0 ? null : $this->input_parameters));
+				$this->records = $this->db->fetch(
+					implode(' ', $this->sql),
+					(count($this->input_parameters) == 0 ? null : $this->input_parameters)
+				);
 
 				if (isset($cache_key))
 				{
-					//$this->cache->set($cache_key, $this->records);
+					$this->cache->set($cache_key, $this->records);
 				}
 			}
 
@@ -600,7 +602,7 @@ class Model extends Object
 					{
 						$format = (stripos($columns, 'USE ') === false);
 
-						$this->sql[] = ($format == true ? 'USE INDEX (' : '') . $columns . ($format == true ? ')' : '');
+						$this->sql[] = ($format ? 'USE INDEX (' : '') . $columns . ($format ? ')' : '');
 					}
 				}
 			}
@@ -608,7 +610,7 @@ class Model extends Object
 			{
 				$format = (stripos($this->hints, 'USE ') === false);
 
-				$this->sql[] = ($format == true ? 'USE INDEX (' : '') . $this->hints . ($format == true ? ')' : '');
+				$this->sql[] = ($format ? 'USE INDEX (' : '') . $this->hints . ($format ? ')' : '');
 			}
 		}
 
@@ -1063,7 +1065,7 @@ class Model extends Object
 			}
 			else
 			{
-				if ($update === true)
+				if ($update == true)
 				{
 					$sql = 'UPDATE';
 				}
@@ -1092,13 +1094,13 @@ class Model extends Object
 					$sql .= ' INTO';
 				}
 
-				$sql .= ' ' . $this->table . ($update === true ? ' SET ' : ' ');
+				$sql .= ' ' . $this->table . ($update ? ' SET ' : ' ');
 			}
 
 			$input_parameters = null;
 
 			// Limits the columns being updated
-			$record = ($update === true ? array_diff_assoc($this->record, isset($this->original[$this->index]) ? $this->original[$this->index] : array()) : $this->record);
+			$record = ($update ? array_diff_assoc($this->record, isset($this->original[$this->index]) ? $this->original[$this->index] : array()) : $this->record);
 
 			// Makes sure there's something to INSERT or UPDATE
 			if (count($record) > 0)
@@ -1110,7 +1112,7 @@ class Model extends Object
 				{
 					if ($column != $this->columns['id'])
 					{
-						if ($update === true)
+						if ($update == true)
 						{
 							if ($input_parameters != null)
 							{
@@ -1129,7 +1131,7 @@ class Model extends Object
 				}
 
 				// If it's an UPDATE tack on the ID
-				if ($update === true)
+				if ($update == true)
 				{
 					if ($this->columns['updated_at'] != false)
 					{
@@ -1155,11 +1157,6 @@ class Model extends Object
 
 					$sql                .= ' WHERE ' . $this->columns['id'] . ' = ?' . ($this->mysql ? ' LIMIT 1' : '') . ';';
 					$input_parameters[]  = $this->record[$this->columns['id']];
-
-					if ($this->caching)
-					{
-						//$this->cache->delete('PICKLES-' . $this->datasource . '-' . $this->table . '-' . $this->record[$this->columns['id']]);
-					}
 				}
 				else
 				{
@@ -1187,7 +1184,7 @@ class Model extends Object
 				}
 
 				// Executes the query
-				if ($this->postgresql && $update === false)
+				if ($this->postgresql && $update == false)
 				{
 					$results = $this->db->fetch($sql, $input_parameters);
 
@@ -1195,7 +1192,15 @@ class Model extends Object
 				}
 				else
 				{
-					return $this->db->execute($sql, $input_parameters);
+					$results = $this->db->execute($sql, $input_parameters);
+
+					// Clears the cache
+					if ($update)
+					{
+						$this->cache->delete($this->model . '-' . $this->record[$this->columns['id']]);
+					}
+
+					return $results;
 				}
 			}
 		}
@@ -1241,8 +1246,12 @@ class Model extends Object
 			}
 
 			$input_parameters[] = $this->record[$this->columns['id']];
+			$results            = $this->db->execute($sql, $input_parameters);
 
-			return $this->db->execute($sql, $input_parameters);
+			// Clears the cache
+			$this->cache->delete($this->model . '-' . $this->record[$this->columns['id']]);
+
+			return $results;
 		}
 		else
 		{
