@@ -150,14 +150,26 @@ class Cache extends Object
 	 *
 	 * Gets the value of the key and returns it.
 	 *
-	 * @param  string $key key to retrieve
-	 * @return mixed  value of the requested key, false if not set
+	 * @param  mixed $keys key(s) to retrieve
+	 * @return mixed value(s) of the requested key(s), false if not set
 	 */
-	public function get($key)
+	public function get($keys)
 	{
 		if ($this->open())
 		{
-			return $this->connection->get(strtoupper($this->namespace . $key));
+			if (is_array($keys))
+			{
+				foreach ($keys as $index => $key)
+				{
+					$keys[$index] = strtoupper($this->namespace . $key);
+				}
+			}
+			else
+			{
+				$keys = strtoupper($this->namespace . $keys);
+			}
+
+			return $this->connection->get($keys);
 		}
 
 		return false;
