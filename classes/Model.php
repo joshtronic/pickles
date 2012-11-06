@@ -621,7 +621,7 @@ class Model extends Object
 
 			foreach ($this->conditions as $column => $value)
 			{
-				if (is_string($column) || is_string($value))
+				if (!is_int($column))
 				{
 					$use_id = false;
 				}
