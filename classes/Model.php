@@ -617,6 +617,21 @@ class Model extends Object
 		// Adds the WHERE conditionals
 		if ($this->conditions != false)
 		{
+			$use_id = true;
+
+			foreach ($this->conditions as $column => $value)
+			{
+				if (is_string($column) || is_string($value))
+				{
+					$use_id = false;
+				}
+			}
+
+			if ($use_id)
+			{
+				$this->conditions = array($this->columns['id'] => $this->conditions);
+			}
+
 			$this->sql[] = 'WHERE ' . (is_array($this->conditions) ? $this->generateConditions($this->conditions) : $this->conditions);
 		}
 
