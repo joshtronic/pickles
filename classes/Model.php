@@ -164,7 +164,7 @@ class Model extends Object
 	 * @access protected
 	 * @var    mixed
 	 */
-	protected $group  = false; // GROUP BY
+	protected $group = false; // GROUP BY
 
 	/**
 	 * Having
@@ -300,6 +300,7 @@ class Model extends Object
 
 		// Gets an instance of the database and check which it is
 		$this->db         = Database::getInstance();
+		$this->use_cache  = $this->db->cache;
 		$this->mysql      = ($this->db->driver == 'pdo_mysql');
 		$this->postgresql = ($this->db->driver == 'pdo_pgsql');
 
@@ -459,7 +460,7 @@ class Model extends Object
 
 			$query_database = true;
 
-			if (isset($cache_key))
+			if (isset($cache_key) && $this->use_cache)
 			{
 				$cached = $this->cache->get($cache_key);
 			}
@@ -475,7 +476,7 @@ class Model extends Object
 					(count($this->input_parameters) == 0 ? null : $this->input_parameters)
 				);
 
-				if (isset($cache_key))
+				if (isset($cache_key) && $this->use_cache)
 				{
 					$this->cache->set($cache_key, $this->records);
 				}
@@ -1210,7 +1211,7 @@ class Model extends Object
 					$results = $this->db->execute($sql, $input_parameters);
 
 					// Clears the cache
-					if ($update)
+					if ($update && $this->use_cache)
 					{
 						$this->cache->delete($this->model . '-' . $this->record[$this->columns['id']]);
 					}
@@ -1264,7 +1265,10 @@ class Model extends Object
 			$results            = $this->db->execute($sql, $input_parameters);
 
 			// Clears the cache
-			$this->cache->delete($this->model . '-' . $this->record[$this->columns['id']]);
+			if ($this->use_cache)
+			{
+				$this->cache->delete($this->model . '-' . $this->record[$this->columns['id']]);
+			}
 
 			return $results;
 		}
