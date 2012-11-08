@@ -1926,15 +1926,22 @@ class Database_PDO_Common extends Database_Common
 		// Checks if the query is blank
 		if ($sql != '')
 		{
-			$files     = array();
-			$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-			krsort($backtrace);
+			$files = array();
 
-			foreach ($backtrace as $file)
+			// Ubuntu 10.04 is a bit behind on PHP 5.3.x and the IGNORE_ARGS
+			// constant doesn't exist. To conserve memory, the backtrace will
+			// Only be used on servers running PHP 5.3.6 or above.
+			if (version_compare(PHP_VERSION, '5.3.6', '>='))
 			{
-				if (isset($file['class']))
+				$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+				krsort($backtrace);
+
+				foreach ($backtrace as $file)
 				{
-					$files[] = $file['class'] . ':' . $file['line'];
+					if (isset($file['class']))
+					{
+						$files[] = $file['class'] . ':' . $file['line'];
+					}
 				}
 			}
 
