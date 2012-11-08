@@ -5153,7 +5153,7 @@ class Model extends Object
 					$sql .= ' DELAYED';
 				}
 
-				$sql .= ' INTO ' . $this->table . ' SET ';
+				$sql .= ' INTO ' . $this->table;
 			}
 			else
 			{
