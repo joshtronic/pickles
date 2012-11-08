@@ -620,7 +620,7 @@ class Cache extends Object
 	/**
 	 * Get Key
 	 *
-	 * Gets the value of the key and returns it.
+	 * Gets the value of the key(s) and returns it.
 	 *
 	 * @param  mixed $keys key(s) to retrieve
 	 * @return mixed value(s) of the requested key(s), false if not set
@@ -676,16 +676,27 @@ class Cache extends Object
 	/**
 	 * Delete Key
 	 *
-	 * Deletes the specified key.
+	 * Deletes the specified key(s).
 	 *
-	 * @param  string $key key to delete
+	 * @param  mixed $keys key(s) to delete
 	 * @return boolean status of deleting the key
 	 */
-	public function delete($key)
+	public function delete($keys)
 	{
 		if ($this->open())
 		{
-			return $this->connection->delete(strtoupper($this->namespace . $key));
+			if (!is_array($keys))
+			{
+				$keys = array($keys);
+			}
+
+			// Memcache() doesn't let you pass an array to delete all records the same way you can with get()
+			foreach ($keys as $key)
+			{
+				$this->connection->delete(strtoupper($this->namespace . $key));
+			}
+
+			return true;
 		}
 
 		return false;
