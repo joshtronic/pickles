@@ -7057,6 +7057,27 @@ class String
 	}
 
 	// }}}
+	// {{{ Generate Slug
+
+	/**
+	 * Generate Slug
+	 *
+	 * Generates a slug from the pass string by lowercasing the string, trimming
+	 * whitespace and converting non-alphanumeric values to dashes. Takes care
+	 * of multiple dashes as well.
+	 *
+	 * @static
+	 * @param  string $string to be converted to the slug
+	 * @return string resulting slug
+	 */
+	public static function generateSlug($string)
+	{
+		$string = strtolower(trim($string));
+		$string = preg_replace('/[^a-z0-9-]/', '-', $string);
+		$string = preg_replace('/-+/',         '-', $string);
+		return trim($string, '-');;
+	}
+
 	// {{{ Is Empty
 
 	/**
