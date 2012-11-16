@@ -276,6 +276,17 @@ class Model extends Object
 	 */
 	private $postgresql = false;
 
+	/**
+	 * Commit Type
+	 *
+	 * Indicates what we want to commit. Defaults to a single row commit, any
+	 * calls to queue() will force the commit to process the queue.
+	 *
+	 * @access private
+	 * @var    string
+	 */
+	private $commit_type = 'row';
+
 	// }}}
 	// {{{ Class Constructor
 
@@ -1045,6 +1056,20 @@ class Model extends Object
 		return $this->record;
 	}
 
+	/**
+	 * Queue Record
+	 *
+	 * Stashes the current record and creates an empty record ready to be
+	 * manipulated. Eliminates looping through records and INSERTing each one
+	 * separately and/or the need for helper methods in the models.
+	 */
+	public function queue()
+	{
+		$this->commit_type = 'queue';
+		$this->records[]   = $this->record;
+		$this->record      = null;
+	}
+
 	// }}}
 	// {{{ Record Manipulation Methods
 
@@ -1057,8 +1082,73 @@ class Model extends Object
 	 */
 	public function commit()
 	{
-		// Checks if the record is actually populated
-		if (count($this->record) > 0)
+		// Multiple row INSERT
+		if ($this->commit_type == 'queue')
+		{
+			foreach ($this->records as $record)
+			{
+				if (!isset($sql))
+				{
+					$field_count   = count($record);
+					$insert_fields = array_keys($record);
+
+					if ($this->columns['created_at'] != false)
+					{
+						$insert_fields[] = $this->columns['created_at'];
+						$field_count++;
+					}
+
+					if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+					{
+						$insert_fields[] = $this->columns['created_id'];
+						$field_count++;
+					}
+
+					$values           = '(' . implode(', ', array_fill(0, $field_count, '?')) . ')';
+					$input_parameters = array();
+
+					// INSERT INTO ...
+					$sql = 'INSERT INTO ' . $this->table . ' (' . implode(', ', $insert_fields) . ') VALUES ' . $values;
+				}
+				else
+				{
+					$sql .= ', ' . $values;
+				}
+
+				$record_field_count = count($record);
+
+				foreach ($record as $variable => $value)
+				{
+					$input_parameters[] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
+				}
+
+				if ($this->columns['created_at'] != false)
+				{
+					$input_parameters[] = Time::timestamp();
+					$record_field_count++;
+				}
+
+				if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+				{
+					$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
+					$record_field_count++;
+				}
+
+				if ($record_field_count != $field_count)
+				{
+					throw new Exception('Record does not match the excepted field count');
+				}
+
+				if (array_key_exists($this->columns['id'], $record))
+				{
+					throw new Exception('Multiple row UPDATEs are currently not supported');
+				}
+			}
+
+			return $this->db->execute($sql . ';', $input_parameters);
+		}
+		// Single row INSERT or UPDATE
+		elseif (count($this->record) > 0)
 		{
 			// Determines if it's an UPDATE or INSERT
 			$update = (isset($this->record[$this->columns['id']]) && trim($this->record[$this->columns['id']]) != '');
