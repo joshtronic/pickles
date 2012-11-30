@@ -1480,12 +1480,26 @@ class Controller extends Object
 	 */
 	public function prepareVariables($basename)
 	{
+		if (strpos($basename, '.') !== false)
+		{
+			list($basename, $action) = explode('.', $basename, 2);
+			$action                  = str_replace('.', '_', $action);
+		}
+
 		// Sets up all of our variables
 		$module_class      = strtr($basename, '/', '_');
 		$module_filename   = SITE_MODULE_PATH . $basename . '.php';
 		$template_basename = $basename;
 		$css_class         = $module_class;
 		$js_basename       = $basename;
+
+		if (isset($action))
+		{
+			$module_class      .= '_' . $action;
+			$template_basename .= '/' . $action;
+			$css_class         .= '_' . $action;
+			$js_basename       .= '/' . $action;
+		}
 
 		// Scrubs class names with hyphens
 		if (strpos($module_class, '-') !== false)
