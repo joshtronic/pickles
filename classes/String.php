@@ -85,6 +85,7 @@ class String
 		return trim($string, '-');;
 	}
 
+	// }}}
 	// {{{ Is Empty
 
 	/**
@@ -233,3 +234,4 @@ class String
 }
 
 ?>
+
