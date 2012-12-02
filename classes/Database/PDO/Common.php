@@ -55,10 +55,13 @@ class Database_PDO_Common extends Database_Common
 			throw new Exception('Data source name is not defined');
 		}
 
-		// This combats a bug: https://bugs.php.net/bug.php?id=62571&edit=1
 		if ($this->driver == 'pdo_pgsql')
 		{
+			// This combats a bug: https://bugs.php.net/bug.php?id=62571&edit=1
 			$this->attributes[PDO::ATTR_PERSISTENT] = false;
+
+			// This allows for multiple prepared queries
+			$this->attributes[PDO::ATTR_EMULATE_PREPARES] = true;
 		}
 	}
 

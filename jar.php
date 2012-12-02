@@ -1844,10 +1844,13 @@ class Database_PDO_Common extends Database_Common
 			throw new Exception('Data source name is not defined');
 		}
 
-		// This combats a bug: https://bugs.php.net/bug.php?id=62571&edit=1
 		if ($this->driver == 'pdo_pgsql')
 		{
+			// This combats a bug: https://bugs.php.net/bug.php?id=62571&edit=1
 			$this->attributes[PDO::ATTR_PERSISTENT] = false;
+
+			// This allows for multiple prepared queries
+			$this->attributes[PDO::ATTR_EMULATE_PREPARES] = true;
 		}
 	}
 
@@ -5179,66 +5182,125 @@ class Model extends Object
 	 */
 	public function commit()
 	{
-		// Multiple row INSERT
+		// Multiple row query / queries
 		if ($this->commit_type == 'queue')
 		{
+			/**
+			 * @todo I outta loop through twice to determine if it's an INSERT
+			 * or an UPDATE. As it stands, you could run into a scenario where
+			 * you could have a mixed lot that would attempt to build out a
+			 * query with both INSERT and UPDATE syntax and would probably cause
+			 * a doomsday scenario for our universe.
+			 */
 			foreach ($this->records as $record)
 			{
-				if (!isset($sql))
-				{
-					$field_count   = count($record);
-					$insert_fields = array_keys($record);
-
-					if ($this->columns['created_at'] != false)
-					{
-						$insert_fields[] = $this->columns['created_at'];
-						$field_count++;
-					}
-
-					if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
-					{
-						$insert_fields[] = $this->columns['created_id'];
-						$field_count++;
-					}
-
-					$values           = '(' . implode(', ', array_fill(0, $field_count, '?')) . ')';
-					$input_parameters = array();
-
-					// INSERT INTO ...
-					$sql = 'INSERT INTO ' . $this->table . ' (' . implode(', ', $insert_fields) . ') VALUES ' . $values;
-				}
-				else
-				{
-					$sql .= ', ' . $values;
-				}
-
-				$record_field_count = count($record);
-
-				foreach ($record as $variable => $value)
-				{
-					$input_parameters[] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
-				}
-
-				if ($this->columns['created_at'] != false)
-				{
-					$input_parameters[] = Time::timestamp();
-					$record_field_count++;
-				}
-
-				if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
-				{
-					$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
-					$record_field_count++;
-				}
-
-				if ($record_field_count != $field_count)
-				{
-					throw new Exception('Record does not match the excepted field count');
-				}
-
+				// Performs an UPDATE with multiple queries
 				if (array_key_exists($this->columns['id'], $record))
 				{
-					throw new Exception('Multiple row UPDATEs are currently not supported');
+					if (!isset($sql))
+					{
+						$sql              = '';
+						$input_parameters = array();
+					}
+
+					$update_fields = array();
+
+					foreach ($record as $field => $value)
+					{
+						if ($field != $this->columns['id'])
+						{
+							$update_fields[]    = $field . ' = ?';
+							$input_parameters[] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
+						}
+					}
+
+					// @todo Check if the column was passed in
+					if ($this->columns['updated_at'] != false)
+					{
+						$update_fields[]    = $this->columns['updated_at'] . ' = ?';
+						$input_parameters[] = Time::timestamp();
+					}
+
+					// @todo Check if the column was passed in
+					if ($this->columns['updated_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+					{
+						$update_fields[]    = $this->columns['updated_id'] . ' = ?';
+						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
+					}
+
+					if ($sql != '')
+					{
+						$sql .= '; ';
+					}
+
+					$sql .= 'UPDATE ' . $this->table . ' SET ' . implode(', ', $update_fields) . ' WHERE ';
+
+					if (isset($record[$this->columns['id']]))
+					{
+						$sql                .= $this->columns['id'] . ' = ?';
+						$input_parameters[]  = $record[$this->columns['id']];
+					}
+					else
+					{
+						throw new Exception('Missing UID field');
+					}
+				}
+				// Performs a multiple row INSERT
+				else
+				{
+					if (!isset($sql))
+					{
+						$field_count   = count($record);
+						$insert_fields = array_keys($record);
+
+						if ($this->columns['created_at'] != false)
+						{
+							$insert_fields[] = $this->columns['created_at'];
+							$field_count++;
+						}
+
+						if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+						{
+							$insert_fields[] = $this->columns['created_id'];
+							$field_count++;
+						}
+
+						$values           = '(' . implode(', ', array_fill(0, $field_count, '?')) . ')';
+						$input_parameters = array();
+
+						// INSERT INTO ...
+						$sql = 'INSERT INTO ' . $this->table . ' (' . implode(', ', $insert_fields) . ') VALUES ' . $values;
+					}
+					else
+					{
+						$sql .= ', ' . $values;
+					}
+
+					$record_field_count = count($record);
+
+					foreach ($record as $variable => $value)
+					{
+						$input_parameters[] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
+					}
+
+					// @todo Check if the column was passed in
+					if ($this->columns['created_at'] != false)
+					{
+						$input_parameters[] = Time::timestamp();
+						$record_field_count++;
+					}
+
+					// @todo Check if the column was passed in
+					if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+					{
+						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
+						$record_field_count++;
+					}
+
+					if ($record_field_count != $field_count)
+					{
+						throw new Exception('Record does not match the excepted field count');
+					}
 				}
 			}
 
