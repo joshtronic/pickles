@@ -1085,6 +1085,9 @@ class Model extends Object
 		// Multiple row query / queries
 		if ($this->commit_type == 'queue')
 		{
+			$update     = false;
+			$cache_keys = array();
+
 			/**
 			 * @todo I outta loop through twice to determine if it's an INSERT
 			 * or an UPDATE. As it stands, you could run into a scenario where
@@ -1097,6 +1100,8 @@ class Model extends Object
 				// Performs an UPDATE with multiple queries
 				if (array_key_exists($this->columns['id'], $record))
 				{
+					$update = true;
+
 					if (!isset($sql))
 					{
 						$sql              = '';
@@ -1111,6 +1116,10 @@ class Model extends Object
 						{
 							$update_fields[]    = $field . ' = ?';
 							$input_parameters[] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
+						}
+						else
+						{
+							$cache_keys[] = $this->model . '-' . $value;
 						}
 					}
 
@@ -1204,7 +1213,15 @@ class Model extends Object
 				}
 			}
 
-			return $this->db->execute($sql . ';', $input_parameters);
+			$results = $this->db->execute($sql . ';', $input_parameters);
+
+			// Clears the cache
+			if ($update && $this->use_cache)
+			{
+				$this->cache->delete($cache_keys);
+			}
+
+			return $results;
 		}
 		// Single row INSERT or UPDATE
 		elseif (count($this->record) > 0)
