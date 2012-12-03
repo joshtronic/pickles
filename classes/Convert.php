@@ -18,36 +18,12 @@
 /**
  * Convert Class
  *
- * Collection of statically called methods to help aid in converting formats.
+ * Collection of statically called methods to help aid in converting formats as
+ * well as distances.
  */
 class Convert
 {
-	/**
-	 * To JSON
-	 *
-	 * Encodes passed variable as JSON.
-	 *
-	 * Requires PHP 5 >= 5.2.0 or PECL json >= 1.2.0
-	 *
-	 * @link http://json.org/
-	 * @link http://us.php.net/json_encode
-	 * @link http://pecl.php.net/package/json
-	 *
-	 * @static
-	 * @param  mixed $variable variable to convert
-	 * @return JSON encoded string
-	 */
-	public static function toJSON($variable)
-	{
-		if (JSON_AVAILABLE)
-		{
-			return json_encode($variable);
-		}
-		else
-		{
-			return '{ "status": "error", "message": "json_encode() not found" }';
-		}
-	}
+	// {{{ Array to XML
 
 	/**
 	 * Array to XML
@@ -140,6 +116,55 @@ class Convert
 
 		return $xml;
 	}
+
+	// }}}
+	// {{{ Meters to Miles
+
+	/**
+	 * Meters to Miles
+	 *
+	 * Converts meters to miles.
+	 *
+	 * @static
+	 * @param  mixed $meters meters to convert to miles
+	 * @return mixed number of miles
+	 */
+	public static function metersToMiles($meters)
+	{
+		return $meters * 0.00062137119;
+	}
+
+	// }}}
+	// {{{ To JSON
+
+	/**
+	 * To JSON
+	 *
+	 * Encodes passed variable as JSON.
+	 *
+	 * Requires PHP 5 >= 5.2.0 or PECL json >= 1.2.0
+	 *
+	 * @link http://json.org/
+	 * @link http://us.php.net/json_encode
+	 * @link http://pecl.php.net/package/json
+	 *
+	 * @static
+	 * @param  mixed $variable variable to convert
+	 * @return JSON encoded string
+	 */
+	public static function toJSON($variable)
+	{
+		if (JSON_AVAILABLE)
+		{
+			return json_encode($variable);
+		}
+		else
+		{
+			return '{ "status": "error", "message": "json_encode() not found" }';
+		}
+	}
+
+	// }}}
 }
 
 ?>
