@@ -2275,7 +2275,13 @@ class Database extends Object
 		{
 			if (isset($config->datasources[$name]))
 			{
-				$datasource           = $config->datasources[$name];
+				$datasource = $config->datasources[$name];
+
+				if (!isset($datasource['driver']))
+				{
+					return false;
+				}
+
 				$datasource['driver'] = strtolower($datasource['driver']);
 
 				if (!isset(self::$instances['Database'][$name]))
