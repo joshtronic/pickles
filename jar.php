@@ -1417,6 +1417,10 @@ class Controller extends Object
 				{
 					$module_return = $module->return;
 				}
+				else
+				{
+					$module_return = array_merge($module_return, $module->return);
+				}
 			}
 
 			$display->setModuleReturn(isset($module_return) ? $module_return : array('status' => 'error', 'message' => $error_message));
