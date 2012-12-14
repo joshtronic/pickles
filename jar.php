@@ -358,7 +358,7 @@ class Browser
 	{
 		if (strpos($destination, '://') === false)
 		{
-			$destination = 'http' . ((!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? '' : 's') . '://' . $_SERVER['HTTP_HOST'] . $destination;
+			$destination = 'http' . ((!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off' || $_SERVER['HTTPS'] == '') ? '' : 's') . '://' . $_SERVER['HTTP_HOST'] . $destination;
 		}
 
 		header('Location: ' . $destination);
@@ -1416,6 +1416,10 @@ class Controller extends Object
 				if ($module_return === null)
 				{
 					$module_return = $module->return;
+				}
+				else
+				{
+					$module_return = array_merge($module_return, $module->return);
 				}
 			}
 
