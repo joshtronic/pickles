@@ -18,8 +18,8 @@
 /**
  * Convert Class
  *
- * Collection of statically called methods to help aid in converting formats as
- * well as distances.
+ * Collection of statically called methods to help aid in converting data
+ * formats.
  */
 class Convert
 {
@@ -115,23 +115,6 @@ class Convert
 		}
 
 		return $xml;
-	}
-
-	// }}}
-	// {{{ Meters to Miles
-
-	/**
-	 * Meters to Miles
-	 *
-	 * Converts meters to miles.
-	 *
-	 * @static
-	 * @param  mixed $meters meters to convert to miles
-	 * @return mixed number of miles
-	 */
-	public static function metersToMiles($meters)
-	{
-		return $meters * 0.00062137119;
 	}
 
 	// }}}
