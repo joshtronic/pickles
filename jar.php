@@ -1413,7 +1413,7 @@ class Controller extends Object
 			{
 				$module_return = $module->$default_method();
 
-				if ($module_return === null)
+				if (!is_array($module_return))
 				{
 					$module_return = $module->return;
 				}
@@ -2908,7 +2908,6 @@ class Distance
 
 		if (count($pieces) == 2)
 		{
-			var_dump($arguments[0], $pieces[0], $pieces[1]);
 			return Distance::convertUnit($arguments[0], $pieces[0], $pieces[1]);
 		}
 
@@ -2980,15 +2979,15 @@ class Distance
 	 * @static
 	 * @param  mixed $latitude_from starting latitude
 	 * @param  mixed $longitude_from starting longitude
-	 * @param  mixed $latitude_from starting latitude
-	 * @param  mixed $longitude_from starting longitude
+	 * @param  mixed $latitude_to ending latitude
+	 * @param  mixed $longitude_to ending longitude
 	 * @param  string $unit optional units to return, miles by default
 	 * @return mixed distance between the points in the desired unit
 	 */
-	public static function calculateDistance($latitude_from, $longitude_from, $latitude_to, $latitude_from, $unit = 'miles')
+	public static function calculateDistance($latitude_from, $longitude_from, $latitude_to, $longitude_to, $unit = 'miles')
 	{
 		$unit  = ucwords(strtolower($unit));
-		$theta = $lontitude_from - $longitude_to;
+		$theta = $longitude_from - $longitude_to;
 
 		$distance =
 			sin(deg2rad($latitude_from))

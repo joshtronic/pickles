@@ -385,7 +385,7 @@ class Controller extends Object
 			{
 				$module_return = $module->$default_method();
 
-				if ($module_return === null)
+				if (!is_array($module_return))
 				{
 					$module_return = $module->return;
 				}
