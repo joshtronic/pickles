@@ -116,6 +116,7 @@ class Time
 	 * @static
 	 * @param  string $date birth / inception date
 	 * @return integer $age number of years old
+	 * @todo   Wondering if this really should live in the Date class since it's a Date function. Could flip the aliasing to preserve any older code.
 	 */
 	public static function age($date)
 	{
@@ -134,6 +135,85 @@ class Time
 		}
 
 		return $age;
+	}
+
+	/**
+	 * Ago
+	 *
+	 * Generates a relative time (e.g. X minutes ago).
+	 *
+	 * @static
+	 * @param  mixed $time timestamp to calculate from
+	 * @return string relative time
+	 */
+	public static function ago($time)
+	{
+		$current = strtotime(Time::timestamp());
+		$time    = preg_match('/^\d+$/', $time) ? $time : strtotime($time);
+
+		if ($current == $time)
+		{
+			$time_ago = 'just now';
+		}
+		else
+		{
+			if ($current > $time)
+			{
+				$difference = $current - $time;
+				$suffix     = ' ago';
+			}
+			else
+			{
+				$difference = $time - $current;
+				$suffix     = ' from now';
+			}
+
+			// Less than 1 minute ago (seconds ago)
+			if ($difference < 60)
+			{
+				$time_ago = 'seconds';
+			}
+			// Less than 1 hour ago (minutes ago)
+			elseif ($difference < 3600)
+			{
+				$minutes  = round($difference / 60);
+				$time_ago = $minutes . ' minute' . ($minutes != 1 ? 's' : '');
+			}
+			// Less than 1 day ago (hours ago)
+			elseif ($difference < 86400)
+			{
+				$hours    = round($difference / 3600);
+				$time_ago = $hours . ' hour' . ($hours != 1 ? 's' : '');
+			}
+			// Less than 1 week ago (days ago)
+			elseif ($difference < 604800)
+			{
+				$days     = round($difference / 86400);
+				$time_ago = $days . ' day' . ($days != 1 ? 's' : '');
+			}
+			// Less than 1 month ago (weeks ago)
+			elseif ($difference < 2419200)
+			{
+				$weeks    = round($difference / 604800);
+				$time_ago = $weeks . ' week' . ($weeks != 1 ? 's' : '');
+			}
+			// Less than 1 year ago (months ago)
+			elseif ($difference < 31449600)
+			{
+				$months   = round($difference / 2419200);
+				$time_ago = $months . ' month' . ($months != 1 ? 's' : '');
+			}
+			// Over 1 year ago (years ago)
+			else
+			{
+				$years    = round($difference / 31449600);
+				$time_ago = $years . ' year' . ($years != 1 ? 's' : '');
+			}
+
+			$time_ago .= $suffix;
+		}
+
+		return $time_ago;
 	}
 
 	/**
