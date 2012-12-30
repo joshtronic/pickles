@@ -5560,7 +5560,17 @@ class Model extends Object
 								$sql .= ', ';
 							}
 
-							$sql .= $column . ' = ?';
+							$sql .= $column . ' = ';
+
+							if (in_array($value, array('++', '--')))
+							{
+								$sql  .= $column . ' ' . substr($value, 0, 1) . ' ?';
+								$value = 1;
+							}
+							else
+							{
+								$sql .= '?';
+							}
 						}
 						else
 						{
