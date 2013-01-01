@@ -114,6 +114,36 @@ class String
 	}
 
 	// }}}
+	// {{{ Pluralize
+
+	/**
+	 * Pluralize
+	 *
+	 * Based on a passed integer, the word will be pluralized. A value of zero
+	 * will also pluralize the word (e.g. 0 things not 0 thing).
+	 *
+	 * @static
+	 * @param  string $string the word to plurailze
+	 * @param  integer $count the count to interrogate
+	 * @param  boolean $both (optional) include count in return
+	 * @return string pluralized word
+	 */
+	public static function pluralize($string, $count, $both = false)
+	{
+		if ($count != 1)
+		{
+			$string .= 's';
+		}
+
+		if ($both)
+		{
+			$string = $count . ' ' . $string;
+		}
+
+		return $string;
+	}
+
+	// }}}
 	// {{{ Random
 
 	/**
