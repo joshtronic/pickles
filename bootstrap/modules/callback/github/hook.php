@@ -1,6 +1,6 @@
 <?php
 
-class callback_github extends Module
+class callback_github_hook extends Module
 {
 	public $method = 'POST';
 
