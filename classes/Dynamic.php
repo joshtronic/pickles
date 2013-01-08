@@ -232,29 +232,9 @@ class Dynamic extends Object
 						&& extension_loaded('curl')
 						&& $this->config->pickles['minify'] === true)
 					{
-						// Sets up the options list
-						$options = array(
-							CURLOPT_URL             => 'http://closure-compiler.appspot.com/compile',
-							CURLOPT_RETURNTRANSFER  => true,
-							CURLOPT_HTTPHEADER      => array('Content-Type: application/x-www-form-urlencoded; charset=utf-8'),
-							CURLOPT_POST            => true,
-							CURLOPT_POSTFIELDS      => 'js_code=' . urlencode(file_get_contents($original_filename)) . '&compilation_level=' . ($level . '_' . ($level == 'WHITESPACE' ? 'ONLY' : 'OPTIMIZATIONS')) . '&output_format=text&output_info=compiled_code'
-						);
+						exec('java -jar ' . PICKLES_PATH . 'vendors/google/closure-compiler/compiler.jar --js=' . $original_filename . ' --compilation_level='  . ($level . '_' . ($level == 'WHITESPACE' ? 'ONLY' : 'OPTIMIZATIONS')) . ' --js_output_file=' . $minified_filename);
 
-						try
-						{
-							// Executes the request
-							$curl = curl_init();
-							curl_setopt_array($curl, $options);
-							file_put_contents($minified_filename, curl_exec($curl));
-							curl_close($curl);
-
-							$reference = $minified_reference;
-						}
-						catch (Exception $exception)
-						{
-							$reference = $original_reference;
-						}
+						$reference = $minified_reference;
 					}
 					elseif (file_exists($minified_filename))
 					{
