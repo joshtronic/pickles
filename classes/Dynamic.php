@@ -141,9 +141,18 @@ class Dynamic extends Object
 		{
 			$reference = $original_reference;
 
-			if (is_writable($path)
-				&& (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename))
-				&& $this->config->pickles['minify'] === true)
+			/**
+			 * Disabled the sanity checks because I'm using LESS's @import for
+			 * some hackery and it's not validating as true due to the imported
+			 * file not being interrogated. Should be okay as minifying is now
+			 * a subjective action that's turned on in the config due to the
+			 * issues I had in production with it.
+			 *
+			 * if (is_writable($path)
+			 *     && (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename))
+			 *     && $this->config->pickles['minify'] === true)
+			 */
+			if ($this->config->pickles['minify'] === true)
 			{
 				// Compiles LESS to CSS before minifying
 				if ($less)
