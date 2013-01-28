@@ -3017,7 +3017,7 @@ class Distance
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -3108,16 +3108,18 @@ class Dynamic extends Object
 	 * Generate Stylesheet Reference
 	 *
 	 * Attempts to minify the stylesheet and then returns the reference URI for
-	 * the file, minified or not. Supports LESS, pass it a .less file instead
-	 * and it will be compiled before minification.
+	 * the file, minified or not. Supports LESS and SASS, pass it a .less file
+	 * or a .scss file instead and it will be compiled before minification.
 	 *
 	 * @param  string $reference URI reference of the Stylesheet
 	 * @return string URI reference reference with dynamic content
 	 * @url    http://lesscss.org
+	 * @url    http://sass-lang.com
 	 */
 	public function css($original_reference)
 	{
 		$less = false;
+		$sass = false;
 
 		// Injects .min into the filename
 		$parts = explode('.', $original_reference);
@@ -3130,10 +3132,17 @@ class Dynamic extends Object
 		{
 			end($parts);
 
-			if (current($parts) == 'less')
+			switch (current($parts))
 			{
-				$less               = true;
-				$parts[key($parts)] = 'css';
+				case 'less':
+					$less               = true;
+					$parts[key($parts)] = 'css';
+					break;
+
+				case 'scss':
+					$sass               = true;
+					$parts[key($parts)] = 'css';
+					break;
 			}
 
 			$parts[key($parts)] = 'min.' . current($parts);
@@ -3162,12 +3171,21 @@ class Dynamic extends Object
 			 */
 			if ($this->config->pickles['minify'] === true)
 			{
-				// Compiles LESS to CSS before minifying
-				if ($less)
+				// Compiles LESS & SASS to CSS before minifying
+				if ($less || $sass)
 				{
 					$compiled_filename = str_replace('.min', '', $minified_filename);
 
-					exec('export PATH=$PATH:/usr/local/bin; ' . PICKLES_PATH . 'vendors/cloudhead/less.js/bin/lessc ' . $original_filename . ' > ' . $compiled_filename);
+					if ($less)
+					{
+						$command = 'export PATH=$PATH:/usr/local/bin; ' . PICKLES_PATH . 'vendors/cloudhead/less.js/bin/lessc ' . $original_filename . ' > ' . $compiled_filename;
+					}
+					elseif ($sass)
+					{
+						$command = 'sass ' . $original_filename . ':' . $compiled_filename;
+					}
+
+					exec($command);
 
 					$original_filename = $compiled_filename;
 				}
