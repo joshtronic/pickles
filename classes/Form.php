@@ -9,7 +9,7 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -55,9 +55,9 @@ class Form extends Object
 	 * @param  boolean $checked optional whether the input is checked
 	 * @return string HTML for the input
 	 */
-	public function input($name, $value = '', $classes = '', $additional = null, $type = 'text', $checked = false)
+	public function input($name, $value = null, $classes = null, $additional = null, $type = 'text', $checked = false)
 	{
-		if ($additional != null)
+		if ($additional)
 		{
 			$additional = ' ' . $additional;
 		}
@@ -67,7 +67,17 @@ class Form extends Object
 			$additional .= ' checked="checked"';
 		}
 
-		return '<input type="' . $type . '" name="' . $name . '" id="' . $name . '" value="' . $value . '" class="' . $classes . '"' . $additional . ' />' . "\n";
+		if ($value)
+		{
+			$additional .= ' value="' . $value . '"';
+		}
+
+		if ($classes)
+		{
+			$additional .= ' class="' . $classes . '"';
+		}
+
+		return '<input type="' . $type . '" name="' . $name . '" id="' . $name . '"' . $additional . ' />';
 	}
 
 	// }}}
@@ -84,7 +94,7 @@ class Form extends Object
 	 * @param  string $additional optional additional parameters
 	 * @return string HTML for the input
 	 */
-	public function hidden($name, $value = '', $classes = '', $additional = null)
+	public function hidden($name, $value = null, $classes = null, $additional = null)
 	{
 		return $this->input($name, $value, $classes, $additional, 'hidden');
 	}
@@ -102,7 +112,7 @@ class Form extends Object
 	 * @param  string $additional optional additional parameters
 	 * @return string HTML for the input
 	 */
-	public function hiddenInput($name, $value = '', $classes = '', $additional = null)
+	public function hiddenInput($name, $value = null, $classes = null, $additional = null)
 	{
 		return $this->input($name, $value, $classes, $additional, 'hidden');
 	}
@@ -121,7 +131,7 @@ class Form extends Object
 	 * @param  string $additional optional additional parameters
 	 * @return string HTML for the input
 	 */
-	public function password($name, $value = '', $classes = '', $additional = null)
+	public function password($name, $value = null, $classes = null, $additional = null)
 	{
 		return $this->input($name, $value, $classes, $additional, 'password');
 	}
@@ -139,7 +149,7 @@ class Form extends Object
 	 * @param  string $additional optional additional parameters
 	 * @return string HTML for the input
 	 */
-	public function passwordInput($name, $value = '', $classes = '', $additional = null)
+	public function passwordInput($name, $value = null, $classes = null, $additional = null)
 	{
 		return $this->input($name, $value, $classes, $additional, 'password');
 	}
@@ -158,7 +168,7 @@ class Form extends Object
 	 * @param  string $additional optional additional parameters
 	 * @return string HTML for the input
 	 */
-	public function submit($name, $value = '', $classes = '', $additional = null)
+	public function submit($name, $value = null, $classes = null, $additional = null)
 	{
 		return $this->input($name, $value, $classes, $additional, 'submit');
 	}
@@ -176,7 +186,7 @@ class Form extends Object
 	 * @param  string $additional optional additional parameters
 	 * @return string HTML for the input
 	 */
-	public function submitInput($name, $value = '', $classes = '', $additional = null)
+	public function submitInput($name, $value = null, $classes = null, $additional = null)
 	{
 		return $this->input($name, $value, $classes, $additional, 'submit');
 	}
@@ -233,7 +243,7 @@ class Form extends Object
 	 * @param  string $additional optional additional parameters
 	 * @return string HTML for the input
 	 */
-	public function checkbox($name, $value = '', $checked = false, $classes = '', $additional = null)
+	public function checkbox($name, $value = null, $checked = false, $classes = null, $additional = null)
 	{
 		return $this->input($name, $value, $classes, $additional, 'checkbox', $checked);
 	}
@@ -258,7 +268,7 @@ class Form extends Object
 	 * @param  string $additional optional additional parameters
 	 * @return string HTML for the input
 	 */
-	public function radio($name, $value = '', $checked = false, $classes = '', $additional = null)
+	public function radio($name, $value = null, $checked = false, $classes = null, $additional = null)
 	{
 		return $this->input($name, $value, $classes, $additional, 'radio', $checked);
 	}
@@ -283,14 +293,19 @@ class Form extends Object
 	 * @param  string $type optional type of input
 	 * @return string HTML for the input
 	 */
-	public function textarea($name, $value = '', $classes = '', $additional = null)
+	public function textarea($name, $value = null, $classes = null, $additional = null)
 	{
-		if ($additional != null)
+		if ($additional)
 		{
 			$additional = ' ' . $additional;
 		}
 
-		return '<textarea name="' . $name . '" id="' . $name . '" class="' . $classes . '"' . $additional . '>' . $value . '</textarea>' . "\n";
+		if ($classes)
+		{
+			$additional .= ' class="' . $classes . '"';
+		}
+
+		return '<textarea name="' . $name . '" id="' . $name . '"' . $additional . '>' . $value . '</textarea>';
 	}
 
 	// }}}
@@ -308,14 +323,19 @@ class Form extends Object
 	 * @param  string $additional optional additional parameters
 	 * @return string HTML for the select box
 	 */
-	public function select($name, $options, $selected = null, $classes = '', $additional = null)
+	public function select($name, $options, $selected = null, $classes = null, $additional = null)
 	{
-		if ($additional != null)
+		if ($additional)
 		{
 			$additional = ' ' . $additional;
 		}
 
-		return '<select id="' . $name . '" name="' . $name . '" class="' . $classes . '"' . $additional . '>' . $this->options($options, $selected) . '</select>' . "\n";
+		if ($classes)
+		{
+			$additional .= ' class="' . $classes . '"';
+		}
+
+		return '<select id="' . $name . '" name="' . $name . '" class="' . $classes . '"' . $additional . '>' . $this->options($options, $selected) . '</select>';
 	}
 
 	// }}}
@@ -400,7 +420,7 @@ class Form extends Object
 	 * @param  string $additional optional additional parameters
 	 * @return string HTML for the select box
 	 */
-	public function stateSelect($name = 'state', $selected = null, $classes = '', $additional = null)
+	public function stateSelect($name = 'state', $selected = null, $classes = null, $additional = null)
 	{
 		$options = array(
 			null => '-- Select State --',
@@ -489,7 +509,7 @@ class Form extends Object
 	 * @param  integer $end_year optional last year to display
 	 * @return string HTML for the select boxes
 	 */
-	public function dateSelect($name = 'date', $selected = null, $classes = '', $additional = null, $start_year = null, $end_year = null)
+	public function dateSelect($name = 'date', $selected = null, $classes = null, $additional = null, $start_year = null, $end_year = null)
 	{
 		$html = '';
 
@@ -565,7 +585,7 @@ class Form extends Object
 	 * @param  string $additional optional additional parameters
 	 * @return string HTML for the select boxes
 	 */
-	public function dobSelect($name = 'dob', $selected = null, $classes = '', $additional = null)
+	public function dobSelect($name = 'dob', $selected = null, $classes = null, $additional = null)
 	{
 		// Note: Start year based on oldest living person: http://en.wikipedia.org/wiki/Oldest_people as of November 2010
 		// Note: Start and end year may seem backwards, but we want them in descending order when rendered
@@ -585,7 +605,7 @@ class Form extends Object
 	 * @param  string $classes optional class names
 	 * @param  string $additional optional additional parameters
 	 */
-	public function polarSelect($name = 'decision', $selected = 0, $classes = '', $additional = null)
+	public function polarSelect($name = 'decision', $selected = 0, $classes = null, $additional = null)
 	{
 		$options = array(1 => 'Yes', 0 => 'No');
 
@@ -605,7 +625,7 @@ class Form extends Object
 	 * @param  string $classes optional class names
 	 * @param  string $additional optional additional parameters
 	 */
-	public function phoneInput($name = 'phone', $value = null, $classes = '', $additional = null)
+	public function phoneInput($name = 'phone', $value = null, $classes = null, $additional = null)
 	{
 		if ($value == null)
 		{
@@ -630,19 +650,28 @@ class Form extends Object
 			'line_number' => 4
 		);
 
-		if ($additional != null)
+		if ($additional)
 		{
 			$additional = ' ' . $additional;
 		}
+
+		$additional .= ' class="digits';
+
+		if ($classes)
+		{
+			$additional .= ' ' . $classes;
+		}
+
+		$additional .= '"';
 
 		$html = '';
 		foreach ($parts as $part => $size)
 		{
 			$html .= ($html != '' ? ' ' : '');
-			$html .= '<input type="input" name="' . $name . '[' . $part . ']" id="' . $name . '[' . $part . ']" value="' . $value[$part] . '" minlength="' . $size . '" maxlength="' . $size . '" class="digits ' . $class . '"' . $additional . ' />';
+			$html .= '<input type="input" name="' . $name . '[' . $part . ']" id="' . $name . '[' . $part . ']" value="' . $value[$part] . '" minlength="' . $size . '" maxlength="' . $size . '"' . $additional . ' />';
 		}
 
-		return $html . "\n";
+		return $html;
 	}
 
 	// }}}
