@@ -9,7 +9,7 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -71,11 +71,13 @@ class Display_PHP extends Display_Common
 			$__fluid     = $this->fluid;
 
 			// Creates (possibly overwritten) objects
-			$form_class    = (class_exists('CustomForm')    ? 'CustomForm'    : 'Form');
 			$dynamic_class = (class_exists('CustomDynamic') ? 'CustomDynamic' : 'Dynamic');
+			$form_class    = (class_exists('CustomForm')    ? 'CustomForm'    : 'Form');
+			$html_class    = (class_exists('CustomHTML')    ? 'CustomHTML'    : 'HTML');
 
-			$__form    = new $form_class();
 			$__dynamic = new $dynamic_class();
+			$__form    = new $form_class();
+			$__html    = new $html_class();
 
 			// Loads the template
 			if ($this->parent_template != null)

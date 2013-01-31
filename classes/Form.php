@@ -20,6 +20,8 @@
  *
  * This class contains methods for easily generating form elements. There is a
  * heavy focus on select boxes as they have the most overhead for a developer.
+ *
+ * @deprecated
  */
 class Form extends Object
 {
