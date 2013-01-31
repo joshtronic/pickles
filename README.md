@@ -22,14 +22,15 @@ PICKLES is in fact not a true MVC system and won't be masquerading around as one
 
 ### Highly Recommended Software
 
-* PHP 5.2.0+ for native JSON support or PECL JSON 1.2.1 (included)
+* PHP 5.2.0+ for native JSON support or PECL JSON 1.2.1
 
 ### Optional Software
 
+* node, npm & lessc to compile LESS files
+* sass to compile SASS files
 * MySQL with PDO and PDO_MYSQL drivers
 * PostgreSQL with PDO and PDO_PGSQL drivers
 * SQLite 3 with PDO and PDO_SQLITE drivers
-* Limited support for Mongo with Mongo driver and PECL Mongo 1.0.10 (included)
 
 ## Installation
 

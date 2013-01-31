@@ -170,14 +170,23 @@ class Dynamic extends Object
 
 					if ($less)
 					{
-						$command = 'export PATH=$PATH:/usr/local/bin; ' . PICKLES_PATH . 'vendors/cloudhead/less.js/bin/lessc ' . $original_filename . ' > ' . $compiled_filename;
+						// I couldn't get getenv() to give me the PATH value... so yeah, there's that.
+						exec('echo $PATH', $path);
+						putenv('PATH=' . $path[0] . PATH_SEPARATOR . '/usr/local/bin');
+
+						$command = 'lessc ' . $original_filename . ' > ' . $compiled_filename;
 					}
 					elseif ($sass)
 					{
 						$command = 'sass ' . $original_filename . ':' . $compiled_filename;
 					}
 
-					exec($command);
+					exec($command, $output, $return);
+
+					if ($return !== 0)
+					{
+						throw new Exception('There was an error executing `' . $command . '` it returned exit code ' . $return);
+					}
 
 					$original_filename = $compiled_filename;
 				}
