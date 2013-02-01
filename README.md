@@ -40,10 +40,6 @@ Installation is quite simple as there is no installer to run, and all server con
 
 2. Place the code anywhere you'd like (that's at least 2 directories up from the root of your website). I recommend using /usr/share/pickles
 
-3. Open the boilerplate directory and you will find a sample site ready to be copied and pasted to wherever the site you set up is located.
-
-       - The directory public will need to be renamed to whatever you've set up your document root as.
-
-       - The file apache.conf will give you some insight to how configure Apache, or you can just set the include path in public/index.php
+3. A starter site can be obtained from [[http://github.com/joshtronic/pickles-starter]]. It has everything you need to get a site up and running.
 
 4. At this point you should have a very rudimentary site up and running.
