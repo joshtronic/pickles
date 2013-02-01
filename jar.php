@@ -4224,11 +4224,6 @@ class HTML extends Object
 		{
 			$label = $this->label(array('for' => $attributes['name']), $attributes['label']);
 
-			if (!isset($attributes['title']))
-			{
-				$attributes['title'] = $attributes['label'];
-			}
-
 			unset($attributes['label']);
 
 			return $label . $this->$method($attributes);
