@@ -4231,7 +4231,7 @@ class HTML extends Object
 
 			unset($attributes['label']);
 
-			return $label . $this->element('div', $this->$method($attributes));
+			return $label . $this->$method($attributes);
 		}
 		else
 		{
