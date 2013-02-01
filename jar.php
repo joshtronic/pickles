@@ -4218,17 +4218,25 @@ class HTML extends Object
 			{
 				$attributes = array('type' => $type);
 			}
-
-			if (isset($attributes['label'], $attributes['name']))
-			{
-				$label = $this->label(array('for' => $attributes['name']), $attributes['label']);
-				unset($attributes['label']);
-
-				return $label . $this->div($this->input($attributes));
-			}
 		}
 
-		return $this->element($method, $attributes, $contents);
+		if (isset($attributes['label'], $attributes['name']))
+		{
+			$label = $this->label(array('for' => $attributes['name']), $attributes['label']);
+
+			if (!isset($attributes['title']))
+			{
+				$attributes['title'] = $attributes['label'];
+			}
+
+			unset($attributes['label']);
+
+			return $label . $this->element('div', $this->$method($attributes));
+		}
+		else
+		{
+			return $this->element($method, $attributes, $contents);
+		}
 	}
 
 	// {{{ Get Instance
