@@ -4200,7 +4200,7 @@ class HTML extends Object
 		}
 
 		// ->inputType('name', $attributes);
-		if (preg_match('/^input/', $method))
+		if (preg_match('/^input/', $method) && !isset($attributes['label']))
 		{
 			$type = strtolower(str_replace('input', '', $method));
 
@@ -4209,6 +4209,8 @@ class HTML extends Object
 				case 'datetimelocal': $type = 'datetime-local'; break;
 				case '':              $type = 'text';           break;
 			}
+
+			$method = 'input';
 
 			if (is_array($attributes))
 			{
