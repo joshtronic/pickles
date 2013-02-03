@@ -4234,7 +4234,7 @@ class HTML extends Object
 				$label = $this->label($attributes['label']);
 			}
 
-			return $label . $this->$method($attributes);
+			return $label . $this->$method($attributes, $contents);
 		}
 		else
 		{
