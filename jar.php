@@ -4222,11 +4222,17 @@ class HTML extends Object
 			}
 		}
 
-		if (isset($attributes['label'], $attributes['name']))
+		if (is_array($attributes) && isset($attributes['label']))
 		{
-			$label = $this->label(array('for' => $attributes['name']), $attributes['label']);
-
-			unset($attributes['label']);
+			if (isset($attributes['name']))
+			{
+				$label = $this->label(array('for' => $attributes['name']), $attributes['label']);
+				unset($attributes['label']);
+			}
+			else
+			{
+				$label = $this->label($attributes['label']);
+			}
 
 			return $label . $this->$method($attributes);
 		}
