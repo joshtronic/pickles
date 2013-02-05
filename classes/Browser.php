@@ -9,7 +9,7 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -21,8 +21,72 @@
  * Just a simple collection of static functions to accomplish some of the more
  * redundant browser-related tasks.
  */
-class Browser
+class Browser extends Object
 {
+	/**
+	 * Attributes
+	 *
+	 * Variables passed on the query string as /var:value/
+	 *
+	 * @access private
+	 * @var    array
+	 */
+	private $attributes = array();
+
+	/**
+	 * Get instance of the object
+	 *
+	 * Let's the parent class do all the work
+	 *
+	 * @static
+	 * @param  string $class name of the class to instantiate
+	 * @return object self::$instance instance of the Config class
+	 */
+	public static function getInstance($class = 'Browser')
+	{
+		return parent::getInstance($class);
+	}
+
+	/**
+	 * Set browser variable
+	 *
+	 * Sets a variable in the attributes array for easier access later.
+	 *
+	 * @static
+	 * @param  string  $variable name of the variable to set
+	 * @param  mixed   $value the value to set to the variable
+	 * @return boolean true
+	 */
+	public static function set($variable, $value)
+	{
+		$browser                        = Browser::getInstance();
+		$browser->attributes[$variable] = $value;
+
+		return true;
+	}
+
+	/**
+	 * Get browser variable
+	 *
+	 * Gets a variable passed in from the browser. Currently only supports
+	 * the custom attribute URI format /$variable:$value/.
+	 *
+	 * @static
+	 * @param  string $variable name of the variable to get
+	 * @return mixed the value of the variable or boolean false if not set
+	 */
+	public static function get($variable)
+	{
+		$browser = Browser::getInstance();
+
+		if (isset($browser->attributes[$variable]))
+		{
+			return $browser->attributes[$variable];
+		}
+
+		return false;
+	}
+
 	/**
 	 * Is Mobile
 	 *

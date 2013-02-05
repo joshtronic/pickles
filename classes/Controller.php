@@ -9,7 +9,7 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -53,6 +53,26 @@ class Controller extends Object
 		if (isset($this->config->pickles['disabled']) && $this->config->pickles['disabled'] == true)
 		{
 			Error::fatal($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
+		}
+
+		// Checks for attributes passed in the URI
+		if (strstr($_REQUEST['request'], ':'))
+		{
+			$parts               = explode('/', $_REQUEST['request']);
+			$_REQUEST['request'] = '';
+
+			foreach ($parts as $part)
+			{
+				if (strstr($part, ':'))
+				{
+					list($variable, $value) = explode(':', $part);
+					Browser::set($variable, $value);
+				}
+				else
+				{
+					$_REQUEST['request'] .= ($_REQUEST['request'] ? '/' : '') . $part;
+				}
+			}
 		}
 
 		$_REQUEST['request'] = trim($_REQUEST['request']);
