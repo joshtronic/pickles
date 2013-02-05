@@ -16,9 +16,10 @@ PICKLES is in fact not a true MVC system and won't be masquerading around as one
 
 ### Required Software
 
-* Apache (should run on 1.3+)
-* Apache Module mod_rewrite
-* PHP 5.0+
+* Web server (nginx or Apache with mod_rewrite)
+* PHP 5.3+
+
+Please note that PICKLES can run on 5.0+ (you may need the PECL JSON library for versions below 5.2) but is heavily field tested on servers running the latest LTS release of Ubuntu (12.04 at the moment) running the latest stable version of PHP in the main repository (which is the 5.3.x branch). nginx is the preferred web server at this point, but PICKLES was deployed to and used on Apache 1.3+ for quite sometime.
 
 ### Highly Recommended Software
 
@@ -26,20 +27,22 @@ PICKLES is in fact not a true MVC system and won't be masquerading around as one
 
 ### Optional Software
 
-* node, npm & lessc to compile LESS files
-* sass to compile SASS files
+#### Databases
+
 * MySQL with PDO and PDO_MYSQL drivers
 * PostgreSQL with PDO and PDO_PGSQL drivers
 * SQLite 3 with PDO and PDO_SQLITE drivers
+
+#### CSS Pre-processors
+
+* node, npm & lessc to compile LESS files
+* sass to compile SASS files
 
 ## Installation
 
 Installation is quite simple as there is no installer to run, and all server configuration options can be set in your index.php for your site.
 
-1. Download the source [[http://github.com/joshtronic/pickles/zipball/master]] (or clone the repository)
-
+1. Download the source http://github.com/joshtronic/pickles/zipball/master (or clone the repository)
 2. Place the code anywhere you'd like (that's at least 2 directories up from the root of your website). I recommend using /usr/share/pickles
-
-3. A starter site can be obtained from [[http://github.com/joshtronic/pickles-starter]]. It has everything you need to get a site up and running.
-
+3. A starter site can be obtained from http://github.com/joshtronic/pickles-starter. It has everything you need to get a site up and running.
 4. At this point you should have a very rudimentary site up and running.
