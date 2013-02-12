@@ -9,7 +9,7 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -40,8 +40,9 @@
  *         id varchar(32) COLLATE utf8_unicode_ci NOT NULL,
  *         session text COLLATE utf8_unicode_ci NOT NULL,
  *         expires_at datetime NOT NULL,
- *         PRIMARY KEY (id)
- *     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ *         PRIMARY KEY (id),
+ *         INDEX (expires_at)
+ *     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
  *
  * Note: The reason for not using a model class was to avoid a naming conflict
  * between the Session model and the Session class itself. This will eventually

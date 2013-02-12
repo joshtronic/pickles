@@ -1101,7 +1101,7 @@ class Config extends Object
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -1894,7 +1894,7 @@ abstract class Database_Common extends Object
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -2051,7 +2051,7 @@ class Database_PDO_Common extends Database_Common
 
 				foreach ($backtrace as $file)
 				{
-					if (isset($file['class']))
+					if (isset($file['class'], $file['line']))
 					{
 						$files[] = $file['class'] . ':' . $file['line'];
 					}
@@ -7363,7 +7363,7 @@ class Security
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -7394,8 +7394,9 @@ class Security
  *         id varchar(32) COLLATE utf8_unicode_ci NOT NULL,
  *         session text COLLATE utf8_unicode_ci NOT NULL,
  *         expires_at datetime NOT NULL,
- *         PRIMARY KEY (id)
- *     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+ *         PRIMARY KEY (id),
+ *         INDEX (expires_at)
+ *     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
  *
  * Note: The reason for not using a model class was to avoid a naming conflict
  * between the Session model and the Session class itself. This will eventually
