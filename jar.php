@@ -7492,7 +7492,7 @@ class Session extends Object
 
 			if (is_array($session))
 			{
-				if (isset($session['handler']) && in_array($session['handler'], array('files', 'mysql')))
+				if (isset($session['handler']) && in_array($session['handler'], array('files', 'memcache', 'mysql')))
 				{
 					$this->handler = $session['handler'];
 
@@ -7516,6 +7516,11 @@ class Session extends Object
 				{
 					$this->handler = 'files';
 				}
+				elseif ($session == 'memcache')
+				{
+					$this->handler = 'memcache';
+					$datasource    = 'memcache';
+				}
 				elseif ($session == 'mysql')
 				{
 					$this->handler = 'mysql';
@@ -7527,6 +7532,21 @@ class Session extends Object
 			{
 				case 'files':
 					ini_set('session.save_handler', 'files');
+					session_start();
+					break;
+
+				case 'memcache':
+					$hostname = 'localhost';
+					$port     = 11211;
+
+					if ($datasource !== false && isset($datasources[$datasource]))
+					{
+						$hostname = $datasources[$datasource]['hostname'];
+						$port     = $datasources[$datasource]['port'];
+					}
+
+					ini_set('session.save_handler', 'memcache');
+					ini_set('session.save_path',    'tcp://' . $hostname . ':' . $port . '?persistent=1&amp;weight=1&amp;timeout=1&amp;retry_interval=15');
 					session_start();
 					break;
 
