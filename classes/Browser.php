@@ -88,6 +88,18 @@ class Browser extends Object
 	}
 
 	/**
+	 * Go Home
+	 *
+	 * Alias for `Browser::redirect('/');`
+	 *
+	 * @static
+	 */
+	public static function goHome()
+	{
+		Browser::redirect('/');
+	}
+
+	/**
 	 * Is Mobile
 	 *
 	 * Detects if we're working with a mobile browser.
@@ -126,15 +138,32 @@ class Browser extends Object
 	}
 
 	/**
-	 * Go Home
+	 * Remote IP
 	 *
-	 * Alias for `Browser::redirect('/');`
+	 * Returns the user's IP address.
 	 *
-	 * @static
+	 * @return mixed IP address or false if unable to determine
 	 */
-	public static function goHome()
+	public static function remoteIP()
 	{
-		Browser::redirect('/');
+		if (!empty($_SERVER['HTTP_CLIENT_IP']))
+		{
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		}
+		elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+		{
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		}
+		elseif (isset($_SERVER['REMOTE_ADDR']))
+		{
+			$ip = $_SERVER['REMOTE_ADDR'];
+		}
+		else
+		{
+			$ip = false;
+		}
+
+		return $ip;
 	}
 
 	/**
