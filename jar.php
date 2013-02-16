@@ -323,8 +323,8 @@ class API_Tinychat extends API_Common
 /**
  * Browser Utility Class
  *
- * Just a simple collection of static functions to accomplish some of the more
- * redundant browser-related tasks.
+ * Just a simple collection of static functions to accomplish some of the
+ * more redundant browser-related tasks.
  */
 class Browser extends Object
 {
@@ -409,10 +409,11 @@ class Browser extends Object
 	/**
 	 * Redirect
 	 *
-	 * Redirects the browser to another URL. Stops execution as to not run code
-	 * erroneously due to output buffering. HTTP/1.1 request an absolute URI,
-	 * hence the inclusion of the scheme, hostname and absolute path if :// is
-	 * not found. Don't hate the player, hate the RFC.
+	 * Redirects the browser to another URL. Stops execution as to not run
+	 * code erroneously due to output buffering. HTTP/1.1 request an
+	 * absolute URI, hence the inclusion of the scheme, hostname and
+	 * absolute path if :// is not found. Don't hate the player, hate the
+	 * RFC.
 	 *
 	 * @static
 	 * @param  string $destination URL to redirect to
@@ -430,13 +431,26 @@ class Browser extends Object
 	}
 
 	/**
+	 * Go Home
+	 *
+	 * Alias for `Browser::redirect('/');`
+	 *
+	 * @static
+	 */
+	public static function goHome()
+	{
+		Browser::redirect('/');
+	}
+
+	/**
 	 * Status
 	 *
-	 * Pushes a status code to the browser. Some of these codes are site (420)
-	 * and server (444) specific, some just for LOLs (418) and some that are
-	 * still in draft (425) and subject to change. I wanted this to be a
-	 * complete list and in the scenario that a code had multiple meanings, I
-	 * favored a more recent RFC (424) even if merely a draft (451).
+	 * Pushes a status code to the browser. Some of these codes are site
+	 * (420) and server (444) specific, some just for LOLs (418) and some
+	 * that are still in draft (425) and subject to change. I wanted this
+	 * to be a complete list and in the scenario that a code had multiple
+	 * meanings, I favored a more recent RFC (424) even if merely a draft
+	 * (451).
 	 *
 	 * @static
 	 * @param  integer status response code
