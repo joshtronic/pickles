@@ -139,7 +139,7 @@ class Cache extends Object
 		if ($this->connection === null)
 		{
 			$this->connection = new Memcache();
-			$this->connection->connect($this->hostname, $this->port);
+			$this->connection->pconnect($this->hostname, $this->port);
 		}
 
 		return true;
