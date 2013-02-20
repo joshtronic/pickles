@@ -18,8 +18,8 @@
 /**
  * String Class
  *
- * Just a simple collection of static functions to accomplish some of the more
- * redundant string related manipulation.
+ * Just a simple collection of static functions to accomplish some of the
+ * more redundant string related manipulation.
  */
 class String
 {
@@ -69,9 +69,9 @@ class String
 	/**
 	 * Generate Slug
 	 *
-	 * Generates a slug from the pass string by lowercasing the string, trimming
-	 * whitespace and converting non-alphanumeric values to dashes. Takes care
-	 * of multiple dashes as well.
+	 * Generates a slug from the pass string by lowercasing the string,
+	 * trimming whitespace and converting non-alphanumeric values to
+	 * dashes. Takes care of multiple dashes as well.
 	 *
 	 * @static
 	 * @param  string $string to be converted to the slug
@@ -91,10 +91,10 @@ class String
 	/**
 	 * Is Empty
 	 *
-	 * Checks if a string is empty. You can use the PHP function empty() but
-	 * that returns true for a string of "0". Last I checked, that's not an
-	 * empty string. PHP's function also doesn't apply trim() to the value
-	 * to ensure it's not just a bunch of spaces.
+	 * Checks if a string is empty. You can use the PHP function empty()
+	 * but that returns true for a string of "0". Last I checked, that's
+	 * not an empty string. PHP's function also doesn't apply trim() to the
+	 * value to ensure it's not just a bunch of spaces.
 	 *
 	 * @static
 	 * @param  string $value string(s) to be checked
@@ -119,8 +119,8 @@ class String
 	/**
 	 * Pluralize
 	 *
-	 * Based on a passed integer, the word will be pluralized. A value of zero
-	 * will also pluralize the word (e.g. 0 things not 0 thing).
+	 * Based on a passed integer, the word will be pluralized. A value of
+	 * zero will also pluralize the word (e.g. 0 things not 0 thing).
 	 *
 	 * @static
 	 * @param  string $string the word to plurailze
@@ -210,8 +210,8 @@ class String
 	/**
 	 * Truncate
 	 *
-	 * Truncates a string to a specified length and (optionally) adds a span to
-	 * provide a rollover to see the expanded text.
+	 * Truncates a string to a specified length and (optionally) adds a
+	 * span to provide a rollover to see the expanded text.
 	 *
 	 * @static
 	 * @param  string $string string to truncate
@@ -242,8 +242,8 @@ class String
 	/**
 	 * Upper Words
 	 *
-	 * Applies strtolower() and ucwords() to the passed string. The exception
-	 * being email addresses which are not formatted at all.
+	 * Applies strtolower() and ucwords() to the passed string. The
+	 * exception being email addresses which are not formatted at all.
 	 *
 	 * @static
 	 * @param  string $string string to format

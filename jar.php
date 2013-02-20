@@ -7416,10 +7416,11 @@ class Security
  * Session Class
  *
  * Provides session handling via database instead of the file based session
- * handling built into PHP. Using this class requires an array to be defined
- * in place of the boolean true/false (on/off). If simply array(), the
- * datasource will default to the value in $config['pickles']['datasource'] and
- * if the table will default to "sessions". The format is as follows:
+ * handling built into PHP. Using this class requires an array to be
+ * defined in place of the boolean true/false (on/off). If simply array(),
+ * the datasource will default to the value in
+ * $config['pickles']['datasource'] and if the table will default to
+ * "sessions". The format is as follows:
  *
  *     $config = array(
  *         'pickles' => array(
@@ -7430,8 +7431,8 @@ class Security
  *         )
  *     );
  *
- * In addition to the configuration variables, a table in your database must
- * be created. The [MySQL] table schema is as follows:
+ * In addition to the configuration variables, a table in your database
+ * must be created. The [MySQL] table schema is as follows:
  *
  *     CREATE TABLE sessions (
  *         id varchar(32) COLLATE utf8_unicode_ci NOT NULL,
@@ -7441,10 +7442,10 @@ class Security
  *         INDEX (expires_at)
  *     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
  *
- * Note: The reason for not using a model class was to avoid a naming conflict
- * between the Session model and the Session class itself. This will eventually
- * be resolved when I abandon full 5.x support and migrate to 5.3+ (assuming
- * that ever happens).
+ * Note: The reason for not using a model class was to avoid a naming
+ * conflict between the Session model and the Session class itself. This
+ * will eventually be resolved when I abandon full 5.x support and migrate
+ * to 5.3+ (assuming that ever happens).
  */
 class Session extends Object
 {
@@ -7471,8 +7472,8 @@ class Session extends Object
 	/**
 	 * Time to Live
 	 *
-	 * The number of seconds the session should remain active. Corresponds to
-	 * the INI variable session.gc_maxlifetime
+	 * The number of seconds the session should remain active. Corresponds
+	 * to the INI variable session.gc_maxlifetime
 	 *
 	 * @access private
 	 * @var    integer
@@ -7493,8 +7494,8 @@ class Session extends Object
 	/**
 	 * Table
 	 *
-	 * Name of the database table in the aforementioned datasource that holds
-	 * the session data. The expected schema is defined above.
+	 * Name of the database table in the aforementioned datasource that
+	 * holds the session data. The expected schema is defined above.
 	 *
 	 * @access private
 	 * @var    string
@@ -7504,8 +7505,8 @@ class Session extends Object
 	/**
 	 * Database
 	 *
-	 * Our database object to interact with the aforementioned datasource and
-	 * table. This object is shared with other PICKLES internals.
+	 * Our database object to interact with the aforementioned datasource
+	 * and table. This object is shared with other PICKLES internals.
 	 *
 	 * @access private
 	 * @var    object
@@ -7515,10 +7516,11 @@ class Session extends Object
 	/**
 	 * Constructor
 	 *
-	 * All of our set up logic for the session in contained here. This object
-	 * is initially instantiated from pickles.php and the session callbacks are
-	 * established here. All variables are driven from php.ini and/or the site
-	 * config. Once configured, the session is started automatically.
+	 * All of our set up logic for the session in contained here. This
+	 * object is initially instantiated from pickles.php and the session
+	 * callbacks are established here. All variables are driven from
+	 * php.ini and/or the site config. Once configured, the session is
+	 * started automatically.
 	 */
 	public function __construct()
 	{
@@ -7575,7 +7577,6 @@ class Session extends Object
 			{
 				case 'files':
 					ini_set('session.save_handler', 'files');
-					session_start();
 					break;
 
 				case 'memcache':
@@ -7590,7 +7591,6 @@ class Session extends Object
 
 					ini_set('session.save_handler', 'memcache');
 					ini_set('session.save_path',    'tcp://' . $hostname . ':' . $port . '?persistent=1&amp;weight=1&amp;timeout=1&amp;retry_interval=15');
-					session_start();
 					break;
 
 				case 'mysql':
@@ -7608,8 +7608,6 @@ class Session extends Object
 
 						// Initializes the session
 						$this->initialize();
-
-						session_start();
 					}
 					else
 					{
@@ -7618,6 +7616,13 @@ class Session extends Object
 
 					break;
 			}
+
+			if (isset($_SERVER['HTTP_USER_AGENT'])
+				&& !String::isEmpty($_SERVER['HTTP_USER_AGENT'])
+				&& !preg_match('/(Baidu|Gigabot|Googlebot|libwww-perl|lwp-trivial|msnbot|SiteUptime|Slurp|WordPress|ZIBB|ZyBorg)/i', $_SERVER['HTTP_USER_AGENT']))
+			{
+				session_start();
+			}
 		}
 	}
 
@@ -7625,9 +7630,9 @@ class Session extends Object
 	 * Destructor
 	 *
 	 * Runs garbage collection and closes the session. I'm not sure if the
-	 * garbage collection should stay as it could be accomplished via php.ini
-	 * variables. The session_write_close() is present to combat a chicken
-	 * and egg scenario in earlier versions of PHP 5.
+	 * garbage collection should stay as it could be accomplished via
+	 * php.ini variables. The session_write_close() is present to combat a
+	 * chicken and egg scenario in earlier versions of PHP 5.
 	 */
 	public function __destruct()
 	{
@@ -7642,8 +7647,8 @@ class Session extends Object
 	 * Initializes the Session
 	 *
 	 * This method exists to combat the fact that calling session_destroy()
-	 * also clears out the save handler. Upon destorying a session this method
-	 * is called again so the save handler is all set.
+	 * also clears out the save handler. Upon destorying a session this
+	 * method is called again so the save handler is all set.
 	 */
 	public function initialize()
 	{
@@ -7664,8 +7669,8 @@ class Session extends Object
 	 * Opens the Session
 	 *
 	 * Since the session is in the database, opens the database connection.
-	 * This step isn't really necessary as the Database object is smart enough
-	 * to open itself up upon execute.
+	 * This step isn't really necessary as the Database object is smart
+	 * enough to open itself up upon execute.
 	 */
 	public function open()
 	{
@@ -7704,7 +7709,8 @@ class Session extends Object
 	/**
 	 * Writes the Session
 	 *
-	 * When there's changes to the session, writes the data to the database.
+	 * When there's changes to the session, writes the data to the
+	 * database.
 	 *
 	 * @param  string $id session ID
 	 * @param  string $session serialized session data
@@ -7770,8 +7776,8 @@ class Session extends Object
 /**
  * String Class
  *
- * Just a simple collection of static functions to accomplish some of the more
- * redundant string related manipulation.
+ * Just a simple collection of static functions to accomplish some of the
+ * more redundant string related manipulation.
  */
 class String
 {
@@ -7821,9 +7827,9 @@ class String
 	/**
 	 * Generate Slug
 	 *
-	 * Generates a slug from the pass string by lowercasing the string, trimming
-	 * whitespace and converting non-alphanumeric values to dashes. Takes care
-	 * of multiple dashes as well.
+	 * Generates a slug from the pass string by lowercasing the string,
+	 * trimming whitespace and converting non-alphanumeric values to
+	 * dashes. Takes care of multiple dashes as well.
 	 *
 	 * @static
 	 * @param  string $string to be converted to the slug
@@ -7843,10 +7849,10 @@ class String
 	/**
 	 * Is Empty
 	 *
-	 * Checks if a string is empty. You can use the PHP function empty() but
-	 * that returns true for a string of "0". Last I checked, that's not an
-	 * empty string. PHP's function also doesn't apply trim() to the value
-	 * to ensure it's not just a bunch of spaces.
+	 * Checks if a string is empty. You can use the PHP function empty()
+	 * but that returns true for a string of "0". Last I checked, that's
+	 * not an empty string. PHP's function also doesn't apply trim() to the
+	 * value to ensure it's not just a bunch of spaces.
 	 *
 	 * @static
 	 * @param  string $value string(s) to be checked
@@ -7871,8 +7877,8 @@ class String
 	/**
 	 * Pluralize
 	 *
-	 * Based on a passed integer, the word will be pluralized. A value of zero
-	 * will also pluralize the word (e.g. 0 things not 0 thing).
+	 * Based on a passed integer, the word will be pluralized. A value of
+	 * zero will also pluralize the word (e.g. 0 things not 0 thing).
 	 *
 	 * @static
 	 * @param  string $string the word to plurailze
@@ -7962,8 +7968,8 @@ class String
 	/**
 	 * Truncate
 	 *
-	 * Truncates a string to a specified length and (optionally) adds a span to
-	 * provide a rollover to see the expanded text.
+	 * Truncates a string to a specified length and (optionally) adds a
+	 * span to provide a rollover to see the expanded text.
 	 *
 	 * @static
 	 * @param  string $string string to truncate
@@ -7994,8 +8000,8 @@ class String
 	/**
 	 * Upper Words
 	 *
-	 * Applies strtolower() and ucwords() to the passed string. The exception
-	 * being email addresses which are not formatted at all.
+	 * Applies strtolower() and ucwords() to the passed string. The
+	 * exception being email addresses which are not formatted at all.
 	 *
 	 * @static
 	 * @param  string $string string to format
