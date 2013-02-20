@@ -130,7 +130,6 @@ class Security
 	{
 		if (session_id() == '')
 		{
-			throw new Exception('Sessions must be enabled to use the Security class');
 			return false;
 		}
 		else

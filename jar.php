@@ -1283,18 +1283,6 @@ class Controller extends Object
 			exit;
 		}
 
-		// Establishes the session
-		if (ini_get('session.auto_start') == 0)
-		{
-			if ($module->session)
-			{
-				if (session_id() == '')
-				{
-					session_start();
-				}
-			}
-		}
-
 		// Validates security level
 		if ($module->security !== false)
 		{
@@ -7093,7 +7081,6 @@ class Security
 	{
 		if (session_id() == '')
 		{
-			throw new Exception('Sessions must be enabled to use the Security class');
 			return false;
 		}
 		else
