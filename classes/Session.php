@@ -132,91 +132,67 @@ class Session extends Object
 			parent::__construct();
 
 			// Sets up our configuration variables
-			$session     = $this->config->pickles['session'];
+			if (isset($this->config->pickles['session']))
+			{
+				$session = $this->config->pickles['session'];
+				$version = 1;
+			}
+
+			if (isset($this->config->pickles['sessions']))
+			{
+				$session = $this->config->pickles['sessions'];
+				$version = 2;
+			}
+
 			$datasources = $this->config->datasources;
 
-			$datasource = false;
-			$table      = 'sessions';
+			$this->handler = 'files';
+			$datasource    = false;
+			$table         = 'sessions';
 
-			if (is_array($session))
+			if (isset($datasources[$session]))
 			{
-				if (isset($session['handler']) && in_array($session['handler'], array('files', 'memcache', 'mysql')))
-				{
-					$this->handler = $session['handler'];
+				$datasource    = $datasources[$session];
+				$this->handler = $datasource['type'];
 
-					if ($this->handler != 'files')
-					{
-						if (isset($session['datasource']))
-						{
-							$datasource = $session['datasource'];
-						}
-
-						if (isset($session['table']))
-						{
-							$table = $session['table'];
-						}
-					}
-				}
-			}
-			else
-			{
-				if ($session === true || $session == 'files')
+				if (isset($datasource['hostname'], $datasource['port']))
 				{
-					$this->handler = 'files';
-				}
-				elseif ($session == 'memcache')
-				{
-					$this->handler = 'memcache';
-					$datasource    = 'memcache';
-				}
-				elseif ($session == 'mysql')
-				{
-					$this->handler = 'mysql';
-					$datasource    = 'mysql';
+					$host = 'tcp://' . $datasource['hostname'] . ':' . $datasource['port'];
 				}
 			}
 
 			switch ($this->handler)
 			{
-				case 'files':
-					ini_set('session.save_handler', 'files');
-					break;
-
 				case 'memcache':
-					$hostname = 'localhost';
-					$port     = 11211;
-
-					if ($datasource !== false && isset($datasources[$datasource]))
-					{
-						$hostname = $datasources[$datasource]['hostname'];
-						$port     = $datasources[$datasource]['port'];
-					}
-
 					ini_set('session.save_handler', 'memcache');
-					ini_set('session.save_path',    'tcp://' . $hostname . ':' . $port . '?persistent=1&amp;weight=1&amp;timeout=1&amp;retry_interval=15');
+					ini_set('session.save_path',    $host . '?persistent=1&amp;weight=1&amp;timeout=1&amp;retry_interval=15');
 					break;
+
+				// @todo memcached
 
 				case 'mysql':
-					if ($datasource !== false && isset($datasources[$datasource]))
-					{
-						// Sets our access time and time to live
-						$this->accessed_at  = time();
-						$this->time_to_live = ini_get('session.gc_maxlifetime');
+					// Sets our access time and time to live
+					$this->accessed_at  = time();
+					$this->time_to_live = ini_get('session.gc_maxlifetime');
 
-						$this->datasource = $datasource;
-						$this->table      = $table;
+					$this->datasource = $datasource;
+					$this->table      = $table;
 
-						// Gets a database instance
-						$this->db = Database::getInstance($this->datasource);
+					// Gets a database instance
+					$this->db = Database::getInstance($this->datasource);
 
-						// Initializes the session
-						$this->initialize();
-					}
-					else
-					{
-						throw new Exception('Unable to determine which datasource to use');
-					}
+					// Initializes the session
+					$this->initialize();
+					break;
 
+				case 'redis':
+					ini_set('session.save_handler', 'redis');
+					ini_set('session.save_path',    $host . '?weight=1' . (isset($datasource['database']) ? '&amp;database=' . $datasource['database'] : ''));
+					break;
+
+				default:
+				case 'files':
+					ini_set('session.save_handler', 'files');
 					break;
 			}
 
