@@ -588,7 +588,7 @@ class Browser extends Object
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -597,21 +597,20 @@ class Browser extends Object
 /**
  * Cache Class
  *
- * Wrapper class for Memcache() to allow for better error handling when the
- * Memcached server is unavailable. Designed around the syntax for Memcached()
- * to allow for an easier transistion to the aforementioned in the future. I
- * don't entirely remember specifics, but the reason for not using Memcached()
- * was due to an unexplainable bug in the version in the repository for Ubuntu
- * 10.04 LTS. Memcached() does support more of the memcached protocol and will
- * eventually be what PICKLES uses. Keys are forced to be uppercase for
- * consistencies sake as I've been burned by the case sensitivity due to typos
- * in my code.
- *
- * Requires php5-memcache
- *
+ * Wrapper class for interfacing with Redis and Memcached as key/value
+ * stores for caching data. Wrapper provides graceful failover when a
+ * caching server is not available. The syntax is designed around the API
+ * for Memcached() to provide a consistent experience across datastores.
+ * Support for Memcached is currently using the Memcache() library due to
+ * some bugginess with Memcached(). The plan is to migrate to Memcached()
+ * in the future. Redis interaction is done via phpredis. Keys are
+ * optionally namespaced and keys are forced to lowercase for consistency.
+
+ * @link http://www.memcached.org/
  * @link http://us.php.net/manual/en/book.memcache.php
  * @link http://packages.ubuntu.com/lucid/php5-memcache
- * @link http://www.memcached.org/
+ * @link http://redis.io
+ * @link https://github.com/nicolasff/phpredis
  */
 class Cache extends Object
 {
@@ -629,7 +628,15 @@ class Cache extends Object
 	 * @access private
 	 * @var    integer
 	 */
-	private $port = 11211;
+	private $port = null;
+
+	/**
+	 * Database to use (Redis-only)
+	 *
+	 * @access private
+	 * @var    integer
+	 */
+	private $database = 0;
 
 	/**
 	 * Namespace (prefix)
@@ -665,7 +672,10 @@ class Cache extends Object
 			{
 				$datasource = $this->config->datasources[$this->config->pickles['cache']];
 
-				foreach (array('hostname', 'port', 'namespace') as $variable)
+				var_dump($datasource);
+				exit;
+
+				foreach (array('hostname', 'port', 'database', 'namespace') as $variable)
 				{
 					if (isset($datasource[$variable]))
 					{
@@ -677,7 +687,7 @@ class Cache extends Object
 
 		if ($this->namespace != '')
 		{
-			$this->namespace .= '-';
+			$this->namespace .= ':';
 		}
 	}
 
