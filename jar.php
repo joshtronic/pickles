@@ -1955,7 +1955,7 @@ class Database_PDO_Common extends Database_Common
 	protected $attributes = array(
 		PDO::ATTR_PERSISTENT   => true,
 		PDO::ATTR_ERRMODE      => PDO::ERRMODE_EXCEPTION,
-		PDO::NULL_EMPTY_STRING => true
+		PDO::NULL_EMPTY_STRING => true,
 	);
 
 	/**
@@ -1969,6 +1969,12 @@ class Database_PDO_Common extends Database_Common
 		if ($this->dsn == null)
 		{
 			throw new Exception('Data source name is not defined');
+		}
+
+		if ($this->driver == 'pdo_mysql')
+		{
+			// Resolves "Invalid UTF-8 sequence" issues when encoding as JSON
+			$this->attributes[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES utf8';
 		}
 
 		if ($this->driver == 'pdo_pgsql')
