@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SQLite Class File for PICKLES
+ * PostgreSQL Class File for PICKLES
  *
  * PHP version 5
  *
@@ -16,23 +16,30 @@
  */
 
 /**
- * SQLite Database Abstraction Layer
+ * PostgreSQL Database Abstraction Layer
  */
-class Datastore_PDO_SQLite extends Datastore_PDO_Common
+class Database_PDO_PostgreSQL extends Database_PDO_Common
 {
 	/**
 	 * Driver
 	 *
 	 * @var string
 	 */
-	public $driver = 'pdo_sqlite';
+	public $driver = 'pdo_pgsql';
 
 	/**
 	 * DSN format
 	 *
 	 * @var string
 	 */
-	public $dsn = 'sqlite:[[hostname]]';
+	public $dsn = 'pgsql:host=[[hostname]];port=[[port]];dbname=[[database]];user=[[username]];password=[[password]]';
+
+	/**
+	 * Default port
+	 *
+	 * @var integer
+	 */
+	public $port = 5432;
 }
 
 ?>
