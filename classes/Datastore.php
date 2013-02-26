@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Database Class File for PICKLES
+ * Datastore Class File for PICKLES
  *
  * PHP version 5
  *
@@ -9,26 +9,24 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
  */
 
 /**
- * Database Factory
+ * Datastore Factory
  *
- * Generic class to simplify connecting to a database. All database objects
- * should be created by this class to future proof against any internal changes
- * to PICKLES.
+ * Generic class to simplify connecting to a datastore.
  */
-class Database extends Object
+class Datastore extends Object
 {
 	/**
 	 * Constructor
 	 *
-	 * Attempts to get an instance of the passed database type or attempts to
-	 * use a default specified in the config.
+	 * Attempts to get an instance of the passed datastore name or attempts
+	 * to use a default specified in the config.
 	 *
 	 * @param string $name optional name of the connection to use
 	 */
@@ -36,16 +34,17 @@ class Database extends Object
 	{
 		parent::__construct();
 
-		return Database::getInstance($name);
+		return Datastore::getInstance($name);
 	}
 
 	/**
 	 * Get Instance
 	 *
-	 * Looks up the datasource using the passed name and gets an instance of
-	 * it. Allows for easy sharing of certain classes within the system to
-	 * avoid the extra overhead of creating new objects each time. Also avoids
-	 * the hassle of passing around variables (yeah I know, very global-ish)
+	 * Looks up the datasource using the passed name and gets an instance
+	 * of it. Allows for easy sharing of certain classes within the system
+	 * to avoid the extra overhead of creating new objects each time. Also
+	 * avoids the hassle of passing around variables (yeah I know, very
+	 * global-ish, don't just me).
 	 *
 	 * @static
 	 * @param  string $name name of the datasource
@@ -85,7 +84,7 @@ class Database extends Object
 
 				$datasource['driver'] = strtolower($datasource['driver']);
 
-				if (!isset(self::$instances['Database'][$name]))
+				if (!isset(self::$instances[$name]))
 				{
 					// Checks the driver is legit and scrubs the name
 					switch ($datasource['driver'])
@@ -99,8 +98,8 @@ class Database extends Object
 							break;
 					}
 
-					// Instantiates our database class
-					$class    = 'Database_' . $class;
+					// Instantiates our datastore class
+					$class    = 'Datastore_' . $class;
 					$instance = new $class();
 
 					// Sets our database parameters
@@ -116,11 +115,11 @@ class Database extends Object
 				// Caches the instance for possible reuse later
 				if (isset($instance))
 				{
-					self::$instances['Database'][$name] = $instance;
+					self::$instances[$name] = $instance;
 				}
 
 				// Returns the instance
-				return self::$instances['Database'][$name];
+				return self::$instances[$name];
 			}
 		}
 

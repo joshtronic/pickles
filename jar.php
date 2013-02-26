@@ -1781,7 +1781,7 @@ class Convert
 }
 
 /**
- * Common Database Class File for PICKLES
+ * Common Datastore Class File for PICKLES
  *
  * PHP version 5
  *
@@ -1789,19 +1789,19 @@ class Convert
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
  */
 
 /**
- * Common Database Abstraction Layer
+ * Common Datastore Abstraction Layer
  *
- * Parent class that our database driver classes should be extending. Contains
- * basic functionality for instantiation and interfacing.
+ * Parent class that our datastore classes should be extending.
+ * Contains basic functionality for instantiation and interfacing.
  */
-abstract class Database_Common extends Object
+abstract class Datastore_Common extends Object
 {
 	/**
 	 * Driver
@@ -1846,9 +1846,9 @@ abstract class Database_Common extends Object
 	public $password = null;
 
 	/**
-	 * Database name for the server
+	 * Database name (or number) for the server
 	 *
-	 * @var string
+	 * @var string or integer
 	 */
 	public $database = null;
 
@@ -1874,30 +1874,9 @@ abstract class Database_Common extends Object
 	public $results = null;
 
 	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-
-		// Checks the driver is set and available
-		if ($this->driver == null)
-		{
-			throw new Exception('Driver name is not set');
-		}
-		else
-		{
-			if (extension_loaded($this->driver) == false)
-			{
-				throw new Exception('Driver "' . $this->driver . '" is not loaded');
-			}
-		}
-	}
-
-	/**
-	 * Open Database Connection
+	 * Open Connection
 	 *
-	 * Establishes a connection to the MySQL database based on the configuration
+	 * Establishes a connection to the datastore based on the configuration
 	 * options that are available in the Config object.
 	 *
 	 * @abstract
@@ -1906,7 +1885,7 @@ abstract class Database_Common extends Object
 	abstract public function open();
 
 	/**
-	 * Close Database Connection
+	 * Close Connection
 	 *
 	 * Sets the connection to null regardless of state.
 	 *
@@ -1936,7 +1915,7 @@ abstract class Database_Common extends Object
  *
  * Parent class for any of our database classes that use PDO.
  */
-class Database_PDO_Common extends Database_Common
+class Datastore_PDO_Common extends Datastore_Common
 {
 	/**
 	 * DSN format
@@ -1965,6 +1944,19 @@ class Database_PDO_Common extends Database_Common
 	{
 		parent::__construct();
 
+		// Checks the driver is set and available
+		if ($this->driver == null)
+		{
+			throw new Exception('Driver name is not set');
+		}
+		else
+		{
+			if (extension_loaded($this->driver) == false)
+			{
+				throw new Exception('Driver "' . $this->driver . '" is not loaded');
+			}
+		}
+
 		// Checks that the prefix is set
 		if ($this->dsn == null)
 		{
@@ -1984,8 +1976,8 @@ class Database_PDO_Common extends Database_Common
 	/**
 	 * Opens database connection
 	 *
-	 * Establishes a connection to the database based on the set configuration
-	 * options.
+	 * Establishes a connection to the database based on the set
+	 * configuration options.
 	 *
 	 * @return boolean true on success, throws an exception overwise
 	 */
@@ -2041,8 +2033,8 @@ class Database_PDO_Common extends Database_Common
 	/**
 	 * Executes an SQL Statement
 	 *
-	 * Executes a standard or prepared query based on passed parameters. All
-	 * queries are logged to a file as well as timed and logged in the
+	 * Executes a standard or prepared query based on passed parameters.
+	 * All queries are logged to a file as well as timed and logged in the
 	 * execution time is over 1 second.
 	 *
 	 * @param  string $sql statement to execute
@@ -2191,7 +2183,7 @@ class Database_PDO_Common extends Database_Common
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -2200,7 +2192,7 @@ class Database_PDO_Common extends Database_Common
 /**
  * MySQL Database Abstraction Layer
  */
-class Database_PDO_MySQL extends Database_PDO_Common
+class Datastore_PDO_MySQL extends Datastore_PDO_Common
 {
 	/**
 	 * Driver
@@ -2242,7 +2234,7 @@ class Database_PDO_MySQL extends Database_PDO_Common
 /**
  * PostgreSQL Database Abstraction Layer
  */
-class Database_PDO_PostgreSQL extends Database_PDO_Common
+class Datastore_PDO_PostgreSQL extends Datastore_PDO_Common
 {
 	/**
 	 * Driver
@@ -2284,7 +2276,7 @@ class Database_PDO_PostgreSQL extends Database_PDO_Common
 /**
  * SQLite Database Abstraction Layer
  */
-class Database_PDO_SQLite extends Database_PDO_Common
+class Datastore_PDO_SQLite extends Datastore_PDO_Common
 {
 	/**
 	 * Driver
@@ -2302,7 +2294,7 @@ class Database_PDO_SQLite extends Database_PDO_Common
 }
 
 /**
- * Database Class File for PICKLES
+ * Datastore Class File for PICKLES
  *
  * PHP version 5
  *
@@ -2310,26 +2302,24 @@ class Database_PDO_SQLite extends Database_PDO_Common
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
  */
 
 /**
- * Database Factory
+ * Datastore Factory
  *
- * Generic class to simplify connecting to a database. All database objects
- * should be created by this class to future proof against any internal changes
- * to PICKLES.
+ * Generic class to simplify connecting to a datastore.
  */
-class Database extends Object
+class Datastore extends Object
 {
 	/**
 	 * Constructor
 	 *
-	 * Attempts to get an instance of the passed database type or attempts to
-	 * use a default specified in the config.
+	 * Attempts to get an instance of the passed datastore name or attempts
+	 * to use a default specified in the config.
 	 *
 	 * @param string $name optional name of the connection to use
 	 */
@@ -2337,16 +2327,17 @@ class Database extends Object
 	{
 		parent::__construct();
 
-		return Database::getInstance($name);
+		return Datastore::getInstance($name);
 	}
 
 	/**
 	 * Get Instance
 	 *
-	 * Looks up the datasource using the passed name and gets an instance of
-	 * it. Allows for easy sharing of certain classes within the system to
-	 * avoid the extra overhead of creating new objects each time. Also avoids
-	 * the hassle of passing around variables (yeah I know, very global-ish)
+	 * Looks up the datasource using the passed name and gets an instance
+	 * of it. Allows for easy sharing of certain classes within the system
+	 * to avoid the extra overhead of creating new objects each time. Also
+	 * avoids the hassle of passing around variables (yeah I know, very
+	 * global-ish, don't just me).
 	 *
 	 * @static
 	 * @param  string $name name of the datasource
@@ -2386,7 +2377,7 @@ class Database extends Object
 
 				$datasource['driver'] = strtolower($datasource['driver']);
 
-				if (!isset(self::$instances['Database'][$name]))
+				if (!isset(self::$instances[$name]))
 				{
 					// Checks the driver is legit and scrubs the name
 					switch ($datasource['driver'])
@@ -2400,8 +2391,8 @@ class Database extends Object
 							break;
 					}
 
-					// Instantiates our database class
-					$class    = 'Database_' . $class;
+					// Instantiates our datastore class
+					$class    = 'Datastore_' . $class;
 					$instance = new $class();
 
 					// Sets our database parameters
@@ -2417,11 +2408,11 @@ class Database extends Object
 				// Caches the instance for possible reuse later
 				if (isset($instance))
 				{
-					self::$instances['Database'][$name] = $instance;
+					self::$instances[$name] = $instance;
 				}
 
 				// Returns the instance
-				return self::$instances['Database'][$name];
+				return self::$instances[$name];
 			}
 		}
 
@@ -4885,7 +4876,7 @@ class Model extends Object
 		parent::__construct();
 
 		// Gets an instance of the database and check which it is
-		$this->db         = Database::getInstance();
+		$this->db         = Datastore::getInstance();
 		$this->use_cache  = $this->db->cache;
 		$this->mysql      = ($this->db->driver == 'pdo_mysql');
 		$this->postgresql = ($this->db->driver == 'pdo_pgsql');
@@ -6104,7 +6095,7 @@ class Model extends Object
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -6113,12 +6104,13 @@ class Model extends Object
 /**
  * Module Class
  *
- * This is a parent class that all PICKLES modules should be extending. Each
- * module can specify it's own meta data and whether or not a user must be
- * properly authenticated to view the page. Currently any pages without a
- * template are treated as pages being requested via AJAX and the return will
- * be JSON encoded. In the future this may need to be changed out for logic
- * that allows the requested module to specify what display type(s) it can use.
+ * This is a parent class that all PICKLES modules should be extending.
+ * Each module can specify it's own meta data and whether or not a user
+ * must be properly authenticated to view the page. Currently any pages
+ * without a template are treated as pages being requested via AJAX and the
+ * return will be JSON encoded. In the future this may need to be changed
+ * out for logic that allows the requested module to specify what display
+ * type(s) it can use.
  */
 class Module extends Object
 {
@@ -6221,9 +6213,9 @@ class Module extends Object
 	/**
 	 * Hash
 	 *
-	 * Whether or not to validate the security hash. Boolean true will indicate
-	 * using the name of the module as the hash, a string value will use the
-	 * value instead.
+	 * Whether or not to validate the security hash. Boolean true will
+	 * indicate using the name of the module as the hash, a string value
+	 * will use the value instead.
 	 *
 	 * @access protected
 	 * @var    string or boolean, null by default
@@ -6244,9 +6236,10 @@ class Module extends Object
 	/**
 	 * Default Template
 	 *
-	 * Defaults to null but could be set to any valid template basename. The
-	 * value is overwritten by the config value if not set by the module. The
-	 * display engine determines what the file extension should be.
+	 * Defaults to null but could be set to any valid template basename.
+	 * The value is overwritten by the config value if not set by the
+	 * module. The display engine determines what the file extension should
+	 * be.
 	 *
 	 * @access protected
 	 * @var    string, 'index' by default
@@ -6258,8 +6251,8 @@ class Module extends Object
 	 *
 	 * Array that is returned to the template in the case of the module not
 	 * returning anything itself. This is somewhat of a one way trip as you
-	 * cannot get the variable unless you reference the return array explicitly
-	 * $this->return['variable']
+	 * cannot get the variable unless you reference the return array
+	 * explicitly $this->return['variable']
 	 *
 	 * @access protected
 	 * @var    array
@@ -6270,9 +6263,10 @@ class Module extends Object
 	 * Constructor
 	 *
 	 * The constructor does nothing by default but can be passed a boolean
-	 * variable to tell it to automatically run the __default() method. This is
-	 * typically used when a module is called outside of the scope of the
-	 * controller (the registration page calls the login page in this manner.
+	 * variable to tell it to automatically run the __default() method.
+	 * This is typically used when a module is called outside of the scope
+	 * of the controller (the registration page calls the login page in
+	 * this manner).
 	 *
 	 * @param boolean $autorun optional flag to autorun __default()
 	 */
@@ -6281,7 +6275,7 @@ class Module extends Object
 		parent::__construct();
 
 		$this->cache = Cache::getInstance();
-		$this->db    = Database::getInstance();
+		$this->db    = Datastore::getInstance();
 
 		if ($autorun === true)
 		{
@@ -6293,10 +6287,10 @@ class Module extends Object
 	 * Default "Magic" Method
 	 *
 	 * This function is overloaded by the module. The __default() method is
-	 * where you want to place any code that needs to be executed at runtime.
-	 * The reason the code isn't in the constructor is because the module must
-	 * be instantiated before the code is executed so that the controller
-	 * script is aware of the authentication requirements.
+	 * where you want to place any code that needs to be executed at
+	 * runtime. The reason the code isn't in the constructor is because the
+	 * module must be instantiated before the code is executed so that the
+	 * controller script is aware of the authentication requirements.
 	 */
 	public function __default()
 	{
@@ -6306,9 +6300,10 @@ class Module extends Object
 	/**
 	 * Magic Setter Method
 	 *
-	 * Places the variables that are being modified in the return array that is
-	 * returned if nothing is returned by the module itself. This also prohibits
-	 * the direct modification of module variables which could cause issues.
+	 * Places the variables that are being modified in the return array
+	 * that is returned if nothing is returned by the module itself. This
+	 * also prohibits the direct modification of module variables which
+	 * could cause issues.
 	 *
 	 * @param string $name name of the variable to be set
 	 * @param mixed $value value of the variable to be set
@@ -6321,8 +6316,8 @@ class Module extends Object
 	/**
 	 * Magic Getter Method
 	 *
-	 * Attempts to load the module variable. If it's not set, will attempt to
-	 * load from the config.
+	 * Attempts to load the module variable. If it's not set, will attempt
+	 * to load from the config.
 	 *
 	 * @param  string $name name of the variable requested
 	 * @return mixed value of the variable or boolean false
@@ -7563,7 +7558,7 @@ class Session extends Object
 					$this->table      = $table;
 
 					// Gets a database instance
-					$this->db = Database::getInstance($this->datasource);
+					$this->db = Datastore::getInstance($this->datasource);
 
 					// Initializes the session
 					$this->initialize();

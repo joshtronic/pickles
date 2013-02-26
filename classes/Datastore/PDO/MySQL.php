@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SQLite Class File for PICKLES
+ * MySQL Class File for PICKLES
  *
  * PHP version 5
  *
@@ -9,30 +9,37 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
  */
 
 /**
- * SQLite Database Abstraction Layer
+ * MySQL Database Abstraction Layer
  */
-class Database_PDO_SQLite extends Database_PDO_Common
+class Datastore_PDO_MySQL extends Datastore_PDO_Common
 {
 	/**
 	 * Driver
 	 *
 	 * @var string
 	 */
-	public $driver = 'pdo_sqlite';
+	public $driver = 'pdo_mysql';
 
 	/**
 	 * DSN format
 	 *
 	 * @var string
 	 */
-	public $dsn = 'sqlite:[[hostname]]';
+	public $dsn = 'mysql:host=[[hostname]];port=[[port]];unix_socket=[[socket]];dbname=[[database]]';
+
+	/**
+	 * Default port
+	 *
+	 * @var integer
+	 */
+	public $port = 3306;
 }
 
 ?>

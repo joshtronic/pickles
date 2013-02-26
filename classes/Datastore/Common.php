@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common Database Class File for PICKLES
+ * Common Datastore Class File for PICKLES
  *
  * PHP version 5
  *
@@ -9,19 +9,19 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
  */
 
 /**
- * Common Database Abstraction Layer
+ * Common Datastore Abstraction Layer
  *
- * Parent class that our database driver classes should be extending. Contains
- * basic functionality for instantiation and interfacing.
+ * Parent class that our datastore classes should be extending.
+ * Contains basic functionality for instantiation and interfacing.
  */
-abstract class Database_Common extends Object
+abstract class Datastore_Common extends Object
 {
 	/**
 	 * Driver
@@ -66,9 +66,9 @@ abstract class Database_Common extends Object
 	public $password = null;
 
 	/**
-	 * Database name for the server
+	 * Database name (or number) for the server
 	 *
-	 * @var string
+	 * @var string or integer
 	 */
 	public $database = null;
 
@@ -94,30 +94,9 @@ abstract class Database_Common extends Object
 	public $results = null;
 
 	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-
-		// Checks the driver is set and available
-		if ($this->driver == null)
-		{
-			throw new Exception('Driver name is not set');
-		}
-		else
-		{
-			if (extension_loaded($this->driver) == false)
-			{
-				throw new Exception('Driver "' . $this->driver . '" is not loaded');
-			}
-		}
-	}
-
-	/**
-	 * Open Database Connection
+	 * Open Connection
 	 *
-	 * Establishes a connection to the MySQL database based on the configuration
+	 * Establishes a connection to the datastore based on the configuration
 	 * options that are available in the Config object.
 	 *
 	 * @abstract
@@ -126,7 +105,7 @@ abstract class Database_Common extends Object
 	abstract public function open();
 
 	/**
-	 * Close Database Connection
+	 * Close Connection
 	 *
 	 * Sets the connection to null regardless of state.
 	 *

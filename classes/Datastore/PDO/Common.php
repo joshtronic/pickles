@@ -20,7 +20,7 @@
  *
  * Parent class for any of our database classes that use PDO.
  */
-class Database_PDO_Common extends Database_Common
+class Datastore_PDO_Common extends Datastore_Common
 {
 	/**
 	 * DSN format
@@ -49,6 +49,19 @@ class Database_PDO_Common extends Database_Common
 	{
 		parent::__construct();
 
+		// Checks the driver is set and available
+		if ($this->driver == null)
+		{
+			throw new Exception('Driver name is not set');
+		}
+		else
+		{
+			if (extension_loaded($this->driver) == false)
+			{
+				throw new Exception('Driver "' . $this->driver . '" is not loaded');
+			}
+		}
+
 		// Checks that the prefix is set
 		if ($this->dsn == null)
 		{
@@ -68,8 +81,8 @@ class Database_PDO_Common extends Database_Common
 	/**
 	 * Opens database connection
 	 *
-	 * Establishes a connection to the database based on the set configuration
-	 * options.
+	 * Establishes a connection to the database based on the set
+	 * configuration options.
 	 *
 	 * @return boolean true on success, throws an exception overwise
 	 */
@@ -125,8 +138,8 @@ class Database_PDO_Common extends Database_Common
 	/**
 	 * Executes an SQL Statement
 	 *
-	 * Executes a standard or prepared query based on passed parameters. All
-	 * queries are logged to a file as well as timed and logged in the
+	 * Executes a standard or prepared query based on passed parameters.
+	 * All queries are logged to a file as well as timed and logged in the
 	 * execution time is over 1 second.
 	 *
 	 * @param  string $sql statement to execute

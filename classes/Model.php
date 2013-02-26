@@ -310,7 +310,7 @@ class Model extends Object
 		parent::__construct();
 
 		// Gets an instance of the database and check which it is
-		$this->db         = Database::getInstance();
+		$this->db         = Datastore::getInstance();
 		$this->use_cache  = $this->db->cache;
 		$this->mysql      = ($this->db->driver == 'pdo_mysql');
 		$this->postgresql = ($this->db->driver == 'pdo_pgsql');

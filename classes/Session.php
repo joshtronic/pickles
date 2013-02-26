@@ -179,7 +179,7 @@ class Session extends Object
 					$this->table      = $table;
 
 					// Gets a database instance
-					$this->db = Database::getInstance($this->datasource);
+					$this->db = Datastore::getInstance($this->datasource);
 
 					// Initializes the session
 					$this->initialize();

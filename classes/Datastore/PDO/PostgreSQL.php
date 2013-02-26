@@ -1,7 +1,7 @@
 <?php
 
 /**
- * MySQL Class File for PICKLES
+ * PostgreSQL Class File for PICKLES
  *
  * PHP version 5
  *
@@ -16,30 +16,30 @@
  */
 
 /**
- * MySQL Database Abstraction Layer
+ * PostgreSQL Database Abstraction Layer
  */
-class Database_PDO_MySQL extends Database_PDO_Common
+class Datastore_PDO_PostgreSQL extends Datastore_PDO_Common
 {
 	/**
 	 * Driver
 	 *
 	 * @var string
 	 */
-	public $driver = 'pdo_mysql';
+	public $driver = 'pdo_pgsql';
 
 	/**
 	 * DSN format
 	 *
 	 * @var string
 	 */
-	public $dsn = 'mysql:host=[[hostname]];port=[[port]];unix_socket=[[socket]];dbname=[[database]]';
+	public $dsn = 'pgsql:host=[[hostname]];port=[[port]];dbname=[[database]];user=[[username]];password=[[password]]';
 
 	/**
 	 * Default port
 	 *
 	 * @var integer
 	 */
-	public $port = 3306;
+	public $port = 5432;
 }
 
 ?>
