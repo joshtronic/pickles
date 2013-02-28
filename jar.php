@@ -614,8 +614,13 @@ class Browser extends Object
  */
 class Cache extends Object
 {
+	/**
+	 * Cache handler
+	 *
+	 * @access private
+	 * @var    string memcached or redis
+	 */
 	private $handler = null;
-	private $datasource = null;
 
 	/**
 	 * Hostname for the Memcached Server
@@ -660,12 +665,9 @@ class Cache extends Object
 	/**
 	 * Constructor
 	 *
-	 * Sets up our connection variables.
-	 *
-	 * @param string $hostname optional hostname to connect to
-	 * @param string $database optional port to use
+	 * Sets up our variables
 	 */
-	public function __construct($hostname = null, $port = null)
+	public function __construct()
 	{
 		parent::__construct();
 
@@ -680,37 +682,31 @@ class Cache extends Object
 					throw new Exception('You must specify the datasource\'s type');
 				}
 
+				$this->hostname = isset($datasource['hostname']) ? $datasource['hostname'] : 'localhost';
+
 				switch ($datasource['type'])
 				{
 					case 'memcache':
 					case 'memcached':
 						$this->handler = 'memcached';
+						$this->port    = isset($datasource['port']) ? $datasource['port'] : 11211;
 						break;
 
 					case 'redis':
-						$this->handler = 'redis';
+						$this->handler  = 'redis';
+						$this->port     = isset($datasource['port'])     ? $datasource['port']     : 6379;
+						$this->database = isset($datasource['database']) ? $datasource['database'] : 0;
 						break;
 
 					default:
 						throw new Exception('The specified datasource type "' . $datasource['type'] . '" is unsupported.');
 				}
 
-				var_dump($datasource);
-				exit;
-
-				foreach (array('hostname', 'port', 'database', 'namespace') as $variable)
+				if (isset($datasource['namespace']) && $datasource['namespace'] != '')
 				{
-					if (isset($datasource[$variable]))
-					{
-						$this->$variable = $datasource[$variable];
-					}
+					$this->namespace = $datasource['namespace'] . ':';
 				}
 			}
-		}
-
-		if ($this->namespace != '')
-		{
-			$this->namespace .= ':';
 		}
 	}
 
@@ -750,11 +746,62 @@ class Cache extends Object
 	{
 		if ($this->connection === null)
 		{
-			$this->connection = new Memcache();
-			$this->connection->connect($this->hostname, $this->port);
+			switch ($this->handler)
+			{
+				case 'memcached':
+					$this->connection = new Memcache();
+					break;
+
+				case 'redis':
+					$this->connection = new Redis();
+					break;
+			}
 		}
 
-		return true;
+		$connected = $this->connection->connect($this->hostname, $this->port);
+
+		if ($connected && $this->database != 0)
+		{
+			$this->connection->select($this->database);
+		}
+
+		return $connected;
+	}
+
+	/**
+	 * Set Key
+	 *
+	 * Sets key to the specified value.
+	 *
+	 * @param  string  $key key to set
+	 * @param  mixed   $value value to set
+	 * @param  integer $expiration optional expiration, defaults to 5 minutes
+	 * @return boolean status of writing the data to the key
+	 */
+	public function set($key, $value, $expire = 300)
+	{
+		$key = strtolower($key);
+
+		if ($this->open())
+		{
+			switch ($this->handler)
+			{
+				case 'memcached':
+					return $this->connection->set(strtolower($this->namespace . $key), $value, 0, $expire);
+					break;
+
+				case 'redis':
+					if (is_array($value))
+					{
+						$value = 'JSON:' . json_encode($value);
+					}
+
+					return $this->connection->set(strtolower($this->namespace . $key), $value, $expire);
+					break;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -769,45 +816,53 @@ class Cache extends Object
 	{
 		if ($this->open())
 		{
+			// Namespaces keys
 			if (is_array($keys))
 			{
 				foreach ($keys as $index => $key)
 				{
-					$keys[$index] = strtoupper($this->namespace . $key);
+					$keys[$index] = strtolower($this->namespace . $key);
 				}
 			}
 			else
 			{
-				$keys = strtoupper($this->namespace . $keys);
+				$keys = strtolower($this->namespace . $keys);
 			}
 
-			return $this->connection->get($keys);
-		}
+			switch ($this->handler)
+			{
+				case 'memcached':
+					return $this->connection->get($keys);
+					break;
 
-		return false;
-	}
+				case 'redis':
+					if (is_array($keys))
+					{
+						$values = $this->connection->mGet($keys);
 
-	/**
-	 * Set Key
-	 *
-	 * Sets key to the specified value. I've found that compression can lead to
-	 * issues with integers and can slow down the storage and retrieval of data
-	 * (defeats the purpose of caching if you ask me) and isn't supported. I've
-	 * also been burned by data inadvertantly being cached for infinity, hence
-	 * the 5 minute default.
-	 *
-	 * @param  string  $key key to set
-	 * @param  mixed   $value value to set
-	 * @param  integer $expiration optional expiration, defaults to 5 minutes
-	 * @return boolean status of writing the data to the key
-	 */
-	public function set($key, $value, $expire = 300)
-	{
-		$key = strtoupper($key);
+						foreach ($values as $index => $value)
+						{
+							if (substr($value, 0, 5) == 'JSON:')
+							{
+								$values[$index] = json_decode(substr($value, 5), true);
+							}
+						}
 
-		if ($this->open())
-		{
-			return $this->connection->set(strtoupper($this->namespace . $key), $value, 0, $expire);
+						return $values;
+					}
+					else
+					{
+						$value = $this->connection->get($keys);
+
+						if (substr($value, 0, 5) == 'JSON:')
+						{
+							$value = json_decode(substr($value, 5), true);
+						}
+
+						return $value;
+					}
+					break;
+			}
 		}
 
 		return false;
@@ -833,10 +888,61 @@ class Cache extends Object
 			// Memcache() doesn't let you pass an array to delete all records the same way you can with get()
 			foreach ($keys as $key)
 			{
-				$this->connection->delete(strtoupper($this->namespace . $key));
+				$this->connection->delete(strtolower($this->namespace . $key));
 			}
 
 			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Change
+	 *
+	 * Increment / decrement a variable by a value
+	 *
+	 * @param string $direction increment or decrement
+	 * @param string $key key to increment
+	 * @param integer $value increment by value
+	 * @return mixed new value or false if unable to connect
+	 */
+	public function change($direction, $key, $value = 1)
+	{
+		if ($this->handler == 'redis')
+		{
+			switch ($direction)
+			{
+				case 'increment': $direction = 'incr'; break;
+				case 'decrement': $direction = 'decr'; break;
+			}
+
+			if ($value > 1)
+			{
+				$direction .= 'By';
+			}
+		}
+
+		$key = strtolower($this->namespace . $key);
+
+		if ($this->open())
+		{
+			// Memcache::*crement() doesn't create the key
+			if ($this->handler == 'memcached')
+			{
+				if ($this->connection->add($key, $value) === false)
+				{
+					return $this->connection->$direction($key, $value);
+				}
+				else
+				{
+					return $value;
+				}
+			}
+			else
+			{
+				return $this->connection->$direction($key, $value);
+			}
 		}
 
 		return false;
@@ -848,17 +954,26 @@ class Cache extends Object
 	 * Increments the value of an existing key.
 	 *
 	 * @param  string $key key to increment
-	 * @return boolean status of incrementing the key
-	 * @todo   Wondering if I should check the key and set to 1 if it's new
+	 * @param  integer $value increment by value
+	 * @return mixed new value or false if unable to connect
 	 */
-	public function increment($key)
+	public function increment($key, $value = 1)
 	{
-		if ($this->open())
-		{
-			return $this->connection->increment(strtoupper($this->namespace . $key));
-		}
+		return $this->change('increment', $key, $value);
+	}
 
-		return false;
+	/**
+	 * Decrement Key
+	 *
+	 * Decrements the value of an existing key.
+	 *
+	 * @param  string $key key to decrement
+	 * @param  integer $value decrement by value
+	 * @return mixed new value or false if unable to connect
+	 */
+	public function decrement($key, $value = 1)
+	{
+		return $this->change('decrement', $key, $value);
 	}
 }
 
