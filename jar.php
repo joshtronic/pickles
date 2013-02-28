@@ -614,6 +614,9 @@ class Browser extends Object
  */
 class Cache extends Object
 {
+	private $handler = null;
+	private $datasource = null;
+
 	/**
 	 * Hostname for the Memcached Server
 	 *
@@ -671,6 +674,26 @@ class Cache extends Object
 			if (isset($this->config->datasources[$this->config->pickles['cache']]))
 			{
 				$datasource = $this->config->datasources[$this->config->pickles['cache']];
+
+				if (!isset($datasource['type']))
+				{
+					throw new Exception('You must specify the datasource\'s type');
+				}
+
+				switch ($datasource['type'])
+				{
+					case 'memcache':
+					case 'memcached':
+						$this->handler = 'memcached';
+						break;
+
+					case 'redis':
+						$this->handler = 'redis';
+						break;
+
+					default:
+						throw new Exception('The specified datasource type "' . $datasource['type'] . '" is unsupported.');
+				}
 
 				var_dump($datasource);
 				exit;

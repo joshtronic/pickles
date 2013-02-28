@@ -35,6 +35,9 @@
  */
 class Cache extends Object
 {
+	private $handler = null;
+	private $datasource = null;
+
 	/**
 	 * Hostname for the Memcached Server
 	 *
@@ -93,22 +96,33 @@ class Cache extends Object
 			{
 				$datasource = $this->config->datasources[$this->config->pickles['cache']];
 
-				var_dump($datasource);
-				exit;
-
-				foreach (array('hostname', 'port', 'database', 'namespace') as $variable)
+				if (!isset($datasource['type']))
 				{
-					if (isset($datasource[$variable]))
-					{
-						$this->$variable = $datasource[$variable];
-					}
+					throw new Exception('You must specify the datasource\'s type');
 				}
-			}
-		}
+
+				switch ($datasource['type'])
+				{
+					case 'memcache':
+					case 'memcached':
+						$this->handler = 'memcached';
+						break;
+
+					case 'redis':
+						$this->handler = 'redis';
+						break;
+
+					default:
+						throw new Exception('The specified datasource type "' . $datasource['type'] . '" is unsupported.');
+				}
 
 		if ($this->namespace != '')
 		{
 			$this->namespace .= ':';
+		}
+
+				$this->datasource = $datasource;
+			}
 		}
 	}
 
