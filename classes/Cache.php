@@ -37,22 +37,6 @@
 class Cache extends Object
 {
 	/**
-	 * Hostname for the Memcached Server
-	 *
-	 * @access private
-	 * @var    string
-	 */
-	private $hostname = 'localhost';
-
-	/**
-	 * Port to use to connect
-	 *
-	 * @access private
-	 * @var    integer
-	 */
-	private $port = 11211;
-
-	/**
 	 * Namespace (prefix)
 	 *
 	 * @access private
@@ -76,21 +60,34 @@ class Cache extends Object
 	 * @param string $hostname optional hostname to connect to
 	 * @param string $database optional port to use
 	 */
-	public function __construct($hostname = null, $port = null)
+	public function __construct()
 	{
 		parent::__construct();
 
 		if ($this->config->pickles['cache'])
 		{
-			if (isset($this->config->datasources[$this->config->pickles['cache']]))
+			if (!is_array($this->config->pickles['cache']))
 			{
-				$datasource = $this->config->datasources[$this->config->pickles['cache']];
+				$datasources = array($this->config->pickles['cache']);
+			}
+			else
+			{
+				$datasources = $this->config->pickles['cache'];
+			}
 
-				foreach (array('hostname', 'port', 'namespace') as $variable)
+			$this->connection = new Memcache();
+
+			foreach ($datasources as $name)
+			{
+				if (isset($this->config->datasources[$name]))
 				{
-					if (isset($datasource[$variable]))
+					$datasource = $this->config->datasources[$name];
+
+					$this->connection->addServer($datasource['hostname'], $datasource['port']);
+
+					if (isset($datasource['namespace']))
 					{
-						$this->$variable = $datasource[$variable];
+						$this->namespace = $datasource['namespace'];
 					}
 				}
 			}
@@ -130,22 +127,6 @@ class Cache extends Object
 	}
 
 	/**
-	 * Opens Connection
-	 *
-	 * Establishes a connection to the memcached server.
-	 */
-	public function open()
-	{
-		if ($this->connection === null)
-		{
-			$this->connection = new Memcache();
-			$this->connection->connect($this->hostname, $this->port);
-		}
-
-		return true;
-	}
-
-	/**
 	 * Get Key
 	 *
 	 * Gets the value of the key(s) and returns it.
@@ -155,24 +136,32 @@ class Cache extends Object
 	 */
 	public function get($keys)
 	{
-		if ($this->open())
-		{
-			if (is_array($keys))
-			{
-				foreach ($keys as $index => $key)
-				{
-					$keys[$index] = strtoupper($this->namespace . $key);
-				}
-			}
-			else
-			{
-				$keys = strtoupper($this->namespace . $keys);
-			}
+		set_error_handler('cacheErrorHandler');
 
-			return $this->connection->get($keys);
+		if (is_array($keys))
+		{
+			foreach ($keys as $index => $key)
+			{
+				$keys[$index] = strtoupper($this->namespace . $key);
+			}
+		}
+		else
+		{
+			$keys = strtoupper($this->namespace . $keys);
 		}
 
-		return false;
+		try
+		{
+			$return = $this->connection->get($keys);
+		}
+		catch (Exception $exception)
+		{
+			$return = false;
+		}
+
+		restore_error_handler();
+
+		return $return;
 	}
 
 	/**
@@ -191,14 +180,22 @@ class Cache extends Object
 	 */
 	public function set($key, $value, $expire = 300)
 	{
+		set_error_handler('cacheErrorHandler');
+
 		$key = strtoupper($key);
 
-		if ($this->open())
+		try
 		{
-			return $this->connection->set(strtoupper($this->namespace . $key), $value, 0, $expire);
+			$return = $this->connection->set(strtoupper($this->namespace . $key), $value, 0, $expire);
+		}
+		catch (Exception $exception)
+		{
+			$return = false;
 		}
 
-		return false;
+		restore_error_handler();
+
+		return $return;
 	}
 
 	/**
@@ -211,7 +208,9 @@ class Cache extends Object
 	 */
 	public function delete($keys)
 	{
-		if ($this->open())
+		set_error_handler('cacheErrorHandler');
+
+		try
 		{
 			if (!is_array($keys))
 			{
@@ -224,10 +223,16 @@ class Cache extends Object
 				$this->connection->delete(strtoupper($this->namespace . $key));
 			}
 
-			return true;
+			$return = true;
+		}
+		catch (Exception $exception)
+		{
+			$return = false;
 		}
 
-		return false;
+		restore_error_handler();
+
+		return $return;
 	}
 
 	/**
@@ -237,17 +242,30 @@ class Cache extends Object
 	 *
 	 * @param  string $key key to increment
 	 * @return boolean status of incrementing the key
-	 * @todo   Wondering if I should check the key and set to 1 if it's new
+	 * @todo   Check if it's set as Memcache() doesn't and won't inc if it doesn't exist
 	 */
 	public function increment($key)
 	{
-		if ($this->open())
+		set_error_handler('cacheErrorHandler');
+
+		try
 		{
-			return $this->connection->increment(strtoupper($this->namespace . $key));
+			$return = $this->connection->increment(strtoupper($this->namespace . $key));
+		}
+		catch (Exception $exception)
+		{
+			$return = false;
 		}
 
-		return false;
+		restore_error_handler();
+
+		return $return;
 	}
+}
+
+function cacheErrorHandler($errno, $errstr, $errfile, $errline)
+{
+	throw new Exception($errstr);
 }
 
 ?>
