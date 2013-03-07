@@ -45,6 +45,14 @@ class Cache extends Object
 	private $namespace = '';
 
 	/**
+	 * Servers
+	 *
+	 * @access private
+	 * @var    integer
+	 */
+	private $servers = 0;
+
+	/**
 	 * Connection resource to Memcached
 	 *
 	 * @access private
@@ -84,6 +92,7 @@ class Cache extends Object
 					$datasource = $this->config->datasources[$name];
 
 					$this->connection->addServer($datasource['hostname'], $datasource['port']);
+					$this->servers++;
 
 					if (isset($datasource['namespace']))
 					{
@@ -106,7 +115,7 @@ class Cache extends Object
 	 */
 	public function __destruct()
 	{
-		if ($this->connection)
+		if ($this->servers)
 		{
 			$this->connection->close();
 		}
