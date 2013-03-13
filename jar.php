@@ -1998,19 +1998,22 @@ class Database_PDO_Common extends Database_Common
 			throw new Exception('Data source name is not defined');
 		}
 
-		if ($this->driver == 'pdo_mysql')
+		switch ($this->driver)
 		{
-			// Resolves "Invalid UTF-8 sequence" issues when encoding as JSON
-			$this->attributes[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES utf8';
-		}
+			case 'pdo_mysql':
+				// Resolves "Invalid UTF-8 sequence" issues when encoding as JSON
+				// @todo Didn't resolve that issue, borked some other characters though
+				//$this->attributes[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES utf8';
+				break;
 
-		if ($this->driver == 'pdo_pgsql')
-		{
-			// This combats a bug: https://bugs.php.net/bug.php?id=62571&edit=1
-			$this->attributes[PDO::ATTR_PERSISTENT] = false;
+			case 'pdo_pgsql':
+				// This combats a bug: https://bugs.php.net/bug.php?id=62571&edit=1
+				$this->attributes[PDO::ATTR_PERSISTENT] = false;
 
-			// This allows for multiple prepared queries
-			$this->attributes[PDO::ATTR_EMULATE_PREPARES] = true;
+				// This allows for multiple prepared queries
+				$this->attributes[PDO::ATTR_EMULATE_PREPARES] = true;
+
+				break;
 		}
 	}
 
