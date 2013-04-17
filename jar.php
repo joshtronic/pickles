@@ -2834,7 +2834,7 @@ class Display_PHP extends Display_Common
 			$buffer = ob_get_clean();
 
 			// Kills any whitespace and HTML comments
-			$buffer = preg_replace(array('/^[\s]+/m', '/<!--.*-->/U'), '', $buffer);
+			$buffer = preg_replace(array('/^[\s]+/m', '/<!--(?:(?!BuySellAds).)+-->/U'), '', $buffer);
 
 			// Note, this doesn't exit in case you want to run code after the display of the page
 			echo $buffer;
