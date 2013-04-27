@@ -7982,7 +7982,7 @@ class String
 		{
 			if ($hover == true)
 			{
-				$string = '<span title="' . $string . '" style="cursor:help">' . substr($string, 0, $length) . '...</span>';
+				$string = '<span title="' . $string . '">' . substr($string, 0, $length) . '&hellip;</span>';
 			}
 			else
 			{
