@@ -186,8 +186,13 @@ class Session extends Object
 					break;
 
 				case 'redis':
+					// Keep in mind that the database value is ignored by phpredis
+					$save_path = $host . '?weight=1'
+					           . (isset($datasource['database']) ? '&database=' . $datasource['database'] : '')
+					           . (isset($datasource['prefix']) ? '&prefix=' . $datasource['prefix'] : '');
+
 					ini_set('session.save_handler', 'redis');
-					ini_set('session.save_path',    $host . '?weight=1' . (isset($datasource['database']) ? '&amp;database=' . $datasource['database'] : ''));
+					ini_set('session.save_path',    $save_path);
 					break;
 
 				default:
