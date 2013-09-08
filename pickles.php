@@ -14,16 +14,12 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
  * @usage     <code>require_once 'pickles.php';</code>
  */
-
-// Set to true while working on PICKLES to pack the JAR
-// Assumption, OSX is considered a development platform
-$pickling = (php_uname('s') == 'Darwin' ? true : false);
 
 // {{{ PICKLES Constants
 
@@ -56,46 +52,6 @@ define('JSON_AVAILABLE', function_exists('json_encode'));
 
 // Creates a variable to flag if we're on the command line
 define('IS_CLI', !isset($_SERVER['REQUEST_METHOD']));
-
-// }}}
-// {{{ Attempts to JAR the PICKLES - Har Har.
-
-function readFileContents($directory)
-{
-	$contents = '';
-	$files    = scandir($directory);
-
-	foreach ($files as $file)
-	{
-		if (strpos($file, '.') !== 0)
-		{
-			$file = $directory . '/' . $file;
-
-			if (is_dir($file))
-			{
-				$contents .= readFileContents($file);
-			}
-			else
-			{
-				$contents .= file_get_contents($file);
-			}
-		}
-	}
-
-	return $contents;
-}
-
-$jar_file = PICKLES_PATH . 'jar.php';
-
-if (is_writable(PICKLES_PATH) && $pickling)
-{
-	file_put_contents(dirname(__FILE__) . '/jar.php', str_replace("\n?" . ">\n<" . "?php\n", '', readFileContents(PICKLES_CLASS_PATH)));
-}
-
-if (file_exists($jar_file) && !$pickling)
-{
-	require $jar_file;
-}
 
 // }}}
 // {{{ Defaults some important configuration options
