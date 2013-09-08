@@ -143,7 +143,7 @@ class Module extends Object
 	 * @access protected
 	 * @var    array, null by default
 	 */
-	protected $get = null;
+	protected $validate = null;
 
 	/**
 	 * Hash
