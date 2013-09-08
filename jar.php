@@ -1519,7 +1519,7 @@ class Controller extends Object
 			}
 
 			// Validates the hash if applicable
-			if ($module->hash !== false)
+			if ($valid_request === true && $module->hash !== false)
 			{
 				if (isset($_REQUEST['security_hash']))
 				{
@@ -1548,7 +1548,7 @@ class Controller extends Object
 
 			$valid_form_input = true;
 
-			if ($module->validate !== false)
+			if ($valid_request === true && $valid_security_hash === true && $module->validate !== false)
 			{
 				$validation_errors = $module->__validate();
 
@@ -6569,13 +6569,13 @@ class Module extends Object
 								// {{{ Checks using preg_match()
 
 								case 'regex':
-									if (count($rule) < 2)
+									if (count($rule) < 3)
 									{
-										throw new Exception('Invalid validation rule, expected: "regex:string".');
+										throw new Exception('Invalid validation rule, expected: "regex:is|not:string".');
 									}
 									else
 									{
-										if (preg_match($rule[1], $value))
+										if ((strtolower($rule[1]) == 'not' && !preg_match($rule[2], $value)) || preg_match($rule[2], $value))
 										{
 											$errors[] = $message;
 										}

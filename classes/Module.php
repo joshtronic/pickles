@@ -425,13 +425,13 @@ class Module extends Object
 								// {{{ Checks using preg_match()
 
 								case 'regex':
-									if (count($rule) < 2)
+									if (count($rule) < 3)
 									{
-										throw new Exception('Invalid validation rule, expected: "regex:string".');
+										throw new Exception('Invalid validation rule, expected: "regex:is|not:string".');
 									}
 									else
 									{
-										if (preg_match($rule[1], $value))
+										if ((strtolower($rule[1]) == 'not' && !preg_match($rule[2], $value)) || preg_match($rule[2], $value))
 										{
 											$errors[] = $message;
 										}

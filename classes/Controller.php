@@ -357,7 +357,7 @@ class Controller extends Object
 			}
 
 			// Validates the hash if applicable
-			if ($module->hash !== false)
+			if ($valid_request === true && $module->hash !== false)
 			{
 				if (isset($_REQUEST['security_hash']))
 				{
@@ -386,7 +386,7 @@ class Controller extends Object
 
 			$valid_form_input = true;
 
-			if ($module->validate !== false)
+			if ($valid_request === true && $valid_security_hash === true && $module->validate !== false)
 			{
 				$validation_errors = $module->__validate();
 
