@@ -329,7 +329,7 @@ class Controller extends Object
 			$error_message       = 'An unexpected error has occurred';
 
 			// Determines if the request method is valid for this request
-			if ($module->method != false)
+			if ($module->method !== false)
 			{
 				$methods = (is_array($module->method) ? $module->method : array($module->method));
 
@@ -346,7 +346,7 @@ class Controller extends Object
 
 				if ($valid_request == false)
 				{
-					$error_message = 'There was a problem with your request method';
+					$error_message = 'There was a problem with your request method.';
 				}
 
 				unset($methods, $request_method, $method);
@@ -357,7 +357,7 @@ class Controller extends Object
 			}
 
 			// Validates the hash if applicable
-			if ($module->hash != false)
+			if ($module->hash !== false)
 			{
 				if (isset($_REQUEST['security_hash']))
 				{
@@ -369,7 +369,7 @@ class Controller extends Object
 					}
 					else
 					{
-						$error_message = 'Invalid security hash';
+						$error_message = 'Invalid security hash.';
 					}
 
 					unset($hash_value);
@@ -384,12 +384,25 @@ class Controller extends Object
 				$valid_security_hash = true;
 			}
 
+			$valid_form_input = true;
+
+			if ($module->validate !== false)
+			{
+				$validation_errors = $module->__validate();
+
+				if ($validation_errors !== false)
+				{
+					$error_message    = implode(' ', $validation_errors);
+					$valid_form_input = false;
+				}
+			}
+
 			/**
 			 * Note to Self: When building in caching will need to let the
 			 * module know to use the cache, either passing in a variable
 			 * or setting it on the object
 			 */
-			if ($valid_request && $valid_security_hash)
+			if ($valid_request && $valid_security_hash && $valid_form_input)
 			{
 				$module_return = $module->$default_method();
 

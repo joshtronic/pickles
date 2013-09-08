@@ -1491,7 +1491,7 @@ class Controller extends Object
 			$error_message       = 'An unexpected error has occurred';
 
 			// Determines if the request method is valid for this request
-			if ($module->method != false)
+			if ($module->method !== false)
 			{
 				$methods = (is_array($module->method) ? $module->method : array($module->method));
 
@@ -1508,7 +1508,7 @@ class Controller extends Object
 
 				if ($valid_request == false)
 				{
-					$error_message = 'There was a problem with your request method';
+					$error_message = 'There was a problem with your request method.';
 				}
 
 				unset($methods, $request_method, $method);
@@ -1519,7 +1519,7 @@ class Controller extends Object
 			}
 
 			// Validates the hash if applicable
-			if ($module->hash != false)
+			if ($module->hash !== false)
 			{
 				if (isset($_REQUEST['security_hash']))
 				{
@@ -1531,7 +1531,7 @@ class Controller extends Object
 					}
 					else
 					{
-						$error_message = 'Invalid security hash';
+						$error_message = 'Invalid security hash.';
 					}
 
 					unset($hash_value);
@@ -1546,12 +1546,25 @@ class Controller extends Object
 				$valid_security_hash = true;
 			}
 
+			$valid_form_input = true;
+
+			if ($module->validate !== false)
+			{
+				$validation_errors = $module->__validate();
+
+				if ($validation_errors !== false)
+				{
+					$error_message    = implode(' ', $validation_errors);
+					$valid_form_input = false;
+				}
+			}
+
 			/**
 			 * Note to Self: When building in caching will need to let the
 			 * module know to use the cache, either passing in a variable
 			 * or setting it on the object
 			 */
-			if ($valid_request && $valid_security_hash)
+			if ($valid_request && $valid_security_hash && $valid_form_input)
 			{
 				$module_return = $module->$default_method();
 
@@ -6140,7 +6153,7 @@ class Model extends Object
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -6245,6 +6258,18 @@ class Module extends Object
 	protected $session = null;
 
 	/**
+	 * AJAX
+	 *
+	 * Whether or not the module is being called via AJAX. This determines if
+	 * errors should be returned as JSON or if it should use the Error class
+	 * which can be interrogated from within a template.
+	 *
+	 * @access protected
+	 * @var    boolean, false (not AJAX) by default
+	 */
+	protected $ajax = false;
+
+	/**
 	 * Method
 	 *
 	 * Request methods that are allowed to access the module.
@@ -6253,6 +6278,16 @@ class Module extends Object
 	 * @var    string or array, null by default
 	 */
 	protected $method = null;
+
+	/**
+	 * Validate
+	 *
+	 * Variables to validate.
+	 *
+	 * @access protected
+	 * @var    array, null by default
+	 */
+	protected $get = null;
 
 	/**
 	 * Hash
@@ -6311,8 +6346,9 @@ class Module extends Object
 	 * controller (the registration page calls the login page in this manner.
 	 *
 	 * @param boolean $autorun optional flag to autorun __default()
+	 * @param boolean $valiate optional flag to disable input validation during autorun
 	 */
-	public function __construct($autorun = false)
+	public function __construct($autorun = false, $validate = true)
 	{
 		parent::__construct();
 
@@ -6321,6 +6357,16 @@ class Module extends Object
 
 		if ($autorun === true)
 		{
+			if ($validate === true)
+			{
+				$errors = $this->__validate();
+
+				if ($errors !== false)
+				{
+					exit('Errors encountered, this is a @todo for form validation when calling modules from inside of modules');
+				}
+			}
+
 			$this->__default();
 		}
 	}
@@ -6399,6 +6445,157 @@ class Module extends Object
 		{
 			throw new Exception('Only Controller can perform setRequest()');
 		}
+	}
+
+	/**
+	 * Validate
+	 */
+	public function __validate()
+	{
+		$errors = array();
+
+		if ($this->validate !== false)
+		{
+			switch (strtoupper($this->method))
+			{
+				case 'GET':  $global = &$_GET;     break;
+				case 'POST': $global = &$_POST;    break;
+				default:     $global = &$_REQUEST; break;
+			}
+
+			foreach ($this->validate as $variable => $rules)
+			{
+				if (!is_array($rules))
+				{
+					$variable = $rules;
+					$rules    = true;
+				}
+
+				if (isset($global[$variable]) && !String::isEmpty($global[$variable]))
+				{
+					$value = $global[$variable];
+
+					if (is_array($rules))
+					{
+						foreach ($rules as $rule => $message)
+						{
+							$rule = explode(':', $rule);
+
+							switch (strtolower($rule[0]))
+							{
+								// @todo case 'alpha':
+								// @todo case 'alphanumeric':
+								// @todo case 'date':
+
+								// {{{ Checks using filter_var()
+
+								case 'filter':
+									if (count($rule) < 2)
+									{
+										throw new Exception('Invalid validation rule, expected: "validate:boolean|email|float|int|ip|regex|url".');
+									}
+									else
+									{
+										switch (strtolower($rule[1]))
+										{
+											case 'boolean':
+											case 'email':
+											case 'float':
+											case 'int':
+											case 'ip':
+											case 'regex':
+											case 'url':
+												$filter = constant('FILTER_VALIDATE_' . strtoupper($rule[1]));
+												break;
+
+											default:
+												throw new Exception('Invalid filter, expecting boolean, email, float, int, ip, regex or url.');
+												break;
+										}
+
+										if (!filter_var($value, $filter))
+										{
+											$errors[] = $message;
+										}
+									}
+
+									break;
+
+								// }}}
+								// {{{ Checks using strlen()
+
+								case 'length':
+									if (count($rule) < 3)
+									{
+										throw new Exception('Invalid validation rule, expected: "length:<|<=|==|!=|>=|>:integer".');
+									}
+									else
+									{
+										if (!filter_var($rule[2], FILTER_VALIDATE_INT))
+										{
+											throw new Exception('Invalid length value, expecting an integer.');
+										}
+										else
+										{
+											$length = strlen($value);
+
+											switch ($rule[1])
+											{
+												case '<':  $valid = $length <  $rule[2]; break;
+												case '<=': $valid = $length <= $rule[2]; break;
+												case '==': $valid = $length == $rule[2]; break;
+												case '!=': $valid = $length != $rule[2]; break;
+												case '>=': $valid = $length >= $rule[2]; break;
+												case '>':  $valid = $length >  $rule[2]; break;
+
+												default:
+													throw new Exception('Invalid operator, expecting <, <=, ==, !=, >= or >.');
+													break;
+											}
+
+											if ($valid === true)
+											{
+												$errors[] = $message;
+											}
+										}
+									}
+
+									break;
+
+								// }}}
+
+								// @todo case 'range':
+
+								// {{{ Checks using preg_match()
+
+								case 'regex':
+									if (count($rule) < 2)
+									{
+										throw new Exception('Invalid validation rule, expected: "regex:string".');
+									}
+									else
+									{
+										if (preg_match($rule[1], $value))
+										{
+											$errors[] = $message;
+										}
+									}
+									break;
+
+								// }}}
+							}
+
+						}
+					}
+				}
+				else
+				{
+					$errors[] = 'The ' . $variable . ' field is required.';
+				}
+			}
+		}
+
+		return $errors == array() ? false : $errors;
 	}
 }
 
