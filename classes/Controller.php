@@ -52,7 +52,7 @@ class Controller extends Object
 		// Generate a generic "site down" message if the site is set to be disabled
 		if (isset($this->config->pickles['disabled']) && $this->config->pickles['disabled'] == true)
 		{
-			Error::fatal($_SERVER['SERVER_NAME'] . ' is currently<br />down for maintenance');
+			Error::fatal($_SERVER['SERVER_NAME'] . ' is currently<br>down for maintenance');
 		}
 
 		// Checks for attributes passed in the URI
@@ -136,20 +136,17 @@ class Controller extends Object
 		// Determines if the module is private and should be, well, private
 		if ($module->private == true)
 		{
-			header('Location: /');
-			exit;
+			Browser::goHome();
 		}
 
 		// Determines if we need to serve over HTTP or HTTPS
 		if ($module->secure == false && isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'])
 		{
-			header('Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-			exit;
+			Browser::redirect('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 		}
 		elseif ($module->secure == true && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false))
 		{
-			header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-			exit;
+			Browser::redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 		}
 
 		// Validates security level
@@ -241,9 +238,7 @@ class Controller extends Object
 					$_SESSION['__pickles']['login']['destination'] = $_REQUEST['request'] ? $_REQUEST['request'] : '/';
 
 					// Redirect to login page, potentially configured in the config, else /login
-					header('Location: /' . (isset($this->config->security['login']) ? $this->config->security['login'] : 'login'));
-
-					exit;
+					Browser::redirect('/' . (isset($this->config->security['login']) ? $this->config->security['login'] : 'login'));
 				}
 			}
 		}
@@ -282,7 +277,7 @@ class Controller extends Object
 		{
 			if (!$_REQUEST['request'])
 			{
-				Error::fatal('Way to go, you\'ve successfully created an infinite redirect loop. Good thing I was here or you would have been served with a pretty ugly browser error.<br /><br />So here\'s the deal, no templates were able to be loaded. Make sure your parent and child templates actually exist and if you\'re using non-default values, make sure they\'re defined correctly in your config.');
+				Error::fatal('Way to go, you\'ve successfully created an infinite redirect loop. Good thing I was here or you would have been served with a pretty ugly browser error.<br><br>So here\'s the deal, no templates were able to be loaded. Make sure your parent and child templates actually exist and if you\'re using non-default values, make sure they\'re defined correctly in your config.');
 			}
 			else
 			{
