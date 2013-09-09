@@ -98,7 +98,7 @@ class Controller extends Object
 		}
 
 		// Loads the module's information
-		list($module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($request);
+		list($module_class, $module_filename, $template_basename, $css_class, $js_basename, $dot_syntax) = $this->prepareVariables($request);
 
 		unset($request);
 
@@ -116,7 +116,11 @@ class Controller extends Object
 			}
 			else
 			{
-				if ($this->config->pickles['logging'] === true)
+				if ($dot_syntax)
+				{
+					Browser::goHome();
+				}
+				elseif ($this->config->pickles['logging'] === true)
 				{
 					Log::warning('Class named ' . $module_class . ' was not found in ' . $module_filename);
 				}
@@ -326,7 +330,7 @@ class Controller extends Object
 
 			$valid_request       = false;
 			$valid_security_hash = false;
-			$error_message       = 'An unexpected error has occurred';
+			$error_message       = 'An unexpected error has occurred.';
 
 			// Determines if the request method is valid for this request
 			if ($module->method !== false)
@@ -477,7 +481,9 @@ class Controller extends Object
 	 */
 	public function prepareVariables($basename)
 	{
-		if (strpos($basename, '.') !== false)
+		$dot_syntax = strpos($basename, '.') !== false;
+
+		if ($dot_syntax)
 		{
 			list($basename, $action) = explode('.', $basename, 2);
 			$action                  = str_replace('.', '_', $action);
@@ -504,7 +510,7 @@ class Controller extends Object
 			$module_class = preg_replace('/(-(.{1}))/e', 'strtoupper("$2")', $module_class);
 		}
 
-		return array($module_class, $module_filename, $template_basename, $css_class, $js_basename);
+		return array($module_class, $module_filename, $template_basename, $css_class, $js_basename, $dot_syntax);
 	}
 }
 
