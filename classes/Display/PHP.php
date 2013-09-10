@@ -62,7 +62,17 @@ class Display_PHP extends Display_Common
 			// Starts up the buffer
 			ob_start();
 
+			// Creates (possibly overwritten) objects
+			$dynamic_class = (class_exists('CustomDynamic') ? 'CustomDynamic' : 'Dynamic');
+			$form_class    = (class_exists('CustomForm')    ? 'CustomForm'    : 'Form');
+			$html_class    = (class_exists('CustomHTML')    ? 'CustomHTML'    : 'HTML');
+
+			// {{{ Old scope, magic variables
+
 			// Puts the class variables in local scope of the template
+			$__dynamic   = new $dynamic_class();
+			$__form      = new $form_class();
+			$__html      = new $html_class();
 			$__config    = $this->config;
 			$__meta      = $this->meta_data;
 			$__module    = $this->module_return;
@@ -70,14 +80,17 @@ class Display_PHP extends Display_Common
 			$__js_file   = $this->js_basename;
 			$__fluid     = $this->fluid;
 
-			// Creates (possibly overwritten) objects
-			$dynamic_class = (class_exists('CustomDynamic') ? 'CustomDynamic' : 'Dynamic');
-			$form_class    = (class_exists('CustomForm')    ? 'CustomForm'    : 'Form');
-			$html_class    = (class_exists('CustomHTML')    ? 'CustomHTML'    : 'HTML');
+			// }}}
+			// {{{ New scope, class variables
 
-			$__dynamic = new $dynamic_class();
-			$__form    = new $form_class();
-			$__html    = new $html_class();
+			$this->dynamic   = &$__dynamic;
+			$this->form      = &$__form;
+			$this->html      = &$__html;
+			$this->meta      = &$__meta;
+			$this->module    = &$__module;
+			$this->js_file   = &$this->js_basename;
+
+			// }}}
 
 			// Loads the template
 			if ($this->parent_template != null)
