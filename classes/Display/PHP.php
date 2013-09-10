@@ -104,11 +104,15 @@ class Display_PHP extends Display_Common
 					$__template = $this->child_template;
 				}
 
+				$this->template = $__template;
+
 				require_once $this->parent_template;
 			}
 			elseif ($this->child_template != null)
 			{
 				$__template = $this->child_template;
+
+				$this->template = $__template;
 
 				require_once $__template;
 			}
