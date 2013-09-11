@@ -9,7 +9,7 @@
  * Redistribution of these files must retain the above copyright notice.
  *
  * @author    Josh Sherman <pickles@joshtronic.com>
- * @copyright Copyright 2007-2012, Josh Sherman
+ * @copyright Copyright 2007-2013, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -121,82 +121,102 @@ class Model extends Object
 	/**
 	 * Field List
 	 *
+	 * SQL: SELECT
+	 *
 	 * @access protected
 	 * @var    mixed
 	 */
-	protected $fields = '*'; // SELECT
+	protected $fields = '*';
 
 	/**
 	 * Table Name
 	 *
+	 * SQL: FROM
+	 *
 	 * @access protected
 	 * @var    mixed
 	 */
-	protected $table = false; // FROM
+	protected $table = false;
 
 	/**
 	 * Joins
 	 *
+	 * SQL: JOIN
+	 *
 	 * @access protected
 	 * @var    mixed
 	 */
-	protected $joins = false; // JOIN
+	protected $joins = false;
 
 	/**
 	 * [Index] Hints
 	 *
+	 * SQL: USE INDEX
+	 *
 	 * @access protected
 	 * @var    mixed
 	 */
-	protected $hints = false; // USE INDEX
+	protected $hints = false;
 
 	/**
 	 * Conditions
 	 *
+	 * SQL: WHERE
+	 *
 	 * @access protected
 	 * @var    mixed
 	 */
-	protected $conditions = false; // WHERE
+	protected $conditions = false;
 
 	/**
 	 * Group
 	 *
+	 * SQL: GROUP BY
+	 *
 	 * @access protected
 	 * @var    mixed
 	 */
-	protected $group = false; // GROUP BY
+	protected $group = false;
 
 	/**
 	 * Having
 	 *
+	 * SQL: HAVING
+	 *
 	 * @access protected
 	 * @var    mixed
 	 */
-	protected $having = false; // HAVING
+	protected $having = false;
 
 	/**
 	 * Order
 	 *
+	 * SQL: ORDER BY
+	 *
 	 * @access protected
 	 * @var    mixed
 	 */
-	protected $order = false; // ORDER BY
+	protected $order = false;
 
 	/**
 	 * Limit
 	 *
+	 * SQL: LIMIT
+	 *
 	 * @access protected
 	 * @var    mixed
 	 */
-	protected $limit = false; // LIMIT
+	protected $limit = false;
 
 	/**
 	 * Offset
 	 *
+	 * SQL: OFFSET
+	 *
 	 * @access protected
 	 * @var    mixed (string or array)
 	 */
-	protected $offset = false; // OFFSET
+	protected $offset = false;
 
 	/**
 	 * Query Results
@@ -390,6 +410,9 @@ class Model extends Object
 			$this->$variable = $value;
 		}
 
+		// Cache fields
+		$cache_field = false;
+
 		// Builds out the query
 		if ($type_or_parameters != null)
 		{
@@ -399,6 +422,25 @@ class Model extends Object
 				if (is_array($parameters))
 				{
 					throw new Exception('You cannot pass in 2 query parameter arrays');
+				}
+
+				if ($this->use_cache && isset($type_or_parameters['conditions'])
+					&& count($type_or_parameters['conditions']) == 1)
+				{
+					$cache_key = $this->model . '-' . key($type_or_parameters['conditions'])
+					           . '-' . current($type_or_parameters['conditions']);
+
+					$cache_id    = $this->cache->get($cache_key);
+					$cache_field = key($type_or_parameters['conditions']);
+
+					if ($cache_id === false)
+					{
+						unset($cache_key);
+					}
+					else
+					{
+						$cache_key = $this->model . '-' . $cache_id;
+					}
 				}
 
 				if ($this->columns['is_deleted'])
@@ -486,6 +528,13 @@ class Model extends Object
 					implode(' ', $this->sql),
 					(count($this->input_parameters) == 0 ? null : $this->input_parameters)
 				);
+
+				if ($this->use_cache && $cache_field && $this->count() == 1)
+				{
+					$this->cache->set($this->model . '-' . $cache_field . '-' . $this->records[0][$cache_field], $this->records[0][$this->columns['id']]);
+
+					$cache_key = $this->model . '-' . $this->records[0][$this->columns['id']];
+				}
 
 				if (isset($cache_key) && $this->use_cache)
 				{
@@ -1389,7 +1438,24 @@ class Model extends Object
 					// Clears the cache
 					if ($update && $this->use_cache)
 					{
-						$this->cache->delete($this->model . '-' . $this->record[$this->columns['id']]);
+						$cache_keys = array($this->model . '-' . $this->record[$this->columns['id']]);
+
+						foreach ($this->original as $original)
+						{
+							if ($original['id'] == $this->record['id'])
+							{
+								foreach ($this->original[0] as $column => $value)
+								{
+									if (!String::isEmpty($value) && !in_array($column, $this->columns)
+										&& $value != $this->record[$column])
+									{
+										$cache_keys[] = $this->model . '-' . $column . '-' . $value;
+									}
+								}
+							}
+						}
+
+						$this->cache->delete($cache_keys);
 					}
 
 					return $results;
@@ -1443,7 +1509,17 @@ class Model extends Object
 			// Clears the cache
 			if ($this->use_cache)
 			{
-				$this->cache->delete($this->model . '-' . $this->record[$this->columns['id']]);
+				$cache_keys = $this->model . '-' . $this->record[$this->columns['id']];
+
+				foreach ($this->record as $column => $value)
+				{
+					if (!in_array($column, $this->columns))
+					{
+						$cache_keys[] = $this->model . '-' . $column . '-' . $value;
+					}
+				}
+
+				$this->cache->delete($cache_keys);
 			}
 
 			return $results;
