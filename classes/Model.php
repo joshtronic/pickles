@@ -1447,7 +1447,7 @@ class Model extends Object
 								foreach ($this->original[0] as $column => $value)
 								{
 									if (!String::isEmpty($value) && !in_array($column, $this->columns)
-										&& $value != $this->record[$column])
+										&& isset($this->record[$column]) && $value != $this->record[$column])
 									{
 										$cache_keys[] = $this->model . '-' . $column . '-' . $value;
 									}
