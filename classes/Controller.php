@@ -98,7 +98,7 @@ class Controller extends Object
 		}
 
 		// Loads the module's information
-		list($module_class, $module_filename, $template_basename, $css_class, $js_basename, $dot_syntax) = $this->prepareVariables($request);
+		list($module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($request);
 
 		unset($request);
 
@@ -116,11 +116,7 @@ class Controller extends Object
 			}
 			else
 			{
-				if ($dot_syntax)
-				{
-					Browser::goHome();
-				}
-				elseif ($this->config->pickles['logging'] === true)
+				if ($this->config->pickles['logging'] === true)
 				{
 					Log::warning('Class named ' . $module_class . ' was not found in ' . $module_filename);
 				}
@@ -476,14 +472,6 @@ class Controller extends Object
 	 */
 	public function prepareVariables($basename)
 	{
-		$dot_syntax = strpos($basename, '.') !== false;
-
-		if ($dot_syntax)
-		{
-			list($basename, $action) = explode('.', $basename, 2);
-			$action                  = str_replace('.', '_', $action);
-		}
-
 		// Sets up all of our variables
 		$module_class      = strtr($basename, '/', '_');
 		$module_filename   = SITE_MODULE_PATH . $basename . '.php';
@@ -505,7 +493,7 @@ class Controller extends Object
 			$module_class = preg_replace('/(-(.{1}))/e', 'strtoupper("$2")', $module_class);
 		}
 
-		return array($module_class, $module_filename, $template_basename, $css_class, $js_basename, $dot_syntax);
+		return array($module_class, $module_filename, $template_basename, $css_class, $js_basename);
 	}
 }
 
