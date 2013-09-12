@@ -55,7 +55,6 @@ class API_Gravatar extends API_Common
 	 */
 	public static function img($email, $size = 80, $default = 'gravatar', $rating = 'g', $force = false, $secure = false, $attributes = false)
 	{
-		$email = 'joshsherman@gmail.com';
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
 		{
 			throw new Exception('Invalid email address.');
