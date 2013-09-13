@@ -410,9 +410,6 @@ class Model extends Object
 			$this->$variable = $value;
 		}
 
-		// Cache fields
-		$cache_field = false;
-
 		// Builds out the query
 		if ($type_or_parameters != null)
 		{
@@ -422,25 +419,6 @@ class Model extends Object
 				if (is_array($parameters))
 				{
 					throw new Exception('You cannot pass in 2 query parameter arrays');
-				}
-
-				if ($this->use_cache && isset($type_or_parameters['conditions'])
-					&& count($type_or_parameters['conditions']) == 1)
-				{
-					$cache_key = $this->model . '-' . key($type_or_parameters['conditions'])
-					           . '-' . current($type_or_parameters['conditions']);
-
-					$cache_id    = $this->cache->get($cache_key);
-					$cache_field = key($type_or_parameters['conditions']);
-
-					if ($cache_id === false)
-					{
-						unset($cache_key);
-					}
-					else
-					{
-						$cache_key = $this->model . '-' . $cache_id;
-					}
 				}
 
 				if ($this->columns['is_deleted'])
@@ -528,13 +506,6 @@ class Model extends Object
 					implode(' ', $this->sql),
 					(count($this->input_parameters) == 0 ? null : $this->input_parameters)
 				);
-
-				if ($this->use_cache && $cache_field && $this->count() == 1)
-				{
-					$this->cache->set($this->model . '-' . $cache_field . '-' . $this->records[0][$cache_field], $this->records[0][$this->columns['id']]);
-
-					$cache_key = $this->model . '-' . $this->records[0][$this->columns['id']];
-				}
 
 				if (isset($cache_key) && $this->use_cache)
 				{
@@ -1438,24 +1409,7 @@ class Model extends Object
 					// Clears the cache
 					if ($update && $this->use_cache)
 					{
-						$cache_keys = array($this->model . '-' . $this->record[$this->columns['id']]);
-
-						foreach ($this->original as $original)
-						{
-							if ($original['id'] == $this->record['id'])
-							{
-								foreach ($this->original[0] as $column => $value)
-								{
-									if (!String::isEmpty($value) && !in_array($column, $this->columns)
-										&& isset($this->record[$column]) && $value != $this->record[$column])
-									{
-										$cache_keys[] = $this->model . '-' . $column . '-' . $value;
-									}
-								}
-							}
-						}
-
-						$this->cache->delete($cache_keys);
+						$this->cache->delete($this->model . '-' . $this->record[$this->columns['id']]);
 					}
 
 					return $results;
@@ -1509,17 +1463,7 @@ class Model extends Object
 			// Clears the cache
 			if ($this->use_cache)
 			{
-				$cache_keys = $this->model . '-' . $this->record[$this->columns['id']];
-
-				foreach ($this->record as $column => $value)
-				{
-					if (!in_array($column, $this->columns))
-					{
-						$cache_keys[] = $this->model . '-' . $column . '-' . $value;
-					}
-				}
-
-				$this->cache->delete($cache_keys);
+				$this->cache->delete($this->model . '-' . $this->record[$this->columns['id']]);
 			}
 
 			return $results;
