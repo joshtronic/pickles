@@ -1356,8 +1356,6 @@ class Model extends Object
 			// Clears the cache
 			if ($update && $this->use_cache)
 			{
-				Log::information('CACHE: Deleted Keys: ' . implode(', ', $cache_keys));
-
 				$this->cache->delete($cache_keys);
 			}
 
@@ -1529,11 +1527,7 @@ class Model extends Object
 					// Clears the cache
 					if ($update && $this->use_cache)
 					{
-						$cache_key = strtoupper($this->model) . '-' . $this->record[$this->columns['id']];
-
-						Log::information('CACHE: Delete Key: ' . $cache_key);
-
-						$this->cache->delete($cache_key);
+						$this->cache->delete(strtoupper($this->model) . '-' . $this->record[$this->columns['id']]);
 					}
 
 					return $results;
@@ -1587,11 +1581,7 @@ class Model extends Object
 			// Clears the cache
 			if ($this->use_cache)
 			{
-				$cache_key = strtoupper($this->model) . '-' . $this->record[$this->columns['id']];
-
-				Log::information('CACHE: Deleted Key: ' . $cache_key);
-
-				$this->cache->delete($cache_key);
+				$this->cache->delete(strtoupper($this->model) . '-' . $this->record[$this->columns['id']]);
 			}
 
 			return $results;

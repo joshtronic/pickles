@@ -205,10 +205,7 @@ class Dynamic extends Object
 			}
 			else
 			{
-				if ($this->config->pickles['logging'] === true)
-				{
-					Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
-				}
+				Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
 			}
 
 			$reference = $this->reference($reference);
@@ -278,10 +275,7 @@ class Dynamic extends Object
 					}
 					else
 					{
-						if ($this->config->pickles['logging'] === true)
-						{
-							Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
-						}
+						Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
 					}
 
 					$reference = $this->reference($reference);

@@ -38,7 +38,7 @@ class Error
 		{
 			if (Log::error($message) == false)
 			{
-				$message .= '<br /><br />This error message could not be logged as the log path or log file is not writable';
+				$message .= '<br><br>This error message could not be logged as the log path or log file is not writable';
 			}
 		}
 		?>

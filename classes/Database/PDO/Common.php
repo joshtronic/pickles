@@ -227,7 +227,7 @@ class Database_PDO_Common extends Database_Common
 				$end_time = microtime(true);
 				$duration = $end_time - $start_time;
 
-				if ($this->config->pickles['logging'] === true && $duration >= 1)
+				if ($duration >= 1)
 				{
 					Log::slowQuery($duration . ' seconds: ' . $loggable_query);
 				}
