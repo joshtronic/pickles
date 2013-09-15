@@ -421,6 +421,50 @@ class Model extends Object
 					throw new Exception('You cannot pass in 2 query parameter arrays');
 				}
 
+				$this->prepareParameters($type_or_parameters);
+
+				if ($this->use_cache
+					&& isset($type_or_parameters['conditions'][$this->columns['id']])
+					&& count($type_or_parameters) == 1
+					&& count($type_or_parameters['conditions']) == 1)
+				{
+					$cache_keys     = array();
+					$sorted_records = array();
+
+					foreach ($type_or_parameters['conditions'][$this->columns['id']] as $id)
+					{
+						$cache_keys[]        = strtoupper($this->model) . '-' . $id;
+						$sorted_records[$id] = true;
+					}
+
+					$cached        = $this->cache->get($cache_keys);
+					$partial_cache = array();
+
+					if ($cached)
+					{
+						foreach ($cached as $record)
+						{
+							$partial_cache[$record['id']] = $record;
+						}
+					}
+
+					unset($cached);
+
+					foreach ($type_or_parameters['conditions'][$this->columns['id']] as $key => $id)
+					{
+						if (isset($partial_cache[$id]))
+						{
+							unset($type_or_parameters['conditions'][$this->columns['id']][$key]);
+						}
+					}
+
+					if (count($type_or_parameters['conditions'][$this->columns['id']]) == 0)
+					{
+						$cache_key = true;
+						$cached    = array_values($partial_cache);
+					}
+				}
+
 				if ($this->columns['is_deleted'])
 				{
 					$type_or_parameters['conditions'][$this->columns['is_deleted']] = '0';
@@ -430,6 +474,50 @@ class Model extends Object
 			}
 			elseif (is_array($parameters))
 			{
+				$this->prepareParameters($parameters);
+
+				if ($this->use_cache
+					&& isset($parameters['conditions'][$this->columns['id']])
+					&& count($parameters) == 1
+					&& count($parameters['conditions']) == 1)
+				{
+					$cache_keys     = array();
+					$sorted_records = array();
+
+					foreach ($parameters['conditions'][$this->columns['id']] as $id)
+					{
+						$cache_keys[]        = strtoupper($this->model) . '-' . $id;
+						$sorted_records[$id] = true;
+					}
+
+					$cached        = $this->cache->get($cache_keys);
+					$partial_cache = array();
+
+					if ($cached)
+					{
+						foreach ($cached as $record)
+						{
+							$partial_cache[$record['id']] = $record;
+						}
+					}
+
+					unset($cached);
+
+					foreach ($parameters['conditions'][$this->columns['id']] as $key => $id)
+					{
+						if (isset($partial_cache[$id]))
+						{
+							unset($parameters['conditions'][$this->columns['id']][$key]);
+						}
+					}
+
+					if (count($parameters['conditions'][$this->columns['id']]) == 0)
+					{
+						$cache_key = true;
+						$cached    = array_values($partial_cache);
+					}
+				}
+
 				if ($this->columns['is_deleted'])
 				{
 					$parameters['conditions'][$this->columns['is_deleted']] = '0';
@@ -439,7 +527,7 @@ class Model extends Object
 			}
 			elseif (ctype_digit((string)$type_or_parameters))
 			{
-				$cache_key  = $this->model . '-' . $type_or_parameters;
+				$cache_key  = strtoupper($this->model) . '-' . $type_or_parameters;
 				$parameters = array($this->columns['id'] => $type_or_parameters);
 
 				if ($this->columns['is_deleted'])
@@ -451,7 +539,7 @@ class Model extends Object
 			}
 			elseif (ctype_digit((string)$parameters))
 			{
-				$cache_key  = $this->model . '-' . $parameters;
+				$cache_key  = strtoupper($this->model) . '-' . $parameters;
 				$parameters = array($this->columns['id'] => $parameters);
 
 				if ($this->columns['is_deleted'])
@@ -485,13 +573,14 @@ class Model extends Object
 				case 'list':
 				case 'indexed':
 				default:
-					$this->generateQuery();
+					if (!isset($cache_key) || $cache_key !== true)
+					{
+						$this->generateQuery();
+					}
 					break;
 			}
 
-			$query_database = true;
-
-			if (isset($cache_key) && $this->use_cache)
+			if (isset($cache_key) && $this->use_cache && !isset($cached))
 			{
 				$cached = $this->cache->get($cache_key);
 			}
@@ -507,9 +596,37 @@ class Model extends Object
 					(count($this->input_parameters) == 0 ? null : $this->input_parameters)
 				);
 
-				if (isset($cache_key) && $this->use_cache)
+				if (isset($partial_cache))
 				{
-					$this->cache->set($cache_key, $this->records);
+					$records = array_merge($partial_cache, $this->records);
+
+					if (isset($sorted_records))
+					{
+						foreach ($records as $record)
+						{
+							$sorted_records[$record['id']] = $record;
+						}
+
+						$records = $sorted_records;
+					}
+
+					$this->records = $records;
+				}
+
+				if ($this->use_cache)
+				{
+					if (isset($cache_key))
+					{
+						$this->cache->set($cache_key, $this->records[0]);
+					}
+					elseif (isset($cache_keys))
+					{
+						// @todo Move to Memcached extension and switch to use setMulti()
+						foreach ($this->records as $record)
+						{
+							$this->cache->set(strtoupper($this->model) . '-' . $record['id'], $record);
+						}
+					}
 				}
 			}
 
@@ -522,7 +639,7 @@ class Model extends Object
 
 				foreach ($this->records as $record)
 				{
-					// Users the first value as the key and the second as the value
+					// Uses the first value as the key and the second as the value
 					if ($type_or_parameters == 'list')
 					{
 						$list[array_shift($record)] = array_shift($record);
@@ -767,7 +884,6 @@ class Model extends Object
 				$is_true  = ($value === true);
 				$is_false = ($value === false);
 				$is_null  = ($value === null);
-
 
 				// Generates an IN statement
 				if (is_array($value) && $between == false)
@@ -1139,8 +1255,10 @@ class Model extends Object
 						}
 						else
 						{
-							$cache_keys[] = $this->model . '-' . $value;
+							$cache_keys[] = strtoupper($this->model) . '-' . $value;
 						}
+
+						var_dump($cache_keys);exit;
 					}
 
 					// @todo Check if the column was passed in
@@ -1238,6 +1356,8 @@ class Model extends Object
 			// Clears the cache
 			if ($update && $this->use_cache)
 			{
+				Log::information('CACHE: Deleted Keys: ' . implode(', ', $cache_keys));
+
 				$this->cache->delete($cache_keys);
 			}
 
@@ -1409,7 +1529,11 @@ class Model extends Object
 					// Clears the cache
 					if ($update && $this->use_cache)
 					{
-						$this->cache->delete($this->model . '-' . $this->record[$this->columns['id']]);
+						$cache_key = strtoupper($this->model) . '-' . $this->record[$this->columns['id']];
+
+						Log::information('CACHE: Delete Key: ' . $cache_key);
+
+						$this->cache->delete($cache_key);
 					}
 
 					return $results;
@@ -1463,7 +1587,11 @@ class Model extends Object
 			// Clears the cache
 			if ($this->use_cache)
 			{
-				$this->cache->delete($this->model . '-' . $this->record[$this->columns['id']]);
+				$cache_key = strtoupper($this->model) . '-' . $this->record[$this->columns['id']];
+
+				Log::information('CACHE: Deleted Key: ' . $cache_key);
+
+				$this->cache->delete($cache_key);
 			}
 
 			return $results;
@@ -1476,6 +1604,33 @@ class Model extends Object
 
 	// }}}
 	// {{{ Utility Methods
+
+	/**
+	 * Prepare Parameters
+	 *
+	 * Checks if the parameters array is only integers and reconstructs the
+	 * array with the proper conditions format.
+	 *
+	 * @access private
+	 * @param  array $array parameters array, passed by reference
+	 */
+	private function prepareParameters(&$parameters)
+	{
+		$all_integers = true;
+
+		foreach ($parameters as $key => $value)
+		{
+			if (!ctype_digit((string)$key) || !ctype_digit((string)$value))
+			{
+				$all_integers = false;
+			}
+		}
+
+		if ($all_integers)
+		{
+			$parameters = array('conditions' => array($this->columns['id'] => $parameters));
+		}
+	}
 
 	/**
 	 * Load Parameters
