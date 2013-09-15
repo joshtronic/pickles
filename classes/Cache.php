@@ -179,15 +179,16 @@ class Cache extends Object
 	 * Sets key to the specified value. I've found that compression can lead to
 	 * issues with integers and can slow down the storage and retrieval of data
 	 * (defeats the purpose of caching if you ask me) and isn't supported. I've
-	 * also been burned by data inadvertantly being cached for infinity, hence
-	 * the 5 minute default.
+	 * also been burned by data inadvertantly being cached for infinity, but
+	 * have had great success caching data for a full day, hence defaulting the
+	 * expiration to a full day.
 	 *
 	 * @param  string  $key key to set
 	 * @param  mixed   $value value to set
-	 * @param  integer $expiration optional expiration, defaults to 5 minutes
+	 * @param  integer $expiration optional expiration, defaults to 1 day
 	 * @return boolean status of writing the data to the key
 	 */
-	public function set($key, $value, $expire = 300)
+	public function set($key, $value, $expire = Time::DAY)
 	{
 		set_error_handler('cacheErrorHandler');
 
