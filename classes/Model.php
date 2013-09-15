@@ -400,9 +400,10 @@ class Model extends Object
 	 * Potentially populates the record set from the passed arguments.
 	 *
 	 * @param mixed $type_or_parameters optional type of query or parameters
-	 * @param array $parameters optional data to create a query from
+	 * @param mixed $parameter_or_key optional data to create query or cache key
+	 * @param string $passed_key optional key to use for caching
 	 */
-	public function execute($type_or_parameters = null, $parameters = null)
+	public function execute($type_or_parameters = null, $parameters_or_key = null, $passed_key = null)
 	{
 		// Resets internal properties
 		foreach ($this->snapshot as $variable => $value)
@@ -416,7 +417,7 @@ class Model extends Object
 			// Loads the parameters into the object
 			if (is_array($type_or_parameters))
 			{
-				if (is_array($parameters))
+				if (is_array($parameters_or_key))
 				{
 					throw new Exception('You cannot pass in 2 query parameter arrays');
 				}
@@ -472,19 +473,19 @@ class Model extends Object
 
 				$this->loadParameters($type_or_parameters);
 			}
-			elseif (is_array($parameters))
+			elseif (is_array($parameters_or_key))
 			{
-				$this->prepareParameters($parameters);
+				$this->prepareParameters($parameters_or_key);
 
 				if ($this->use_cache
-					&& isset($parameters['conditions'][$this->columns['id']])
-					&& count($parameters) == 1
-					&& count($parameters['conditions']) == 1)
+					&& isset($parameters_or_key['conditions'][$this->columns['id']])
+					&& count($parameters_or_key) == 1
+					&& count($parameters_or_key['conditions']) == 1)
 				{
 					$cache_keys     = array();
 					$sorted_records = array();
 
-					foreach ($parameters['conditions'][$this->columns['id']] as $id)
+					foreach ($parameters_or_key['conditions'][$this->columns['id']] as $id)
 					{
 						$cache_keys[]        = strtoupper($this->model) . '-' . $id;
 						$sorted_records[$id] = true;
@@ -503,15 +504,15 @@ class Model extends Object
 
 					unset($cached);
 
-					foreach ($parameters['conditions'][$this->columns['id']] as $key => $id)
+					foreach ($parameters_or_key['conditions'][$this->columns['id']] as $key => $id)
 					{
 						if (isset($partial_cache[$id]))
 						{
-							unset($parameters['conditions'][$this->columns['id']][$key]);
+							unset($parameters_or_key['conditions'][$this->columns['id']][$key]);
 						}
 					}
 
-					if (count($parameters['conditions'][$this->columns['id']]) == 0)
+					if (count($parameters_or_key['conditions'][$this->columns['id']]) == 0)
 					{
 						$cache_key = true;
 						$cached    = array_values($partial_cache);
@@ -520,38 +521,48 @@ class Model extends Object
 
 				if ($this->columns['is_deleted'])
 				{
-					$parameters['conditions'][$this->columns['is_deleted']] = '0';
+					$parameters_or_key['conditions'][$this->columns['is_deleted']] = '0';
 				}
 
-				$this->loadParameters($parameters);
+				$this->loadParameters($parameters_or_key);
 			}
 			elseif (ctype_digit((string)$type_or_parameters))
 			{
-				$cache_key  = strtoupper($this->model) . '-' . $type_or_parameters;
-				$parameters = array($this->columns['id'] => $type_or_parameters);
+				$cache_key         = strtoupper($this->model) . '-' . $type_or_parameters;
+				$parameters_or_key = array($this->columns['id'] => $type_or_parameters);
 
 				if ($this->columns['is_deleted'])
 				{
-					$parameters[$this->columns['is_deleted']] = '0';
+					$parameters_or_key[$this->columns['is_deleted']] = '0';
 				}
 
-				$this->loadParameters($parameters);
+				$this->loadParameters($parameters_or_key);
 			}
-			elseif (ctype_digit((string)$parameters))
+			elseif (ctype_digit((string)$parameters_or_key))
 			{
-				$cache_key  = strtoupper($this->model) . '-' . $parameters;
-				$parameters = array($this->columns['id'] => $parameters);
+				$cache_key         = strtoupper($this->model) . '-' . $parameters_or_key;
+				$parameters_or_key = array($this->columns['id'] => $parameters_or_key);
 
 				if ($this->columns['is_deleted'])
 				{
-					$parameters[$this->columns['is_deleted']] = '0';
+					$parameters_or_key[$this->columns['is_deleted']] = '0';
 				}
 
-				$this->loadParameters($parameters);
+				$this->loadParameters($parameters_or_key);
 			}
 			elseif ($this->columns['is_deleted'])
 			{
 				$this->loadParameters(array($this->columns['is_deleted'] => '0'));
+			}
+
+			if (is_string($parameters_or_key))
+			{
+				$passed_key = $parameters_or_key;
+			}
+
+			if (is_string($passed_key))
+			{
+				$cache_key = $passed_key;
 			}
 
 			// Starts with a basic SELECT ... FROM
@@ -617,7 +628,7 @@ class Model extends Object
 				{
 					if (isset($cache_key))
 					{
-						$this->cache->set($cache_key, $this->records[0]);
+						$this->cache->set($cache_key, $passed_key ? $this->records : $this->records[0]);
 					}
 					elseif (isset($cache_keys))
 					{
@@ -1257,8 +1268,6 @@ class Model extends Object
 						{
 							$cache_keys[] = strtoupper($this->model) . '-' . $value;
 						}
-
-						var_dump($cache_keys);exit;
 					}
 
 					// @todo Check if the column was passed in
