@@ -1691,6 +1691,30 @@ class Model extends Object
 		return $value;
 	}
 
+	/**
+	 * Field Values
+	 *
+	 * Pulls the value from a single field and returns an array without any
+	 * duplicates. Perfect for extracting foreign keys to use in later queries.
+	 *
+	 * @access protected
+	 * @param  string $field field we want the values for
+	 * @return array values for the passed field
+	 */
+	protected function fieldValues($field)
+	{
+		$values = array();
+
+		foreach ($this->records as $record)
+		{
+			$values[] = $record[$field];
+		}
+
+		array_unique($values);
+
+		return $values;
+	}
+
 	// }}}
 }
 
