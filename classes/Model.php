@@ -441,7 +441,7 @@ class Model extends Object
 					$cached        = $this->cache->get($cache_keys);
 					$partial_cache = array();
 
-					if ($cached)
+					if ($cached !== false)
 					{
 						foreach ($cached as $record)
 						{
@@ -494,7 +494,7 @@ class Model extends Object
 					$cached        = $this->cache->get($cache_keys);
 					$partial_cache = array();
 
-					if ($cached)
+					if ($cached !== false)
 					{
 						foreach ($cached as $record)
 						{
@@ -596,7 +596,7 @@ class Model extends Object
 				$cached = $this->cache->get($cache_key);
 			}
 
-			if (isset($cached) && $cached)
+			if (isset($cached) && $cached !== false)
 			{
 				$this->records = $cached;
 			}
