@@ -432,6 +432,11 @@ class Model extends Object
 					$cache_keys     = array();
 					$sorted_records = array();
 
+					if (!is_array($type_or_parameters['conditions'][$this->columns['id']]))
+					{
+						$type_or_parameters['conditions'][$this->columns['id']] = array($type_or_parameters['conditions'][$this->columns['id']]);
+					}
+
 					foreach ($type_or_parameters['conditions'][$this->columns['id']] as $id)
 					{
 						$cache_keys[]        = strtoupper($this->model) . '-' . $id;
