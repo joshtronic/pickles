@@ -305,6 +305,13 @@ class Module extends Object
 
 	/**
 	 * Validate
+	 *
+	 * Internal validation for data passed to a Module. Grabs the super global
+	 * based on the Module's request method and loops through the data using the
+	 * Module's validation array (if present) sanity checking each variable
+	 * against the rules.
+	 *
+	 * @return mixed boolean false if everything is fine or an array or errors
 	 */
 	public function __validate()
 	{
@@ -329,118 +336,13 @@ class Module extends Object
 
 				if (isset($global[$variable]) && !String::isEmpty($global[$variable]))
 				{
-					$value = $global[$variable];
-
 					if (is_array($rules))
 					{
-						foreach ($rules as $rule => $message)
+						$rule_errors = Validate::isValid($global[$variable], $rules);
+
+						if (is_array($rule_errors))
 						{
-							$rule = explode(':', $rule);
-
-							switch (strtolower($rule[0]))
-							{
-								// @todo case 'alpha':
-								// @todo case 'alphanumeric':
-								// @todo case 'date':
-
-								// {{{ Checks using filter_var()
-
-								case 'filter':
-									if (count($rule) < 2)
-									{
-										throw new Exception('Invalid validation rule, expected: "validate:boolean|email|float|int|ip|regex|url".');
-									}
-									else
-									{
-										switch (strtolower($rule[1]))
-										{
-											case 'boolean':
-											case 'email':
-											case 'float':
-											case 'int':
-											case 'ip':
-											case 'regex':
-											case 'url':
-												$filter = constant('FILTER_VALIDATE_' . strtoupper($rule[1]));
-												break;
-
-											default:
-												throw new Exception('Invalid filter, expecting boolean, email, float, int, ip, regex or url.');
-												break;
-										}
-
-										if (!filter_var($value, $filter))
-										{
-											$errors[] = $message;
-										}
-									}
-
-									break;
-
-								// }}}
-								// {{{ Checks using strlen()
-
-								case 'length':
-									if (count($rule) < 3)
-									{
-										throw new Exception('Invalid validation rule, expected: "length:<|<=|==|!=|>=|>:integer".');
-									}
-									else
-									{
-										if (!filter_var($rule[2], FILTER_VALIDATE_INT))
-										{
-											throw new Exception('Invalid length value, expecting an integer.');
-										}
-										else
-										{
-											$length = strlen($value);
-
-											switch ($rule[1])
-											{
-												case '<':  $valid = $length <  $rule[2]; break;
-												case '<=': $valid = $length <= $rule[2]; break;
-												case '==': $valid = $length == $rule[2]; break;
-												case '!=': $valid = $length != $rule[2]; break;
-												case '>=': $valid = $length >= $rule[2]; break;
-												case '>':  $valid = $length >  $rule[2]; break;
-
-												default:
-													throw new Exception('Invalid operator, expecting <, <=, ==, !=, >= or >.');
-													break;
-											}
-
-											if ($valid === true)
-											{
-												$errors[] = $message;
-											}
-										}
-									}
-
-									break;
-
-								// }}}
-
-								// @todo case 'range':
-
-								// {{{ Checks using preg_match()
-
-								case 'regex':
-									if (count($rule) < 3)
-									{
-										throw new Exception('Invalid validation rule, expected: "regex:is|not:string".');
-									}
-									else
-									{
-										if ((strtolower($rule[1]) == 'not' && !preg_match($rule[2], $value)) || preg_match($rule[2], $value))
-										{
-											$errors[] = $message;
-										}
-									}
-									break;
-
-								// }}}
-							}
-
+							$errors = array_merge($errors, $rule_errors);
 						}
 					}
 				}
