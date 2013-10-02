@@ -1719,11 +1719,10 @@ class Model extends Object
 	 * Pulls the value from a single field and returns an array without any
 	 * duplicates. Perfect for extracting foreign keys to use in later queries.
 	 *
-	 * @access protected
 	 * @param  string $field field we want the values for
 	 * @return array values for the passed field
 	 */
-	protected function fieldValues($field)
+	public function fieldValues($field)
 	{
 		$values = array();
 
@@ -1732,9 +1731,7 @@ class Model extends Object
 			$values[] = $record[$field];
 		}
 
-		array_unique($values);
-
-		return $values;
+		return array_unique($values);
 	}
 
 	// }}}
