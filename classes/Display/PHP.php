@@ -128,7 +128,7 @@ class Display_PHP extends Display_Common
 		}
 		else
 		{
-			echo json_encode($this->module_return);
+			echo json_encode($this->module_return, isset($_GET['pretty']) ? JSON_PRETTY_PRINT : false);
 		}
 	}
 }
