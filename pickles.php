@@ -27,8 +27,9 @@
 define('PICKLES_START_TIME', microtime(true));
 
 // Establishes our PICKLES paths
-define('PICKLES_PATH',       dirname(__FILE__) . '/');
-define('PICKLES_CLASS_PATH', PICKLES_PATH . 'classes/');
+define('PICKLES_PATH',        dirname(__FILE__) . '/');
+define('PICKLES_CLASS_PATH',  PICKLES_PATH . 'classes/');
+define('PICKLES_VENDOR_PATH', PICKLES_PATH . 'vendors/');
 
 // Establishes our site paths
 define('SITE_PATH', getcwd() . '/../');
@@ -127,38 +128,43 @@ if (!isset($_REQUEST['request']))
  * Magic function to automatically load classes
  *
  * Attempts to load a core PICKLES class or a site level data model or
- * module class. If Smarty is being requested, will load the proper class
- * from the vendors directory
+ * module class.
  *
  * @param  string $class Name of the class to be loaded
  * @return boolean Return value of require_once() or false (default)
  */
 function __autoload($class)
 {
-	$loaded = false;
-
+	$loaded   = false;
 	$filename = preg_replace('/_/', '/', $class) . '.php';
 
-	// Path as the key, boolean value is whether ot not to convert back to hyphenated
-	$paths = array(
-		PICKLES_CLASS_PATH => false,
-		SITE_CLASS_PATH    => false,
-		SITE_MODEL_PATH    => false,
-		SITE_MODULE_PATH   => true,
-	);
-
-	foreach ($paths as $path => $hyphenated)
+	if ($class == 'AYAH')
 	{
-		// Converts the filename back to hypenated
-		if ($hyphenated == true)
-		{
-			$filename = strtolower(preg_replace('/([A-Z]{1})/', '-$1', $filename));;
-		}
+		$loaded = require_once PICKLES_VENDOR_PATH . '/ayah/' . $filename;
+	}
+	else
+	{
+		// Path as the key, boolean value is whether ot not to convert back to hyphenated
+		$paths = array(
+			PICKLES_CLASS_PATH  => false,
+			SITE_CLASS_PATH     => false,
+			SITE_MODEL_PATH     => false,
+			SITE_MODULE_PATH    => true,
+		);
 
-		if (file_exists($path . $filename))
+		foreach ($paths as $path => $hyphenated)
 		{
-			$loaded = require_once $path . $filename;
-			break;
+			// Converts the filename back to hypenated
+			if ($hyphenated == true)
+			{
+				$filename = strtolower(preg_replace('/([A-Z]{1})/', '-$1', $filename));;
+			}
+
+			if (file_exists($path . $filename))
+			{
+				$loaded = require_once $path . $filename;
+				break;
+			}
 		}
 	}
 
