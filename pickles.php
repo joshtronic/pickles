@@ -140,7 +140,7 @@ function __autoload($class)
 
 	if ($class == 'AYAH')
 	{
-		$loaded = require_once PICKLES_VENDOR_PATH . '/ayah/' . $filename;
+		$loaded = require_once PICKLES_VENDOR_PATH . 'ayah/' . strtolower($filename);
 	}
 	else
 	{
