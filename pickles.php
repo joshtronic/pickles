@@ -48,9 +48,6 @@ define('DISPLAY_PHP',  'PHP');
 define('DISPLAY_RSS',  'RSS');
 define('DISPLAY_XML',  'XML');
 
-// Creates a constant as to whether or not we have JSON available
-define('JSON_AVAILABLE', function_exists('json_encode'));
-
 // Creates a variable to flag if we're on the command line
 define('IS_CLI', !isset($_SERVER['REQUEST_METHOD']));
 

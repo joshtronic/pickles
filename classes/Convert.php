@@ -118,36 +118,6 @@ class Convert
 	}
 
 	// }}}
-	// {{{ To JSON
-
-	/**
-	 * To JSON
-	 *
-	 * Encodes passed variable as JSON.
-	 *
-	 * Requires PHP 5 >= 5.2.0 or PECL json >= 1.2.0
-	 *
-	 * @link http://json.org/
-	 * @link http://us.php.net/json_encode
-	 * @link http://pecl.php.net/package/json
-	 *
-	 * @static
-	 * @param  mixed $variable variable to convert
-	 * @return JSON encoded string
-	 */
-	public static function toJSON($variable)
-	{
-		if (JSON_AVAILABLE)
-		{
-			return json_encode($variable);
-		}
-		else
-		{
-			return '{ "status": "error", "message": "json_encode() not found" }';
-		}
-	}
-
-	// }}}
 }
 
 ?>

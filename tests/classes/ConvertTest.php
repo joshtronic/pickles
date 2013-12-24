@@ -1,40 +1,9 @@
 <?php
 
 require_once 'classes/Convert.php';
-define('JSON_AVAILABLE', true);
 
 class ConvertTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @dataProvider providerToJSON
-	 */
-	public function testToJSON($a, $b)
-	{
-		$this->assertEquals(Convert::toJSON($a), $b);
-	}
-
-	public function providerToJSON()
-	{
-		$object      = (object)'object';
-		$object->foo = 'foo';
-		$object->bar = 'bar';
-
-		return array(
-			array('',                         '""'),
-			array('foo',                      '"foo"'),
-			array(array('bar'),               '["bar"]'),
-			array(array('foo', 'bar'),        '["foo","bar"]'),
-			array(19810223,                   '19810223'),
-			array(array(1981, 02, 23),        '[1981,2,23]'),
-			array(array('foo', 1981),         '["foo",1981]'),
-			array(array('foo', array('bar')), '["foo",["bar"]]'),
-			array($object,                    '{"scalar":"object","foo":"foo","bar":"bar"}'),
-			array(true,                       'true'),
-			array(false,                      'false'),
-			array(null,                       'null'),
-		);
-	}
-
 	/**
 	* @dataProvider providerArrayToXML
 	*/

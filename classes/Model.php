@@ -1284,7 +1284,7 @@ class Model extends Object
 						if ($field != $this->columns['id'])
 						{
 							$update_fields[]    = $field . ' = ?';
-							$input_parameters[] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
+							$input_parameters[] = (is_array($value) ? json_encode($value) : $value);
 						}
 						else
 						{
@@ -1358,7 +1358,7 @@ class Model extends Object
 
 					foreach ($record as $variable => $value)
 					{
-						$input_parameters[] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
+						$input_parameters[] = (is_array($value) ? json_encode($value) : $value);
 					}
 
 					// @todo Check if the column was passed in
@@ -1487,7 +1487,7 @@ class Model extends Object
 							$insert_fields[] = $column;
 						}
 
-						$input_parameters[] = (is_array($value) ? (JSON_AVAILABLE ? json_encode($value) : serialize($value)) : $value);
+						$input_parameters[] = (is_array($value) ? json_encode($value) : $value);
 					}
 				}
 

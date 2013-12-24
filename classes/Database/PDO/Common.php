@@ -152,7 +152,7 @@ class Database_PDO_Common extends Database_Common
 
 			if ($input_parameters != null)
 			{
-				$loggable_query .= ' -- ' . (JSON_AVAILABLE ? json_encode($input_parameters) : serialize($input_parameters));
+				$loggable_query .= ' -- ' . json_encode($input_parameters);
 			}
 
 			Log::query($loggable_query);
