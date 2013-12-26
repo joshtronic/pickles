@@ -1,6 +1,9 @@
 <?php
 
 require_once 'classes/String.php';
+require_once 'classes/Object.php';
+require_once 'classes/API/Common.php';
+require_once 'classes/API/Gravatar.php';
 
 class StringTest extends PHPUnit_Framework_TestCase
 {
@@ -62,13 +65,13 @@ class StringTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(strlen(String::random()),   8);
 		$this->assertEquals(strlen(String::random(16)), 16);
 
-		$this->assertEquals(preg_match('/[A-Z0-9]/', String::random(32, true,  true)),  1);
-		$this->assertEquals(preg_match('/[A-Z]/',    String::random(32, true,  false)), 1);
+		$this->assertEquals(preg_match('/[a-z0-9]/', String::random(32, true,  true)),  1);
+		$this->assertEquals(preg_match('/[a-z]/',    String::random(32, true,  false)), 1);
 		$this->assertEquals(preg_match('/[0-9]/',    String::random(32, false, true)),  1);
 
 		$this->assertEquals(preg_match('/[0-9]/',    String::random(32, true,  false)), 0);
-		$this->assertEquals(preg_match('/[A-Z]/',    String::random(32, false, true)),  0);
-		$this->assertEquals(preg_match('/[A-Z0-9]/', String::random(32, false, false)), 0);
+		$this->assertEquals(preg_match('/[a-z]/',    String::random(32, false, true)),  0);
+		$this->assertEquals(preg_match('/[a-z0-9]/', String::random(32, false, false)), 0);
 	}
 
 	/**
@@ -82,7 +85,7 @@ class StringTest extends PHPUnit_Framework_TestCase
 	public function providerTruncate()
 	{
 		return array(
-			array('foo bar', 3, true,  '<span title="foo bar" style="cursor:help">foo...</span>'),
+			array('foo bar', 3, true,  '<span title="foo bar">foo&hellip;</span>'),
 			array('foo bar', 3, false, 'foo...'),
 			array('foo bar', 7, true,  'foo bar'),
 			array('foo bar', 8, true,  'foo bar'),

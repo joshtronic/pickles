@@ -1,6 +1,7 @@
 <?php
 
 require_once 'classes/Date.php';
+require_once 'classes/Time.php';
 
 class DateTest extends PHPUnit_Framework_TestCase
 {
