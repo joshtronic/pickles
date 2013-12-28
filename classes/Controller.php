@@ -236,11 +236,6 @@ class Controller extends Object
 			}
 		}
 
-		// Validates the rendering engine
-		$engines = is_array($module->engine) ? array_values($module->engine) : array($module->engine);
-		$engines = array_combine($engines, $engines);
-		$engine  = current($engines);
-
 		// Possibly overrides the engine with the passed return type
 		if (isset($return_type))
 		{
@@ -256,7 +251,7 @@ class Controller extends Object
 		}
 
 		// Starts up the display engine
-		$display_class = 'Display_' . $engine;
+		$display_class = 'Display_PHP';
 		$display       = new $display_class();
 
 		// Assigns the template / template variables
@@ -476,18 +471,18 @@ class Controller extends Object
 		$css_class         = $module_class;
 		$js_basename       = $basename;
 
-		if (isset($action))
-		{
-			$module_class      .= '_' . $action;
-			$template_basename .= '/' . $action;
-			$css_class         .= '_' . $action;
-			$js_basename       .= '/' . $action;
-		}
-
 		// Scrubs class names with hyphens
+		// @todo Unsure this is even relevant anymore
 		if (strpos($module_class, '-') !== false)
 		{
-			$module_class = preg_replace('/(-(.{1}))/e', 'strtoupper("$2")', $module_class);
+			$module_class = preg_replace_callback(
+				'/(-(.{1}))/',
+				function ($matches)
+				{
+					return strtoupper($matches[2]);
+				},
+				$module_class
+			);
 		}
 
 		return array($module_class, $module_filename, $template_basename, $css_class, $js_basename);

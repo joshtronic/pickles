@@ -41,49 +41,12 @@ class Config extends Object
 	 * Constructor
 	 *
 	 * Calls the parent constructor and loads the passed file.
-	 *
-	 * @param string $filename optional Filename of the config
 	 */
-	public function __construct($filename = null)
+	public function __construct()
 	{
 		parent::__construct();
 
-		// Try to fine the configuration
-		if ($filename == null)
-		{
-			$filename = 'config.php';
-			$loaded   = false;
-			$cwd      = getcwd();
-
-			while ($loaded == false)
-			{
-				chdir(dirname($filename));
-
-				if (getcwd() == '/')
-				{
-					throw new Exception('Unable to load configuration.');
-				}
-
-				chdir($cwd);
-
-				$filename = '../' . $filename;
-				$loaded   = $this->load($filename);
-			}
-		}
-		else
-		{
-			$this->load($filename);
-		}
-	}
-
-	/**
-	 * Loads a configuration file
-	 *
-	 * @param  string $filename filename of the config file
-	 * @return boolean success of the load process
-	 */
-	public function load($filename)
-	{
+		$filename     = '../config.php';
 		$environments = false;
 		$environment  = false;
 

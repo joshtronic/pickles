@@ -158,17 +158,6 @@ class Module extends Object
 	protected $hash = null;
 
 	/**
-	 * Default Display Engine
-	 *
-	 * Defaults to PHP but could be set to JSON, XML or RSS. Value is
-	 * overwritten by the config value if not set by the module.
-	 *
-	 * @access protected
-	 * @var    string, null by default
-	 */
-	protected $engine = DISPLAY_PHP;
-
-	/**
 	 * Default Template
 	 *
 	 * Defaults to null but could be set to any valid template basename. The

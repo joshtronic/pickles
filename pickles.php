@@ -31,8 +31,11 @@ define('PICKLES_PATH',        dirname(__FILE__) . '/');
 define('PICKLES_CLASS_PATH',  PICKLES_PATH . 'classes/');
 define('PICKLES_VENDOR_PATH', PICKLES_PATH . 'vendors/');
 
-// Establishes our site paths
-define('SITE_PATH', getcwd() . '/../');
+// Establishes our site paths, sanity check is to allow vfsStream in our tests
+if (!defined('SITE_PATH'))
+{
+	define('SITE_PATH', getcwd() . '/../');
+}
 
 define('SITE_CLASS_PATH',    SITE_PATH . 'classes/');
 define('SITE_MODEL_PATH',    SITE_PATH . 'models/');
@@ -41,12 +44,6 @@ define('SITE_TEMPLATE_PATH', SITE_PATH . 'templates/');
 
 define('PRIVATE_PATH', SITE_PATH    . 'private/');
 define('LOG_PATH',     PRIVATE_PATH . 'logs/');
-
-// Sets up constants for the Display names
-define('DISPLAY_JSON', 'JSON');
-define('DISPLAY_PHP',  'PHP');
-define('DISPLAY_RSS',  'RSS');
-define('DISPLAY_XML',  'XML');
 
 // Creates a variable to flag if we're on the command line
 define('IS_CLI', !isset($_SERVER['REQUEST_METHOD']));
@@ -167,6 +164,8 @@ function __autoload($class)
 
 	return $loaded;
 }
+
+spl_autoload_register('__autoload');
 
 // }}}
 // {{{ Error Handler
