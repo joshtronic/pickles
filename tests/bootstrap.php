@@ -7,7 +7,8 @@ $vfs_files = [
 	'./vendor/autoload.php',
 ];
 
-print_r(scandir());
+echo getcwd();
+print_r(scandir(getcwd()));
 
 foreach ($vfs_files as $vfs_file)
 {
