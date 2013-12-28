@@ -167,7 +167,7 @@ class Module extends Object
 	 * @access protected
 	 * @var    string, 'index' by default
 	 */
-	protected $template = 'index';
+	public $template = 'index';
 
 	/**
 	 * Return
@@ -180,7 +180,8 @@ class Module extends Object
 	 * @access protected
 	 * @var    array
 	 */
-	protected $return = array();
+	protected $return_data = array();
+	public $return = array();
 
 	/**
 	 * Constructor
@@ -242,7 +243,14 @@ class Module extends Object
 	 */
 	public function __set($name, $value)
 	{
-		$this->return[$name] = $value;
+		if ($name == 'method')
+		{
+			$this->method = $value;
+		}
+		else
+		{
+			$this->return_data[$name] = $value;
+		}
 	}
 
 	/**
@@ -308,6 +316,11 @@ class Module extends Object
 
 		if ($this->validate !== false)
 		{
+			if (is_array($this->method))
+			{
+				$this->method = $this->method[0];
+			}
+
 			switch (strtoupper($this->method))
 			{
 				case 'GET':  $global = &$_GET;     break;
