@@ -26,7 +26,6 @@ class HTML extends Object
 
 	public function __call($method, $arguments)
 	{
-
 		$attributes = null;
 		$contents   = null;
 
