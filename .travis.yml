@@ -4,6 +4,6 @@ php:
   - "5.5"
 
 install:
-  - composer config vendor-dir .composer require mikey179/vfsStream:1.2.0
+  - composer install
 
 script: phpunit --bootstrap ./tests/bootstrap.php ./tests
