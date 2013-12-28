@@ -2,6 +2,8 @@ language: php
 
 php:
   - "5.5"
-  - "5.4"
+
+install:
+  - require mikey179/vfsStream:1.2.0
 
 script: phpunit --bootstrap ./tests/bootstrap.php ./tests

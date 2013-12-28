@@ -2,7 +2,12 @@
 
 ob_start();
 
-require_once '/usr/local/Cellar/php55/5.5.7/lib/php/vfsStream/vfsStream.php';
+$vfs_file = '/usr/local/Cellar/php55/5.5.7/lib/php/vfsStream/vfsStream.php';
+
+if (file_exists($vfs_file))
+{
+	require_once $vfs_file;
+}
 
 $root = vfsStream::setup('site');
 define('SITE_PATH', vfsStream::url('site/'));
