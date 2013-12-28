@@ -1,5 +1,7 @@
 # PHP Interface Collection of Killer Libraries to Enhance Stuff
 
+[![Build Status](https://travis-ci.org/joshtronic/pickles.png)](https://travis-ci.org/joshtronic/pickles)
+
 ## What is PICKLES?
 
 PICKLES is an open source framework for the rapid development of web applications.
