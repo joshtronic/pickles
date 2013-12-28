@@ -112,7 +112,7 @@ if (isset($config->pickles['sessions']))
 
 if (!isset($_REQUEST['request']))
 {
-	$_REQUEST['request'] = isset($config->pickles['module']) ? $config->pickles['module'] : '';
+	$_REQUEST['request'] = 'home';
 }
 
 // }}}
