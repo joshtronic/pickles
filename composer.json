@@ -1,0 +1,8 @@
+{
+	"config": {
+		"vendor-dir": ".composer"
+	},
+	"require": {
+		"mikey179/vfsStream": "1.2.0"
+	}
+}

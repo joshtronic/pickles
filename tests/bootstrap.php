@@ -2,26 +2,10 @@
 
 ob_start();
 
-$vfs_files = [
-	'/usr/local/Cellar/php55/5.5.7/lib/php/vfsStream/vfsStream.php',
-	'./vendor/autoload.php',
-];
+require_once '.composer/autoload.php';
 
-echo getcwd();
-print_r(scandir(getcwd()));
-
-foreach ($vfs_files as $vfs_file)
-{
-	echo $vfs_file;
-	if (file_exists($vfs_file))
-	{
-		echo 'loaded';
-		require_once $vfs_file;
-	}
-}
-
-$root = vfsStream::setup('site');
-define('SITE_PATH', vfsStream::url('site/'));
+$root = org\bovigo\vfs\vfsStream::setup('site');
+define('SITE_PATH', org\bovigo\vfs\vfsStream::url('site/'));
 
 require_once 'classes/Object.php';
 require_once 'classes/Config.php';
