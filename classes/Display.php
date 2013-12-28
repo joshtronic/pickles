@@ -37,7 +37,7 @@ class Display extends Object
 	public $return = ['template', 'json'];
 
 	/**
-	 * Template
+	 * Templates
 	 *
 	 * Templates are found in the ./templates directory of your site. The
 	 * template workflow is to load ./templates/__shared/index.phtml and you
@@ -49,7 +49,7 @@ class Display extends Object
 	 *
 	 * @var string or boolean false the basename of the parent template
 	 */
-	public $template = 'index';
+	public $templates = false;
 
 	/**
 	 * Meta Data
@@ -146,25 +146,27 @@ class Display extends Object
 				$__html      = $this->html    = new $html_class();
 
 				// Checks for the parent template and tries to load it
-				if ($this->template)
+				if ($this->templates)
 				{
-					$parent_file = SITE_TEMPLATE_PATH . '__shared/' . $this->template . '.phtml';
-					$child_file  = SITE_TEMPLATE_PATH . $_REQUEST['request'] . '.phtml';
+					$profiler = $this->config->pickles['profiler'];
+					$profiler = $profiler === true || stripos($profiler, 'timers') !== false;
 
-					// Assigns old and new variables
-					// @todo Remove $__template when all sites are ported
-					$__template = $this->template = $child_file;
-
-					if (file_exists($parent_file))
+					// Starts a timer for the loading of the template
+					if ($profiler)
 					{
-						$loaded = require_once $parent_file;
+						Profiler::timer('loading template');
 					}
-				}
 
-				// Checks for the module template and tries to load it
-				if (file_exists($child_file))
-				{
-					$loaded = require_once $child_file;
+					// Assigns old variable
+					$required_template = $this->templates[0];
+					$__template        = $this->template = end($this->templates);
+					$loaded            = require_once $required_template;
+
+					// Stops the template loading timer
+					if ($profiler)
+					{
+						Profiler::timer('loading template');
+					}
 				}
 			}
 

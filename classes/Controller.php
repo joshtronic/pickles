@@ -28,28 +28,18 @@
 class Controller extends Object
 {
 	/**
-	 * Pass Thru
-	 *
-	 * Whether or not the page being loaded is simple a pass thru for an
-	 * internal PICKLES file. The point of this variable is to suppress the
-	 * profiler report in the destructor.
-	 *
-	 * @access private
-	 * @var    boolean
-	 */
-	private $passthru = false;
-
-	/**
 	 * Constructor
 	 *
-	 * To make life a bit easier when using PICKLES, the Controller logic is
-	 * executed automatically via use of a constructor.
+	 * To save a few keystrokes, the Controller is executed as part of the
+	 * constructor instead of via a method. You either want the Controller or
+	 * you don't.
 	 */
 	public function __construct()
 	{
 		parent::__construct();
 
 		// Generate a generic "site down" message if the site is set to be disabled
+		// @todo Clean this up to be just a single sanity check
 		if (isset($this->config->pickles['disabled']) && $this->config->pickles['disabled'] == true)
 		{
 			Error::fatal($_SERVER['SERVER_NAME'] . ' is currently<br>down for maintenance');
@@ -75,48 +65,33 @@ class Controller extends Object
 			}
 		}
 
-		$_REQUEST['request'] = trim($_REQUEST['request']);
+		// Catches requests that aren't lowercase
+		$lowercase_request = strtolower($_REQUEST['request']);
 
-		// Checks the passed request for validity
-		if ($_REQUEST['request'])
+		if ($_REQUEST['request'] != $lowercase_request)
 		{
-			// Catches requests that aren't lowercase
-			$lowercase_request = strtolower($_REQUEST['request']);
-
-			if ($_REQUEST['request'] != $lowercase_request)
-			{
-				header('Location: ' . substr_replace($_SERVER['REQUEST_URI'], $lowercase_request, 1, strlen($lowercase_request)), true, 301);
-				exit;
-			}
-
-			$request = $_REQUEST['request'];
+			// @todo Rework the Browser class to handle the 301 (perhaps redirect301()) to not break other code
+			header('Location: ' . substr_replace($_SERVER['REQUEST_URI'], $lowercase_request, 1, strlen($lowercase_request)), true, 301);
+			exit;
 		}
-		// Loads the default module information if we don't have a valid request
-		else
-		{
-			$request = isset($this->config->pickles['module']) ? $this->config->pickles['module'] : 'home';
-		}
+
+		// Grabs the requested page
+		$request = $_REQUEST['request'];
 
 		// Loads the module's information
-		list($module_class, $module_filename, $template_basename, $css_class, $js_basename) = $this->prepareVariables($request);
+		$module_class    = strtr($request, '/', '_');
+		$module_filename = SITE_MODULE_PATH . $request . '.php';
+		$module_exists   = isset($module_filename) && $module_filename != null && file_exists($module_filename);
 
-		unset($request);
-
-		$module_exists = (isset($module_filename) && $module_filename != null && file_exists($module_filename));
-
-		// Instantiates an instance of the module
+		// Attempts to instantiate a module instance
 		if ($module_exists)
 		{
+			// @todo Is this redundant because of our autoloader?
 			require_once $module_filename;
 
-			// Checks that our class exists
 			if (class_exists($module_class))
 			{
 				$module = new $module_class;
-			}
-			else
-			{
-				Log::warning('Class named ' . $module_class . ' was not found in ' . $module_filename);
 			}
 		}
 
@@ -127,6 +102,7 @@ class Controller extends Object
 		}
 
 		// Determines if the module is private and should be, well, private
+		// @todo Is this even a thing anymore? thinking this was replaced with putting code in ./classes
 		if ($module->private == true)
 		{
 			Browser::goHome();
@@ -143,7 +119,7 @@ class Controller extends Object
 		}
 
 		// Validates security level
-		if ($module->security !== false)
+		if ($module->security)
 		{
 			$is_authenticated = false;
 
@@ -157,18 +133,18 @@ class Controller extends Object
 				{
 					$security_check_type = strtoupper($module_security['type']);
 
-					if (in_array($security_check_type, array('IS', 'HAS', 'BETWEEN')))
+					if (in_array($security_check_type, ['IS', 'HAS', 'BETWEEN']))
 					{
 						$security_check_class = $security_check_type;
 					}
 
-					unset($security_check_type, $module_security['type']);
+					unset($module_security['type']);
 				}
 
-				$module_security_levels = array();
+				$module_security_levels = [];
 
 				// If there's a level(s) key use it
-				foreach (array('level', 'levels') as $security_level_key)
+				foreach (['level', 'levels'] as $security_level_key)
 				{
 					if (isset($module_security[$security_level_key]))
 					{
@@ -200,14 +176,14 @@ class Controller extends Object
 						break;
 
 					case 'HAS':
-						if ($security_level_count > 0)
+						if ($security_level_count)
 						{
 							$is_authenticated = Security::hasLevel($module_security_levels);
 						}
 						break;
 
 					case 'IS':
-						if ($security_level_count > 0)
+						if ($security_level_count)
 						{
 							$is_authenticated = Security::isLevel($module_security_levels);
 						}
@@ -219,11 +195,11 @@ class Controller extends Object
 				$is_authenticated = Security::isLevel($module->security);
 			}
 
-			if ($is_authenticated == false)
+			if (!$is_authenticated)
 			{
 				if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				{
-					exit('{ "status": "error", "message": "You are not properly authenticated" }');
+					exit('{"status": "error", "message": "You are not properly authenticated, try logging out and back in."}');
 				}
 				else
 				{
@@ -236,53 +212,9 @@ class Controller extends Object
 			}
 		}
 
-		// Possibly overrides the engine with the passed return type
-		if (isset($return_type))
-		{
-			$return_type = strtoupper($return_type);
-
-			// Validates the return type against the module
-			if (in_array($return_type, array('JSON', 'RSS', 'XML')) && in_array($return_type, $engines))
-			{
-				$engine = $return_type;
-			}
-
-			unset($return_type);
-		}
-
-		// Starts up the display engine
-		$display_class = 'Display_PHP';
-		$display       = new $display_class();
-
-		// Assigns the template / template variables
-		$display->setTemplateVariables($module->template, $template_basename, $css_class, $js_basename, $module->fluid);
-
-		// Checks the templates
-		$template_exists = $display->templateExists();
-
-		// If there is no valid module or template, then redirect
-		if (!$module_exists && !$template_exists)
-		{
-			if (!$_REQUEST['request'])
-			{
-				Error::fatal('Way to go, you\'ve successfully created an infinite redirect loop. Good thing I was here or you would have been served with a pretty ugly browser error.<br><br>So here\'s the deal, no templates were able to be loaded. Make sure your parent and child templates actually exist and if you\'re using non-default values, make sure they\'re defined correctly in your config.');
-			}
-			else
-			{
-				$redirect_url = '/';
-
-				if (isset($this->config->pickles['404']) && $_REQUEST['request'] != $this->config->pickles['404'])
-				{
-					$redirect_url .= $this->config->pickles['404'];
-				}
-
-				header('Location: ' . $redirect_url, 404);
-				exit;
-			}
-		}
-
 		// Gets the profiler status
 		$profiler = $this->config->pickles['profiler'];
+		$profiler = $profiler === true || stripos($profiler, 'timers') !== false;
 
 		$default_method = '__default';
 		$role_method    = null;
@@ -302,11 +234,11 @@ class Controller extends Object
 		{
 			if (isset($requested_id))
 			{
-				$module->setRequest(array('id' => $requested_id));
+				$module->setRequest(['id' => $requested_id]);
 			}
 
 			// Starts a timer before the module is executed
-			if ($profiler === true || stripos($profiler, 'timers') !== false)
+			if ($profiler)
 			{
 				Profiler::timer('module ' . $default_method);
 			}
@@ -316,13 +248,16 @@ class Controller extends Object
 			$error_message       = 'An unexpected error has occurred.';
 
 			// Determines if the request method is valid for this request
-			if ($module->method !== false)
+			if ($module->method)
 			{
-				$methods = (is_array($module->method) ? $module->method : array($module->method));
+				if (!is_array($module->method))
+				{
+					$module->method = [$module->method];
+				}
 
 				$request_method = $_SERVER['REQUEST_METHOD'];
 
-				foreach ($methods as $method)
+				foreach ($module->method as $method)
 				{
 					if ($request_method == strtoupper($method))
 					{
@@ -331,12 +266,10 @@ class Controller extends Object
 					}
 				}
 
-				if ($valid_request == false)
+				if (!$valid_request)
 				{
 					$error_message = 'There was a problem with your request method.';
 				}
-
-				unset($methods, $request_method, $method);
 			}
 			else
 			{
@@ -344,11 +277,12 @@ class Controller extends Object
 			}
 
 			// Validates the hash if applicable
-			if ($valid_request === true && $module->hash !== false)
+			if ($valid_request && $module->hash)
 			{
 				if (isset($_REQUEST['security_hash']))
 				{
-					$hash_value = ($module->hash === true ? get_class($module) : $module->hash);
+					// @todo Does this need to be === ?
+					$hash_value = $module->hash === true ? get_class($module) : $module->hash;
 
 					if (Security::generateHash($hash_value) == $_REQUEST['security_hash'])
 					{
@@ -358,8 +292,6 @@ class Controller extends Object
 					{
 						$error_message = 'Invalid security hash.';
 					}
-
-					unset($hash_value);
 				}
 				else
 				{
@@ -373,11 +305,11 @@ class Controller extends Object
 
 			$valid_form_input = true;
 
-			if ($valid_request === true && $valid_security_hash === true && $module->validate !== false)
+			if ($valid_request && $valid_security_hash && $module->validate)
 			{
 				$validation_errors = $module->__validate();
 
-				if ($validation_errors !== false)
+				if ($validation_errors)
 				{
 					$error_message    = implode(' ', $validation_errors);
 					$valid_form_input = false;
@@ -395,43 +327,91 @@ class Controller extends Object
 
 				if (!is_array($module_return))
 				{
-					$module_return = $module->return;
+					$module_return = $module->return_data;
 				}
 				else
 				{
-					$module_return = array_merge($module_return, $module->return);
+					$module_return = array_merge($module_return, $module->return_data);
 				}
 			}
 
-			$display->setModuleReturn(isset($module_return) ? $module_return : array('status' => 'error', 'message' => $error_message));
-
-			unset($error_message);
-
 			// Stops the module timer
-			if ($profiler === true || stripos($profiler, 'timers') !== false)
+			if ($profiler)
 			{
 				Profiler::timer('module ' . $default_method);
 			}
 
-			// Sets meta data from the module
-			$display->setMetaData(array(
+			// @todo Set this in the module and use $module->return and rename module->return to module->data?
+			$module->return = ['template', 'json'];
+
+			// Checks if we have any templates
+			$templates = [
+				SITE_TEMPLATE_PATH . '__shared/' . $module->template . '.phtml',
+				SITE_TEMPLATE_PATH . $_REQUEST['request'] . '.phtml',
+			];
+
+			$module->template = [];
+			$child_exists     = file_exists($templates[1]);
+			$template_exists  = false;
+
+			if (file_exists($templates[0]) && $child_exists)
+			{
+				$module->template = $templates;
+				$template_exists  = true;
+			}
+			elseif ($child_exists)
+			{
+				$module->template = $templates[1];
+				$template_exists  = true;
+			}
+
+			if (!$module_exists && !$template_exists)
+			{
+				if (!$_REQUEST['request'])
+				{
+					Error::fatal('Way to go, you\'ve successfully created an infinite redirect loop. Good thing I was here or you would have been served with a pretty ugly browser error.<br><br>So here\'s the deal, no templates were able to be loaded. Make sure your parent and child templates actually exist and if you\'re using non-default values, make sure they\'re defined correctly in your config.');
+				}
+				else
+				{
+					$redirect_url = '/';
+
+					if (isset($this->config->pickles['404']) && $_REQUEST['request'] != $this->config->pickles['404'])
+					{
+						$redirect_url .= $this->config->pickles['404'];
+					}
+
+					// @todo Add redirect(url, code) and clean this up
+					header('Location: ' . $redirect_url, 404);
+					exit;
+				}
+			}
+
+			$display            = new Display();
+			$display->return    = $module->return;
+			$display->templates = $module->template;
+			$display->module    = isset($module_return) ? $module_return : ['status' => 'error', 'message' => $error_message];
+
+			// @todo Check for $module->meta variable first, then remove entirely when sites are updated
+			$display->meta      = [
 				'title'       => $module->title,
 				'description' => $module->description,
 				'keywords'    => $module->keywords
-			));
+			];
 		}
 
 		// Starts a timer for the display rendering
-		if ($profiler === true || stripos($profiler, 'timers') !== false)
+		if ($profiler)
 		{
 			Profiler::timer('display render');
 		}
 
 		// Renders the content
-		$display->render();
+		$output = $display->render();
 
-		// Steps the display timer
-		if ($profiler === true || stripos($profiler, 'timers') !== false)
+		echo $output;
+
+		// Stops the display timer
+		if ($profiler)
 		{
 			Profiler::timer('display render');
 		}
@@ -446,46 +426,11 @@ class Controller extends Object
 	{
 		parent::__destruct();
 
-		// Display the Profiler's report is the stars are aligned
-		if ($this->config->pickles['profiler'] != false && $this->passthru == false)
+		// Display the Profiler's report if the stars are aligned
+		if ($this->config->pickles['profiler'])
 		{
 			Profiler::report();
 		}
-	}
-
-	/**
-	 * Prepare Variables
-	 *
-	 * Processes the request variable and creates all the variables that the
-	 * Controller needs to load the page.
-	 *
-	 * @param  string $basename the requested page
-	 * @return array the resulting variables
-	 */
-	public function prepareVariables($basename)
-	{
-		// Sets up all of our variables
-		$module_class      = strtr($basename, '/', '_');
-		$module_filename   = SITE_MODULE_PATH . $basename . '.php';
-		$template_basename = $basename;
-		$css_class         = $module_class;
-		$js_basename       = $basename;
-
-		// Scrubs class names with hyphens
-		// @todo Unsure this is even relevant anymore
-		if (strpos($module_class, '-') !== false)
-		{
-			$module_class = preg_replace_callback(
-				'/(-(.{1}))/',
-				function ($matches)
-				{
-					return strtoupper($matches[2]);
-				},
-				$module_class
-			);
-		}
-
-		return array($module_class, $module_filename, $template_basename, $css_class, $js_basename);
 	}
 }
 
