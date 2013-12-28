@@ -2,11 +2,17 @@
 
 ob_start();
 
-$vfs_file = '/usr/local/Cellar/php55/5.5.7/lib/php/vfsStream/vfsStream.php';
+$vfs_files = [
+	'/usr/local/Cellar/php55/5.5.7/lib/php/vfsStream/vfsStream.php',
+	'./vendor/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStream.php',
+];
 
-if (file_exists($vfs_file))
+foreach ($vfs_files as $vfs_file)
 {
-	require_once $vfs_file;
+	if (file_exists($vfs_file))
+	{
+		require_once $vfs_file;
+	}
 }
 
 $root = vfsStream::setup('site');
