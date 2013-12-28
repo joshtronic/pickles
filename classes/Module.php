@@ -44,18 +44,11 @@ class Module extends Object
 	protected $db = null;
 
 	/**
-	 * Fluid or Fixed?
-	 *
-	 * @access protected
-	 * @var    boolean
-	 */
-	protected $fluid = false;
-
-	/**
 	 * Page Title
 	 *
 	 * @access protected
 	 * @var    string, null by default
+	 * @todo   Move to public scope
 	 */
 	protected $title = null;
 
@@ -64,6 +57,7 @@ class Module extends Object
 	 *
 	 * @access protected
 	 * @var    string, null by default
+	 * @todo   Move to public scope
 	 */
 	protected $description = null;
 
@@ -72,6 +66,7 @@ class Module extends Object
 	 *
 	 * @access protected
 	 * @var    string, null by default
+	 * @todo   Move to public scope
 	 */
 	protected $keywords = null;
 
@@ -80,38 +75,18 @@ class Module extends Object
 	 *
 	 * Whether or not the page should be loaded via SSL.
 	 *
-	 * @access protected
-	 * @var    boolean, null by default
+	 * @var boolean defaults to false
 	 */
-	protected $secure = null;
-
-	/**
-	 * Private
-	 *
-	 * Whether or not the page can be accessed directly.
-	 *
-	 * @access protected
-	 * @var    boolean, false by default
-	 */
-	protected $private = false;
+	public $secure = false;
 
 	/**
 	 * Security Settings
 	 *
 	 * @access protected
 	 * @var    boolean, null by default
+	 * @todo   Move to public scope
 	 */
 	protected $security = null;
-
-	/**
-	 * Session
-	 *
-	 * Whether or not a session should be established.
-	 *
-	 * @access protected
-	 * @var    boolean, null by default
-	 */
-	protected $session = null;
 
 	/**
 	 * AJAX
@@ -122,6 +97,7 @@ class Module extends Object
 	 *
 	 * @access protected
 	 * @var    boolean, false (not AJAX) by default
+	 * @todo   Move to public scope
 	 */
 	protected $ajax = false;
 
@@ -132,6 +108,7 @@ class Module extends Object
 	 *
 	 * @access protected
 	 * @var    string or array, null by default
+	 * @todo   Move to public scope
 	 */
 	protected $method = null;
 
@@ -142,6 +119,7 @@ class Module extends Object
 	 *
 	 * @access protected
 	 * @var    array, null by default
+	 * @todo   Move to public scope
 	 */
 	protected $validate = null;
 
@@ -154,15 +132,16 @@ class Module extends Object
 	 *
 	 * @access protected
 	 * @var    string or boolean, null by default
+	 * @todo   Move to public scope
 	 */
 	protected $hash = null;
 
 	/**
-	 * Default Template
+	 * Template
 	 *
-	 * Defaults to null but could be set to any valid template basename. The
-	 * value is overwritten by the config value if not set by the module. The
-	 * display engine determines what the file extension should be.
+	 * This is the parent template that will be loaded if you are using the
+	 * 'template' return type in the Display class. Parent templates are found
+	 * in ./templates/__shared and use the phtml extension.
 	 *
 	 * @access protected
 	 * @var    string, 'index' by default
@@ -179,8 +158,11 @@ class Module extends Object
 	 *
 	 * @access protected
 	 * @var    array
+	 * @todo   Move to public scope and rename __return so it's kinda obscured
 	 */
 	protected $return_data = array();
+
+	// @todo Document me
 	public $return = array();
 
 	/**
@@ -192,7 +174,7 @@ class Module extends Object
 	 * controller (the registration page calls the login page in this manner.
 	 *
 	 * @param boolean $autorun optional flag to autorun __default()
-	 * @param boolean $valiate optional flag to disable input validation during autorun
+	 * @param boolean $valiate optional flag to disable autorun validation
 	 */
 	public function __construct($autorun = false, $validate = true)
 	{
@@ -209,6 +191,7 @@ class Module extends Object
 
 				if ($errors !== false)
 				{
+					// @todo Fatal error perhaps?
 					exit('Errors encountered, this is a @todo for form validation when calling modules from inside of modules');
 				}
 			}
@@ -222,9 +205,6 @@ class Module extends Object
 	 *
 	 * This function is overloaded by the module. The __default() method is
 	 * where you want to place any code that needs to be executed at runtime.
-	 * The reason the code isn't in the constructor is because the module must
-	 * be instantiated before the code is executed so that the controller
-	 * script is aware of the authentication requirements.
 	 */
 	public function __default()
 	{
@@ -240,6 +220,7 @@ class Module extends Object
 	 *
 	 * @param string $name name of the variable to be set
 	 * @param mixed $value value of the variable to be set
+	 * @todo  Ditch the $name check once everything is public
 	 */
 	public function __set($name, $value)
 	{
@@ -261,6 +242,7 @@ class Module extends Object
 	 *
 	 * @param  string $name name of the variable requested
 	 * @return mixed value of the variable or boolean false
+	 * @todo   Unsure how necessary this will be moving forward, ideally would like to delete entirely
 	 */
 	public function __get($name)
 	{
@@ -277,27 +259,6 @@ class Module extends Object
 		}
 
 		return $this->$name;
-	}
-
-	/**
-	 * Sets the Request
-	 *
-	 * @param  array $request data to be loaded into the request variable
-	 * @return boolean whether or not the assignment was successful
-	 */
-	public function setRequest($request)
-	{
-		$backtrace = debug_backtrace();
-
-		if ($backtrace[1]['class'] == 'Controller')
-		{
-			$this->request = $request;
-			return true;
-		}
-		else
-		{
-			throw new Exception('Only Controller can perform setRequest()');
-		}
 	}
 
 	/**

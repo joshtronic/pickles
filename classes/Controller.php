@@ -101,13 +101,6 @@ class Controller extends Object
 			$module = new Module();
 		}
 
-		// Determines if the module is private and should be, well, private
-		// @todo Is this even a thing anymore? thinking this was replaced with putting code in ./classes
-		if ($module->private == true)
-		{
-			Browser::goHome();
-		}
-
 		// Determines if we need to serve over HTTP or HTTPS
 		if ($module->secure == false && isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'])
 		{
@@ -232,11 +225,6 @@ class Controller extends Object
 		// Attempts to execute the default method
 		if ($default_method == $role_method || method_exists($module, $default_method))
 		{
-			if (isset($requested_id))
-			{
-				$module->setRequest(['id' => $requested_id]);
-			}
-
 			// Starts a timer before the module is executed
 			if ($profiler)
 			{
