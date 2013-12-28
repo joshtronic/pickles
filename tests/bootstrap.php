@@ -7,11 +7,14 @@ $vfs_files = [
 	'./vendor/autoload.php',
 ];
 
+print_r(scandir());
+
 foreach ($vfs_files as $vfs_file)
 {
+	echo $vfs_file;
 	if (file_exists($vfs_file))
 	{
-		echo $vfs_file;
+		echo 'loaded';
 		require_once $vfs_file;
 	}
 }
