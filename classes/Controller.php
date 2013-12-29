@@ -81,9 +81,9 @@ class Controller extends Object
 		// Loads the module's information
 		$module_class    = strtr($request, '/', '_');
 		$module_filename = SITE_MODULE_PATH . $request . '.php';
-		$module_exists   = isset($module_filename) && $module_filename != null && file_exists($module_filename);
+		$module_exists   = file_exists($module_filename);
 
-		// Attempts to instantiate a module instance
+		// Instantiates the requested module or a generic object
 		if ($module_exists)
 		{
 			// @todo Is this redundant because of our autoloader?
@@ -93,10 +93,12 @@ class Controller extends Object
 			{
 				$module = new $module_class;
 			}
+			else
+			{
+				$module = new Module();
+			}
 		}
-
-		// If a new module object wasn't created, create a generic one
-		if (!isset($module))
+		else
 		{
 			$module = new Module();
 		}
@@ -156,11 +158,11 @@ class Controller extends Object
 
 				// Assume everything left in the array is a level and add it to the array
 				array_merge($module_security_levels, $module_security);
-
 				$security_level_count = count($module_security_levels);
 
 				switch ($security_check_class)
 				{
+					// @todo Thinking of removing this?
 					case 'BETWEEN':
 						if ($security_level_count >= 2)
 						{
@@ -192,6 +194,7 @@ class Controller extends Object
 			{
 				if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				{
+					// @todo Perhaps I could force a logout / redirect to the login page
 					exit('{"status": "error", "message": "You are not properly authenticated, try logging out and back in."}');
 				}
 				else
@@ -199,8 +202,8 @@ class Controller extends Object
 					// Sets variable for the destination
 					$_SESSION['__pickles']['login']['destination'] = $_REQUEST['request'] ? $_REQUEST['request'] : '/';
 
-					// Redirect to login page, potentially configured in the config, else /login
-					Browser::redirect('/' . (isset($this->config->security['login']) ? $this->config->security['login'] : 'login'));
+					// Redirect to login page
+					Browser::redirect('/login');
 				}
 			}
 		}
@@ -231,9 +234,8 @@ class Controller extends Object
 				Profiler::timer('module ' . $default_method);
 			}
 
-			$valid_request       = false;
-			$valid_security_hash = false;
-			$error_message       = 'An unexpected error has occurred.';
+			$valid_request = false;
+			$error_message = 'An unexpected error has occurred.';
 
 			// Determines if the request method is valid for this request
 			if ($module->method)
@@ -264,36 +266,9 @@ class Controller extends Object
 				$valid_request = true;
 			}
 
-			// Validates the hash if applicable
-			if ($valid_request && $module->hash)
-			{
-				if (isset($_REQUEST['security_hash']))
-				{
-					// @todo Does this need to be === ?
-					$hash_value = $module->hash === true ? get_class($module) : $module->hash;
-
-					if (Security::generateHash($hash_value) == $_REQUEST['security_hash'])
-					{
-						$valid_security_hash = true;
-					}
-					else
-					{
-						$error_message = 'Invalid security hash.';
-					}
-				}
-				else
-				{
-					$error_message = 'Missing security hash';
-				}
-			}
-			else
-			{
-				$valid_security_hash = true;
-			}
-
 			$valid_form_input = true;
 
-			if ($valid_request && $valid_security_hash && $module->validate)
+			if ($valid_request && $module->validate)
 			{
 				$validation_errors = $module->__validate();
 
@@ -309,7 +284,7 @@ class Controller extends Object
 			 * module know to use the cache, either passing in a variable
 			 * or setting it on the object
 			 */
-			if ($valid_request && $valid_security_hash && $valid_form_input)
+			if ($valid_request && $valid_form_input)
 			{
 				$module_return = $module->$default_method();
 
@@ -333,44 +308,24 @@ class Controller extends Object
 			$module->return = ['template', 'json'];
 
 			// Checks if we have any templates
-			$templates = [
-				SITE_TEMPLATE_PATH . '__shared/' . $module->template . '.phtml',
-				SITE_TEMPLATE_PATH . $_REQUEST['request'] . '.phtml',
-			];
+			$parent_template = $module->template;
+			$template_exists = $this->validateTemplates($module, $parent_template);
 
-			$module->template = [];
-			$child_exists     = file_exists($templates[1]);
-			$template_exists  = false;
-
-			if (file_exists($templates[0]) && $child_exists)
-			{
-				$module->template = $templates;
-				$template_exists  = true;
-			}
-			elseif ($child_exists)
-			{
-				$module->template = $templates[1];
-				$template_exists  = true;
-			}
-
+			// No templates? 404 that shit
 			if (!$module_exists && !$template_exists)
 			{
-				if (!$_REQUEST['request'])
-				{
-					Error::fatal('Way to go, you\'ve successfully created an infinite redirect loop. Good thing I was here or you would have been served with a pretty ugly browser error.<br><br>So here\'s the deal, no templates were able to be loaded. Make sure your parent and child templates actually exist and if you\'re using non-default values, make sure they\'re defined correctly in your config.');
-				}
-				else
-				{
-					$redirect_url = '/';
+				Browser::status(404);
+				$_REQUEST['request'] = '__shared/404';
 
-					if (isset($this->config->pickles['404']) && $_REQUEST['request'] != $this->config->pickles['404'])
-					{
-						$redirect_url .= $this->config->pickles['404'];
-					}
-
-					// @todo Add redirect(url, code) and clean this up
-					header('Location: ' . $redirect_url, 404);
-					exit;
+				if (!$this->validateTemplates($module, $parent_template))
+				{
+					exit('
+						<h1>Not Found</h1>
+						<p>The requested URL /' . $request . ' was not found on this server.</p>
+						<p>Additionally, a custom error template was not found.</p>
+						<hr>
+						<em>Powered by <a href="https://github.com/joshtronic/pickles">PICKLES</a></em>
+					');
 				}
 			}
 
@@ -419,6 +374,30 @@ class Controller extends Object
 		{
 			Profiler::report();
 		}
+	}
+
+	private function validateTemplates(&$module, $parent_template)
+	{
+		$templates = [
+			SITE_TEMPLATE_PATH . '__shared/' . $parent_template . '.phtml',
+			SITE_TEMPLATE_PATH . $_REQUEST['request'] . '.phtml',
+		];
+
+		$module->template = [];
+		$child_exists     = file_exists($templates[1]);
+
+		if (file_exists($templates[0]) && $child_exists)
+		{
+			$module->template = $templates;
+			return true;
+		}
+		elseif ($child_exists)
+		{
+			$module->template = $templates[1];
+			return true;
+		}
+
+		return false;
 	}
 }
 

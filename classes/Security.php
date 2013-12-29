@@ -45,6 +45,7 @@ class Security
 	 * @param  string $source value to hash
 	 * @param  mixed $salts optional salt or salts
 	 * @return string SHA1 hash
+	 * @todo   Transition away from this
 	 */
 	public static function generateHash($source, $salts = null)
 	{
@@ -81,19 +82,6 @@ class Security
 	}
 
 	/**
-	 * SHA-256
-	 *
-	 * Generates an SHA-256 hash from the provided string.
-	 *
-	 * @param  string $source value to hash
-	 * @return string SHA1 hash
-	 */
-	public static function sha256($source)
-	{
-		return hash('sha256', $source);
-	}
-
-	/**
 	 * Generate SHA-256 Hash
 	 *
 	 * Generates an SHA-256 hash from the provided string and salt. Borrowed the
@@ -111,7 +99,7 @@ class Security
 
 		for ($i = 0; $i < 1000; $i++)
 		{
-			$sha256 = Security::sha256($sha256 . (($i % 2 == 0) ? $source : $salt));
+			$sha256 = hash('sha256', $sha256 . (($i % 2 == 0) ? $source : $salt));
 		}
 
 		return $sha256;

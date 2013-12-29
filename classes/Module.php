@@ -124,19 +124,6 @@ class Module extends Object
 	protected $validate = null;
 
 	/**
-	 * Hash
-	 *
-	 * Whether or not to validate the security hash. Boolean true will indicate
-	 * using the name of the module as the hash, a string value will use the
-	 * value instead.
-	 *
-	 * @access protected
-	 * @var    string or boolean, null by default
-	 * @todo   Move to public scope
-	 */
-	protected $hash = null;
-
-	/**
 	 * Template
 	 *
 	 * This is the parent template that will be loaded if you are using the
