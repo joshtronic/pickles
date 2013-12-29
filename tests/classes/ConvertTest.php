@@ -1,7 +1,5 @@
 <?php
 
-require_once 'classes/Convert.php';
-
 class ConvertTest extends PHPUnit_Framework_TestCase
 {
 	/**

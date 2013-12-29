@@ -23,7 +23,7 @@
  * module asks for it, and loads the viewer that the module requested. Default
  * values are present to make things easier on the user.
  *
- * @usage <code>new Controller($config);</code>
+ * @usage <code>new Controller();</code>
  */
 class Controller extends Object
 {
@@ -83,7 +83,7 @@ class Controller extends Object
 		$module_filename = SITE_MODULE_PATH . $request . '.php';
 		$module_exists   = file_exists($module_filename);
 
-		// Instantiates the requested module or a generic object
+		// Attempts to instantiate the requested module
 		if ($module_exists)
 		{
 			// @todo Is this redundant because of our autoloader?
@@ -93,12 +93,10 @@ class Controller extends Object
 			{
 				$module = new $module_class;
 			}
-			else
-			{
-				$module = new Module();
-			}
 		}
-		else
+
+		// No module instantiated, load up a generic Module
+		if (!isset($module))
 		{
 			$module = new Module();
 		}

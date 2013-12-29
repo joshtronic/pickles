@@ -1,10 +1,5 @@
 <?php
 
-require_once 'classes/String.php';
-require_once 'classes/Object.php';
-require_once 'classes/API/Common.php';
-require_once 'classes/API/Gravatar.php';
-
 class StringTest extends PHPUnit_Framework_TestCase
 {
 	/**
