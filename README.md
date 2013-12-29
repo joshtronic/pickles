@@ -19,9 +19,15 @@ PICKLES is in fact not a true MVC system and won’t be masquerading around as o
 ### Required Software
 
 * Web server of your choice (nginx is highly recommended)
-* PHP 5.5.7+
+* PHP 5.4+
 
-Please note that strides are being made to be compatible with bleeding edge technologies, specifically PHP 5.5.7 and beyond. This effort will be with somewhat of a reckless abandon towards backwards compatibility to keep up with deprecations within PHP. To help anyone that is “stuck” using PHP 5.3.x, the version distributed with Ubuntu 12.04 LTS, you can still use the 5.3 compatible branch [available here](https://github.com/joshtronic/pickles/archive/php53-compatible.zip) instead. This branch is a fork of the master branch just before we started to these efforts and is considered very stable. The branch will remain available for the foreseeable future but will be indefinitely frozen unless pull requests are submitted.
+Please note that strides are being made to be compatible with bleeding edge technologies. PICKLES is currently developed against PHP 5.5 with builds still passing against PHP 5.4. This effort will be with somewhat of a reckless abandon towards backwards compatibility to keep up with deprecations within PHP.
+
+To help anyone that is “stuck” using PHP 5.3.x, the version distributed with Ubuntu 12.04 LTS, you can still use the 5.3 compatible branch [available here](https://github.com/joshtronic/pickles/archive/php53-compatible.zip) instead. This branch is a fork of the master branch just before we started to these efforts and is considered very stable. The branch will remain available for the foreseeable future but will be indefinitely frozen unless pull requests are submitted.
+
+PHP 5.4 will only be supported until it stops passing builds and will subsequently be branched in the same manner as the PHP 5.3 compatibile branch.
+
+As developers we make demands that our end users use modern day browsers while we’re just as guilty by running older server software. I feel that we should be holdings ourselves to the same standards when it comes to our server stacks. Stability is great, but at a certain point you’re sacrificing your own advancements as a developer as well as turning a blind eye to optimizations that can benefit your users.
 
 ### Optional Software
 
