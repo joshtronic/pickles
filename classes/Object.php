@@ -29,9 +29,9 @@ class Object
 	 *
 	 * @static
 	 * @access private
-	 * @var    mixed
+	 * @var    array
 	 */
-	protected static $instances = array();
+	protected static $instances = [];
 
 	/**
 	 * Instance of the Config object
@@ -42,8 +42,23 @@ class Object
 	protected $config = null;
 
 	/**
-	 * Profiler flag
+	 * Instance of the Cache object
 	 *
+	 * @access protected
+	 * @var    object
+	 */
+	protected $cache = null;
+
+	/**
+	 * Instance of the Database object
+	 *
+	 * @access protected
+	 * @var    object
+	 */
+	protected $db = null;
+
+	/**
+	 * Profiler flag
 	 *
 	 * @access private
 	 * @var    mixed
@@ -55,7 +70,7 @@ class Object
 	 *
 	 * Establishes a Config instance for all children to enjoy
 	 */
-	public function __construct()
+	public function __construct($objects = null)
 	{
 		// Gets an instance of the config, unless we ARE the config
 		if (get_class($this) == 'Config')
@@ -65,6 +80,23 @@ class Object
 		else
 		{
 			$this->config = Config::getInstance();
+		}
+
+		if ($objects)
+		{
+			if (!is_array($objects))
+			{
+				$objects = [$objects];
+			}
+
+			foreach ($objects as $object)
+			{
+				switch ($object)
+				{
+					case 'cache': $this->cache = Cache::getInstance();    break;
+					case 'db':    $this->db    = Database::getInstance(); break;
+				}
+			}
 		}
 
 		// Assigns the profiler flag

@@ -81,7 +81,7 @@ class Display extends Object
 
 			if (!is_array($this->return))
 			{
-				$this->return = [ $this->return ];
+				$this->return = [$this->return];
 			}
 
 			$return_json = $return_rss = $return_template = $return_xml = false;

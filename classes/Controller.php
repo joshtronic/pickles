@@ -295,11 +295,11 @@ class Controller extends Object
 
 					if (!is_array($module_return))
 					{
-						$module_return = $module->return_data;
+						$module_return = $module->return;
 					}
 					else
 					{
-						$module_return = array_merge($module_return, $module->return_data);
+						$module_return = array_merge($module_return, $module->return);
 					}
 				}
 
@@ -310,7 +310,7 @@ class Controller extends Object
 				}
 
 				// @todo Set this in the module and use $module->return and rename module->return to module->data?
-				$module->return = ['template', 'json'];
+				$module->display = ['template', 'json'];
 
 				// Checks if we have any templates
 				$parent_template = $module->template;
@@ -334,8 +334,10 @@ class Controller extends Object
 					}
 				}
 
+				// @todo Should simplify this, give Display direct acess to
+				//       $module instead of all these variable assignment
 				$display            = new Display();
-				$display->return    = $module->return;
+				$display->output    = $module->output;
 				$display->templates = $module->template;
 				$display->module    = isset($module_return) ? $module_return : ['status' => 'error', 'message' => $error_message];
 

@@ -28,27 +28,11 @@
 class Module extends Object
 {
 	/**
-	 * Cache Object
-	 *
-	 * @access protected
-	 * @var    object
-	 */
-	protected $cache = null;
-
-	/**
-	 * Database Object
-	 *
-	 * @access protected
-	 * @var    object
-	 */
-	protected $db = null;
-
-	/**
 	 * Page Title
 	 *
 	 * @access protected
 	 * @var    string, null by default
-	 * @todo   Move to public scope
+	 * @todo   Move to public scope, then abandon for $this->meta
 	 */
 	protected $title = null;
 
@@ -57,7 +41,7 @@ class Module extends Object
 	 *
 	 * @access protected
 	 * @var    string, null by default
-	 * @todo   Move to public scope
+	 * @todo   Move to public scope, then abandon for $this->meta
 	 */
 	protected $description = null;
 
@@ -66,9 +50,20 @@ class Module extends Object
 	 *
 	 * @access protected
 	 * @var    string, null by default
-	 * @todo   Move to public scope
+	 * @todo   Move to public scope, then abandon for $this->meta
 	 */
 	protected $keywords = null;
+
+	/**
+	 * Meta Data
+	 *
+	 * @var array
+	 */
+	public $meta = [
+		'title'       => '',
+		'description' => '',
+		'keywords'    => '',
+	];
 
 	/**
 	 * Secure
@@ -98,6 +93,9 @@ class Module extends Object
 	 * @access protected
 	 * @var    boolean, false (not AJAX) by default
 	 * @todo   Move to public scope
+	 * @todo   Doesn't seem to be in use, but I have it defined on Clipinary
+	 *         don't want to remove until I drop it else it would end up in the
+	 *         module return array.
 	 */
 	protected $ajax = false;
 
@@ -146,11 +144,20 @@ class Module extends Object
 	 * @access protected
 	 * @var    array
 	 * @todo   Move to public scope and rename __return so it's kinda obscured
+	 * @todo   Will need to update leaderbin and sndcrd to use new variable
 	 */
-	protected $return_data = array();
+	protected $return = array();
 
-	// @todo Document me
-	public $return = array();
+	/**
+	 * Output
+	 *
+	 * What should the class render as output? This can be a string or an array
+	 * containing either 'json', 'rss', 'template' or 'xml'. Default is to use
+	 * templates and if the template is not present, fall back to JSON.
+	 *
+	 * @var mixed string or array
+	 */
+	public $output = ['template', 'json'];
 
 	/**
 	 * Constructor
@@ -165,10 +172,7 @@ class Module extends Object
 	 */
 	public function __construct($autorun = false, $validate = true)
 	{
-		parent::__construct();
-
-		$this->cache = Cache::getInstance();
-		$this->db    = Database::getInstance();
+		parent::__construct(['cache', 'db']);
 
 		if ($autorun === true)
 		{
@@ -217,7 +221,7 @@ class Module extends Object
 		}
 		else
 		{
-			$this->return_data[$name] = $value;
+			$this->return[$name] = $value;
 		}
 	}
 

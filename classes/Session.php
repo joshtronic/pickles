@@ -106,17 +106,6 @@ class Session extends Object
 	private $table = null;
 
 	/**
-	 * Database
-	 *
-	 * Our database object to interact with the aforementioned datasource
-	 * and table. This object is shared with other PICKLES internals.
-	 *
-	 * @access private
-	 * @var    object
-	 */
-	private $db = null;
-
-	/**
 	 * Constructor
 	 *
 	 * All of our set up logic for the session in contained here. This

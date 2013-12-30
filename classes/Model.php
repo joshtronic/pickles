@@ -35,14 +35,6 @@ class Model extends Object
 	private $model = null;
 
 	/**
-	 * Database Object
-	 *
-	 * @access protected
-	 * @var    object
-	 */
-	protected $db = null;
-
-	/**
 	 * Columns
 	 *
 	 * Mapping of key columns for the table.
@@ -51,14 +43,6 @@ class Model extends Object
 	 * @var    array
 	 */
 	protected $columns = null;
-
-	/**
-	 * Cache Object
-	 *
-	 * @access
-	 * @var    object
-	 */
-	protected $cache = null;
 
 	/**
 	 * Whether or not to use cache
@@ -327,16 +311,14 @@ class Model extends Object
 		}
 
 		// Runs the parent constructor so we have the config
-		parent::__construct();
+		parent::__construct(['cache', 'db']);
 
-		// Gets an instance of the database and check which it is
-		$this->db         = Database::getInstance();
+		// Interrogates our database object
 		$this->use_cache  = $this->db->cache;
 		$this->mysql      = ($this->db->driver == 'pdo_mysql');
 		$this->postgresql = ($this->db->driver == 'pdo_pgsql');
 
-		// Sets up the cache object and grabs the class name to use in our cache keys
-		$this->cache = Cache::getInstance();
+		// Grabs the class name to use in our cache keys
 		$this->model = get_class($this);
 
 		// Default column mapping
