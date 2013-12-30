@@ -61,6 +61,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(in_array('Location: /testing', xdebug_get_headers()));
 	}
 
+	/*
 	public function testForceSecure()
 	{
 		$_SERVER['REQUEST_URI'] = '/secure';
@@ -104,7 +105,6 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(in_array('Location: http://testsite.com/insecure', xdebug_get_headers()));
 	}
 
-	/*
 	public function testNotAuthenticated()
 	{
 		$this->fail();
