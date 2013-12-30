@@ -182,7 +182,7 @@ class Profiler
 			'log'     => $log,
 			'type'    => $data_type,
 			'time'    => $time,
-			'elapsed' => $time - PICKLES_START_TIME,
+			'elapsed' => $time - $_SERVER['REQUEST_TIME_FLOAT'],
 			'memory'  => memory_get_usage(),
 		);
 	}
@@ -325,9 +325,9 @@ class Profiler
 			}
 			else
 			{
-				$start_time = PICKLES_START_TIME;
+				$start_time = $_SERVER['REQUEST_TIME_FLOAT'];
 				$peak_usage = self::formatSize(memory_get_peak_usage());
-				$end_time   = self::$profile[count(self::$profile) - 1]['time']; // TODO
+				$end_time   = self::$profile[count(self::$profile) - 1]['time']; // @todo No idea what though?
 				$duration   = ($end_time - $start_time);
 
 				$logs  = count(self::$profile);

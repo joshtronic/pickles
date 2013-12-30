@@ -265,7 +265,9 @@ class Dynamic extends Object
 						&& extension_loaded('curl')
 						&& $this->config->pickles['minify'] === true)
 					{
-						exec('java -jar ' . PICKLES_PATH . 'vendors/google/closure-compiler/compiler.jar --js=' . $original_filename . ' --compilation_level='  . ($level . '_' . ($level == 'WHITESPACE' ? 'ONLY' : 'OPTIMIZATIONS')) . ' --js_output_file=' . $minified_filename);
+						$config = Config::getInstance();
+
+						exec('java -jar ' . $config->pickles['path'] . 'vendors/google/closure-compiler/compiler.jar --js=' . $original_filename . ' --compilation_level='  . ($level . '_' . ($level == 'WHITESPACE' ? 'ONLY' : 'OPTIMIZATIONS')) . ' --js_output_file=' . $minified_filename);
 
 						$reference = $minified_reference;
 					}

@@ -3,8 +3,8 @@
 class ConvertTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	* @dataProvider providerArrayToXML
-	*/
+	 * @dataProvider providerArrayToXML
+	 */
 	public function testArrayToXML($a, $b, $c)
 	{
 		$this->assertEquals(Convert::arrayToXML($a, $b), $c);

@@ -32,10 +32,9 @@ class Config extends Object
 	/**
 	 * Config data
 	 *
-	 * @access private
-	 * @var    array
+	 * @var array
 	 */
-	private $data = array();
+	public $data = array();
 
 	/**
 	 * Constructor
@@ -234,19 +233,6 @@ class Config extends Object
 	public static function getInstance($class = 'Config')
 	{
 		return parent::getInstance($class);
-	}
-
-	/**
-	 * Magic Setter Method
-	 *
-	 * Prohibits the direct modification of module variables.
-	 *
-	 * @param string $name name of the variable to be set
-	 * @param mixed $value value of the variable to be set
-	 */
-	public function __set($name, $value)
-	{
-		throw new Exception('Cannot set config variables directly', E_USER_ERROR);
 	}
 
 	/**
