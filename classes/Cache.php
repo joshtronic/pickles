@@ -72,7 +72,8 @@ class Cache extends Object
 	{
 		parent::__construct();
 
-		if ($this->config->pickles['cache'])
+		// @todo Shouldn't need the isset() but Travis is failing some tests
+		if (isset($this->config->pickles['cache']) && $this->config->pickles['cache'])
 		{
 			if (!is_array($this->config->pickles['cache']))
 			{
