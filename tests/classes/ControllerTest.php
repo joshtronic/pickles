@@ -7,20 +7,11 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 	public function setUp()
 	{
 		$this->config = Config::getInstance();
-		$this->config->data['pickles']['disabled'] = false;
-		$this->config->data['pickles']['profiler'] = false;
-		$_SERVER['REQUEST_URI'] = '';
+		$this->config->data['pickles']['disabled']    = false;
+		$this->config->data['pickles']['profiler']    = false;
+		$this->config->data['security']['levels'][10] = 'USER';
 
-		if (!file_exists(SITE_MODULE_PATH))
-		{
-			mkdir(SITE_MODULE_PATH, 0644);
-		}
-
-		unlink(SITE_MODULE_PATH . 'testing.php');
-
-		$_SERVER['HTTP_HOST']   = 'testsite.com';
-		$_SERVER['REQUEST_URI'] = '/home';
-		$_REQUEST['request']    = 'home';
+		setUpRequest('home');
 
 		$module = '<?php class home extends Module { } ?>';
 
@@ -29,8 +20,6 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
 	public function testSiteDown()
 	{
-		$_SERVER['SERVER_NAME'] = 'Test Server';
-
 		$this->config->data['pickles']['disabled'] = true;
 
 		$this->expectOutputRegex('/Test Server is currently down for maintenance/');
@@ -53,28 +42,18 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
 	public function testUpperCaseURI()
 	{
-		$_SERVER['REQUEST_URI'] = '/TESTING';
-		$_REQUEST['request']    = 'TESTING';
+		setUpRequest('TESTING');
 
 		new Controller();
 
 		$this->assertTrue(in_array('Location: /testing', xdebug_get_headers()));
 	}
 
-	/*
 	public function testForceSecure()
 	{
-		$_SERVER['REQUEST_URI'] = '/secure';
-		$_REQUEST['request']    = 'secure';
+		setUpRequest('secure');
 
-		$module = '
-			<?php
-			class secure extends Module
-			{
-				public $secure = true;
-			}
-			?>
-		';
+		$module = '<?php class secure extends Module { public $secure = true; } ?>';
 
 		file_put_contents(SITE_MODULE_PATH . 'secure.php', $module);
 
@@ -85,18 +64,10 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
 	public function testForceInsecure()
 	{
-		$_SERVER['HTTPS']       = 'on';
-		$_SERVER['REQUEST_URI'] = '/insecure';
-		$_REQUEST['request']    = 'insecure';
+		setUpRequest('insecure');
+		$_SERVER['HTTPS'] = 'on';
 
-		$module = '
-			<?php
-			class insecure extends Module
-			{
-				public $secure = false;
-			}
-			?>
-		';
+		$module = '<?php class insecure extends Module { public $secure = false; } ?>';
 
 		file_put_contents(SITE_MODULE_PATH . 'insecure.php', $module);
 
@@ -107,19 +78,49 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
 	public function testNotAuthenticated()
 	{
-		$this->fail();
+		setUpRequest('notauth');
+
+		$module = '<?php class notauth extends Module { public $security = SECURITY_LEVEL_USER; } ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'notauth.php', $module);
+
+		new Controller();
+
+		$this->assertTrue(in_array('Location: http://testsite.com/login', xdebug_get_headers()));
 	}
 
 	public function testNotAuthenticatedPOST()
 	{
-		$this->fail();
+		setUpRequest('notauthpost', 'POST');
+
+		$module = '<?php class notauthpost extends Module { public $security = SECURITY_LEVEL_USER; } ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'notauthpost.php', $module);
+
+		new Controller();
+
+		$this->expectOutputRegex('/You are not properly authenticated/');
 	}
 
 	public function testAuthenticated()
 	{
-		$this->fail();
+		setUpRequest('auth');
+
+		$module = '<?php class auth extends Module { '
+				. 'public $security = SECURITY_LEVEL_USER;'
+				. 'public function __default() { return ["foo" => "bar"]; }'
+				. '} ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'auth.php', $module);
+
+		session_start();
+		Security::login(1, 10, 'USER');
+		new Controller();
+
+		$this->expectOutputString('{"foo":"bar"}');
 	}
 
+	/*
 	public function testHasLevelAccess()
 	{
 		$this->fail();

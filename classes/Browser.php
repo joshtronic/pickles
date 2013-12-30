@@ -134,7 +134,15 @@ class Browser extends Object
 		}
 
 		header('Location: ' . $destination);
-		exit;
+
+		if (defined('UNIT_TESTING'))
+		{
+			throw new Exception();
+		}
+		else
+		{
+			exit;
+		}
 	}
 
 	/**

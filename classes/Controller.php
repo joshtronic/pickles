@@ -201,7 +201,7 @@ class Controller extends Object
 					if ($_SERVER['REQUEST_METHOD'] == 'POST')
 					{
 						// @todo Perhaps I could force a logout / redirect to the login page
-						exit('{"status": "error", "message": "You are not properly authenticated, try logging out and back in."}');
+						throw new Exception('{"status": "error", "message": "You are not properly authenticated, try logging out and back in."}');
 					}
 					else
 					{
