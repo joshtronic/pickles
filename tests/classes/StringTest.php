@@ -105,6 +105,33 @@ class StringTest extends PHPUnit_Framework_TestCase
 			array('FOO@BAR.COM', 'FOO@BAR.COM'),
 		);
 	}
+
+	/**
+	 * @dataProvider providerGenerateSlug
+	 */
+	public function testGenerateSlug($a, $b)
+	{
+		$this->assertEquals($b, String::generateSlug($a));
+	}
+
+	public function providerGenerateSlug()
+	{
+		return array(
+			array('TEST STRING',    'test-string'),
+			array('Test String',    'test-string'),
+			array('TEST  STRING',   'test-string'),
+			array('#! Test String', 'test-string'),
+			array('-test--string-', 'test-string'),
+		);
+	}
+
+	public function testPluralize()
+	{
+		$this->assertEquals('test',    String::pluralize('test', 1, false));
+		$this->assertEquals('1 test',  String::pluralize('test', 1, true));
+		$this->assertEquals('tests',   String::pluralize('test', 2, false));
+		$this->assertEquals('2 tests', String::pluralize('test', 2, true));
+	}
 }
 
 ?>
