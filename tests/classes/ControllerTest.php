@@ -32,13 +32,25 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 	{
 		$this->fail();
 	}
+	*/
 
 	public function testAttributesInURI()
 	{
-		/testing/id:123/foo:bar
-		$this->fail();
+		setUpRequest('home/id:123');
+
+		new Controller();
+
+		$this->assertEquals(123, Browser::get('id'));
+
+		setUpRequest('home/id:456/foo:bar');
+
+		new Controller();
+
+		// Compensates for 2 empty template executions of the Controller
+		$this->expectOutputString('[][]');
+		$this->assertEquals(456,   Browser::get('id'));
+		$this->assertEquals('bar', Browser::get('foo'));
 	}
-	*/
 
 	public function testUpperCaseURI()
 	{
