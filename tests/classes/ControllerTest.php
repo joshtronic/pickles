@@ -27,12 +27,16 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 		new Controller();
 	}
 
-	/*
 	public function testCustomSiteDown()
 	{
-		$this->fail();
+		$this->config->data['pickles']['disabled'] = true;
+
+		file_put_contents(SITE_TEMPLATE_PATH . '__shared/maintenance.phtml', '<h1>Custom Down for Maintenance</h1>');
+
+		new Controller();
+
+		$this->expectOutputRegex('/<h1>Custom Down for Maintenance<\/h1>/');
 	}
-	*/
 
 	public function testAttributesInURI()
 	{

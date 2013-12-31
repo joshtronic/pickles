@@ -42,16 +42,26 @@ class Controller extends Object
 		try
 		{
 			// @todo Clean this up to be just a single sanity check
-			if (isset($this->config->pickles['disabled']) && $this->config->pickles['disabled'] == true)
+			if (isset($this->config->pickles['disabled']) && $this->config->pickles['disabled'])
 			{
-				// @todo Add support for custom templates
-				throw new Exception('
-					<h1>Down for Maintenance</h1>
-					<p>' . $_SERVER['SERVER_NAME'] . ' is currently down for maintenance. Please check back in a few minutes.</p>
-					<p>Additionally, a custom maintenance template was not found.</p>
-					<hr>
-					<em>Powered by <a href="https://github.com/joshtronic/pickles">PICKLES</a></em>
-				');
+				$custom_template = SITE_TEMPLATE_PATH . '__shared/maintenance.phtml';
+
+				if (file_exists($custom_template))
+				{
+					require_once $custom_template;
+				}
+				else
+				{
+					echo '
+						<h1>Down for Maintenance</h1>
+						<p>' . $_SERVER['SERVER_NAME'] . ' is currently down for maintenance. Please check back in a few minutes.</p>
+						<p>Additionally, a custom maintenance template was not found.</p>
+						<hr>
+						<em>Powered by <a href="https://github.com/joshtronic/pickles">PICKLES</a></em>
+					';
+				}
+
+				throw new Exception();
 			}
 
 			// Checks for attributes passed in the URI
@@ -309,9 +319,6 @@ class Controller extends Object
 				{
 					Profiler::timer('module ' . $default_method);
 				}
-
-				// @todo Set this in the module and use $module->return and rename module->return to module->data?
-				$module->display = ['template', 'json'];
 
 				// Checks if we have any templates
 				$parent_template = $module->template;
