@@ -125,56 +125,83 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
 		file_put_contents(SITE_MODULE_PATH . 'auth.php', $module);
 
-		session_start();
 		Security::login(1, 10, 'USER');
 		new Controller();
 
 		$this->expectOutputString('{"foo":"bar"}');
 	}
 
-	/*
-	public function testHasLevelAccess()
-	{
-		$this->fail();
-	}
-
-	public function testIsLevelAccess()
-	{
-		$this->fail();
-	}
-
 	public function testRoleDefaultMethod()
 	{
-		$this->fail();
+		setUpRequest('rolemethod');
+
+		$module = '<?php class rolemethod extends Module { '
+				. 'public $security = SECURITY_LEVEL_USER;'
+				. 'public function __default() { return ["foo" => "bar"]; }'
+				. 'public function __default_USER() { return ["user" => "me"]; }'
+				. '} ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'rolemethod.php', $module);
+
+		Security::login(1, 10, 'USER');
+		new Controller();
+
+		$this->expectOutputString('{"user":"me"}');
 	}
 
 	public function testBadRequestMethod()
 	{
-		$this->fail();
+		setUpRequest('requestmethod');
+
+		$module = '<?php class requestmethod extends Module { '
+				. 'public $method = "POST";'
+				. 'public function __default() { return ["foo" => "bar"]; }'
+				. '} ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'requestmethod.php', $module);
+
+		new Controller();
+
+		$this->expectOutputString('{"status":"error","message":"There was a problem with your request method."}');
 	}
 
-	// @todo Reuse one of the Module tests?
 	public function testValidationErrors()
 	{
-		$this->fail();
+		setUpRequest('validationerrors');
+
+		$module = '<?php class validationerrors extends Module { '
+				. 'protected $validate = ["test"];'
+				. 'public function __default() { return ["foo" => "bar"]; }'
+				. '} ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'validationerrors.php', $module);
+
+		new Controller();
+
+		$this->expectOutputString('{"status":"error","message":"The test field is required."}');
 	}
 
 	public function testError404()
 	{
-		$this->fail();
+		setUpRequest('fourohfour');
+
+		new Controller();
+
+		$this->assertTrue(in_array('Status: 404 Not Found', xdebug_get_headers()));
+		$this->expectOutputRegex('/<h1>Not Found<\/h1>/');
 	}
 
 	public function testCustomError404()
 	{
-		$this->fail();
-	}
+		setUpRequest('customfourohfour');
 
-	// @todo Reuse one of the Display tests?
-	public function testOutput()
-	{
-		$this->fail();
+		file_put_contents(SITE_TEMPLATE_PATH . '__shared/404.phtml', '<h1>Custom Not Found</h1>');
+
+		new Controller();
+
+		$this->assertTrue(in_array('Status: 404 Not Found', xdebug_get_headers()));
+		$this->expectOutputRegex('/<h1>Custom Not Found<\/h1>/');
 	}
-	*/
 
 	public function testProfilerOutput()
 	{

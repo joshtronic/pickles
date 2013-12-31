@@ -263,6 +263,7 @@ class Controller extends Object
 
 					if (!$valid_request)
 					{
+						// @todo Should probably utilize that AJAX flag to determine the type of return
 						$error_message = 'There was a problem with your request method.';
 					}
 				}
@@ -398,7 +399,7 @@ class Controller extends Object
 		}
 		elseif ($child_exists)
 		{
-			$module->template = $templates[1];
+			$module->template = [$templates[1]];
 			return true;
 		}
 

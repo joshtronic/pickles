@@ -1,6 +1,7 @@
 <?php
 
 ob_start();
+session_start();
 
 require_once '.composer/autoload.php';
 
@@ -24,6 +25,11 @@ if (!file_exists(SITE_MODULE_PATH))
 if (!file_exists(SITE_TEMPLATE_PATH))
 {
 	mkdir(SITE_TEMPLATE_PATH, 0644);
+}
+
+if (!file_exists(SITE_TEMPLATE_PATH . '__shared/'))
+{
+	mkdir(SITE_TEMPLATE_PATH . '__shared/', 0644);
 }
 
 $_SERVER['HTTP_HOST']   = 'testsite.com';
