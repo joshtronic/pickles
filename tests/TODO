@@ -2,17 +2,18 @@ Cache
 Config
 Database
 Dynamic
-File
 Form
 HTML
 Log
 Model
 Module
-Number
 Object
 Profiler
 Security
 Session
 Validate
 
-Stuff in API directory
+API/AYAH
+API/Gravatar
+API/Tinychat
+API/Google/Profanity
