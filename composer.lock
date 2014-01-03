@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2f93a3360b4a2c31afcdbd8dabf847b0",
+    "hash": "bf2609e3e57922dab5119cf53ac06105",
     "packages": [
         {
             "name": "devize/closure-compiler",
