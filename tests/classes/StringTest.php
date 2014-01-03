@@ -12,17 +12,17 @@ class StringTest extends PHPUnit_Framework_TestCase
 
 	public function providerFormatPhoneNumber()
 	{
-		return array(
-			array('1234567890',            '123-456-7890'),
-			array('123 456 7890',          '123-456-7890'),
-			array('123.456.7890',          '123-456-7890'),
-			array('123_456_7890',          '123-456-7890'),
-			array('1234567890',            '123-456-7890'),
-			array('1234-56-7890',          '123-456-7890'),
-			array('(123) 456-7890',        '123-456-7890'),
-			array('1234567890 x1000',      '123-456-7890x1000'),
-			array('(123) 456-7890_x10.00', '123-456-7890x1000'),
-		);
+		return [
+			['1234567890',            '123-456-7890'],
+			['123 456 7890',          '123-456-7890'],
+			['123.456.7890',          '123-456-7890'],
+			['123_456_7890',          '123-456-7890'],
+			['1234567890',            '123-456-7890'],
+			['1234-56-7890',          '123-456-7890'],
+			['(123) 456-7890',        '123-456-7890'],
+			['1234567890 x1000',      '123-456-7890x1000'],
+			['(123) 456-7890_x10.00', '123-456-7890x1000'],
+		];
 	}
 
 	/**
@@ -35,10 +35,10 @@ class StringTest extends PHPUnit_Framework_TestCase
 
 	public function providerGenerateGravatarHash()
 	{
-		return array(
-			array('foo@bar.com', 'f3ada405ce890b6f8204094deb12d8a8'),
-			array('FOO@BAR.COM', 'f3ada405ce890b6f8204094deb12d8a8'),
-		);
+		return [
+			['foo@bar.com', 'f3ada405ce890b6f8204094deb12d8a8'],
+			['FOO@BAR.COM', 'f3ada405ce890b6f8204094deb12d8a8'],
+		];
 	}
 
 	public function testIsEmpty()
@@ -79,12 +79,12 @@ class StringTest extends PHPUnit_Framework_TestCase
 
 	public function providerTruncate()
 	{
-		return array(
-			array('foo bar', 3, true,  '<span title="foo bar">foo&hellip;</span>'),
-			array('foo bar', 3, false, 'foo...'),
-			array('foo bar', 7, true,  'foo bar'),
-			array('foo bar', 8, true,  'foo bar'),
-		);
+		return [
+			['foo bar', 3, true,  '<span title="foo bar">foo&hellip;</span>'],
+			['foo bar', 3, false, 'foo...'],
+			['foo bar', 7, true,  'foo bar'],
+			['foo bar', 8, true,  'foo bar'],
+		];
 	}
 
 	/**
@@ -97,13 +97,13 @@ class StringTest extends PHPUnit_Framework_TestCase
 
 	public function providerUpperWords()
 	{
-		return array(
-			array('foo bar',     'Foo Bar'),
-			array('FOO BAR',     'Foo Bar'),
-			array('fOO bAR',     'Foo Bar'),
-			array('foo@bar.com', 'foo@bar.com'),
-			array('FOO@BAR.COM', 'FOO@BAR.COM'),
-		);
+		return [
+			['foo bar',     'Foo Bar'],
+			['FOO BAR',     'Foo Bar'],
+			['fOO bAR',     'Foo Bar'],
+			['foo@bar.com', 'foo@bar.com'],
+			['FOO@BAR.COM', 'FOO@BAR.COM'],
+		];
 	}
 
 	/**
@@ -116,13 +116,13 @@ class StringTest extends PHPUnit_Framework_TestCase
 
 	public function providerGenerateSlug()
 	{
-		return array(
-			array('TEST STRING',    'test-string'),
-			array('Test String',    'test-string'),
-			array('TEST  STRING',   'test-string'),
-			array('#! Test String', 'test-string'),
-			array('-test--string-', 'test-string'),
-		);
+		return [
+			['TEST STRING',    'test-string'],
+			['Test String',    'test-string'],
+			['TEST  STRING',   'test-string'],
+			['#! Test String', 'test-string'],
+			['-test--string-', 'test-string'],
+		];
 	}
 
 	public function testPluralize()

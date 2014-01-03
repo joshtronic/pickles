@@ -16,14 +16,14 @@ class DateTest extends PHPUnit_Framework_TestCase
 
 		$time = strtotime('-25 years');
 
-		return array(
-			array(date('Y-m-d', $time), '25'),
-			array(date('m/d/Y', $time), '25'),
-			array(date('r',     $time), '25'),
-			array('today',              '0'),
-			array('400 days ago',       '1'),
-			array(true,                 Date::age('1969-12-31')),
-		);
+		return [
+			[date('Y-m-d', $time), '25'],
+			[date('m/d/Y', $time), '25'],
+			[date('r',     $time), '25'],
+			['today',              '0'],
+			['400 days ago',       '1'],
+			[true,                 Date::age('1969-12-31')],
+		];
 	}
 }
 

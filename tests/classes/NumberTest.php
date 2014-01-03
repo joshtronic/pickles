@@ -12,16 +12,16 @@ class NumberTest extends PHPUnit_Framework_TestCase
 
 	public function providerOrginalIndicatorNoSuper()
 	{
-		return array(
-			array(1,  '1st'),
-			array(2,  '2nd'),
-			array(3,  '3rd'),
-			array(4,  '4th'),
-			array(51, '51st'),
-			array(52, '52nd'),
-			array(53, '53rd'),
-			array(54, '54th'),
-		);
+		return [
+			[1,  '1st'],
+			[2,  '2nd'],
+			[3,  '3rd'],
+			[4,  '4th'],
+			[51, '51st'],
+			[52, '52nd'],
+			[53, '53rd'],
+			[54, '54th'],
+		];
 	}
 
 	/**
@@ -34,16 +34,16 @@ class NumberTest extends PHPUnit_Framework_TestCase
 
 	public function providerOrginalIndicatorSuper()
 	{
-		return array(
-			array(1,  '1<sup>st</sup>'),
-			array(2,  '2<sup>nd</sup>'),
-			array(3,  '3<sup>rd</sup>'),
-			array(4,  '4<sup>th</sup>'),
-			array(51, '51<sup>st</sup>'),
-			array(52, '52<sup>nd</sup>'),
-			array(53, '53<sup>rd</sup>'),
-			array(54, '54<sup>th</sup>'),
-		);
+		return [
+			[1,  '1<sup>st</sup>'],
+			[2,  '2<sup>nd</sup>'],
+			[3,  '3<sup>rd</sup>'],
+			[4,  '4<sup>th</sup>'],
+			[51, '51<sup>st</sup>'],
+			[52, '52<sup>nd</sup>'],
+			[53, '53<sup>rd</sup>'],
+			[54, '54<sup>th</sup>'],
+		];
 	}
 }
 
