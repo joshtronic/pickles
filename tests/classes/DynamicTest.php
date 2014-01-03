@@ -104,19 +104,6 @@ CSS;
 		$this->dynamic->css('/css/invalid');
 	}
 
-	// TODO May not be able to do these two as it would require lessc and sass to not be installed
-	// TODO Good chance will also fail on Travis due to missing dependencies, will need to work through that
-	// TODO will probably want to move to the composer available versions of these
-	public function testCSSCommandErrorLESS()
-	{
-
-	}
-
-	public function testCSSCommandErrorSASS()
-	{
-
-	}
-
 	public function testCSSWithoutMinify()
 	{
 		$config = Config::getInstance();

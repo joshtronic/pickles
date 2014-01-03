@@ -150,37 +150,33 @@ class Dynamic extends Object
 		{
 			$reference = $original_reference;
 
-			// @todo LESS and SASS compiling should happen regardless of minification
-			if ($this->config->pickles['minify'] === true)
+			// Compiles LESS & SASS to CSS before minifying
+			if ($less || $sass)
 			{
-				// Compiles LESS & SASS to CSS before minifying
-				if ($less || $sass)
+				$compiled_filename = str_replace('.min', '', $minified_filename);
+
+				require_once $this->config->pickles['path'] . '.composer/autoload.php';
+
+				if ($less)
 				{
-					$compiled_filename = str_replace('.min', '', $minified_filename);
+					$less = new lessc();
+					$less->compileFile($original_filename, $compiled_filename);
+				}
+				elseif ($sass)
+				{
+					$scss = new scssc();
 
-					if ($less)
-					{
-						// I couldn't get getenv() to give me the PATH value... so yeah, there's that.
-						exec('echo $PATH', $path);
-						putenv('PATH=' . $path[0] . PATH_SEPARATOR . '/usr/local/bin');
-
-						$command = 'lessc ' . $original_filename . ' > ' . $compiled_filename;
-					}
-					elseif ($sass)
-					{
-						$command = 'sass ' . $original_filename . ':' . $compiled_filename;
-					}
-
-					exec($command, $output, $return);
-
-					if ($return !== 0)
-					{
-						throw new Exception('There was an error executing `' . $command . '` it returned exit code ' . $return);
-					}
-
-					$original_filename = $compiled_filename;
+					file_put_contents(
+						$compiled_filename,
+						$scss->compile(file_get_contents($original_filename))
+					);
 				}
 
+				$original_filename = $compiled_filename;
+			}
+
+			if ($this->config->pickles['minify'] === true)
+			{
 				// Minifies CSS with a few basic character replacements.
 				$stylesheet = file_get_contents($original_filename);
 				$stylesheet = str_replace(array("\t", "\n", ', ', ' {', ': ', ';}', '{  ', ';  '), array('', '', ',', '{', ':', '}', '{', ';'), $stylesheet);
