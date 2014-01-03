@@ -3,8 +3,9 @@
 		"vendor-dir": ".composer"
 	},
 	"require": {
-		"mikey179/vfsStream": "1.2.0",
-		"leafo/lessphp":      "0.4.0",
-		"leafo/scssphp":      "0.0.9"
+		"devize/closure-compiler": "@dev",
+		"leafo/lessphp":           "0.4.0",
+		"leafo/scssphp":           "0.0.9",
+		"mikey179/vfsStream":      "1.2.0"
 	}
 }

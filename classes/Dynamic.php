@@ -210,70 +210,54 @@ class Dynamic extends Object
 	 * @param  string $reference URI reference of the Javascript file
 	 * @return string URI reference reference with dynamic content
 	 */
-	public function js($original_reference, $level = 'simple')
+	public function js($original_reference)
 	{
-		$level = strtoupper($level);
+		// Injects .min into the filename
+		$parts = explode('.', $original_reference);
 
-		switch ($level)
+		if (count($parts) == 1)
 		{
-			CASE 'WHITESPACE':
-			CASE 'SIMPLE':
-			CASE 'ADVANCED':
-				// Injects .min into the filename
-				$parts = explode('.', $original_reference);
+			throw new Exception('Filename must have an extension (e.g. /path/to/file.js)');
+		}
+		else
+		{
+			end($parts);
+			$parts[key($parts)] = 'min.' . current($parts);
+			$minified_reference = implode('.', $parts);
+		}
 
-				if (count($parts) == 1)
-				{
-					throw new Exception('Filename must have an extension (e.g. /path/to/file.js)');
-				}
-				else
-				{
-					end($parts);
-					$parts[key($parts)] = 'min.' . current($parts);
-					$minified_reference = implode('.', $parts);
-				}
+		$original_filename = '.' . $original_reference;
+		$minified_filename = '.' . $minified_reference;
 
-				$original_filename = '.' . $original_reference;
-				$minified_filename = '.' . $minified_reference;
+		$path = dirname($original_filename);
 
-				$path = dirname($original_filename);
+		if (file_exists($original_filename))
+		{
+			$reference = $original_reference;
 
-				if (file_exists($original_filename))
-				{
-					$reference = $original_reference;
+			if ($this->config->pickles['minify'] === true)
+			{
+				require_once $this->config->pickles['path'] . '.composer/autoload.php';
 
-					if (is_writable($path)
-						&& (!file_exists($minified_filename) || filemtime($original_filename) > filemtime($minified_filename))
-						&& extension_loaded('curl')
-						&& $this->config->pickles['minify'] === true)
-					{
-						$config = Config::getInstance();
+				$compiler = new Devize\ClosureCompiler\ClosureCompiler;
+				$compiler->setSourceBaseDir(dirname($original_filename));
+				$compiler->setTargetBaseDir(dirname($minified_filename));
+				$compiler->addSourceFile(basename($original_filename));
+				$compiler->setTargetFile(basename($minified_filename));
+				$compiler->compile();
 
-						exec('java -jar ' . $config->pickles['path'] . 'vendors/google/closure-compiler/compiler.jar --js=' . $original_filename . ' --compilation_level='  . ($level . '_' . ($level == 'WHITESPACE' ? 'ONLY' : 'OPTIMIZATIONS')) . ' --js_output_file=' . $minified_filename);
+				$reference = $minified_reference;
+			}
+			elseif (file_exists($minified_filename))
+			{
+				$reference = $minified_reference;
+			}
 
-						$reference = $minified_reference;
-					}
-					elseif (file_exists($minified_filename))
-					{
-						$reference = $minified_reference;
-					}
-					else
-					{
-						Log::warning('Unable to minify ' . $original_reference . ' and a minified copy does not already exist');
-					}
-
-					$reference = $this->reference($reference);
-				}
-				else
-				{
-					throw new Exception('Supplied reference does not exist');
-				}
-
-				break;
-
-			default:
-				throw new Exception('The level "' . $level . '" is invalid. Valid levels include "whitespace", "simple" and "advanced"');
-				break;
+			$reference = $this->reference($reference);
+		}
+		else
+		{
+			throw new Exception('Supplied reference does not exist');
 		}
 
 		return $reference;

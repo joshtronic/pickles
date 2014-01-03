@@ -32,6 +32,17 @@ CSS;
 
 		file_put_contents($public_path . 'css/alternate.css', $css);
 
+		$js = <<<JS
+function foo()
+{
+	alert('bar');
+}
+
+console.log('stuff');
+JS;
+
+		file_put_contents($public_path . 'js/script.js', $js);
+
 		chdir($public_path);
 	}
 
@@ -161,29 +172,30 @@ CSS;
 		$this->assertRegExp('/^\/css\/stylesheet\.min\.\d{10}\.css$/', $this->dynamic->css('/css/stylesheet.scss'));
 	}
 
-	public function testJSWrongExtension()
+	/**
+	 * @expectedException        Exception
+	 * @expectedExceptionMessage Filename must have an extension (e.g. /path/to/file.js)
+	 */
+	public function testJSMissingExtension()
 	{
-
+		$this->dynamic->js('/js/invalid');
 	}
 
-	public function testJSUnableToMinify()
+	/**
+	 * @expectedException        Exception
+	 * @expectedExceptionMessage Supplied reference does not exist
+	 */
+	public function testJSReferenceDoesNotExist()
 	{
-
-	}
-
-	public function testJSDoesNotExist()
-	{
-
-	}
-
-	public function testJSInvalidLevel()
-	{
-
+		$this->dynamic->js('/js/missing.js');
 	}
 
 	public function testJS()
 	{
+		$config = Config::getInstance();
+		$config->data['pickles']['minify'] = true;
 
+		$this->assertRegExp('/^\/js\/script\.min\.\d{10}\.js$/', $this->dynamic->js('/js/script.js'));
 	}
 }
 
