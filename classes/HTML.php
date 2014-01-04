@@ -132,19 +132,13 @@ class HTML extends Object
 					$html .= ' ' . $attribute . '="' . str_replace('"', '\"', $value) . '"';
 				}
 			}
-			else
-			{
-				throw new Exception('Attributes must be an array.');
-			}
 		}
 
-		if ($contents || !in_array($element, $this->self_closing))
+		$html .= '>';
+
+		if (!in_array($element, $this->self_closing))
 		{
-			$html .= '>' . $contents . '</' . $element . '>';
-		}
-		else
-		{
-			$html .= ' />';
+			$html .= $contents . '</' . $element . '>';
 		}
 
 		return $html;
