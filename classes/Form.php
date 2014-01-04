@@ -79,7 +79,7 @@ class Form extends Object
 			$additional .= ' class="' . $classes . '"';
 		}
 
-		return '<input type="' . $type . '" name="' . $name . '" id="' . $name . '"' . $additional . ' />';
+		return '<input type="' . $type . '" name="' . $name . '" id="' . $name . '"' . $additional . '>';
 	}
 
 	// }}}
@@ -251,11 +251,6 @@ class Form extends Object
 	}
 
 	// }}}
-	// {{{ Checkboxes
-
-	// @todo
-
-	// }}}
 	// {{{ Radio Button
 
 	/**
@@ -276,12 +271,7 @@ class Form extends Object
 	}
 
 	// }}}
-	// {{{ Radio Buttons
-
-	// @todo
-
-	// }}}
-	// {{{ Text Area
+	// {{{ Textarea
 
 	/**
 	 * Textarea
@@ -567,7 +557,7 @@ class Form extends Object
 		{
 			$options  = $part . '_options';
 			$selected = 'selected_' . $part;
-			$html   .= ' ' . $this->select($name . '[' . $part . ']', $$options, $$selected, $classes, $additional);
+			$html    .= ($html == '' ? '' : ' ') . $this->select($name . '[' . $part . ']', $$options, $$selected, $classes, $additional);
 		}
 
 		return $html;
@@ -670,7 +660,7 @@ class Form extends Object
 		foreach ($parts as $part => $size)
 		{
 			$html .= ($html != '' ? ' ' : '');
-			$html .= '<input type="input" name="' . $name . '[' . $part . ']" id="' . $name . '[' . $part . ']" value="' . $value[$part] . '" minlength="' . $size . '" maxlength="' . $size . '"' . $additional . ' />';
+			$html .= '<input type="input" name="' . $name . '[' . $part . ']" id="' . $name . '[' . $part . ']" value="' . $value[$part] . '" minlength="' . $size . '" maxlength="' . $size . '"' . $additional . '>';
 		}
 
 		return $html;
