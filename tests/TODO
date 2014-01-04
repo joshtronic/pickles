@@ -1,9 +1,9 @@
-Cache
+Write tests for Profiler (it's all stubbed out though)
+
 Config
 Database
 Model
 Module
-Profiler
 Security
 Session
 Validate
