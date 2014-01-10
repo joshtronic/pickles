@@ -29,17 +29,11 @@ As developers we make demands that our end users use modern day browsers while w
 
 ### Optional Software
 
-#### Datastores
-
 * MySQL with PDO and PDO_MYSQL drivers
 * PostgreSQL with PDO and PDO_PGSQL drivers
 * SQLite 3 with PDO and PDO_SQLITE drivers
 * Memcached with the Memcache module
-
-#### CSS Pre-processors
-
-* node, npm & lessc to compile LESS files
-* sass to compile SASS files
+* composer is you want to compile LESS, SCSS or JS also necessary if you want to run the unit tests
 
 ## Installation
 
@@ -49,3 +43,4 @@ Installation is quite simple as there is no installer to run, and all server con
 2. Place the code anywhere you’d like (that’s at least 2 directories up from the root of your website). I recommend using `/usr/share/pickles`
 3. A starter site can be obtained from http://github.com/joshtronic/pickles-starter. It has everything you need to get a site up and running.
 4. At this point you should have a very rudimentary site up and running.
+5. Run `composer update`
