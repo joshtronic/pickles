@@ -6,6 +6,7 @@
 .*
 !.gitignore
 !.travis.yml
+!.coveralls.yml
 *~
 
 # Global/OSX.gitignore #
