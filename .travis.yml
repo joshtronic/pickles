@@ -13,8 +13,8 @@ install:
 
 script:
   - mkdir -p vendors/composer/build/logs
-  - phpunit --coverage-clover vendors/composer/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
+  - phpunit --coverage-clover /home/travis/build/joshtronic/pickles/vendors/composer/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
 
 after_script:
   - tail /home/travis/build/joshtronic/pickles/vendors/composer/build/logs/clover.xml
-  - php vendors/composer/bin/coveralls --config /home/travis/build/joshtronic/pickles.coveralls.yml -v
+  - php vendors/composer/bin/coveralls --config /home/travis/build/joshtronic/pickles/.coveralls.yml -v
