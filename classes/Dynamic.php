@@ -237,7 +237,7 @@ class Dynamic extends Object
 
 			if ($this->config->pickles['minify'] === true)
 			{
-				require_once $this->config->pickles['path'] . '.composer/autoload.php';
+				require_once $this->config->pickles['path'] . 'vendors/composer/autoload.php';
 
 				$compiler = new Devize\ClosureCompiler\ClosureCompiler;
 				$compiler->setSourceBaseDir(dirname($original_filename));
