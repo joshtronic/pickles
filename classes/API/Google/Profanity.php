@@ -18,7 +18,7 @@
 /**
  * Google Profanity API Interface
  */
-class API_Google_Profanity extends API_Common
+class API_Google_Profanity
 {
 	/**
 	 * Check

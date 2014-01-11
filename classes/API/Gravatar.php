@@ -20,7 +20,7 @@
  *
  * @link http://en.gravatar.com/site/implement/
  */
-class API_Gravatar extends API_Common
+class API_Gravatar
 {
 	/**
 	 * Hash

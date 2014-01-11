@@ -20,7 +20,7 @@
  *
  * @link http://areyouahuman.com
  */
-class API_AYAH extends API_Common
+class API_AYAH
 {
 	public static function getHTML()
 	{
