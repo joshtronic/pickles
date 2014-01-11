@@ -1,2 +1,2 @@
 service_name: travis-ci
-src_dir: ../../classes
+src_dir: classes
