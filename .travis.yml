@@ -12,8 +12,8 @@ install:
   - composer install
 
 script:
-  - mkdir -p build/logs
-  - phpunit --coverage-clover build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
+  - mkdir -p .composer/build/logs
+  - phpunit --coverage-clover .composer/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
 
 after_script:
   - php .composer/bin/coveralls -v
