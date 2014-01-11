@@ -1,2 +1,2 @@
 service_name: travis-ci
-src_dir: /home/travis/build/joshtronic/pickles/classes
+src_dir: ../classes
