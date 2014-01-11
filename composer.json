@@ -1,6 +1,6 @@
 {
 	"config": {
-		"vendor-dir": ".composer"
+		"vendor-dir": "vendors/composer"
 	},
 	"require": {
 		"devize/closure-compiler": "@dev",
