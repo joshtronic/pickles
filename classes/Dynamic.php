@@ -155,7 +155,7 @@ class Dynamic extends Object
 			{
 				$compiled_filename = str_replace('.min', '', $minified_filename);
 
-				require_once $this->config->pickles['path'] . '.composer/autoload.php';
+				require_once $this->config->pickles['path'] . 'vendors/composer/autoload.php';
 
 				if ($less)
 				{

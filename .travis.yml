@@ -16,4 +16,4 @@ script:
   - phpunit --coverage-clover vendors/composer/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
 
 after_script:
-  - php .composer/bin/coveralls --config .coveralls.yml -v
+  - php vendors/composer/bin/coveralls --config .coveralls.yml -v
