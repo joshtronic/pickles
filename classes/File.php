@@ -61,9 +61,13 @@ class File
 					}
 				}
 			}
-		}
 
-		rmdir($directory);
+			rmdir($directory);
+		}
+		else
+		{
+			unlink($directory);
+		}
 	}
 }
 
