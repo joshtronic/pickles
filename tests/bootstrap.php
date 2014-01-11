@@ -3,7 +3,7 @@
 ob_start();
 session_start();
 
-require_once '.composer/autoload.php';
+require_once 'vendors/composer/autoload.php';
 
 $root = org\bovigo\vfs\vfsStream::setup('site');
 
