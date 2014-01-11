@@ -11,6 +11,8 @@ matrix:
 install:
   - composer install
 
+before_script: pwd
+
 script:
   - mkdir -p vendors/composer/build/logs
   - phpunit --coverage-clover vendors/composer/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
