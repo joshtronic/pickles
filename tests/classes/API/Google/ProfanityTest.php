@@ -29,23 +29,13 @@ class API_Google_ProfanityTest extends PHPUnit_Framework_TestCase
 	 * @expectedException        Exception
 	 * @expectedExceptionMessage Invalid response from API.
 	 */
-	public function testNullResponse()
+	public function testInvalidResponse()
 	{
 		$file = SITE_PATH . 'null-';
 
 		file_put_contents($file . 'test', null);
 
 		API_Google_Profanity::check('test', $file);
-	}
-
-	public function testMissingResponse()
-	{
-
-	}
-
-	public function testInvalidResponse()
-	{
-
 	}
 }
 
