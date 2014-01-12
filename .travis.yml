@@ -9,17 +9,16 @@ matrix:
     - php: hhvm
 
 install:
-  - ls -al /etc/
-  - cat /etc/php.ini
   - composer install
   - cd vendors/php-test-helpers
   - phpize
   - ./configure --enable-test-helpers
   - make
   - sudo make install
-  - echo "zend_extension=test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - cat /etc/php.ini
   - cd ../../
+
+before_script:
+  - echo "zend_extension=test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 script:
   - mkdir -p vendors/build/logs
