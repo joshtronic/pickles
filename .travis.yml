@@ -10,6 +10,8 @@ matrix:
 
 install:
   - composer install
+  - pear channel-discover pear.phpunit.de
+  - pecl install phpunit/test_helpers
 
 script:
   - mkdir -p vendors/build/logs
