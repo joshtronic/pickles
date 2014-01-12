@@ -27,11 +27,12 @@ class API_Google_Profanity
 	 *
 	 * @usage API_Google_Profanity::check('fuck'); // returns true
 	 * @param string $word word to check
+	 * @param string $endpoint the endpoint to call (helps testing)
 	 * @return boolean whether or not the word is profanity
 	 */
-	public static function check($word)
+	public static function check($word, $endpoint = 'http://www.wdyl.com/profanity?q=')
 	{
-		$response = json_decode(file_get_contents('http://www.wdyl.com/profanity?q=' . $word), true);
+		$response = json_decode(file_get_contents($endpoint . $word), true);
 
 		if ($response == null || !isset($response['response']) || !in_array($response['response'], array('true', 'false')))
 		{

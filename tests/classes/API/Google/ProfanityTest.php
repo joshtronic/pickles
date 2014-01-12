@@ -24,6 +24,29 @@ class API_Google_ProfanityTest extends PHPUnit_Framework_TestCase
 			['cuntface',   false], // Unsure why not...
 		];
 	}
+
+	/**
+	 * @expectedException        Exception
+	 * @expectedExceptionMessage Invalid response from API.
+	 */
+	public function testNullResponse()
+	{
+		$file = SITE_PATH . 'null-';
+
+		file_put_contents($file . 'test', null);
+
+		API_Google_Profanity::check('test', $file);
+	}
+
+	public function testMissingResponse()
+	{
+
+	}
+
+	public function testInvalidResponse()
+	{
+
+	}
 }
 
 ?>
