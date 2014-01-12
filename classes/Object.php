@@ -123,6 +123,7 @@ class Object
 	public static function getInstance($class = false)
 	{
 		// In < 5.3 arguments must match in child, hence defaulting $class
+		// @todo Remove this, as we're no longer supporting 5.3
 		if ($class == false)
 		{
 			return false;

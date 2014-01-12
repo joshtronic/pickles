@@ -96,7 +96,7 @@ class Browser extends Object
 	 */
 	public static function goHome()
 	{
-		Browser::redirect('/');
+		return Browser::redirect('/');
 	}
 
 	/**
@@ -134,15 +134,7 @@ class Browser extends Object
 		}
 
 		header('Location: ' . $destination);
-
-		if (defined('UNIT_TESTING'))
-		{
-			throw new Exception();
-		}
-		else
-		{
-			exit;
-		}
+		exit;
 	}
 
 	/**
@@ -197,7 +189,6 @@ class Browser extends Object
 			case 102: $message = '102 Processing';                           break;
 			// }}}
 			// {{{ 2xx Success
-			case 200: $message = '200 OK';                                   break;
 			case 201: $message = '201 Created';                              break;
 			case 202: $message = '202 Accepted';                             break;
 			case 203: $message = '203 Non-Authoritative Information';        break;

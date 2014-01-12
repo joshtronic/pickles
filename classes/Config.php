@@ -53,7 +53,11 @@ class Config extends Object
 		if (file_exists($filename) && is_file($filename) && is_readable($filename))
 		{
 			require_once $filename;
+		}
 
+		// Checks that we have the config array
+		if (isset($config))
+		{
 			// Determines the environment
 			if (isset($config['environment']))
 			{

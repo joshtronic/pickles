@@ -68,7 +68,10 @@ JS;
 
 	public function testReference()
 	{
-		$this->assertRegExp('/^\/images\/image\.\d{10}\.png$/', $this->dynamic->reference('/images/image.png'));
+		$this->assertRegExp(
+			'/^\/images\/image\.\d{10}\.png$/',
+			$this->dynamic->reference('/images/image.png'
+		));
 	}
 
 	/**
@@ -106,6 +109,14 @@ JS;
 		$this->dynamic->reference('../images/relative.png');
 	}
 
+	public function testReferenceWithQueryString()
+	{
+		$this->assertRegExp(
+			'/^\/images\/image\.\d{10}\.png\?foo=bar$/',
+			$this->dynamic->reference('/images/image.png?foo=bar'
+		));
+	}
+
 	/**
 	 * @expectedException        Exception
 	 * @expectedExceptionMessage Filename must have an extension (e.g. /path/to/file.css)
@@ -121,6 +132,18 @@ JS;
 		$config->data['pickles']['minify'] = false;
 
 		$this->assertRegExp('/^\/css\/stylesheet\.\d{10}\.css$/', $this->dynamic->css('/css/stylesheet.css'));
+	}
+
+	public function testCSSWithoutMinifyFileMinifiedFileExists()
+	{
+		$config = Config::getInstance();
+		$config->data['pickles']['minify'] = false;
+
+		touch('/tmp/pickles-fs/public/css/stylesheet.min.css');
+
+		$this->assertRegExp('/^\/css\/stylesheet\.min\.\d{10}\.css$/', $this->dynamic->css('/css/stylesheet.css'));
+
+		unlink('/tmp/pickles-fs/public/css/stylesheet.min.css');
 	}
 
 	public function testCSSWithMinify()
@@ -196,6 +219,18 @@ JS;
 		$config->data['pickles']['minify'] = true;
 
 		$this->assertRegExp('/^\/js\/script\.min\.\d{10}\.js$/', $this->dynamic->js('/js/script.js'));
+	}
+
+	public function testJSWithoutMinifyFileMinifiedFileExists()
+	{
+		$config = Config::getInstance();
+		$config->data['pickles']['minify'] = false;
+
+		touch('/tmp/pickles-fs/public/js/script.min.css');
+
+		$this->assertRegExp('/^\/js\/script\.min\.\d{10}\.js$/', $this->dynamic->js('/js/script.js'));
+
+		unlink('/tmp/pickles-fs/public/js/script.min.css');
 	}
 }
 

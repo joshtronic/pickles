@@ -37,15 +37,25 @@ class Number
 	 */
 	public static function ordinalIndicator($number, $superscript = false)
 	{
-		$suffix = 'th';
-
 		if (!in_array(($number % 100), array(11, 12, 13)))
 		{
 			switch ($number % 10)
 			{
-				case 1: $suffix = 'st'; break;
-				case 2: $suffix = 'nd'; break;
-				case 3: $suffix = 'rd'; break;
+				case 1:
+					$suffix = 'st';
+					break;
+
+				case 2:
+					$suffix = 'nd';
+					break;
+
+				case 3:
+					$suffix = 'rd';
+					break;
+
+				default:
+					$suffix = 'th';
+					break;
 			}
 		}
 

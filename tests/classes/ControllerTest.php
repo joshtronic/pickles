@@ -100,7 +100,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
 		file_put_contents(SITE_MODULE_PATH . 'notauth.php', $module);
 
-		new Controller();
+		@new Controller();
 
 		$this->assertTrue(in_array('Location: http://testsite.com/login', xdebug_get_headers()));
 	}

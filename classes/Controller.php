@@ -220,6 +220,11 @@ class Controller extends Object
 
 						// Redirect to login page
 						Browser::redirect('/login');
+
+						// header() updates are a bitch to test, returning
+						// halts execution so we don't have any output in our
+						// testing results.
+						return false;
 					}
 				}
 			}

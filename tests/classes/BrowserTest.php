@@ -13,17 +13,14 @@ class BrowserTest extends  PHPUnit_Framework_TestCase
 		$this->assertEquals('bar', Browser::get('foo'));
 	}
 
+	public function testMissingVariable()
+	{
+		$this->assertFalse(Browser::get('missing'));
+	}
+
 	public function testGoHome()
 	{
-		try
-		{
-			Browser::goHome();
-		}
-		catch (Exception $e)
-		{
-
-		}
-
+		Browser::goHome();
 		$this->assertTrue(in_array('Location: http://testsite.com/', xdebug_get_headers()));
 	}
 
@@ -34,7 +31,7 @@ class BrowserTest extends  PHPUnit_Framework_TestCase
 		$this->assertTrue(Browser::isMobile());
 	}
 
-	public function testRedirect()
+	public function testIsNotMobile()
 	{
 		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.73.11 (KHTML, like Gecko) Version/7.0.1 Safari/537.73.11';
 

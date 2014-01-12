@@ -22,7 +22,7 @@
  */
 class HTML extends Object
 {
-	private $self_closing = array('br', 'hr', 'img', 'input', 'link', 'meta');
+	private $self_closing = ['br', 'hr', 'img', 'input', 'link', 'meta'];
 
 	public function __call($method, $arguments)
 	{
@@ -58,7 +58,7 @@ class HTML extends Object
 			}
 			else
 			{
-				$attributes = array('type' => $type);
+				$attributes = ['type' => $type];
 			}
 		}
 
@@ -66,13 +66,14 @@ class HTML extends Object
 		{
 			if (isset($attributes['name']))
 			{
-				$label = $this->label(array('for' => $attributes['name']), $attributes['label']);
-				unset($attributes['label']);
+				$label = $this->label(['for' => $attributes['name']], $attributes['label']);
 			}
 			else
 			{
 				$label = $this->label($attributes['label']);
 			}
+
+			unset($attributes['label']);
 
 			return $label . $this->$method($attributes, $contents);
 		}

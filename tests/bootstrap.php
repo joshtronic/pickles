@@ -1,7 +1,9 @@
 <?php
 
+set_exit_overload(function(){ return false; });
+
 ob_start();
-session_start();
+@session_start();
 
 require_once 'vendors/composer/autoload.php';
 
@@ -11,8 +13,6 @@ if (!defined('SITE_PATH'))
 {
 	define('SECURITY_LEVEL_USER', 10);
 	define('SITE_PATH', org\bovigo\vfs\vfsStream::url('site/'));
-	// This isn't ideal but it helps a ton when testing the Browser class.
-	define('UNIT_TESTING', true);
 }
 
 require_once 'pickles.php';

@@ -2,10 +2,12 @@
 
 class LogTest extends PHPUnit_Framework_TestCase
 {
-	public static function setUpBeforeClass()
+	private $config;
+
+	public function setUp()
 	{
-		$config = Config::getInstance();
-		$config->data['pickles']['logging'] = true;
+		$this->config = Config::getInstance();
+		$this->config->data['pickles']['logging'] = true;
 	}
 
 	public static function tearDownAfterClass()
@@ -88,6 +90,13 @@ class LogTest extends PHPUnit_Framework_TestCase
 		$line = $data[count($data) - 1];
 
 		$this->assertRegExp('/^\d{2}:\d{2}:\d{2} .+ query$/', $line);
+	}
+
+	public function testLoggingDisabled()
+	{
+		$this->config->data['pickles']['logging'] = false;
+
+		$this->assertFalse(Log::error('should return false'));
 	}
 }
 

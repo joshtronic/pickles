@@ -94,6 +94,16 @@ class HTMLTest extends PHPUnit_Framework_TestCase
 			$this->html->div('string', ['class' => 'fancy'])
 		);
 	}
+
+	public function testLabelWithInputWithoutName()
+	{
+		$this->assertEquals(
+			'<label>Label</label><input type="text">',
+			$this->html->input([
+				'label' => 'Label',
+			])
+		);
+	}
 }
 
 ?>

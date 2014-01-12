@@ -15,6 +15,11 @@ class ObjectTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('Cache', PHPUnit_Framework_Assert::readAttribute($object, 'cache'));
 	}
+
+	public function testGetInstanceWithoutClass()
+	{
+		$this->assertFalse(Object::getInstance());
+	}
 }
 
 ?>

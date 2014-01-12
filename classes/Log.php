@@ -122,33 +122,26 @@ class Log
 		{
 			$log_path = LOG_PATH . date('Y/m/d/', ($time == false ? time() : $time));
 
-			try
+			if (!file_exists($log_path))
 			{
-				if (!file_exists($log_path))
-				{
-					mkdir($log_path, 0755, true);
-				}
-
-				$log_file = $log_path . $log_type . '.log';
-
-				$message .= "\n";
-
-				if ($format == true)
-				{
-					$backtrace = debug_backtrace();
-					rsort($backtrace);
-					$frame = $backtrace[strpos($backtrace[0]['file'], 'index.php') === false ? 0 : 1];
-
-					return file_put_contents($log_file, date('H:i:s') . ' ' . str_replace(getcwd(), '', $frame['file']) . ':' . $frame['line'] . ' ' . $message, FILE_APPEND);
-				}
-				else
-				{
-					return file_put_contents($log_file, $message, FILE_APPEND);
-				}
+				mkdir($log_path, 0755, true);
 			}
-			catch (ErrorException $exception)
+
+			$log_file = $log_path . $log_type . '.log';
+
+			$message .= "\n";
+
+			if ($format == true)
 			{
-				return false;
+				$backtrace = debug_backtrace();
+				rsort($backtrace);
+				$frame = $backtrace[strpos($backtrace[0]['file'], 'index.php') === false ? 0 : 1];
+
+				return file_put_contents($log_file, date('H:i:s') . ' ' . str_replace(getcwd(), '', $frame['file']) . ':' . $frame['line'] . ' ' . $message, FILE_APPEND);
+			}
+			else
+			{
+				return file_put_contents($log_file, $message, FILE_APPEND);
 			}
 		}
 
