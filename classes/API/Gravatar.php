@@ -69,7 +69,7 @@ class API_Gravatar
 		}
 		elseif (!in_array($rating, array('g', 'pg', 'r', 'x')))
 		{
-			throw new Exception('Invalid rating perameter, expecting g, pg, r or x.');
+			throw new Exception('Invalid rating parameter, expecting g, pg, r or x.');
 		}
 		else
 		{

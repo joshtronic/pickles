@@ -47,11 +47,19 @@ class API_Gravatar_Test extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException        Exception
-	 * @expectedExceptionMessage Invalid rating perameter, expecting g, pg, r or x.
+	 * @expectedExceptionMessage Invalid rating parameter, expecting g, pg, r or x.
 	 */
 	public function testImgInvalidRating()
 	{
 		API_Gravatar::img('foo@bar.com', 80, 'gravatar', 'sexytime');
+	}
+
+	public function testURLDefault()
+	{
+		$this->assertEquals(
+			'<img src="http://www.gravatar.com/avatar/f3ada405ce890b6f8204094deb12d8a8?s=80&d=http%253A%252F%252Fexample.org%252Ficon&r=g">',
+			API_Gravatar::img('foo@bar.com', 80, 'http://example.org/icon')
+		);
 	}
 
 	public function testImg()
