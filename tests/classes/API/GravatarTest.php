@@ -85,6 +85,14 @@ class API_Gravatar_Test extends PHPUnit_Framework_TestCase
 			API_Gravatar::img('foo@bar.com')
 		);
 	}
+
+	public function testImgWithParameters()
+	{
+		$this->assertEquals(
+			'<img src="http://www.gravatar.com/avatar/f3ada405ce890b6f8204094deb12d8a8?s=80&d=&r=g" class="gravatar">',
+			API_Gravatar::img('foo@bar.com', 80, 'gravatar', 'g', false, false, ['class' => 'gravatar'])
+		);
+	}
 }
 
 ?>
