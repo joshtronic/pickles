@@ -9,19 +9,21 @@ matrix:
     - php: hhvm
 
 install:
+  - ls -al ~/.phpenv/versions/$(phpenv version-name)/etc/
+  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer install
   - cd vendors/php-test-helpers
   - phpize
   - ./configure --enable-test-helpers
   - make
   - sudo make install
+  - echo "zend_extension=test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - cd ../../
 
 before_script:
-  - echo "zend_extension=test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - mkdir -p vendors/build/logs
 
 script:
-  - mkdir -p vendors/build/logs
   - phpunit --colors --coverage-clover /home/travis/build/joshtronic/pickles/vendors/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
 
 after_script:
