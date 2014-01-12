@@ -327,7 +327,7 @@ class Form extends Object
 			$additional .= ' class="' . $classes . '"';
 		}
 
-		return '<select id="' . $name . '" name="' . $name . '" class="' . $classes . '"' . $additional . '>' . $this->options($options, $selected) . '</select>';
+		return '<select id="' . $name . '" name="' . $name . '"' . $additional . '>' . $this->options($options, $selected) . '</select>';
 	}
 
 	// }}}
@@ -629,6 +629,7 @@ class Form extends Object
 		}
 		else
 		{
+			$value = str_replace('-', '', $value);
 			$value = array(
 				'area_code'   => substr($value, 0, 3),
 				'prefix'      => substr($value, 3, 3),

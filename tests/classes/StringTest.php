@@ -69,6 +69,11 @@ class StringTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(preg_match('/[a-z0-9]/', String::random(32, false, false)), 0);
 	}
 
+	public function testRandomSimilarFalse()
+	{
+		$this->assertRegExp('/[a-hj-np-z2-9]{8}/', String::random(8, true, true, false));
+	}
+
 	/**
 	 * @dataProvider providerTruncate
 	 */

@@ -17,6 +17,16 @@ class TimeTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(-18, Time::age(date('Y-m-d', strtotime('18 years'))));
 	}
 
+	public function testAgeWrongFormat()
+	{
+		$this->assertEquals(17, Time::age(date('Ymd', strtotime('December 31st -18 years'))));
+	}
+
+	public function testAgoJustNow()
+	{
+		$this->assertEquals('just now', Time::ago(Time::timestamp()));
+	}
+
 	public function testAgoPastTimeSeconds()
 	{
 		$this->assertEquals('seconds ago', Time::ago(strtotime('-30 seconds')));

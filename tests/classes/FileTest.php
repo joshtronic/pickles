@@ -2,14 +2,29 @@
 
 class FileTest extends PHPUnit_Framework_TestCase
 {
+	public static function setUpBeforeClass()
+	{
+		// Using actual filesystem because you can't chdir with vfs://
+		$directory = '/tmp/pickles-fs/filetest/test/test';
+
+		if (!file_exists($directory))
+		{
+			mkdir($directory, 0777, true);
+		}
+	}
+
+	public static function tearDownAfterClass()
+	{
+		File::removeDirectory('/tmp/pickles-fs');
+	}
+
 	public function testRemoveDirectory()
 	{
-		$directory = SITE_PATH . 'test/test/test/';
+		$directory = '/tmp/pickles-fs/filetest/';
 
-		mkdir($directory, 0777, true);
-		touch(SITE_PATH . 'test/ing');
-		touch(SITE_PATH . 'test/test/ing');
-		touch(SITE_PATH . 'test/test/test/ing');
+		touch($directory . 'ing');
+		touch($directory . 'test/ing');
+		touch($directory . 'test/test/ing');
 
 		File::removeDirectory($directory);
 
