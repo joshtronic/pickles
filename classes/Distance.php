@@ -39,7 +39,7 @@ class Distance
 	{
 		$pieces = explode('to', strtolower($method));
 
-		if (count($pieces) == 2)
+		if (count($pieces) == 2 && $pieces[1])
 		{
 			return Distance::convertUnit($arguments[0], $pieces[0], $pieces[1]);
 		}

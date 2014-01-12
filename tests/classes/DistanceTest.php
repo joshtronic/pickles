@@ -66,6 +66,11 @@ class DistanceTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(1765745.8326334, Distance::calculateDistance(27.947222, -82.458611, 40.67, -73.94, 'yards'), '', 0.2);
 	}
+
+	public function testNotEnoughUnits()
+	{
+		$this->assertFalse(Distance::milesTo(123));
+	}
 }
 
 ?>
