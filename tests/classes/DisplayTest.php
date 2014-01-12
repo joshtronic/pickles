@@ -62,35 +62,6 @@ class DisplayTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->child_html, $this->display->render());
 	}
 
-	public function testRenderTemplate()
-	{
-		$child_template = SITE_TEMPLATE_PATH . 'test.phtml';
-		file_put_contents($child_template, $this->child_html);
-
-		// Vim syntax highlighting borks unless ----v
-		$child = '<?php require $this->template; ?' . '>' . "\n";
-
-		$html = <<<HTML
-<!doctype html>
-<html>
-	<body>
-		<!-- BuySellAds Unstripped Comment -->
-		<h1>parent template</h1>
-		{$child}
-	</body>
-</html>
-HTML;
-
-		$parent_template = $this->shared_templates . 'index.phtml';
-		file_put_contents($parent_template, $html);
-
-		$html = str_replace($child, $this->child_html, $html);
-		$html = preg_replace(['/^[\s]+/m', '/<!--(?:(?!BuySellAds).)+-->/U'], '', $html);
-
-		$this->display->templates = [$parent_template, $child_template];
-		$this->assertEquals($html, $this->display->render());
-	}
-
 	public function testRenderJSON()
 	{
 		$this->assertEquals(

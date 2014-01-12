@@ -161,7 +161,7 @@ class Controller extends Object
 						{
 							if (is_array($module_security[$security_level_key]))
 							{
-								array_merge($module_security_levels, $module_security[$security_level_key]);
+								$module_security_levels = array_merge($module_security_levels, $module_security[$security_level_key]);
 							}
 							else
 							{
@@ -180,7 +180,7 @@ class Controller extends Object
 					{
 						// @todo Thinking of removing this?
 						case 'BETWEEN':
-							if ($security_level_count >= 2)
+							if ($security_level_count == 2)
 							{
 								$is_authenticated = Security::betweenLevel($module_security_levels[0], array_pop($module_security_levels));
 							}
@@ -221,10 +221,8 @@ class Controller extends Object
 						// Redirect to login page
 						Browser::redirect('/login');
 
-						// header() updates are a bitch to test, returning
-						// halts execution so we don't have any output in our
-						// testing results.
-						return false;
+						// Resolves testing error due to undefined $output
+						$output = '';
 					}
 				}
 			}

@@ -10,6 +10,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 		$this->config->data['pickles']['disabled']    = false;
 		$this->config->data['pickles']['profiler']    = false;
 		$this->config->data['security']['levels'][10] = 'USER';
+		$this->config->data['security']['levels'][20] = 'ADMIN';
 
 		setUpRequest('home');
 
@@ -100,7 +101,90 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
 		file_put_contents(SITE_MODULE_PATH . 'notauth.php', $module);
 
-		@new Controller();
+		new Controller();
+
+		// Compensates for an empty template due to exit() being skipped
+		$this->expectOutputString('[]');
+
+		$this->assertTrue(in_array('Location: http://testsite.com/login', xdebug_get_headers()));
+	}
+
+	public function testSecurityArray()
+	{
+		setUpRequest('securityarray');
+
+		$module = '<?php class securityarray extends Module { public $security = [SECURITY_LEVEL_USER, SECURITY_LEVEL_ADMIN]; } ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'securityarray.php', $module);
+
+		new Controller();
+
+		// Compensates for an empty template due to exit() being skipped
+		$this->expectOutputString('[]');
+
+		$this->assertTrue(in_array('Location: http://testsite.com/login', xdebug_get_headers()));
+	}
+
+	public function testSecurityArrayTypeString()
+	{
+		setUpRequest('securityarraytypestring');
+
+		$module = '<?php class securityarraytypestring extends Module { public $security = ["type" => "IS", "level" => SECURITY_LEVEL_USER]; } ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'securityarraytypestring.php', $module);
+
+		new Controller();
+
+		// Compensates for an empty template due to exit() being skipped
+		$this->expectOutputString('[]');
+
+		$this->assertTrue(in_array('Location: http://testsite.com/login', xdebug_get_headers()));
+	}
+
+	public function testSecurityArrayTypeArray()
+	{
+		setUpRequest('securityarraytypearray');
+
+		$module = '<?php class securityarraytypearray extends Module { public $security = ["type" => "IS", "level" => [SECURITY_LEVEL_USER, SECURITY_LEVEL_ADMIN]]; } ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'securityarraytypearray.php', $module);
+
+		new Controller();
+
+		// Compensates for an empty template due to exit() being skipped
+		$this->expectOutputString('[]');
+
+		$this->assertTrue(in_array('Location: http://testsite.com/login', xdebug_get_headers()));
+	}
+
+	public function testSecurityArrayTypeBetween()
+	{
+		setUpRequest('securityarraytypebetween');
+
+		$module = '<?php class securityarraytypebetween extends Module { public $security = ["type" => "BETWEEN", "levels" => [SECURITY_LEVEL_USER, SECURITY_LEVEL_ADMIN]]; } ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'securityarraytypebetween.php', $module);
+
+		new Controller();
+
+		// Compensates for an empty template due to exit() being skipped
+		$this->expectOutputString('[]');
+
+		$this->assertTrue(in_array('Location: http://testsite.com/login', xdebug_get_headers()));
+	}
+
+	public function testSecurityArrayTypeHas()
+	{
+		setUpRequest('securityarraytypehas');
+
+		$module = '<?php class securityarraytypehas extends Module { public $security = ["type" => "HAS", "level" => SECURITY_LEVEL_USER]; } ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'securityarraytypehas.php', $module);
+
+		new Controller();
+
+		// Compensates for an empty template due to exit() being skipped
+		$this->expectOutputString('[]');
 
 		$this->assertTrue(in_array('Location: http://testsite.com/login', xdebug_get_headers()));
 	}
@@ -153,16 +237,32 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 		$this->expectOutputString('{"user":"me"}');
 	}
 
-	public function testBadRequestMethod()
+	public function testValidRequestMethod()
 	{
-		setUpRequest('requestmethod');
+		setUpRequest('validrequestmethod');
 
-		$module = '<?php class requestmethod extends Module { '
+		$module = '<?php class validrequestmethod extends Module { '
+				. 'public $method = "GET";'
+				. 'public function __default() { return ["foo" => "bar"]; }'
+				. '} ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'validrequestmethod.php', $module);
+
+		new Controller();
+
+		$this->expectOutputString('{"foo":"bar"}');
+	}
+
+	public function testInvalidRequestMethod()
+	{
+		setUpRequest('invalidrequestmethod');
+
+		$module = '<?php class invalidrequestmethod extends Module { '
 				. 'public $method = "POST";'
 				. 'public function __default() { return ["foo" => "bar"]; }'
 				. '} ?>';
 
-		file_put_contents(SITE_MODULE_PATH . 'requestmethod.php', $module);
+		file_put_contents(SITE_MODULE_PATH . 'invalidrequestmethod.php', $module);
 
 		new Controller();
 
@@ -214,6 +314,45 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 		$this->expectOutputRegex('/id="pickles-profiler"/');
 
 		new Controller();
+	}
+
+	public function testTwoValidTemplates()
+	{
+		$this->config->data['pickles']['profiler'] = true;
+
+		setUpRequest('validtemplates');
+
+		$module = '<?php class validtemplates extends Module { } ?>';
+
+		file_put_contents(SITE_MODULE_PATH . 'validtemplates.php', $module);
+
+		$child_template = SITE_TEMPLATE_PATH . 'validtemplates.phtml';
+		file_put_contents($child_template, '<div>child template</div>');
+
+		// Vim syntax highlighting borks unless ----v
+		$child = '<?php require $this->template; ?' . '>' . "\n";
+
+		$html = <<<HTML
+<!doctype html>
+<html>
+	<body>
+		<h1>parent template</h1>
+		{$child}
+	</body>
+</html>
+HTML;
+
+		file_put_contents(SITE_TEMPLATE_PATH . '__shared/index.phtml', $html);
+
+		new Controller();
+
+		$this->expectOutputRegex('/^<!doctype html>
+<html>
+<body>
+<h1>parent template<\/h1>
+<div>child template<\/div>
+<\/body>
+<\/html>.+<style>/');
 	}
 }
 
