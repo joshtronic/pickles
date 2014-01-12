@@ -16,6 +16,7 @@ install:
   - make
   - sudo make install
   - echo "extension=test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - cd ../../
 
 script:
   - mkdir -p vendors/build/logs
