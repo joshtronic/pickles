@@ -15,7 +15,7 @@ install:
   - ./configure --enable-test-helpers
   - make
   - sudo make install
-  - echo "extension=test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "zend_extension=test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - cd ../../
 
 script:
