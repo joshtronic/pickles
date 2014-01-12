@@ -10,7 +10,7 @@ matrix:
 
 install:
   - composer install
-  - git clone git@github.com:php-test-helpers/php-test-helpers.git
+  - yes | git clone git@github.com:php-test-helpers/php-test-helpers.git
   - cd php-test-helpers
   - phpize
   - ./configure --enable-test-helpers
