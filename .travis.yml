@@ -10,7 +10,6 @@ matrix:
 
 install:
   - ls -al ~/.phpenv/versions/$(phpenv version-name)/etc/
-  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer install
   - cd vendors/php-test-helpers
   - phpize
@@ -21,6 +20,7 @@ install:
   - cd ../../
 
 before_script:
+  - phpenv config-add php.ini
   - mkdir -p vendors/build/logs
 
 script:
