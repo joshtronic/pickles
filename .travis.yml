@@ -9,7 +9,6 @@ matrix:
     - php: hhvm
 
 install:
-  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   - composer install
   - cd vendors/php-test-helpers
   - phpize
@@ -17,7 +16,6 @@ install:
   - make
   - sudo make install
   - echo "zend_extension=test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
-  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   - cd ../../
 
 before_script:

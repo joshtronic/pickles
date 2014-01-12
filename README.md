@@ -35,7 +35,7 @@ As developers we make demands that our end users use modern day browsers while w
 * PostgreSQL with PDO and PDO_PGSQL drivers
 * SQLite 3 with PDO and PDO_SQLITE drivers
 * Memcached with the Memcache module
-* composer is you want to compile LESS, SCSS or JS also necessary if you want to run the unit tests
+* composer if you want to compile LESS, SCSS or JS also necessary if you want to run the unit tests
 
 ## Installation
 
