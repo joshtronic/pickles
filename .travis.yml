@@ -10,8 +10,13 @@ matrix:
 
 install:
   - composer install
-  - pear channel-discover pear.phpunit.de
-  - pecl install phpunit/test_helpers
+  - git clone git@github.com:php-test-helpers/php-test-helpers.git
+  - cd php-test-helpers
+  - phpize
+  - ./configure --enable-test-helpers
+  - make
+  - sudo make install
+  - echo "extension=test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 script:
   - mkdir -p vendors/build/logs
