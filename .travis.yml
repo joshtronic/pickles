@@ -8,6 +8,11 @@ matrix:
   allow_failures:
     - php: hhvm
 
+services:
+  - memcache
+  - memcached
+  - redis
+
 install:
   - composer install
   - cd vendors/php-test-helpers
@@ -15,13 +20,13 @@ install:
   - ./configure --enable-test-helpers
   - make
   - sudo make install
-  - echo "zend_extension=test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   - cd ../../
 
 before_script:
   - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "zend_extension = test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   - mkdir -p vendors/build/logs
 
 script:
