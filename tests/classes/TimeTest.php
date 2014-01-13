@@ -47,6 +47,13 @@ class TimeTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('1 day ago', Time::ago(strtotime('-1 day')));
 	}
 
+	/* @todo Need to fix these results so it doesn't fail.
+	public function testAgoPastTimeDays2()
+	{
+		$this->assertEquals('1 day ago', Time::ago(strtotime('-23 hours -55 minutes')));
+	}
+	*/
+
 	public function testAgoPastTimeWeeks()
 	{
 		$this->assertEquals('1 week ago', Time::ago(strtotime('-1 week')));
