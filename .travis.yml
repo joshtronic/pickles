@@ -28,9 +28,10 @@ before_script:
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "zend_extension = test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   - mkdir -p vendors/build/logs
+  - $(phpenv version-name)
 
 script:
   - phpunit --colors --coverage-clover /home/travis/build/joshtronic/pickles/vendors/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
 
-after_script:
+after_success:
   - php vendors/composer/bin/coveralls --config ../.coveralls.yml -v
