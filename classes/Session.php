@@ -24,95 +24,24 @@
  * the datasource will default to the value in
  * $config['pickles']['datasource'] and if the table will default to
  * "sessions". The format is as follows:
- *
- *     $config = array(
- *         'pickles' => array(
- *             'session' => array(
- *                 'datasource' => 'mysql',
- *                 'table'      => 'sessions',
- *             )
- *         )
- *     );
- *
- * In addition to the configuration variables, a table in your database
- * must be created. The [MySQL] table schema is as follows:
- *
- *     CREATE TABLE sessions (
- *         id varchar(32) COLLATE utf8_unicode_ci NOT NULL,
- *         session text COLLATE utf8_unicode_ci NOT NULL,
- *         expires_at datetime NOT NULL,
- *         PRIMARY KEY (id),
- *         INDEX (expires_at)
- *     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
- *
- * Note: The reason for not using a model class was to avoid a naming
- * conflict between the Session model and the Session class itself. This
- * will eventually be resolved when I abandon full 5.x support and migrate
- * to 5.3+ (assuming that ever happens).
  */
 class Session extends Object
 {
 	/**
-	 * Handler
-	 *
-	 * What the session is being handled by.
-	 *
-	 * @access private
-	 * @var    string
-	 */
-	private $handler = false;
-
-	/**
-	 * Accessed At
-	 *
-	 * The UNIX timestamp of when the page was accessed.
-	 *
-	 * @access private
-	 * @var    integer
-	 */
-	private $accessed_at = null;
-
-	/**
-	 * Time to Live
-	 *
-	 * The number of seconds the session should remain active. Corresponds
-	 * to the INI variable session.gc_maxlifetime
-	 *
-	 * @access private
-	 * @var    integer
-	 */
-	private $time_to_live = null;
-
-	/**
-	 * Datasource
-	 *
-	 * Name of the datasource, defaults to whatever the default datasource
-	 * is defined to in config.php
-	 *
-	 * @access private
-	 * @var    string
-	 */
-	private $datasource = null;
-
-	/**
-	 * Table
-	 *
-	 * Name of the database table in the aforementioned datasource that
-	 * holds the session data. The expected schema is defined above.
-	 *
-	 * @access private
-	 * @var    string
-	 */
-	private $table = null;
-
-	/**
 	 * Constructor
 	 *
-	 * All of our set up logic for the session in contained here. This
-	 * object is initially instantiated from pickles.php and the session
-	 * callbacks are established here. All variables are driven from
-	 * php.ini and/or the site config. Once configured, the session is
-	 * started automatically.
+	 * All of our set up logic for the session in contained here. This class is
+	 * initially instantiated from pickles.php. Non-file handlers need to be
+	 * configured in the site's config. MySQL support was dropped in favor of
+	 * in memory stores or simply relying on file based sessions. Why? Because
+	 * using MySQL for sessions is very write intensive and having done it in
+	 * the past I don't recommend it. If you run a single server, files are
+	 * good enough if your volume is lower. Memcache[d] is fine if you don't
+	 * mind logging all of your users off your site when you restart the
+	 * service and/or you run out of memory for the process. Redis is the best
+	 * choice as it can be configured to be persistent and lives in memory.
+	 * This is assuming you don't just want to roll your own sessions, which is
+	 * pretty damn easy as well.
 	 */
 	public function __construct()
 	{
@@ -121,64 +50,60 @@ class Session extends Object
 			parent::__construct();
 
 			// Sets up our configuration variables
-			if (isset($this->config->pickles['session']))
-			{
-				$session = $this->config->pickles['session'];
-				$version = 1;
-			}
-
 			if (isset($this->config->pickles['sessions']))
 			{
 				$session = $this->config->pickles['sessions'];
-				$version = 2;
 			}
 
 			$datasources = $this->config->datasources;
 
-			$this->handler = 'files';
-			$datasource    = false;
-			$table         = 'sessions';
+			$handler    = 'files';
+			$datasource = false;
 
 			if (isset($datasources[$session]))
 			{
-				$datasource    = $datasources[$session];
-				$this->handler = $datasource['type'];
+				$datasource = $datasources[$session];
+				$handler    = $datasource['type'];
 
-				if (isset($datasource['hostname'], $datasource['port']))
+				if ($handler != 'files')
 				{
-					$host = 'tcp://' . $datasource['hostname'] . ':' . $datasource['port'];
+					if (isset($datasource['hostname'], $datasource['port']))
+					{
+						$host = ($handler != 'memcached' ? 'tcp://' : '')
+						      . $datasource['hostname'] . ':' . $datasource['port'];
+					}
+					else
+					{
+						throw new Exception('You must provide both the hostname and port for the datasource.');
+					}
 				}
 			}
 
-			switch ($this->handler)
+			switch ($handler)
 			{
 				case 'memcache':
 					ini_set('session.save_handler', 'memcache');
 					ini_set('session.save_path',    $host . '?persistent=1&amp;weight=1&amp;timeout=1&amp;retry_interval=15');
 					break;
 
-				// @todo memcached
-
-				case 'mysql':
-					// Sets our access time and time to live
-					$this->accessed_at  = time();
-					$this->time_to_live = ini_get('session.gc_maxlifetime');
-
-					$this->datasource = $datasource;
-					$this->table      = $table;
-
-					// Gets a database instance
-					$this->db = Database::getInstance($this->datasource);
-
-					// Initializes the session
-					$this->initialize();
+				case 'memcached':
+					ini_set('session.save_handler', 'memcached');
+					ini_set('session.save_path',    $host);
 					break;
 
 				case 'redis':
-					// Keep in mind that the database value is ignored by phpredis
-					$save_path = $host . '?weight=1'
-					           . (isset($datasource['database']) ? '&database=' . $datasource['database'] : '')
-					           . (isset($datasource['prefix']) ? '&prefix=' . $datasource['prefix'] : '');
+					$save_path = $host . '?weight=1';
+
+					// Database ignored by phpredis when this was coded
+					if (isset($datasource['database']))
+					{
+						$save_path .= '&database=' . $datasource['database'];
+					}
+
+					if (isset($datasource['prefix']))
+					{
+						$save_path .= '&prefix=' . $datasource['prefix'];
+					}
 
 					ini_set('session.save_handler', 'redis');
 					ini_set('session.save_path',    $save_path);
@@ -190,6 +115,7 @@ class Session extends Object
 					break;
 			}
 
+			// Don't start sessions for people without a user agent and bots.
 			if (isset($_SERVER['HTTP_USER_AGENT'])
 				&& !String::isEmpty($_SERVER['HTTP_USER_AGENT'])
 				&& !preg_match('/(Baidu|Gigabot|Googlebot|libwww-perl|lwp-trivial|msnbot|SiteUptime|Slurp|WordPress|ZIBB|ZyBorg)/i', $_SERVER['HTTP_USER_AGENT']))
@@ -197,137 +123,6 @@ class Session extends Object
 				session_start();
 			}
 		}
-	}
-
-	/**
-	 * Destructor
-	 *
-	 * Runs garbage collection and closes the session. I'm not sure if the
-	 * garbage collection should stay as it could be accomplished via
-	 * php.ini variables. The session_write_close() is present to combat a
-	 * chicken and egg scenario in earlier versions of PHP 5.
-	 */
-	public function __destruct()
-	{
-		if ($this->handler == 'mysql')
-		{
-			$this->gc($this->time_to_live);
-			session_write_close();
-		}
-	}
-
-	/**
-	 * Initializes the Session
-	 *
-	 * This method exists to combat the fact that calling session_destroy()
-	 * also clears out the save handler. Upon destorying a session this
-	 * method is called again so the save handler is all set.
-	 */
-	public function initialize()
-	{
-		// Sets up the session handler
-		session_set_save_handler(
-			array($this, 'open'),
-			array($this, 'close'),
-			array($this, 'read'),
-			array($this, 'write'),
-			array($this, 'destroy'),
-			array($this, 'gc')
-		);
-
-		register_shutdown_function('session_write_close');
-	}
-
-	/**
-	 * Opens the Session
-	 *
-	 * Since the session is in the database, opens the database connection.
-	 * This step isn't really necessary as the Database object is smart
-	 * enough to open itself up upon execute.
-	 */
-	public function open()
-	{
-		session_regenerate_id();
-
-		return $this->db->open();
-	}
-
-	/**
-	 * Closes the Session
-	 *
-	 * Same as above, but in reverse.
-	 */
-	public function close()
-	{
-		return $this->db->close();
-	}
-
-	/**
-	 * Reads the Session
-	 *
-	 * Checks the database for the session ID and returns the session data.
-	 *
-	 * @param  string $id session ID
-	 * @return string serialized session data
-	 */
-	public function read($id)
-	{
-		$sql = 'SELECT session FROM `' . $this->table . '` WHERE id = ?;';
-
-		$session = $this->db->fetch($sql, array($id));
-
-		return isset($session[0]['session']) ? $session[0]['session'] : '';
-	}
-
-	/**
-	 * Writes the Session
-	 *
-	 * When there's changes to the session, writes the data to the
-	 * database.
-	 *
-	 * @param  string $id session ID
-	 * @param  string $session serialized session data
-	 * @return boolean whether the query executed correctly
-	 */
-	public function write($id, $session)
-	{
-		$sql = 'REPLACE INTO `' . $this->table . '` VALUES (?, ? ,?);';
-
-		$parameters = array($id, $session, date('Y-m-d H:i:s', strtotime('+' . $this->time_to_live . ' seconds')));
-
-		return $this->db->execute($sql, $parameters);
-	}
-
-	/**
-	 * Destroys the Session
-	 *
-	 * Deletes the session from the database.
-	 *
-	 * @param  string $id session ID
-	 * @return boolean whether the query executed correctly
-	 */
-	public function destroy($id)
-	{
-		$sql = 'DELETE FROM `' . $this->table . '` WHERE id = ?;';
-
-		return $this->db->execute($sql, array($id));
-	}
-
-	/**
-	 * Garbage Collector
-	 *
-	 * This is who you call when you got trash to be taken out.
-	 *
-	 * @param  integer $time_to_live number of seconds a session is active
-	 * @return boolean whether the query executed correctly
-	 */
-	public function gc($time_to_live)
-	{
-		$sql = 'DELETE FROM `' . $this->table . '` WHERE expires_at < ?;';
-
-		$parameters = array(date('Y-m-d H:i:s', $this->accessed_at - $time_to_live));
-
-		return $this->db->execute($sql, $parameters);
 	}
 }
 
