@@ -139,34 +139,7 @@ class Security
 	 */
 	private static function checkLevel(&$access_level)
 	{
-		if (is_int($access_level))
-		{
-			return true;
-		}
-		else
-		{
-			$config = Config::getInstance();
-
-			// Attempts to validate the string passed
-			if (isset($config->security[$access_level]))
-			{
-				if (is_numeric($config->security[$access_level]))
-				{
-					$access_level = (int)$config->security[$access_level];
-					return true;
-				}
-				else
-				{
-					throw new Exception('Level "' . $access_level . '" is not numeric in config.ini');
-				}
-			}
-			else
-			{
-				throw new Exception('Level "' . $access_level . '" is not defined in config.ini');
-			}
-		}
-
-		return false;
+		return is_int($access_level);
 	}
 
 	/**
@@ -343,7 +316,6 @@ class Security
 					if (self::getUserLevel() == $access_level)
 					{
 						$is_level = true;
-						break;
 					}
 				}
 			}
@@ -380,7 +352,6 @@ class Security
 					if (self::getUserLevel() >= $access_level)
 					{
 						$has_level = true;
-						break;
 					}
 				}
 			}
@@ -412,7 +383,6 @@ class Security
 				if ($user_level >= $low && $user_level <= $high)
 				{
 					$between_level = true;
-					break;
 				}
 			}
 		}
