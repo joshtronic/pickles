@@ -54,7 +54,7 @@ class Validate
 					case 'filter':
 						if (count($rule) < 2)
 						{
-							throw new Exception('Invalid validation rule, expected: "validate:boolean|email|float|int|ip|regex|url".');
+							throw new Exception('Invalid validation rule, expected: "validate:boolean|email|float|int|ip|url".');
 						}
 						else
 						{
@@ -65,13 +65,12 @@ class Validate
 								case 'float':
 								case 'int':
 								case 'ip':
-								case 'regex':
 								case 'url':
 									$filter = constant('FILTER_VALIDATE_' . strtoupper($rule[1]));
 									break;
 
 								default:
-									throw new Exception('Invalid filter, expecting boolean, email, float, int, ip, regex or url.');
+									throw new Exception('Invalid filter, expecting boolean, email, float, int, ip or url.');
 									break;
 							}
 
@@ -103,19 +102,36 @@ class Validate
 
 								switch ($rule[1])
 								{
-									case '<':  $valid = $length <  $rule[2]; break;
-									case '<=': $valid = $length <= $rule[2]; break;
-									case '==': $valid = $length == $rule[2]; break;
-									case '!=': $valid = $length != $rule[2]; break;
-									case '>=': $valid = $length >= $rule[2]; break;
-									case '>':  $valid = $length >  $rule[2]; break;
+									case '<':
+										$valid = $length < $rule[2];
+										break;
+
+									case '<=':
+										$valid = $length <= $rule[2];
+										break;
+
+									case '==':
+										$valid = $length == $rule[2];
+										break;
+
+									case '!=':
+										$valid = $length != $rule[2];
+										break;
+
+									case '>=':
+										$valid = $length >= $rule[2];
+										break;
+
+									case '>':
+										$valid = $length >  $rule[2];
+										break;
 
 									default:
 										throw new Exception('Invalid operator, expecting <, <=, ==, !=, >= or >.');
 										break;
 								}
 
-								if ($valid === true)
+								if (!$valid)
 								{
 									$errors[] = $message;
 								}
@@ -137,7 +153,10 @@ class Validate
 						}
 						else
 						{
-							if ((strtolower($rule[1]) == 'not' && !preg_match($rule[2], $value)) || preg_match($rule[2], $value))
+							$rule[1] = strtolower($rule[1]);
+
+							if (($rule[1] == 'is' && preg_match($rule[2], $value))
+								|| ($rule[1] == 'not' && !preg_match($rule[2], $value)))
 							{
 								$errors[] = $message;
 							}
