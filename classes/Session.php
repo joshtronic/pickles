@@ -56,11 +56,10 @@ class Session extends Object
 			}
 
 			$datasources = $this->config->datasources;
+			$handler     = 'files';
+			$datasource  = false;
 
-			$handler    = 'files';
-			$datasource = false;
-
-			if (isset($datasources[$session]))
+			if (isset($session, $datasources[$session]))
 			{
 				$datasource = $datasources[$session];
 				$handler    = $datasource['type'];
@@ -109,7 +108,6 @@ class Session extends Object
 					ini_set('session.save_path',    $save_path);
 					break;
 
-				default:
 				case 'files':
 					ini_set('session.save_handler', 'files');
 					break;

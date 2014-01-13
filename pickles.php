@@ -24,9 +24,12 @@
 // {{{ PICKLES Constants
 
 // @todo Finish reworking constants to be part of the Config object
-// Establishes our site paths, sanity check is to allow vfsStream in our tests
 if (!defined('SITE_PATH'))
 {
+	// Creates a variable to flag if we're on the command line
+	define('IS_CLI', !isset($_SERVER['REQUEST_METHOD']));
+
+	// Establishes our site paths, sanity check is to allow vfsStream in our tests
 	define('SITE_PATH', getcwd() . '/../');
 }
 
@@ -40,9 +43,6 @@ if (!defined('SITE_CLASS_PATH'))
 
 	define('PRIVATE_PATH', SITE_PATH    . 'private/');
 	define('LOG_PATH',     PRIVATE_PATH . 'logs/');
-
-	// Creates a variable to flag if we're on the command line
-	define('IS_CLI', !isset($_SERVER['REQUEST_METHOD']));
 }
 
 // }}}
