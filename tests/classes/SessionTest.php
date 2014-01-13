@@ -23,17 +23,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('files', $_SESSION['test']);
 	}
 
-	public function testFiles()
-	{
-		$config = Config::getInstance();
-		$config->data['pickles']['sessions'] = 'files';
-
-		new Session();
-
-		$_SESSION['test'] = 'files';
-		$this->assertEquals('files', $_SESSION['test']);
-	}
-
 	public function testMemcache()
 	{
 		$config = Config::getInstance();
