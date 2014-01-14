@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @runTestsInSeparateProcesses
- */
 class CacheTest extends PHPUnit_Framework_TestCase
 {
 	private $config;
