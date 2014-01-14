@@ -146,8 +146,6 @@ class Cache extends Object
 	 */
 	public function get($keys)
 	{
-		set_error_handler('cacheErrorHandler');
-
 		if (is_array($keys))
 		{
 			foreach ($keys as $index => $key)
@@ -160,18 +158,7 @@ class Cache extends Object
 			$keys = strtoupper($this->namespace . $keys);
 		}
 
-		try
-		{
-			$return = $this->connection->get($keys);
-		}
-		catch (Exception $exception)
-		{
-			$return = false;
-		}
-
-		restore_error_handler();
-
-		return $return;
+		return $this->connection->get($keys);
 	}
 
 	/**
@@ -191,22 +178,9 @@ class Cache extends Object
 	 */
 	public function set($key, $value, $expire = Time::DAY)
 	{
-		set_error_handler('cacheErrorHandler');
-
 		$key = strtoupper($key);
 
-		try
-		{
-			$return = $this->connection->set(strtoupper($this->namespace . $key), $value, 0, $expire);
-		}
-		catch (Exception $exception)
-		{
-			$return = false;
-		}
-
-		restore_error_handler();
-
-		return $return;
+		return $this->connection->set(strtoupper($this->namespace . $key), $value, 0, $expire);
 	}
 
 	/**
@@ -219,31 +193,18 @@ class Cache extends Object
 	 */
 	public function delete($keys)
 	{
-		set_error_handler('cacheErrorHandler');
-
-		try
+		if (!is_array($keys))
 		{
-			if (!is_array($keys))
-			{
-				$keys = array($keys);
-			}
-
-			// Memcache() doesn't let you pass an array to delete all records the same way you can with get()
-			foreach ($keys as $key)
-			{
-				$this->connection->delete(strtoupper($this->namespace . $key));
-			}
-
-			$return = true;
-		}
-		catch (Exception $exception)
-		{
-			$return = false;
+			$keys = array($keys);
 		}
 
-		restore_error_handler();
+		// Memcache() doesn't let you pass an array to delete all records the same way you can with get()
+		foreach ($keys as $key)
+		{
+			$this->connection->delete(strtoupper($this->namespace . $key));
+		}
 
-		return $return;
+		return true;
 	}
 
 	/**
@@ -257,26 +218,8 @@ class Cache extends Object
 	 */
 	public function increment($key)
 	{
-		set_error_handler('cacheErrorHandler');
-
-		try
-		{
-			$return = $this->connection->increment(strtoupper($this->namespace . $key));
-		}
-		catch (Exception $exception)
-		{
-			$return = false;
-		}
-
-		restore_error_handler();
-
-		return $return;
+		return $this->connection->increment(strtoupper($this->namespace . $key));
 	}
-}
-
-function cacheErrorHandler($errno, $errstr, $errfile, $errline)
-{
-	throw new Exception($errstr);
 }
 
 ?>

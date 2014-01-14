@@ -137,8 +137,15 @@ class Database extends Object
 			}
 			elseif (is_array($config->datasources))
 			{
-				$datasources     = $config->datasources;
-				$datasource_name = key($datasources);
+				$datasources = $config->datasources;
+
+				foreach ($datasources as $name => $datasource)
+				{
+					if (isset($datasource['driver']))
+					{
+						$datasource_name = $name;
+					}
+				}
 			}
 		}
 
@@ -156,6 +163,7 @@ class Database extends Object
 
 				if (!isset($datasource['driver']))
 				{
+					var_Dump($datasource);
 					throw new Exception('The specified datasource lacks a driver.');
 				}
 
