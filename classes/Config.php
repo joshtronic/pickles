@@ -100,7 +100,7 @@ class Config extends Object
 								// Exact match
 								if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host)
 									&& $_SERVER['SERVER_ADDR'] == $host)
-									|| $_SERVER['HTTP_HOST'] == $host)
+									|| (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == $host))
 								{
 									$environment = $name;
 									break;
