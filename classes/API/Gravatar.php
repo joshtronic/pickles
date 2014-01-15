@@ -63,11 +63,12 @@ class API_Gravatar
 		{
 			throw new Exception('Invalid size parameter, expecting an integer between 1 and 2048.');
 		}
-		elseif (!in_array($default, array('gravatar', '404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro', 'blank')) && !filter_var($default, FILTER_VALIDATE_URL))
+		elseif (!in_array($default, ['gravatar', '404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro', 'blank'])
+			&& !filter_var($default, FILTER_VALIDATE_URL))
 		{
 			throw new Exception('Invalid default parameter, expecting gravatar, 404, mm, identicon, monsterid, wavatar, retro, blank or a valid URL.');
 		}
-		elseif (!in_array($rating, array('g', 'pg', 'r', 'x')))
+		elseif (!in_array($rating, ['g', 'pg', 'r', 'x']))
 		{
 			throw new Exception('Invalid rating parameter, expecting g, pg, r or x.');
 		}

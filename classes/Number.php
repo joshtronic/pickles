@@ -37,7 +37,7 @@ class Number
 	 */
 	public static function ordinalIndicator($number, $superscript = false)
 	{
-		if (!in_array(($number % 100), array(11, 12, 13)))
+		if (!in_array(($number % 100), [11, 12, 13]))
 		{
 			switch ($number % 10)
 			{

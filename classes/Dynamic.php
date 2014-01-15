@@ -179,7 +179,11 @@ class Dynamic extends Object
 			{
 				// Minifies CSS with a few basic character replacements.
 				$stylesheet = file_get_contents($original_filename);
-				$stylesheet = str_replace(array("\t", "\n", ', ', ' {', ': ', ';}', '{  ', ';  '), array('', '', ',', '{', ':', '}', '{', ';'), $stylesheet);
+				$stylesheet = str_replace(
+					["\t", "\n", ', ', ' {', ': ', ';}', '{  ', ';  '],
+					['', '', ',', '{', ':', '}', '{', ';'],
+					$stylesheet
+				);
 				$stylesheet = preg_replace('/\/\*.+?\*\//', '', $stylesheet);
 				file_put_contents($minified_filename, $stylesheet);
 

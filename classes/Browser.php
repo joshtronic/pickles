@@ -31,7 +31,7 @@ class Browser extends Object
 	 * @access private
 	 * @var    array
 	 */
-	private $attributes = array();
+	private $attributes = [];
 
 	/**
 	 * Get instance of the object

@@ -64,7 +64,7 @@ class Form extends Object
 			$additional = ' ' . $additional;
 		}
 
-		if (in_array($type, array('checkbox', 'radio')) && $checked == true)
+		if (in_array($type, ['checkbox', 'radio']) && $checked == true)
 		{
 			$additional .= ' checked="checked"';
 		}
@@ -414,7 +414,7 @@ class Form extends Object
 	 */
 	public function stateSelect($name = 'state', $selected = null, $classes = null, $additional = null)
 	{
-		$options = array(
+		$options = [
 			null => '-- Select State --',
 			'AK' => 'Alaska',
 			'AL' => 'Alabama',
@@ -480,7 +480,7 @@ class Form extends Object
 			'AE' => 'Armed Forces Europe',
 			'AE' => 'Armed Forces Middle East',
 			'AP' => 'Armed Forces Pacific'
-		);
+		];
 
 		return $this->select($name, $options, $selected, $classes, $additional);
 	}
@@ -517,7 +517,7 @@ class Form extends Object
 			list($selected_year, $selected_month, $selected_day) = explode('-', $selected);
 		}
 
-		$month_options = array(
+		$month_options = [
 			null => 'Month',
 			'01' => 'January',
 			'02' => 'February',
@@ -531,10 +531,10 @@ class Form extends Object
 			'10' => 'October',
 			'11' => 'November',
 			'12' => 'December',
-		);
+		];
 
-		$day_options   = array(null => 'Day');
-		$year_options  = array(null => 'Year');
+		$day_options   = [null => 'Day'];
+		$year_options  = [null => 'Year'];
 
 		// Generates the list of days
 		for ($i = 1; $i <= 31; ++$i)
@@ -553,7 +553,7 @@ class Form extends Object
 		}
 
 		// Loops through and generates the selects
-		foreach (array('month', 'day', 'year') as $part)
+		foreach (['month', 'day', 'year'] as $part)
 		{
 			$options  = $part . '_options';
 			$selected = 'selected_' . $part;
@@ -599,7 +599,7 @@ class Form extends Object
 	 */
 	public function polarSelect($name = 'decision', $selected = 0, $classes = null, $additional = null)
 	{
-		$options = array(1 => 'Yes', 0 => 'No');
+		$options = [1 => 'Yes', 0 => 'No'];
 
 		return $this->select($name, $options, $selected, $classes, $additional);
 	}
@@ -621,27 +621,27 @@ class Form extends Object
 	{
 		if ($value == null)
 		{
-			$value = array(
+			$value = [
 				'area_code'   => '',
 				'prefix'      => '',
 				'line_number' => ''
-			);
+			];
 		}
 		else
 		{
 			$value = str_replace('-', '', $value);
-			$value = array(
+			$value = [
 				'area_code'   => substr($value, 0, 3),
 				'prefix'      => substr($value, 3, 3),
 				'line_number' => substr($value, 6)
-			);
+			];
 		}
 
-		$parts = array(
+		$parts = [
 			'area_code'   => 3,
 			'prefix'      => 3,
 			'line_number' => 4
-		);
+		];
 
 		if ($additional)
 		{

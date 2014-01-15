@@ -75,13 +75,11 @@ class Cache extends Object
 		// @todo Shouldn't need the isset() but Travis is failing some tests
 		if (isset($this->config->pickles['cache']) && $this->config->pickles['cache'])
 		{
-			if (!is_array($this->config->pickles['cache']))
+			$datasources = $this->config->pickles['cache'];
+
+			if (!is_array($datasources))
 			{
-				$datasources = array($this->config->pickles['cache']);
-			}
-			else
-			{
-				$datasources = $this->config->pickles['cache'];
+				$datasources = [$datasources];
 			}
 
 			$this->connection = new Memcache();
@@ -195,7 +193,7 @@ class Cache extends Object
 	{
 		if (!is_array($keys))
 		{
-			$keys = array($keys);
+			$keys = [$keys];
 		}
 
 		// Memcache() doesn't let you pass an array to delete all records the same way you can with get()

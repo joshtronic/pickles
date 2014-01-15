@@ -49,7 +49,7 @@ class File
 			// Loop through said files, check for directories, and unlink files
 			foreach ($files as $file)
 			{
-				if (!in_array($file, array('.', '..')))
+				if (!in_array($file, ['.', '..']))
 				{
 					if (is_dir($directory . $file))
 					{

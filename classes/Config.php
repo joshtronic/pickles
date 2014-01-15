@@ -34,7 +34,7 @@ class Config extends Object
 	 *
 	 * @var array
 	 */
-	public $data = array();
+	public $data = [];
 
 	/**
 	 * Constructor
@@ -83,7 +83,7 @@ class Config extends Object
 					{
 						if (!is_array($hosts))
 						{
-							$hosts = array($hosts);
+							$hosts = [$hosts];
 						}
 
 						// Tries to determine the environment name
@@ -161,7 +161,7 @@ class Config extends Object
 			}
 
 			// Defaults expected PICKLES options to false
-			foreach (array('cache', 'logging', 'minify') as $variable)
+			foreach (['cache', 'logging', 'minify'] as $variable)
 			{
 				if (!isset($this->data['pickles'][$variable]))
 				{

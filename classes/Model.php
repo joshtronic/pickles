@@ -58,7 +58,7 @@ class Model extends Object
 	 * @access private
 	 * @var    array
 	 */
-	private $sql = array();
+	private $sql = [];
 
 	/**
 	 * Input Parameters Array
@@ -66,7 +66,7 @@ class Model extends Object
 	 * @access private
 	 * @var    array
 	 */
-	private $input_parameters = array();
+	private $input_parameters = [];
 
 	/**
 	 * Insert Priority
@@ -258,7 +258,7 @@ class Model extends Object
 	 * @access private
 	 * @var    array
 	 */
-	private $snapshot = array();
+	private $snapshot = [];
 
 	/**
 	 * MySQL?
@@ -322,7 +322,7 @@ class Model extends Object
 		$this->model = get_class($this);
 
 		// Default column mapping
-		$columns = array(
+		$columns = [
 			'id'         => 'id',
 			'created_at' => 'created_at',
 			'created_id' => 'created_id',
@@ -331,7 +331,7 @@ class Model extends Object
 			'deleted_at' => 'deleted_at',
 			'deleted_id' => 'deleted_id',
 			'is_deleted' => 'is_deleted',
-		);
+		];
 
 		// Grabs the config columns if no columns are set
 		if ($this->columns === null && isset($this->db->columns))
@@ -364,7 +364,7 @@ class Model extends Object
 		// Takes a snapshot of the [non-object] object properties
 		foreach ($this as $variable => $value)
 		{
-			if (!in_array($variable, array('db', 'cache', 'config', 'snapshot')))
+			if (!in_array($variable, ['db', 'cache', 'config', 'snapshot']))
 			{
 				$this->snapshot[$variable] = $value;
 			}
@@ -411,12 +411,12 @@ class Model extends Object
 					&& count($type_or_parameters) == 1
 					&& count($type_or_parameters['conditions']) == 1)
 				{
-					$cache_keys     = array();
-					$sorted_records = array();
+					$cache_keys     = [];
+					$sorted_records = [];
 
 					if (!is_array($type_or_parameters['conditions'][$this->columns['id']]))
 					{
-						$type_or_parameters['conditions'][$this->columns['id']] = array($type_or_parameters['conditions'][$this->columns['id']]);
+						$type_or_parameters['conditions'][$this->columns['id']] = [$type_or_parameters['conditions'][$this->columns['id']]];
 					}
 
 					foreach ($type_or_parameters['conditions'][$this->columns['id']] as $id)
@@ -426,7 +426,7 @@ class Model extends Object
 					}
 
 					$cached        = $this->cache->get($cache_keys);
-					$partial_cache = array();
+					$partial_cache = [];
 
 					if ($cached !== false)
 					{
@@ -469,8 +469,8 @@ class Model extends Object
 					&& count($parameters_or_key) == 1
 					&& count($parameters_or_key['conditions']) == 1)
 				{
-					$cache_keys     = array();
-					$sorted_records = array();
+					$cache_keys     = [];
+					$sorted_records = [];
 
 					foreach ($parameters_or_key['conditions'][$this->columns['id']] as $id)
 					{
@@ -479,7 +479,7 @@ class Model extends Object
 					}
 
 					$cached        = $this->cache->get($cache_keys);
-					$partial_cache = array();
+					$partial_cache = [];
 
 					if ($cached !== false)
 					{
@@ -516,7 +516,7 @@ class Model extends Object
 			elseif (ctype_digit((string)$type_or_parameters))
 			{
 				$cache_key         = strtoupper($this->model) . '-' . $type_or_parameters;
-				$parameters_or_key = array($this->columns['id'] => $type_or_parameters);
+				$parameters_or_key = [$this->columns['id'] => $type_or_parameters];
 
 				if ($this->columns['is_deleted'])
 				{
@@ -528,7 +528,7 @@ class Model extends Object
 			elseif (ctype_digit((string)$parameters_or_key))
 			{
 				$cache_key         = strtoupper($this->model) . '-' . $parameters_or_key;
-				$parameters_or_key = array($this->columns['id'] => $parameters_or_key);
+				$parameters_or_key = [$this->columns['id'] => $parameters_or_key];
 
 				if ($this->columns['is_deleted'])
 				{
@@ -539,7 +539,7 @@ class Model extends Object
 			}
 			elseif ($this->columns['is_deleted'])
 			{
-				$this->loadParameters(array($this->columns['is_deleted'] => '0'));
+				$this->loadParameters([$this->columns['is_deleted'] => '0']);
 			}
 
 			if (is_string($parameters_or_key))
@@ -553,10 +553,10 @@ class Model extends Object
 			}
 
 			// Starts with a basic SELECT ... FROM
-			$this->sql = array(
+			$this->sql = [
 				'SELECT ' . (is_array($this->fields) ? implode(', ', $this->fields) : $this->fields),
 				'FROM '   . $this->table,
-			);
+			];
 
 			switch ($type_or_parameters)
 			{
@@ -645,12 +645,12 @@ class Model extends Object
 				}
 			}
 
-			$index_records = in_array($type_or_parameters, array('list', 'indexed'));
+			$index_records = in_array($type_or_parameters, ['list', 'indexed']);
 
 			// Flattens the data into a list
 			if ($index_records == true)
 			{
-				$list = array();
+				$list = [];
 
 				foreach ($this->records as $record)
 				{
@@ -713,7 +713,7 @@ class Model extends Object
 			{
 				foreach ($this->joins as $join => $tables)
 				{
-					$join_pieces = array((stripos('JOIN ', $join) === false ? 'JOIN' : strtoupper($join)));
+					$join_pieces = [(stripos('JOIN ', $join) === false ? 'JOIN' : strtoupper($join))];
 
 					if (is_array($tables))
 					{
@@ -793,7 +793,7 @@ class Model extends Object
 
 			if ($use_id)
 			{
-				$this->conditions = array($this->columns['id'] => $this->conditions);
+				$this->conditions = [$this->columns['id'] => $this->conditions];
 			}
 
 			$this->sql[] = 'WHERE ' . (is_array($this->conditions) ? $this->generateConditions($this->conditions) : $this->conditions);
@@ -1237,7 +1237,7 @@ class Model extends Object
 		if ($this->commit_type == 'queue')
 		{
 			$update     = false;
-			$cache_keys = array();
+			$cache_keys = [];
 
 			/**
 			 * @todo I outta loop through twice to determine if it's an INSERT
@@ -1256,10 +1256,10 @@ class Model extends Object
 					if (!isset($sql))
 					{
 						$sql              = '';
-						$input_parameters = array();
+						$input_parameters = [];
 					}
 
-					$update_fields = array();
+					$update_fields = [];
 
 					foreach ($record as $field => $value)
 					{
@@ -1326,7 +1326,7 @@ class Model extends Object
 						}
 
 						$values           = '(' . implode(', ', array_fill(0, $field_count, '?')) . ')';
-						$input_parameters = array();
+						$input_parameters = [];
 
 						// INSERT INTO ...
 						$sql = 'INSERT INTO ' . $this->table . ' (' . implode(', ', $insert_fields) . ') VALUES ' . $values;
@@ -1409,7 +1409,8 @@ class Model extends Object
 					// PRIORITY syntax takes priority over DELAYED
 					if ($this->mysql)
 					{
-						if ($this->priority !== false && in_array(strtoupper($this->priority), array('LOW', 'HIGH')))
+						if ($this->priority !== false
+							&& in_array(strtoupper($this->priority), ['LOW', 'HIGH']))
 						{
 							$sql .= ' ' . strtoupper($this->priority) . '_PRIORITY';
 						}
@@ -1433,12 +1434,15 @@ class Model extends Object
 			$input_parameters = null;
 
 			// Limits the columns being updated
-			$record = ($update ? array_diff_assoc($this->record, isset($this->original[$this->index]) ? $this->original[$this->index] : array()) : $this->record);
+			$record = ($update ? array_diff_assoc(
+				$this->record,
+				isset($this->original[$this->index]) ? $this->original[$this->index] : []
+			) : $this->record);
 
 			// Makes sure there's something to INSERT or UPDATE
 			if (count($record) > 0)
 			{
-				$insert_fields = array();
+				$insert_fields = [];
 
 				// Loops through all the columns and assembles the query
 				foreach ($record as $column => $value)
@@ -1454,7 +1458,7 @@ class Model extends Object
 
 							$sql .= $column . ' = ';
 
-							if (in_array($value, array('++', '--')))
+							if (in_array($value, ['++', '--']))
 							{
 								$sql  .= $column . ' ' . substr($value, 0, 1) . ' ?';
 								$value = 1;
@@ -1566,7 +1570,7 @@ class Model extends Object
 			if ($this->columns['is_deleted'])
 			{
 				$sql              = 'UPDATE ' . $this->table . ' SET ' . $this->columns['is_deleted'] . ' = ?';
-				$input_parameters = array('1');
+				$input_parameters = ['1'];
 
 				if ($this->columns['deleted_at'])
 				{
@@ -1631,7 +1635,7 @@ class Model extends Object
 
 		if ($all_integers)
 		{
-			$parameters = array('conditions' => array($this->columns['id'] => $parameters));
+			$parameters = ['conditions' => [$this->columns['id'] => $parameters]];
 		}
 	}
 
@@ -1657,7 +1661,7 @@ class Model extends Object
 				$key = trim(strtolower($key));
 
 				// Assigns valid keys to the appropriate class property
-				if (in_array($key, array('fields', 'table', 'joins', 'hints', 'conditions', 'group', 'having', 'order', 'limit', 'offset')))
+				if (in_array($key, ['fields', 'table', 'joins', 'hints', 'conditions', 'group', 'having', 'order', 'limit', 'offset']))
 				{
 					$this->$key = $value;
 					$conditions = false;
@@ -1706,7 +1710,7 @@ class Model extends Object
 	 */
 	public function fieldValues($field)
 	{
-		$values = array();
+		$values = [];
 
 		foreach ($this->records as $record)
 		{

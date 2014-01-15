@@ -19,11 +19,10 @@
  * Session Class
  *
  * Provides session handling via database instead of the file based session
- * handling built into PHP. Using this class requires an array to be
- * defined in place of the boolean true/false (on/off). If simply array(),
- * the datasource will default to the value in
- * $config['pickles']['datasource'] and if the table will default to
- * "sessions". The format is as follows:
+ * handling built into PHP. Using this class requires an array to be defined
+ * in place of the boolean true/false (on/off). If simply an empty array, the
+ * datasource will default to the value in $config['pickles']['datasource'] and
+ * if the table will default to "sessions". The format is as follows:
  */
 class Session extends Object
 {

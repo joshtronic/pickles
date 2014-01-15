@@ -38,7 +38,7 @@ class String
 	public static function formatPhoneNumber($number, $replacement = '$1-$2-$3')
 	{
 		// Strips characters we don't need
-		$number = str_replace(array('(', ')', ' ', '-', '.', '_'), '', $number);
+		$number = str_replace(['(', ')', ' ', '-', '.', '_'], '', $number);
 
 		// Formats the number
 		return preg_replace('/^(\d{3})(\d{3})(.+)$/', $replacement, $number);
@@ -162,7 +162,7 @@ class String
 	 */
 	public static function random($length = 8, $alpha = true, $numeric = true, $similar = true)
 	{
-		$characters = array();
+		$characters = [];
 		$string     = '';
 
 		// Adds alpha characters to the list

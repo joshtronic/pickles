@@ -34,7 +34,8 @@ class API_Google_Profanity
 	{
 		$response = json_decode(file_get_contents($endpoint . $word), true);
 
-		if ($response == null || !isset($response['response']) || !in_array($response['response'], array('true', 'false')))
+		if ($response == null || !isset($response['response'])
+			|| !in_array($response['response'], ['true', 'false']))
 		{
 			throw new Exception('Invalid response from API.');
 		}

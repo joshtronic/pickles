@@ -146,7 +146,7 @@ class Module extends Object
 	 * @todo   Move to public scope and rename __return so it's kinda obscured
 	 * @todo   Will need to update leaderbin and sndcrd to use new variable
 	 */
-	protected $return = array();
+	protected $return = [];
 
 	/**
 	 * Output
@@ -264,7 +264,7 @@ class Module extends Object
 	 */
 	public function __validate()
 	{
-		$errors = array();
+		$errors = [];
 
 		if ($this->validate !== false)
 		{
@@ -307,7 +307,7 @@ class Module extends Object
 			}
 		}
 
-		return $errors == array() ? false : $errors;
+		return $errors == [] ? false : $errors;
 	}
 }
 

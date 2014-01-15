@@ -33,13 +33,13 @@ class Convert
 	 * that an array's format isn't quite the same as well-formed XML.
 	 *
 	 * Input Array =
-	 *     array('children' => array(
-	 *         'child' => array(
-	 *             array('name' => 'Wendy Darling'),
-	 *             array('name' => 'John Darling'),
-	 *             array('name' => 'Michael Darling')
-	 *         )
-	 *     ))
+	 *     ['children' => [
+	 *         'child' => [
+	 *             ['name' => 'Wendy Darling'],
+	 *             ['name' => 'John Darling'],
+	 *             ['name' => 'Michael Darling'],
+	 *         ],
+	 *     ]]
 	 *
 	 * Output XML =
 	 *     <children>
@@ -68,7 +68,7 @@ class Convert
 						if (is_array($value2))
 						{
 							// Nest the value if the node is an integer
-							$new_value = (is_int($node2) ? $value2 : array($node2 => $value2));
+							$new_value = (is_int($node2) ? $value2 : [$node2 => $value2]);
 
 							$xml .= ($format ? str_repeat("\t", $level) : '');
 							$xml .= '<' . $node . '>' . ($format ? "\n" : '');

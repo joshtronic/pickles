@@ -35,7 +35,7 @@ class Validate
 	 */
 	public static function isValid($value, $rules)
 	{
-		$errors = array();
+		$errors = [];
 
 		if (is_array($rules))
 		{

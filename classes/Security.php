@@ -35,7 +35,7 @@ class Security
 	 * @access private
 	 * @var    array
 	 */
-	private static $cache = array();
+	private static $cache = [];
 
 	/**
 	 * Generate Hash
@@ -60,14 +60,14 @@ class Security
 			}
 			else
 			{
- 				$salts = array('P1ck73', 'Ju1C3');
+ 				$salts = ['P1ck73', 'Ju1C3'];
 			}
 		}
 
 		// Forces the variable to be an array
 		if (!is_array($salts))
 		{
-			$salts = array($salts);
+			$salts = [$salts];
 		}
 
 		// Loops through the salts, applies them and calculates the hash
@@ -163,12 +163,12 @@ class Security
 		{
 			$token = sha1(microtime());
 
-			$_SESSION['__pickles']['security'] = array(
+			$_SESSION['__pickles']['security'] = [
 				'token'   => $token,
 				'user_id' => (int)$user_id,
 				'level'   => $level,
 				'role'    => $role,
-			);
+			];
 
 			setcookie('pickles_security_token', $token);
 
@@ -240,14 +240,19 @@ class Security
 
 					if ($config->security === false)
 					{
-						$config = array();
+						$config = [];
 					}
 					else
 					{
 						$config = $config->security;
 					}
 
-					$defaults = array('login' => 'login', 'model' => 'User', 'column' => 'level');
+					$defaults = [
+						'login'  => 'login',
+						'model'  => 'User',
+						'column' => 'level',
+					];
+
 					foreach ($defaults as $variable => $value)
 					{
 						if (!isset($config[$variable]))
@@ -258,7 +263,12 @@ class Security
 
 					// Uses the model to pull the user's access level
 					$class = $config['model'];
-					$model = new $class(array('fields' => $config['column'], 'conditions' => array('id' => (int)$_SESSION['__pickles']['security']['user_id'])));
+					$model = new $class([
+						'fields'     => $config['column'],
+						'conditions' => [
+							'id' => (int)$_SESSION['__pickles']['security']['user_id'],
+						],
+					]);
 
 					if ($model->count() == 0)
 					{

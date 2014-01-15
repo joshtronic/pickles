@@ -10,9 +10,10 @@ class CacheTest extends PHPUnit_Framework_TestCase
 		$this->config = Config::getInstance();
 		$this->config->data['pickles']['cache'] = 'mc';
 		$this->config->data['datasources']['mc'] = [
-			'type'     => 'memcache',
-			'hostname' => 'localhost',
-			'port'     => 11211,
+			'type'      => 'memcache',
+			'hostname'  => 'localhost',
+			'port'      => 11211,
+			'namespace' => 'ns',
 		];
 
 		$this->cache = Cache::getInstance();
@@ -46,7 +47,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 		foreach ($keys as $key => $key_name)
 		{
 			$value = $values[$key];
-			$expected[strtoupper($key_name)] = $value;
+			$expected['NS-' . strtoupper($key_name)] = $value;
 			$this->cache->set($key_name, $value);
 		}
 
