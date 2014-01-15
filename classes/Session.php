@@ -45,7 +45,7 @@ class Session extends Object
 	 */
 	public function __construct()
 	{
-		if (!IS_CLI)
+		if (isset($_SERVER['REQUEST_METHOD']))
 		{
 			parent::__construct();
 

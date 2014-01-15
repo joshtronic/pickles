@@ -79,6 +79,8 @@ class SessionTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testMissingHostname()
 	{
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+
 		$config = Config::getInstance();
 		$config->data['pickles']['sessions'] = 'redis';
 		$config->data['datasources']['redis'] = [

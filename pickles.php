@@ -26,9 +26,6 @@
 // @todo Finish reworking constants to be part of the Config object
 if (!defined('SITE_PATH'))
 {
-	// Creates a variable to flag if we're on the command line
-	define('IS_CLI', !isset($_SERVER['REQUEST_METHOD']));
-
 	// Establishes our site paths, sanity check is to allow vfsStream in our tests
 	define('SITE_PATH', getcwd() . '/../');
 }

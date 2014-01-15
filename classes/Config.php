@@ -45,14 +45,16 @@ class Config extends Object
 	{
 		parent::__construct();
 
-		$filename     = '../config.php';
+		$filename     = SITE_PATH . 'config.php';
 		$environments = false;
 		$environment  = false;
+		$is_cli       = !isset($_SERVER['REQUEST_METHOD']);
+
 
 		// Sanity checks the config file
 		if (file_exists($filename) && is_file($filename) && is_readable($filename))
 		{
-			require_once $filename;
+			require $filename;
 		}
 
 		// Checks that we have the config array
@@ -70,7 +72,8 @@ class Config extends Object
 					$environments = $config['environments'];
 
 					// If we're on the CLI, check an environment was even passed in
-					if (IS_CLI == true && $_SERVER['argc'] < 2)
+					// @todo is checking for argc enough?
+					if ($is_cli && $_SERVER['argc'] < 2)
 					{
 						throw new Exception('You must pass an environment (e.g. php script.php <environment>)');
 					}
@@ -86,7 +89,7 @@ class Config extends Object
 						// Tries to determine the environment name
 						foreach ($hosts as $host)
 						{
-							if (IS_CLI == true)
+							if ($is_cli)
 							{
 								// Checks the first argument on the command line
 								if ($_SERVER['argv'][1] == $name)
@@ -146,7 +149,7 @@ class Config extends Object
 					}
 
 					// Checks that one of our known values exists, if not, force true
-					if (preg_match('/(objects|timers|queries|explains)/', $this->data['pickles']['profiler'] == false))
+					if (preg_match('/(objects|timers|queries|explains)/', $this->data['pickles']['profiler']) == false)
 					{
 						$this->data['pickles']['profiler'] = true;
 					}

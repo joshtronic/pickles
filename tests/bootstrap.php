@@ -14,7 +14,6 @@ if (!defined('SITE_PATH'))
 	define('SECURITY_LEVEL_USER',  10);
 	define('SECURITY_LEVEL_ADMIN', 20);
 	define('SITE_PATH', org\bovigo\vfs\vfsStream::url('site/'));
-	define('IS_CLI', false);
 }
 
 require_once 'pickles.php';
@@ -36,6 +35,7 @@ if (!file_exists(SITE_TEMPLATE_PATH . '__shared/'))
 
 $_SERVER['HTTP_HOST']   = 'testsite.com';
 $_SERVER['SERVER_NAME'] = 'Test Server';
+$_SERVER['SERVER_ADDR'] = '127.0.0.1';
 
 function setUpRequest($request, $method = 'GET')
 {
