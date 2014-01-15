@@ -34,17 +34,6 @@
 class Profiler
 {
 	/**
-	 * Config
-	 *
-	 * Profiler configuration
-	 *
-	 * @static
-	 * @access private
-	 * @var    array
-	 */
-	private static $config;
-
-	/**
 	 * Profile
 	 *
 	 * Array of logged events
@@ -53,7 +42,7 @@ class Profiler
 	 * @access private
 	 * @var    array
 	 */
-	private static $profile = array();
+	private static $profile = [];
 
 	/**
 	 * Queries
@@ -75,19 +64,7 @@ class Profiler
 	 * @access private
 	 * @var    array
 	 */
-	private static $timers = array();
-
-	/**
-	 * Constructor
-	 *
-	 * Private constructor since this class is interfaced wtih statically.
-	 *
-	 * @access private
-	 */
-	private function __construct()
-	{
-
-	}
+	private static $timers = [];
 
 	/**
 	 * Enabled
@@ -100,15 +77,11 @@ class Profiler
 	 */
 	public static function enabled(/* polymorphic */)
 	{
-		// Grabs the config object if we don't have one yet
-		if (self::$config == null)
-		{
-			$config       = Config::getInstance();
-			self::$config = $config->pickles['profiler'];
-		}
+		$config = Config::getInstance();
+		$config = $config->pickles['profiler'];
 
 		// Checks if we're set to boolean true
-		if (self::$config === true)
+		if ($config === true)
 		{
 			return true;
 		}
@@ -118,7 +91,7 @@ class Profiler
 
 			foreach ($types as $type)
 			{
-				if (stripos(self::$config, $type) !== false)
+				if (stripos($config, $type) !== false)
 				{
 					return true;
 				}
@@ -178,13 +151,13 @@ class Profiler
 				break;
 		}
 
-		self::$profile[] = array(
+		self::$profile[] = [
 			'log'     => $log,
 			'type'    => $data_type,
 			'time'    => $time,
 			'elapsed' => $time - $_SERVER['REQUEST_TIME_FLOAT'],
 			'memory'  => memory_get_usage(),
-		);
+		];
 	}
 
 	/**
@@ -206,11 +179,11 @@ class Profiler
 
 		if ($input_parameters != 'false' && is_array($input_parameters))
 		{
-			$log .= '<br />';
+			$log .= '<br>';
 
 			foreach ($input_parameters as $key => $value)
 			{
-				$log .= '<br /><span style="color:#a82222">' . $key . '</span> <span style="color:#666">=></span> <span style="color:#ffff7f">' . $value . '</span>';
+				$log .= '<br><span style="color:#a82222">' . $key . '</span> <span style="color:#666">=></span> <span style="color:#ffff7f">' . $value . '</span>';
 
 				$query = str_replace($key, '<span style="color:#a82222">' . $key . '</span>', $query);
 			}
@@ -220,19 +193,19 @@ class Profiler
 
 		if (is_array($explain))
 		{
-			$log .= '<br />';
+			$log .= '<br>';
 
 			foreach ($explain as $table)
 			{
-				$log .= '<br /><span style="color:RoyalBlue">Possible Keys</span> <span style="color:#666">=></span> <span style="color:DarkGoldenRod">' . ($table['possible_keys'] == '' ? '<em style="color:red">NONE</em>' : $table['possible_keys']) . '</span>'
-					 . '<br /><span style="color:RoyalBlue">Key</span> <span style="color:#666">=></span> <span style="color:DarkGoldenRod">'  . ($table['key'] == '' ? '<em style="color:red">NONE</em>' : $table['key']) . '</span>'
-					 . '<br /><span style="color:RoyalBlue">Type</span> <span style="color:#666">=></span> <span style="color:DarkGoldenRod">' . $table['type'] . '</span>'
-					 . '<br /><span style="color:RoyalBlue">Rows</span> <span style="color:#666">=></span> <span style="color:DarkGoldenRod">'  . $table['rows'] . '</span>'
-					 . ($table['Extra'] != '' ? '<br /><span style="color:RoyalBlue">Extra</span> <span style="color:#666">=></span> <span style="color:DarkGoldenRod">' . $table['Extra'] . '</span>' : '');
+				$log .= '<br><span style="color:RoyalBlue">Possible Keys</span> <span style="color:#666">=></span> <span style="color:DarkGoldenRod">' . ($table['possible_keys'] == '' ? '<em style="color:red">NONE</em>' : $table['possible_keys']) . '</span>'
+					 . '<br><span style="color:RoyalBlue">Key</span> <span style="color:#666">=></span> <span style="color:DarkGoldenRod">'  . ($table['key'] == '' ? '<em style="color:red">NONE</em>' : $table['key']) . '</span>'
+					 . '<br><span style="color:RoyalBlue">Type</span> <span style="color:#666">=></span> <span style="color:DarkGoldenRod">' . $table['type'] . '</span>'
+					 . '<br><span style="color:RoyalBlue">Rows</span> <span style="color:#666">=></span> <span style="color:DarkGoldenRod">'  . $table['rows'] . '</span>'
+					 . ($table['Extra'] != '' ? '<br><span style="color:RoyalBlue">Extra</span> <span style="color:#666">=></span> <span style="color:DarkGoldenRod">' . $table['Extra'] . '</span>' : '');
 			}
 		}
 
-		$log .= '<br /><br /><span style="color:DarkKhaki">Speed:</span> ' . number_format($duration * 100, 3) . ' ms';
+		$log .= '<br><br><span style="color:DarkKhaki">Speed:</span> ' . number_format($duration * 100, 3) . ' ms';
 
 		self::log($log, false, '<span style="color:DarkCyan">database</span>');
 	}
@@ -275,6 +248,8 @@ class Profiler
 	 * Generates the Profiler report that is displayed by the Controller.
 	 * Contains all the HTML needed to display the data properly inline on the
 	 * page. Will generally be displayed after the closing HTML tag.
+	 *
+	 * @todo Thinking this should return the report and not necessarily echo it
 	 */
 	public static function report()
 	{
@@ -317,7 +292,7 @@ class Profiler
 			}
 		</style>
 		<div id="pickles-profiler">
-			<strong style="font-size:1.5em">PICKLES Profiler</strong><br /><br />
+			<strong style="font-size:1.5em">PICKLES Profiler</strong><br><br>
 	 		<?php
 			if (count(self::$profile) == 0)
 			{
@@ -386,8 +361,11 @@ class Profiler
 			}
 			?>
 		</div>
-		<br /><br />
+		<br><br>
 		<?php
+		self::$profile = [];
+		self::$queries = 0;
+		self::$timers  = [];
 	}
 
 	/**
@@ -399,10 +377,11 @@ class Profiler
 	 * @access private
 	 * @param  float $filesize size of the file
 	 * @return string formatted number string
+	 * @todo   Probably can move this elsewhere and make it public
 	 */
 	private static function formatSize($filesize)
 	{
-		$units = array('bytes', 'kB', 'MB', 'GB');
+		$units = ['bytes', 'kB', 'MB', 'GB'];
 
 		return number_format(round($filesize / pow(1024, ($i = floor(log($filesize, 1024)))), 2), 2) . ' ' . $units[$i];
 	}
