@@ -379,15 +379,13 @@ class Controller extends Object
 		{
 			$output = $e->getMessage();
 		}
-		finally
-		{
-			echo $output;
 
-			// Display the Profiler's report if the stars are aligned
-			if ($this->config->pickles['profiler'])
-			{
-				Profiler::report();
-			}
+		echo $output;
+
+		// Display the Profiler's report if the stars are aligned
+		if ($this->config->pickles['profiler'])
+		{
+			Profiler::report();
 		}
 	}
 
