@@ -78,7 +78,7 @@ class Profiler
 	public static function enabled(/* polymorphic */)
 	{
 		$config = Config::getInstance();
-		$config = $config->pickles['profiler'];
+		$config = isset($config->pickles['profiler']) ? $config->pickles['profiler'] : false;
 
 		// Checks if we're set to boolean true
 		if ($config === true)

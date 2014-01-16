@@ -27,6 +27,8 @@ before_script:
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "zend_extension = test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
+  - mysql -e 'create database test;'
+  - mysql test < tests/schema.sql
   - mkdir -p vendors/build/logs
 
 script:

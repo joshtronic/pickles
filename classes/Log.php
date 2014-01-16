@@ -118,7 +118,7 @@ class Log
 	{
 		$config = Config::getInstance();
 
-		if ($config->pickles['logging'] === true)
+		if (isset($config->pickles['logging']) && $config->pickles['logging'])
 		{
 			$log_path = LOG_PATH . date('Y/m/d/', ($time == false ? time() : $time));
 

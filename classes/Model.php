@@ -333,12 +333,6 @@ class Model extends Object
 			'is_deleted' => 'is_deleted',
 		];
 
-		// Grabs the config columns if no columns are set
-		if ($this->columns === null && isset($this->db->columns))
-		{
-			$this->columns = $this->db->columns;
-		}
-
 		// Sets all but the `id` column to false
 		if ($this->columns === false)
 		{
@@ -594,7 +588,7 @@ class Model extends Object
 					(count($this->input_parameters) == 0 ? null : $this->input_parameters)
 				);
 
-				if (isset($partial_cache))
+				if (isset($partial_cache) && count($this->records) > 1)
 				{
 					$records = array_merge($partial_cache, $this->records);
 
@@ -639,7 +633,10 @@ class Model extends Object
 						// @todo Move to Memcached extension and switch to use setMulti()
 						foreach ($this->records as $record)
 						{
-							$this->cache->set(strtoupper($this->model) . '-' . $record['id'], $record);
+							if (isset($record['id']))
+							{
+								$this->cache->set(strtoupper($this->model) . '-' . $record['id'], $record);
+							}
 						}
 					}
 				}
@@ -1678,25 +1675,6 @@ class Model extends Object
 		}
 
 		return false;
-	}
-
-	/**
-	 * Unescape String
-	 *
-	 * Assuming magic quotes is turned on, strips slashes from the string.
-	 *
-	 * @access protected
-	 * @param  string $value string to be unescaped
-	 * @return string unescaped string
-	 */
-	protected function unescape($value)
-	{
-		if (get_magic_quotes_gpc())
-		{
-			$value = stripslashes($value);
-		}
-
-		return $value;
 	}
 
 	/**

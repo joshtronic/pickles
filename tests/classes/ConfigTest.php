@@ -2,23 +2,14 @@
 
 class ConfigTest extends PHPUnit_Framework_TestCase
 {
-	private $config_file;
 	private $config;
 
 	public function setUp()
 	{
-		$this->config_file = SITE_PATH . 'config.php';
 		$this->config      = Config::getInstance();
-		$this->createConfigFile([]);
+		setupConfig([]);
 
 		$_SERVER['REQUEST_METHOD'] = 'GET';
-	}
-
-	private function createConfigFile($config)
-	{
-		$config = '<?php $config = ' . var_export($config, true) . '; ?>';
-
-		file_put_contents($this->config_file, $config);
 	}
 
 	public function testConfigProperty()
@@ -40,7 +31,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
 	public function testDefinedEnvironment()
 	{
-		$this->createConfigFile([
+		setUpConfig([
 			'environment' => 'local',
 		]);
 
@@ -51,7 +42,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
 	public function testMultipleEnvironmentsByIP()
 	{
-		$this->createConfigFile([
+		setUpConfig([
 			'environments' => [
 				'local' => '127.0.0.1',
 				'prod'  => '123.456.789.0',
@@ -65,7 +56,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
 	public function testMultipleEnvironmentsByRegex()
 	{
-		$this->createConfigFile([
+		setUpConfig([
 			'environments' => [
 				'local' => '/^local\.testsite\.com$/',
 				'prod'  => '/^testsite\.com$/',
@@ -82,7 +73,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 		unset($_SERVER['REQUEST_METHOD']);
 		$_SERVER['argv'][1] = 'prod';
 
-		$this->createConfigFile([
+		setUpConfig([
 			'environments' => [
 				'local' => '127.0.0.1',
 				'prod'  => '123.456.789.0',
@@ -103,14 +94,14 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 		unset($_SERVER['REQUEST_METHOD']);
 		$_SERVER['argc'] = 1;
 
-		$this->createConfigFile(['environments' => []]);
+		setUpConfig(['environments' => []]);
 
 		$config = new Config();
 	}
 
 	public function testProfiler()
 	{
-		$this->createConfigFile([
+		setUpConfig([
 			'environment' => 'local',
 			'pickles'     => ['profiler' => true],
 		]);
@@ -122,7 +113,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
 	public function testProfilerArray()
 	{
-		$this->createConfigFile([
+		setUpConfig([
 			'environment' => 'local',
 			'pickles'     => ['profiler' => ['objects', 'timers']],
 		]);
@@ -134,7 +125,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
 	public function testProfilerForceTrue()
 	{
-		$this->createConfigFile([
+		setUpConfig([
 			'environment' => 'local',
 			'pickles'     => ['profiler' => ['unknown']],
 		]);
@@ -146,7 +137,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
 	public function testSecurityConstant()
 	{
-		$this->createConfigFile([
+		setUpConfig([
 			'environment' => 'local',
 			'security'    => ['levels' => [10 => 'level']],
 		]);
@@ -162,7 +153,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSecurityConstantAlreadyDefined()
 	{
-		$this->createConfigFile([
+		setUpConfig([
 			'environment' => 'local',
 			'security'    => ['levels' => [10 => 'level']],
 		]);
@@ -175,7 +166,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	// This test is just for coverage
 	public function testConfigArrayMissing()
 	{
-		file_put_contents($this->config_file, '');
+		file_put_contents(SITE_PATH . 'config.php', '');
 		new Config();
 	}
 }

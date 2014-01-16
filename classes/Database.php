@@ -163,7 +163,6 @@ class Database extends Object
 
 				if (!isset($datasource['driver']))
 				{
-					var_Dump($datasource);
 					throw new Exception('The specified datasource lacks a driver.');
 				}
 
@@ -315,7 +314,7 @@ class Database extends Object
 	{
 		$this->open();
 
-		if ($this->config->pickles['logging'] === true)
+		if (isset($this->config->pickles['logging']) && $this->config->pickles['logging'])
 		{
 			$loggable_query = $sql;
 

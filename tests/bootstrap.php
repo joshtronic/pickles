@@ -44,4 +44,15 @@ function setUpRequest($request, $method = 'GET')
 	$_REQUEST['request']       = $request;
 }
 
+function setUpConfig($config)
+{
+	file_put_contents(
+		SITE_PATH . 'config.php',
+		'<?php $config = ' . var_export($config, true) . '; ?>'
+	);
+}
+
+`mysql -e 'TRUNCATE TABLE test.pickles;'`;
+`echo 'flush_all' | nc localhost 11211`;
+
 ?>
