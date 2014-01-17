@@ -6,12 +6,6 @@ class MockModelWithoutColumns extends Model
 	protected $columns = false;
 }
 
-class MockOtherModel extends Model
-{
-	protected $table   = 'brines';
-	protected $columns = false;
-}
-
 class MockModel extends Model
 {
 	protected $table   = 'pickles';
