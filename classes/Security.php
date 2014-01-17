@@ -350,6 +350,7 @@ class Security
 		if (self::checkSession())
 		{
 			$arguments = func_get_args();
+
 			if (is_array($arguments[0]))
 			{
 				$arguments = $arguments[0];

@@ -461,7 +461,9 @@ class Model extends Object
 				if ($this->use_cache
 					&& isset($parameters_or_key['conditions'][$this->columns['id']])
 					&& count($parameters_or_key) == 1
-					&& count($parameters_or_key['conditions']) == 1)
+					&& count($parameters_or_key['conditions']) == 1
+					// @todo Fix cache merging to allow for this
+					&& $type_or_parameters != 'count')
 				{
 					$cache_keys     = [];
 					$sorted_records = [];
@@ -521,7 +523,12 @@ class Model extends Object
 			}
 			elseif (ctype_digit((string)$parameters_or_key))
 			{
-				$cache_key         = strtoupper($this->model) . '-' . $parameters_or_key;
+				// @todo Fix cache merging to allow for this
+				if ($type_or_parameters != 'count' && $type_or_parameters != 'list')
+				{
+					$cache_key = strtoupper($this->model) . '-' . $parameters_or_key;
+				}
+
 				$parameters_or_key = [$this->columns['id'] => $parameters_or_key];
 
 				if ($this->columns['is_deleted'])
@@ -552,24 +559,16 @@ class Model extends Object
 				'FROM '   . $this->table,
 			];
 
-			switch ($type_or_parameters)
+			// Updates query to use COUNT syntax
+			if ($type_or_parameters == 'count')
 			{
-				// Updates query to use COUNT syntax
-				case 'count':
-					$this->sql[0] = 'SELECT COUNT(*) AS count';
-					$this->generateQuery();
-					break;
-
-				// Adds the rest of the query
-				case 'all':
-				case 'list':
-				case 'indexed':
-				default:
-					if (!isset($cache_key) || $cache_key !== true)
-					{
-						$this->generateQuery();
-					}
-					break;
+				$this->sql[0] = 'SELECT COUNT(*) AS count';
+				$this->generateQuery();
+			}
+			// Adds the rest of the query
+			elseif (!isset($cache_key) || $cache_key !== true)
+			{
+				$this->generateQuery();
 			}
 
 			if (isset($cache_key) && $this->use_cache && !isset($cached))
@@ -588,7 +587,7 @@ class Model extends Object
 					(count($this->input_parameters) == 0 ? null : $this->input_parameters)
 				);
 
-				if (isset($partial_cache) && count($this->records) > 1)
+				if (isset($partial_cache) && count($this->records))
 				{
 					$records = array_merge($partial_cache, $this->records);
 
@@ -704,6 +703,7 @@ class Model extends Object
 	private function generateQuery()
 	{
 		// Adds the JOIN syntax
+		// @todo Ton of issues with predefined columns
 		if ($this->joins != false)
 		{
 			if (is_array($this->joins))
@@ -744,7 +744,7 @@ class Model extends Object
 			}
 			else
 			{
-				$this->sql[] = (stripos('JOIN ', $join) === false ? 'JOIN ' : '') . $this->joins;
+				$this->sql[] = (stripos('JOIN ', $this->joins) === false ? 'JOIN ' : '') . $this->joins;
 			}
 		}
 

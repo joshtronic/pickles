@@ -1,5 +1,10 @@
 <?php
 
+class MockUserModel extends Model
+{
+	protected $table = 'users';
+}
+
 class SecurityTest extends PHPUnit_Framework_TestCase
 {
 	public function testGenerateHashWithDefaultSalts()
@@ -94,6 +99,51 @@ class SecurityTest extends PHPUnit_Framework_TestCase
 
 		$this->assertFalse(Security::isLevel(SECURITY_LEVEL_USER));
 	}
+
+	/*
+	public function testIsLevelDB()
+	{
+		$config = Config::getInstance();
+
+		$config->data = [
+			'pickles' => [
+				'datasource' => 'mysql',
+				'cache'      => 'memcache',
+			],
+			'datasources' => [
+				'mysql' => [
+					'type'     => 'mysql',
+					'driver'   => 'pdo_mysql',
+					'hostname' => 'localhost',
+					'username' => '',
+					'password' => '',
+					'database' => 'test',
+					'cache'    => true,
+				],
+				'memcache' => [
+					'type'      => 'memcache',
+					'hostname'  => 'localhost',
+					'port'      => 11211,
+					'namespace' => '',
+				],
+			],
+		];
+
+		$model = new MockUserModel();
+		$model->record['username'] = 'pickles';
+		$model->commit();
+
+		setUpConfig([
+
+		]);
+
+		new Config();
+
+		Security::login(1, 10, 'USER');
+
+		//$this->assertTrue(Security::isLevel([SECURITY_LEVEL_USER, SECURITY_LEVEL_ADMIN]));
+	}
+	*/
 }
 
 ?>
