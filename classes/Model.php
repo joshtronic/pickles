@@ -133,16 +133,6 @@ class Model extends Object
 	protected $joins = false;
 
 	/**
-	 * [Index] Hints
-	 *
-	 * SQL: USE INDEX
-	 *
-	 * @access protected
-	 * @var    mixed
-	 */
-	protected $hints = false;
-
-	/**
 	 * Conditions
 	 *
 	 * SQL: WHERE
@@ -745,33 +735,6 @@ class Model extends Object
 			else
 			{
 				$this->sql[] = (stripos('JOIN ', $this->joins) === false ? 'JOIN ' : '') . $this->joins;
-			}
-		}
-
-		// Adds the index hints
-		if ($this->hints != false)
-		{
-			if (is_array($this->hints))
-			{
-				foreach ($this->hints as $hint => $columns)
-				{
-					if (is_array($columns))
-					{
-						$this->sql[] = $hint . ' (' . implode(', ', $columns) . ')';
-					}
-					else
-					{
-						$format = (stripos($columns, 'USE ') === false);
-
-						$this->sql[] = ($format ? 'USE INDEX (' : '') . $columns . ($format ? ')' : '');
-					}
-				}
-			}
-			else
-			{
-				$format = (stripos($this->hints, 'USE ') === false);
-
-				$this->sql[] = ($format ? 'USE INDEX (' : '') . $this->hints . ($format ? ')' : '');
 			}
 		}
 
@@ -1658,7 +1621,7 @@ class Model extends Object
 				$key = trim(strtolower($key));
 
 				// Assigns valid keys to the appropriate class property
-				if (in_array($key, ['fields', 'table', 'joins', 'hints', 'conditions', 'group', 'having', 'order', 'limit', 'offset']))
+				if (in_array($key, ['fields', 'table', 'joins', 'conditions', 'group', 'having', 'order', 'limit', 'offset']))
 				{
 					$this->$key = $value;
 					$conditions = false;
