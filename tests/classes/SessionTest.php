@@ -10,6 +10,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
 		}
 
 		$_SERVER['HTTP_USER_AGENT'] = 'yes';
+		$_SERVER['REQUEST_METHOD']  = 'GET';
 	}
 
 	public function testFiles()
