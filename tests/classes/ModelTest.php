@@ -176,30 +176,6 @@ class ModelTest extends PHPUnit_Framework_TestCase
 		]);
 	}
 
-	public function testIndexHintsString()
-	{
-		$model = new MockModelWithoutColumns([
-			'conditions' => ['pickles.id' => 1],
-			'hints'      => 'is_deleted',
-		]);
-	}
-
-	public function testIndexHintsArray()
-	{
-		$model = new MockModelWithoutColumns([
-			'conditions' => ['pickles.id' => 1],
-			'hints'      => ['is_deleted'],
-		]);
-	}
-
-	public function testIndexHintsMultiple()
-	{
-		$model = new MockOtherModel([
-			'conditions' => ['id' => 1],
-			'hints'      => ['IGNORE INDEX' => ['pickle_id', 'is_deleted']],
-		]);
-	}
-
 	public function testFieldValues()
 	{
 		$model = new MockModel('all');
