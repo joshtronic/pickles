@@ -123,16 +123,6 @@ class Model extends Object
 	protected $table = false;
 
 	/**
-	 * Joins
-	 *
-	 * SQL: JOIN
-	 *
-	 * @access protected
-	 * @var    mixed
-	 */
-	protected $joins = false;
-
-	/**
 	 * Conditions
 	 *
 	 * SQL: WHERE
@@ -692,52 +682,6 @@ class Model extends Object
 	 */
 	private function generateQuery()
 	{
-		// Adds the JOIN syntax
-		// @todo Ton of issues with predefined columns
-		if ($this->joins != false)
-		{
-			if (is_array($this->joins))
-			{
-				foreach ($this->joins as $join => $tables)
-				{
-					$join_pieces = [(stripos('JOIN ', $join) === false ? 'JOIN' : strtoupper($join))];
-
-					if (is_array($tables))
-					{
-						foreach ($tables as $table => $conditions)
-						{
-							$join_pieces[] = $table;
-
-							if (is_array($conditions))
-							{
-								$type       = strtoupper(key($conditions));
-								$conditions = current($conditions);
-
-								$join_pieces[] = $type;
-								$join_pieces[] = $this->generateConditions($conditions, true);
-							}
-							else
-							{
-								$join_pieces = $conditions;
-							}
-						}
-					}
-					else
-					{
-						$join_pieces[] = $tables;
-					}
-				}
-
-				$this->sql[] = implode(' ', $join_pieces);
-
-				unset($join_pieces);
-			}
-			else
-			{
-				$this->sql[] = (stripos('JOIN ', $this->joins) === false ? 'JOIN ' : '') . $this->joins;
-			}
-		}
-
 		// Adds the WHERE conditionals
 		if ($this->conditions != false)
 		{
@@ -1621,7 +1565,7 @@ class Model extends Object
 				$key = trim(strtolower($key));
 
 				// Assigns valid keys to the appropriate class property
-				if (in_array($key, ['fields', 'table', 'joins', 'conditions', 'group', 'having', 'order', 'limit', 'offset']))
+				if (in_array($key, ['fields', 'table', 'conditions', 'group', 'having', 'order', 'limit', 'offset']))
 				{
 					$this->$key = $value;
 					$conditions = false;

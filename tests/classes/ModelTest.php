@@ -158,24 +158,6 @@ class ModelTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals([2 => 'one'], $model->records);
 	}
 
-	public function testJoinsString()
-	{
-		$model = new MockModelWithoutColumns([
-			'conditions' => ['pickles.id' => 1],
-			'joins'      => 'brines ON brines.pickle_id = pickles.id',
-		]);
-	}
-
-	public function testJoinsArray()
-	{
-		$model = new MockModelWithoutColumns([
-			'conditions' => ['pickles.id' => 1],
-			'joins'      => [
-				'INNER JOIN' => 'brines ON brines.pickle_id = pickles.id',
-			],
-		]);
-	}
-
 	public function testFieldValues()
 	{
 		$model = new MockModel('all');
