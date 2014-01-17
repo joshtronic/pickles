@@ -30,29 +30,26 @@ class Module extends Object
 	/**
 	 * Page Title
 	 *
-	 * @access protected
-	 * @var    string, null by default
-	 * @todo   Move to public scope, then abandon for $this->meta
+	 * @var  string, null by default
+	 * @todo Abandon for $this->meta
 	 */
-	protected $title = null;
+	public $title = null;
 
 	/**
 	 * Meta Description
 	 *
-	 * @access protected
-	 * @var    string, null by default
-	 * @todo   Move to public scope, then abandon for $this->meta
+	 * @var  string, null by default
+	 * @todo Abandon for $this->meta
 	 */
-	protected $description = null;
+	public $description = null;
 
 	/**
 	 * Meta Keywords (comma separated)
 	 *
-	 * @access protected
-	 * @var    string, null by default
-	 * @todo   Move to public scope, then abandon for $this->meta
+	 * @var  string, null by default
+	 * @todo Abandon for $this->meta
 	 */
-	protected $keywords = null;
+	public $keywords = null;
 
 	/**
 	 * Meta Data
@@ -77,11 +74,9 @@ class Module extends Object
 	/**
 	 * Security Settings
 	 *
-	 * @access protected
-	 * @var    boolean, null by default
-	 * @todo   Move to public scope
+	 * @var boolean, null by default
 	 */
-	protected $security = null;
+	public $security = null;
 
 	/**
 	 * AJAX
@@ -90,36 +85,30 @@ class Module extends Object
 	 * errors should be returned as JSON or if it should use the Error class
 	 * which can be interrogated from within a template.
 	 *
-	 * @access protected
-	 * @var    boolean, false (not AJAX) by default
-	 * @todo   Move to public scope
-	 * @todo   Doesn't seem to be in use, but I have it defined on Clipinary
-	 *         don't want to remove until I drop it else it would end up in the
-	 *         module return array.
+	 * @var  boolean, false (not AJAX) by default
+	 * @todo Doesn't seem to be in use, but I have it defined on Clipinary
+	 *       don't want to remove until I drop it else it would end up in the
+	 *       module return array.
 	 */
-	protected $ajax = false;
+	public $ajax = false;
 
 	/**
 	 * Method
 	 *
 	 * Request methods that are allowed to access the module.
 	 *
-	 * @access protected
-	 * @var    string or array, null by default
-	 * @todo   Move to public scope
+	 * @var string or array, null by default
 	 */
-	protected $method = null;
+	public $method = null;
 
 	/**
 	 * Validate
 	 *
 	 * Variables to validate.
 	 *
-	 * @access protected
-	 * @var    array, null by default
-	 * @todo   Move to public scope
+	 * @var array
 	 */
-	protected $validate = null;
+	public $validate = [];
 
 	/**
 	 * Template
@@ -128,8 +117,7 @@ class Module extends Object
 	 * 'template' return type in the Display class. Parent templates are found
 	 * in ./templates/__shared and use the phtml extension.
 	 *
-	 * @access protected
-	 * @var    string, 'index' by default
+	 * @var string, 'index' by default
 	 */
 	public $template = 'index';
 
@@ -141,12 +129,11 @@ class Module extends Object
 	 * cannot get the variable unless you reference the return array explicitly
 	 * $this->return['variable']
 	 *
-	 * @access protected
-	 * @var    array
-	 * @todo   Move to public scope and rename __return so it's kinda obscured
-	 * @todo   Will need to update leaderbin and sndcrd to use new variable
+	 * @var  array
+	 * @todo Rename __return so it's kinda obscured
+	 * @todo Will need to update leaderbin and sndcrd to use new variable
 	 */
-	protected $return = [];
+	public $return = [];
 
 	/**
 	 * Output
@@ -205,51 +192,36 @@ class Module extends Object
 	/**
 	 * Magic Setter Method
 	 *
-	 * Places the variables that are being modified in the return array that is
-	 * returned if nothing is returned by the module itself. This also prohibits
-	 * the direct modification of module variables which could cause issues.
+	 * Places undefined properties into the return array as part of the
+	 * module's payload.
 	 *
 	 * @param string $name name of the variable to be set
 	 * @param mixed $value value of the variable to be set
-	 * @todo  Ditch the $name check once everything is public
 	 */
 	public function __set($name, $value)
 	{
-		if ($name == 'method')
-		{
-			$this->method = $value;
-		}
-		else
-		{
-			$this->return[$name] = $value;
-		}
+		$this->return[$name] = $value;
 	}
 
 	/**
 	 * Magic Getter Method
 	 *
-	 * Attempts to load the module variable. If it's not set, will attempt to
-	 * load from the config.
+	 * Any variables not defined in this class are set in the return array and
+	 * default to false if not defined there.
 	 *
 	 * @param  string $name name of the variable requested
 	 * @return mixed value of the variable or boolean false
-	 * @todo   Unsure how necessary this will be moving forward, ideally would like to delete entirely
 	 */
 	public function __get($name)
 	{
-		if (!isset($this->$name))
+		if (!isset($this->return[$name]))
 		{
-			if (isset($this->config->pickles[$name]))
-			{
-				$this->$name = $this->config->pickles[$name];
-			}
-			else
-			{
-				$this->$name = false;
-			}
+			return false;
 		}
-
-		return $this->$name;
+		else
+		{
+			return $this->return[$name];
+		}
 	}
 
 	/**
@@ -266,7 +238,7 @@ class Module extends Object
 	{
 		$errors = [];
 
-		if ($this->validate !== false)
+		if ($this->validate)
 		{
 			if (is_array($this->method))
 			{
@@ -275,14 +247,22 @@ class Module extends Object
 
 			switch (strtoupper($this->method))
 			{
-				case 'GET':  $global = &$_GET;     break;
-				case 'POST': $global = &$_POST;    break;
-				default:     $global = &$_REQUEST; break;
+				case 'GET':
+					$global = &$_GET;
+					break;
+
+				case 'POST':
+					$global = &$_POST;
+					break;
+
+				default:
+					$global = &$_REQUEST;
+					break;
 			}
 
 			foreach ($this->validate as $variable => $rules)
 			{
-				if (!is_array($rules))
+				if (!is_array($rules) && $rules !== true)
 				{
 					$variable = $rules;
 					$rules    = true;

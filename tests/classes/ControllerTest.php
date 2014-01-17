@@ -274,7 +274,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 		setUpRequest('validationerrors');
 
 		$module = '<?php class validationerrors extends Module { '
-				. 'protected $validate = ["test"];'
+				. 'public $validate = ["test"];'
 				. 'public function __default() { return ["foo" => "bar"]; }'
 				. '} ?>';
 

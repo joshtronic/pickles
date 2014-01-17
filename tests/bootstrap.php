@@ -1,6 +1,14 @@
 <?php
 
-set_exit_overload(function(){ return false; });
+set_exit_overload(function($status = false)
+{
+	if ($status)
+	{
+		echo $status;
+	}
+
+	return false;
+});
 
 ob_start();
 @session_start();
