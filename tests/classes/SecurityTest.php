@@ -100,7 +100,6 @@ class SecurityTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse(Security::isLevel(SECURITY_LEVEL_USER));
 	}
 
-	/*
 	public function testIsLevelDB()
 	{
 		$config = Config::getInstance();
@@ -127,6 +126,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
 					'namespace' => '',
 				],
 			],
+			'security' => ['model' => 'MockUserModel'],
 		];
 
 		$model = new MockUserModel();
@@ -141,9 +141,14 @@ class SecurityTest extends PHPUnit_Framework_TestCase
 
 		Security::login(1, 10, 'USER');
 
-		//$this->assertTrue(Security::isLevel([SECURITY_LEVEL_USER, SECURITY_LEVEL_ADMIN]));
+		unset(
+			$_SESSION['__pickles']['security']['token'],
+			$_COOKIE['pickles_security_token'],
+			$_SESSION['__pickles']['security']['level']
+		);
+
+		$this->assertFalse(Security::isLevel([SECURITY_LEVEL_USER, SECURITY_LEVEL_ADMIN]));
 	}
-	*/
 }
 
 ?>

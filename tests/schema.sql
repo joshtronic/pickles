@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE `users` (
   `id` int(1) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `role` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'USER',
+  `level` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'USER',
   `created_id` int(1) unsigned DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_id` int(1) unsigned DEFAULT NULL,

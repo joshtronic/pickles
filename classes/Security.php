@@ -225,73 +225,11 @@ class Security
 			{
 				return $_SESSION['__pickles']['security']['level'];
 			}
-			// Hits the database to determine the user's level
+			// Used to hit the database to determine the user's level, found it
+			// to be overkill and just opted for a simple logout.
 			else
 			{
-				// Checks the session cache instead of hitting the database
-				if (isset($_SESSION['__pickles']['security']['user_id'], self::$cache[(int)$_SESSION['__pickles']['security']['user_id']]))
-				{
-					return self::$cache[(int)$_SESSION['__pickles']['security']['user_id']];
-				}
-				else
-				{
-					// Pulls the config and defaults where necessary
-					$config = Config::getInstance();
-
-					if ($config->security === false)
-					{
-						$config = [];
-					}
-					else
-					{
-						$config = $config->security;
-					}
-
-					$defaults = [
-						'login'  => 'login',
-						'model'  => 'User',
-						'column' => 'level',
-					];
-
-					foreach ($defaults as $variable => $value)
-					{
-						if (!isset($config[$variable]))
-						{
-							$config[$variable] = $value;
-						}
-					}
-
-					// Uses the model to pull the user's access level
-					$class = $config['model'];
-					$model = new $class([
-						'fields'     => $config['column'],
-						'conditions' => [
-							'id' => (int)$_SESSION['__pickles']['security']['user_id'],
-						],
-					]);
-
-					if ($model->count() == 0)
-					{
-						Security::logout();
-					}
-					else
-					{
-						$constant = 'SECURITY_LEVEL_' . $model->record[$config['column']];
-
-						if (defined($constant))
-						{
-							$constant = constant($constant);
-
-							self::$cache[(int)$_SESSION['__pickles']['security']['user_id']] = $constant;
-
-							return $constant;
-						}
-						else
-						{
-							throw new Exception('Security level constant is not defined');
-						}
-					}
-				}
+				Security::logout();
 			}
 		}
 
