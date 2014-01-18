@@ -145,9 +145,8 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException        PDOException
-	 * @expectedExceptionMessage SQLSTATE[08006] [7] could not connect to server
-	 * @expectedExceptionCode    7
+	 * @expectedException     PDOException
+	 * @expectedExceptionCode 7
 	 */
 	public function testOpenPostgreSQL()
 	{
