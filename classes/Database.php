@@ -13,6 +13,8 @@
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
+ * @todo      Drop driver, hardcode drivers based on the type
+ * @todo      More assumptions for the datasource variables
  */
 
 /**
@@ -231,12 +233,6 @@ class Database extends Object
 	{
 		if ($this->connection === null)
 		{
-			// Checks that the prefix is set
-			if ($this->dsn == null)
-			{
-				throw new Exception('Data source name is not defined');
-			}
-
 			switch ($this->driver)
 			{
 				case 'pdo_mysql':
@@ -256,30 +252,22 @@ class Database extends Object
 
 			if (isset($this->username, $this->password, $this->database))
 			{
-				// Creates a new PDO database object (persistent)
-				try
-				{
-					// Swaps out any variables with values in the DSN
-					$this->dsn = str_replace(
-						['[[hostname]]', '[[port]]', '[[socket]]', '[[username]]', '[[password]]', '[[database]]'],
-						[$this->hostname, $this->port, $this->socket, $this->username, $this->password, $this->database],
-						$this->dsn
-					);
+				// Swaps out any variables with values in the DSN
+				$this->dsn = str_replace(
+					['[[hostname]]', '[[port]]', '[[socket]]', '[[username]]', '[[password]]', '[[database]]'],
+					[$this->hostname, $this->port, $this->socket, $this->username, $this->password, $this->database],
+					$this->dsn
+				);
 
-					// Strips any empty parameters in the DSN
-					$this->dsn = str_replace(['host=;', 'port=;', 'unix_socket=;'], '', $this->dsn);
+				// Strips any empty parameters in the DSN
+				$this->dsn = str_replace(['host=;', 'port=;', 'unix_socket=;'], '', $this->dsn);
 
-					// Attempts to establish a connection
-					$this->connection = new PDO($this->dsn,	$this->username, $this->password, $this->attributes);
-				}
-				catch (PDOException $e)
-				{
-					throw new Exception($e);
-				}
+				// Attempts to establish a connection
+				$this->connection = new PDO($this->dsn,	$this->username, $this->password, $this->attributes);
 			}
 			else
 			{
-				throw new Exception('There was an error loading the database configuration');
+				throw new Exception('There was an error loading the database configuration.');
 			}
 		}
 
@@ -308,9 +296,10 @@ class Database extends Object
 	 *
 	 * @param  string $sql statement to execute
 	 * @param  array $input_parameters optional key/values to be bound
+	 * @param  boolean $force_slow optional, force slow query logging
 	 * @return integer ID of the last inserted row or sequence number
 	 */
-	public function execute($sql, $input_parameters = null)
+	public function execute($sql, $input_parameters = null, $force_slow = false)
 	{
 		$this->open();
 
@@ -347,68 +336,59 @@ class Database extends Object
 
 			$sql .= "\n" . '/* [' . implode('|', $files) . '] */';
 
-			try
+			// Establishes if we're working on an EXPLAIN
+			if (Profiler::enabled('explains'))
 			{
-				// Establishes if we're working on an EXPLAIN
-				if (Profiler::enabled('explains') == true)
-				{
-					$explaining = preg_match('/^EXPLAIN /i', $sql);
-					$selecting  = preg_match('/^SELECT /i',  $sql);
-				}
-				else
-				{
-					$explaining = null;
-					$selecting  = null;
-				}
-
-				// Executes a standard query
-				if ($input_parameters === null)
-				{
-					// Explains the query
-					if ($selecting == true && $explaining == false)
-					{
-						$explain = $this->fetch('EXPLAIN ' . $sql);
-					}
-
-					$start_time    = microtime(true);
-					$this->results = $this->connection->query($sql);
-				}
-				// Executes a prepared statement
-				else
-				{
-					// Explains the query
-					if ($selecting == true && $explaining == false)
-					{
-						$explain = $this->fetch('EXPLAIN ' . $sql, $input_parameters);
-					}
-
-					$start_time    = microtime(true);
-					$this->results = $this->connection->prepare($sql);
-					$this->results->execute($input_parameters);
-				}
-
-				$end_time = microtime(true);
-				$duration = $end_time - $start_time;
-
-				if ($duration >= 1)
-				{
-					Log::slowQuery($duration . ' seconds: ' . $loggable_query);
-				}
-
-				// Logs the information to the profiler
-				if ($explaining == false && Profiler::enabled('explains', 'queries'))
-				{
-					Profiler::logQuery($sql, $input_parameters, (isset($explain) ? $explain : false), $duration);
-				}
+				$explain = preg_match('/^SELECT /i',  $sql);
 			}
-			catch (PDOException $e)
+			else
 			{
-				throw new Exception($e);
+				$explain = null;
+			}
+
+			// Executes a standard query
+			if ($input_parameters === null)
+			{
+				// Explains the query
+				if ($explain)
+				{
+					$explain = $this->fetch('EXPLAIN ' . $sql);
+				}
+
+				$start_time    = microtime(true);
+				$this->results = $this->connection->query($sql);
+			}
+			// Executes a prepared statement
+			else
+			{
+				// Explains the query
+				if ($explain)
+				{
+					$explain = $this->fetch('EXPLAIN ' . $sql, $input_parameters);
+				}
+
+				$start_time    = microtime(true);
+				$this->results = $this->connection->prepare($sql);
+				$this->results->execute($input_parameters);
+			}
+
+			$end_time = microtime(true);
+			$duration = $end_time - $start_time;
+
+			if ($duration >= 1 || $force_slow)
+			{
+				Log::slowQuery($duration . ' seconds: ' . $loggable_query);
+			}
+
+			// Logs the information to the profiler
+			if (Profiler::enabled('explains', 'queries'))
+			{
+				Profiler::logQuery($sql, $input_parameters, (isset($explain) ? $explain : false), $duration);
 			}
 		}
 		else
 		{
-			throw new Exception('No query to execute');
+			throw new Exception('No query to execute.');
 		}
 
 		return $this->connection->lastInsertId();
