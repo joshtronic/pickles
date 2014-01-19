@@ -289,7 +289,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 			'IS NOT' => null,
 		]);
 
-		var_dump($conditions);
+		//var_dump($conditions);
 	}
 
 	public function testGenerateConditionsInjectValues()
@@ -304,7 +304,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 			'IS NOT' => null,
 		], true);
 
-		var_dump($conditions);
+		//var_dump($conditions);
 	}
 }
 

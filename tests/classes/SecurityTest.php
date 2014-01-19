@@ -2,7 +2,7 @@
 
 class MockUserModel extends Model
 {
-	protected $table = 'users';
+	public $table = 'users';
 }
 
 class SecurityTest extends PHPUnit_Framework_TestCase
