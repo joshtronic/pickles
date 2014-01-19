@@ -286,10 +286,13 @@ class ModelTest extends PHPUnit_Framework_TestCase
 			'OR id !=' => 10,
 			'OR NOT' => [15, 20, 25],
 			'id != 30',
-			'IS NOT' => null,
+			'id IS NOT' => null,
+			'id !=' => false,
+			'id <' => true,
+			'id >' => null,
+			'id BETWEEN' => [35, 40],
 		]);
-
-		//var_dump($conditions);
+		$this->assertEquals('id in (?, ?, ?) AND NOT = ? OR id != ? OR NOT in (?, ?, ?) AND id != 30 AND id IS NOT NULL AND id IS NOT FALSE AND id IS TRUE AND id > NULL AND id BETWEEN ? AND ?', $conditions);
 	}
 
 	public function testGenerateConditionsInjectValues()
@@ -301,10 +304,54 @@ class ModelTest extends PHPUnit_Framework_TestCase
 			'OR id !=' => 10,
 			'OR NOT' => [15, 20, 25],
 			'id != 30',
-			'IS NOT' => null,
+			'id IS NOT' => null,
+			'id !=' => false,
+			'id <' => true,
+			'id >' => null,
+			'id BETWEEN' => [35, 40],
 		], true);
+		$this->assertEquals('id in (1, 2, 3) AND NOT = 5 OR id != 10 OR NOT in (15, 20, 25) AND id != 30 AND id IS NOT NULL AND id IS NOT FALSE AND id IS TRUE AND id > NULL AND id BETWEEN 35 AND 40', $conditions);
+	}
 
-		//var_dump($conditions);
+	public function testGenerateConditionsNoOperatorTrue()
+	{
+		$model = new MockModel();
+		$conditions = $model->generateConditions(['id' => true]);
+		$this->assertEquals('id IS TRUE', $conditions);
+	}
+
+	public function testGenerateConditionsNoOperatorFalse()
+	{
+		$model = new MockModel();
+		$conditions = $model->generateConditions(['id' => false]);
+		$this->assertEquals('id IS FALSE', $conditions);
+	}
+
+	public function testGenerateConditionsNoOperatorNull()
+	{
+		$model = new MockModel();
+		$conditions = $model->generateConditions(['id' => null]);
+		$this->assertEquals('id IS NULL', $conditions);
+	}
+
+	/**
+	 * @expectedException        Exception
+	 * @expectedExceptionMessage BETWEEN expects an array with 2 values.
+	 */
+	public function testGenerateConditionsBetweenMissingValue()
+	{
+		$model = new MockModel();
+		$conditions = $model->generateConditions(['id BETWEEN' => [1]]);
+	}
+
+	/**
+	 * @expectedException        Exception
+	 * @expectedExceptionMessage BETWEEN expects an array.
+	 */
+	public function testGenerateConditionsBetweenNotArray()
+	{
+		$model = new MockModel();
+		$conditions = $model->generateConditions(['id BETWEEN' => '1']);
 	}
 }
 
