@@ -2,14 +2,14 @@
 
 class MockModelWithoutColumns extends Model
 {
-	protected $table   = 'pickles';
-	protected $columns = false;
+	public $table   = 'pickles';
+	public $columns = false;
 }
 
 class MockModel extends Model
 {
-	protected $table   = 'pickles';
-	protected $columns = ['created_at' => 'created_at'];
+	public $table   = 'pickles';
+	public $columns = ['created_at' => 'created_at'];
 }
 
 class ModelTest extends PHPUnit_Framework_TestCase
@@ -244,6 +244,67 @@ class ModelTest extends PHPUnit_Framework_TestCase
 		}
 
 		$model->commit();
+	}
+
+	public function testGetFromCache()
+	{
+		$model = new MockModel(1);
+		$this->assertEquals('1', $model->record['id']);
+	}
+
+	public function testGetFromCacheConditionals()
+	{
+		$model = new MockModel(['conditions' => ['id' => 1]]);
+		$this->assertEquals('1', $model->record['id']);
+	}
+
+	public function testCacheKey()
+	{
+		$model = new MockModel('indexed', 1, 'cache-key');
+		$this->assertEquals([1], array_keys($model->records));
+	}
+
+	public function testGenerateQuery()
+	{
+		$model = new MockModelWithoutColumns([
+			'conditions' => [1, 2, 3],
+			'group'      => 'id',
+			'having'     => '1 = 1',
+			'order'      => 'id DESC',
+			'limit'      => 5,
+			'offset'     => 1,
+		]);
+		$this->assertEquals('2', $model->record['id']);
+	}
+
+	public function testGenerateConditions()
+	{
+		$model = new MockModel();
+		$conditions = $model->generateConditions([
+			'id' => [1, 2, 3],
+			'NOT' => 5,
+			'OR id !=' => 10,
+			'OR NOT' => [15, 20, 25],
+			'id != 30',
+			'IS NOT' => null,
+		]);
+
+		var_dump($conditions);
+	}
+
+	public function testGenerateConditionsInjectValues()
+	{
+		$model = new MockModel();
+		$conditions = $model->generateConditions([
+			'id' => [1, 2, 3],
+			'NOT' => 5,
+			'OR id !=' => 10,
+			'OR NOT' => [15, 20, 25],
+			'id != 30',
+			'IS NOT' => null,
+		], true);
+
+		var_dump($conditions);
 	}
 }
 

@@ -29,179 +29,160 @@ class Model extends Object
 	/**
 	 * Model Name
 	 *
-	 * @access private
-	 * @var    string
+	 * @var string
 	 */
-	private $model = null;
+	public $model = null;
 
 	/**
 	 * Columns
 	 *
 	 * Mapping of key columns for the table.
 	 *
-	 * @access protected
-	 * @var    array
+	 * @var array
 	 */
-	protected $columns = null;
+	public $columns = null;
 
 	/**
 	 * Whether or not to use cache
 	 *
-	 * @access protected
-	 * @var    boolean
+	 * @var boolean
 	 */
-	protected $use_cache = false;
+	public $use_cache = false;
 
 	/**
 	 * SQL Array
 	 *
-	 * @access private
-	 * @var    array
+	 * @var array
 	 */
-	private $sql = [];
+	public $sql = [];
 
 	/**
 	 * Input Parameters Array
 	 *
-	 * @access private
-	 * @var    array
+	 * @var array
 	 */
-	private $input_parameters = [];
+	public $input_parameters = [];
 
 	/**
 	 * Insert Priority
 	 *
 	 * Defaults to false (normal priority) but can be set to "low" or "high"
 	 *
-	 * @access protected
-	 * @var    string
+	 * @var string
 	 */
-	protected $priority = false;
+	public $priority = false;
 
 	/**
 	 * Delayed Insert
 	 *
-	 * @access protected
-	 * @var    boolean
+	 * @var boolean
 	 */
-	protected $delayed = false;
+	public $delayed = false;
 
 	/**
 	 * Ignore Unique Index
 	 *
-	 * @access protected
-	 * @var    boolean
+	 * @var boolean
 	 */
-	protected $ignore = false;
+	public $ignore = false;
 
 	/**
 	 * Replace instead of Insert/Update?
 	 *
-	 * @access protected
-	 * @var    boolean
+	 * @var boolean
 	 */
-	protected $replace = false;
+	public $replace = false;
 
 	/**
 	 * Field List
 	 *
 	 * SQL: SELECT
 	 *
-	 * @access protected
-	 * @var    mixed
+	 * @var mixed, string or array
 	 */
-	protected $fields = '*';
+	public $fields = '*';
 
 	/**
 	 * Table Name
 	 *
 	 * SQL: FROM
 	 *
-	 * @access protected
-	 * @var    mixed
+	 * @var string
 	 */
-	protected $table = false;
+	public $table = false;
 
 	/**
 	 * Conditions
 	 *
 	 * SQL: WHERE
 	 *
-	 * @access protected
-	 * @var    mixed
+	 * @var array
 	 */
-	protected $conditions = false;
+	public $conditions = false;
 
 	/**
 	 * Group
 	 *
 	 * SQL: GROUP BY
 	 *
-	 * @access protected
-	 * @var    mixed
+	 * @var mixed, string or array
 	 */
-	protected $group = false;
+	public $group = false;
 
 	/**
 	 * Having
 	 *
 	 * SQL: HAVING
 	 *
-	 * @access protected
-	 * @var    mixed
+	 * @var mixed, string or array
 	 */
-	protected $having = false;
+	public $having = false;
 
 	/**
 	 * Order
 	 *
 	 * SQL: ORDER BY
 	 *
-	 * @access protected
-	 * @var    mixed
+	 * @var mixed, string or array
 	 */
-	protected $order = false;
+	public $order = false;
 
 	/**
 	 * Limit
 	 *
 	 * SQL: LIMIT
 	 *
-	 * @access protected
-	 * @var    mixed
+	 * @var mixed, integer or array
 	 */
-	protected $limit = false;
+	public $limit = false;
 
 	/**
 	 * Offset
 	 *
 	 * SQL: OFFSET
 	 *
-	 * @access protected
-	 * @var    mixed (string or array)
+	 * @var integer
 	 */
-	protected $offset = false;
+	public $offset = false;
 
 	/**
 	 * Query Results
 	 *
-	 * @access protected
-	 * @var    array
+	 * @var array
 	 */
-	protected $results = null;
+	public $results = null;
 
 	/**
 	 * Index
 	 *
 	 * @var integer
 	 */
-	private $index = null;
+	public $index = null;
 
 	/**
 	 * Record
 	 *
-	 * @access private
-	 * @var    array
+	 * @var array
 	 */
 	public $record = null;
 
@@ -215,50 +196,45 @@ class Model extends Object
 	/**
 	 * Original Record
 	 *
-	 * @access private
-	 * @var    array
+	 * @var array
 	 */
-	private $original = null;
+	public $original = null;
 
 	/**
 	 * Iterate
 	 *
 	 * Used to hold the status during a walk()
 	 *
-	 * @access private
-	 * @var    boolean
+	 * @var boolean
 	 */
-	private $iterate = false;
+	public $iterate = false;
 
 	/**
 	 * Snapshot
 	 *
 	 * Snapshot of the object properties
 	 *
-	 * @access private
-	 * @var    array
+	 * @var array
 	 */
-	private $snapshot = [];
+	public $snapshot = [];
 
 	/**
 	 * MySQL?
 	 *
 	 * Whether or not we're using MySQL
 	 *
-	 * @access private
-	 * @var    boolean
+	 * @var boolean
 	 */
-	private $mysql = false;
+	public $mysql = false;
 
 	/**
 	 * PostgreSQL?
 	 *
 	 * Whether or not we're using PostgreSQL
 	 *
-	 * @access private
-	 * @var    boolean
+	 * @var boolean
 	 */
-	private $postgresql = false;
+	public $postgresql = false;
 
 	/**
 	 * Commit Type
@@ -266,10 +242,9 @@ class Model extends Object
 	 * Indicates what we want to commit. Defaults to a single row commit, any
 	 * calls to queue() will force the commit to process the queue.
 	 *
-	 * @access private
-	 * @var    string
+	 * @var string
 	 */
-	private $commit_type = 'row';
+	public $commit_type = 'row';
 
 	// }}}
 	// {{{ Class Constructor
@@ -281,8 +256,9 @@ class Model extends Object
 	 *
 	 * @param mixed $type_or_parameters optional type of query or parameters
 	 * @param array $parameters optional data to create a query from
+	 * @param string $passed_key optional key to use for caching
 	 */
-	public function __construct($type_or_parameters = null, $parameters = null)
+	public function __construct($type_or_parameters = null, $parameters = null, $passed_key = null)
 	{
 		// Errors if a table is not set. You're welcome, Geoff.
 		if ($this->table == false)
@@ -344,7 +320,7 @@ class Model extends Object
 			}
 		}
 
-		return $this->execute($type_or_parameters, $parameters);
+		return $this->execute($type_or_parameters, $parameters, $passed_key);
 	}
 
 	// }}}
@@ -438,12 +414,12 @@ class Model extends Object
 			{
 				$this->prepareParameters($parameters_or_key);
 
+				// @todo Fix cache merging to allow for this
+				/*
 				if ($this->use_cache
 					&& isset($parameters_or_key['conditions'][$this->columns['id']])
 					&& count($parameters_or_key) == 1
-					&& count($parameters_or_key['conditions']) == 1
-					// @todo Fix cache merging to allow for this
-					&& $type_or_parameters != 'count')
+					&& count($parameters_or_key['conditions']) == 1)
 				{
 					$cache_keys     = [];
 					$sorted_records = [];
@@ -481,6 +457,7 @@ class Model extends Object
 						$cached    = array_values($partial_cache);
 					}
 				}
+				*/
 
 				if ($this->columns['is_deleted'])
 				{
@@ -504,10 +481,7 @@ class Model extends Object
 			elseif (ctype_digit((string)$parameters_or_key))
 			{
 				// @todo Fix cache merging to allow for this
-				if ($type_or_parameters != 'count' && $type_or_parameters != 'list')
-				{
-					$cache_key = strtoupper($this->model) . '-' . $parameters_or_key;
-				}
+				//$cache_key = strtoupper($this->model) . '-' . $parameters_or_key;
 
 				$parameters_or_key = [$this->columns['id'] => $parameters_or_key];
 
@@ -521,11 +495,6 @@ class Model extends Object
 			elseif ($this->columns['is_deleted'])
 			{
 				$this->loadParameters([$this->columns['is_deleted'] => '0']);
-			}
-
-			if (is_string($parameters_or_key))
-			{
-				$passed_key = $parameters_or_key;
 			}
 
 			if (is_string($passed_key))
@@ -678,9 +647,9 @@ class Model extends Object
 	 * Goes through all of the object variables that correspond with parts of
 	 * the query and adds them to the master SQL array.
 	 *
-	 * @return boolean true
+	 * @return array $this->sql an array of SQL parts
 	 */
-	private function generateQuery()
+	public function generateQuery()
 	{
 		// Adds the WHERE conditionals
 		if ($this->conditions != false)
@@ -733,7 +702,7 @@ class Model extends Object
 			$this->sql[] = 'OFFSET ' . $this->offset;
 		}
 
-		return true;
+		return $this->sql;
 	}
 
 	/**
@@ -748,7 +717,7 @@ class Model extends Object
 	 * @param  string $conditional syntax to use between conditions
 	 * @return string $sql generated SQL for the conditions
 	 */
-	private function generateConditions($conditions, $inject_values = false, $conditional = 'AND')
+	public function generateConditions($conditions, $inject_values = false, $conditional = 'AND')
 	{
 		$sql = '';
 
@@ -756,180 +725,153 @@ class Model extends Object
 		{
 			$key = trim($key);
 
-			if (strtoupper($key) == 'NOT')
+			if ($sql != '')
 			{
-				$key = 'AND NOT';
-			}
-
-			// Checks if conditional to start recursion
-			if (preg_match('/^(AND|&&|OR|\|\||XOR)( NOT)?$/i', $key))
-			{
-				if (is_array($value))
+				if (preg_match('/^(AND|&&|OR|\|\||XOR)( NOT)?/i', $key))
 				{
-					// Determines if we need to include ( )
-					$nested = (count($value) > 1);
-
-					$conditional = $key;
-
-					$sql .= ' ' . ($sql == '' ? '' : $key) . ' ' . ($nested ? '(' : '');
-					$sql .= $this->generateConditions($value, $inject_values, $conditional);
-					$sql .= ($nested ? ')' : '');
+					$sql .= ' ';
 				}
 				else
 				{
-					$sql .= ' ' . ($sql == '' ? '' : $key) . ' ' . $value;
+					$sql .= ' ' . $conditional . ' ';
 				}
+			}
+
+			// checks for our keywords to control the flow
+			$operator  = preg_match('/(<|<=|=|>=|>|!=|!|<>| LIKE)$/i', $key);
+			$between   = preg_match('/ BETWEEN$/i', $key);
+			$is_is_not = preg_match('/( IS| IS NOT)$/i', $key);
+
+			// checks for boolean and null
+			$is_true  = ($value === true);
+			$is_false = ($value === false);
+			$is_null  = ($value === null);
+
+			// generates an in statement
+			if (is_array($value) && $between == false)
+			{
+				$sql .= $key . ' in (';
+
+				if ($inject_values == true)
+				{
+					$sql .= implode(', ', $value);
+				}
+				else
+				{
+					$sql .= implode(', ', array_fill(1, count($value), '?'));
+					$this->input_parameters = array_merge($this->input_parameters, $value);
+				}
+
+				$sql .= ')';
 			}
 			else
 			{
-				if ($sql != '')
+				// if the key is numeric it wasn't set, so don't use it
+				if (is_numeric($key))
 				{
-					if (preg_match('/^(AND|&&|OR|\|\||XOR)( NOT)?/i', $key))
-					{
-						$sql .= ' ';
-					}
-					else
-					{
-						$sql .= ' ' . $conditional . ' ';
-					}
-				}
-
-				// Checks for our keywords to control the flow
-				$operator  = preg_match('/(<|<=|=|>=|>|!=|!|<>| LIKE)$/i', $key);
-				$between   = preg_match('/ BETWEEN$/i', $key);
-				$is_is_not = preg_match('/( IS| IS NOT)$/i', $key);
-
-				// Checks for boolean and null
-				$is_true  = ($value === true);
-				$is_false = ($value === false);
-				$is_null  = ($value === null);
-
-				// Generates an IN statement
-				if (is_array($value) && $between == false)
-				{
-					$sql .= $key . ' IN (';
-
-					if ($inject_values == true)
-					{
-						$sql .= implode(', ', $value);
-					}
-					else
-					{
-						$sql .= implode(', ', array_fill(1, count($value), '?'));
-						$this->input_parameters = array_merge($this->input_parameters, $value);
-					}
-
-					$sql .= ')';
+					$sql .= $value;
 				}
 				else
 				{
-					// If the key is numeric it wasn't set, so don't use it
-					if (is_numeric($key))
+					// omits the operator as the operator is there
+					if ($operator == true || $is_is_not == true)
 					{
-						$sql .= $value;
-					}
-					else
-					{
-						// Omits the operator as the operator is there
-						if ($operator == true || $is_is_not == true)
+						if ($is_true || $is_false || $is_null)
 						{
-							if ($is_true || $is_false || $is_null)
+							// scrubs the operator if someone doesn't use is / is not
+							if ($operator == true)
 							{
-								// Scrubs the operator if someone doesn't use IS / IS NOT
-								if ($operator == true)
-								{
-									$key = preg_replace('/ ?(!=|!|<>)$/i',         ' IS NOT', $key);
-									$key = preg_replace('/ ?(<|<=|=|>=| LIKE)$/i', ' IS',     $key);
-								}
+								$key = preg_replace('/ ?(!=|!|<>)$/i',         ' is not', $key);
+								$key = preg_replace('/ ?(<|<=|=|>=| LIKE)$/i', ' is',     $key);
+							}
 
-								$sql .= $key . ' ';
+							$sql .= $key . ' ';
 
-								if ($is_true)
-								{
-									$sql .= 'TRUE';
-								}
-								elseif ($is_false)
-								{
-									$sql .= 'FALSE';
-								}
-								else
-								{
-									$sql .= 'NULL';
-								}
+							if ($is_true)
+							{
+								$sql .= 'TRUE';
+							}
+							elseif ($is_false)
+							{
+								$sql .= 'FALSE';
 							}
 							else
 							{
-								$sql .= $key . ' ';
-
-								if ($inject_values == true)
-								{
-									$sql .= $value;
-								}
-								else
-								{
-									$sql .= '?';
-									$this->input_parameters[] = $value;
-								}
-							}
-						}
-						// Generates a BETWEEN statement
-						elseif ($between == true)
-						{
-							if (is_array($value))
-							{
-								// Checks the number of values, BETWEEN expects 2
-								if (count($value) != 2)
-								{
-									throw new Exception('Between expects 2 values');
-								}
-								else
-								{
-									$sql .= $key . ' ';
-
-									if ($inject_values == true)
-									{
-										$sql .= $value[0] . ' AND ' . $value[1];
-									}
-									else
-									{
-										$sql .= '? AND ?';
-										$this->input_parameters = array_merge($this->input_parameters, $value);
-									}
-								}
-							}
-							else
-							{
-								throw new Exception('Between usage expects values to be in an array');
+								$sql .= 'NULL';
 							}
 						}
 						else
 						{
 							$sql .= $key . ' ';
 
-							// Checks if we're working with NULL values
-							if ($is_true)
+							if ($inject_values == true)
 							{
-								$sql .= 'IS TRUE';
-							}
-							elseif ($is_false)
-							{
-								$sql .= 'IS FALSE';
-							}
-							elseif ($is_null)
-							{
-								$sql .= 'IS NULL';
+								$sql .= $value;
 							}
 							else
 							{
+								$sql .= '?';
+								$this->input_parameters[] = $value;
+							}
+						}
+					}
+					// generates a between statement
+					elseif ($between == true)
+					{
+						if (is_array($value))
+						{
+							// checks the number of values, between expects 2
+							if (count($value) != 2)
+							{
+								throw new Exception('BETWEEN expects 2 values.');
+							}
+							else
+							{
+								$sql .= $key . ' ';
+
 								if ($inject_values == true)
 								{
-									$sql .= '= ' . $value;
+									$sql .= $value[0] . ' AND ' . $value[1];
 								}
 								else
 								{
-									$sql .= '= ?';
-									$this->input_parameters[] = $value;
+									$sql .= '? AND ?';
+									$this->input_parameters = array_merge($this->input_parameters, $value);
 								}
+							}
+						}
+						else
+						{
+							throw new Exception('BETWEEN expects an array.');
+						}
+					}
+					else
+					{
+						$sql .= $key . ' ';
+
+						// checks if we're working with null values
+						if ($is_true)
+						{
+							$sql .= 'TRUE';
+						}
+						elseif ($is_false)
+						{
+							$sql .= 'FALSE';
+						}
+						elseif ($is_null)
+						{
+							$sql .= 'NULL';
+						}
+						else
+						{
+							if ($inject_values == true)
+							{
+								$sql .= '= ' . $value;
+							}
+							else
+							{
+								$sql .= '= ?';
+								$this->input_parameters[] = $value;
 							}
 						}
 					}
@@ -941,12 +883,12 @@ class Model extends Object
 	}
 
 	// }}}
-	// {{{ Record Interaction Methods
+	// {{{ record interaction methods
 
 	/**
-	 * Count Records
+	 * count records
 	 *
-	 * Counts the records
+	 * counts the records
 	 */
 	public function count()
 	{
@@ -954,27 +896,27 @@ class Model extends Object
 	}
 
 	/**
-	 * Sort Records
+	 * sort records
 	 *
-	 * Sorts the records by the specified index in the specified order.
+	 * sorts the records by the specified index in the specified order.
 	 *
 	 * @param  string $index the index to be sorted on
 	 * @param  string $order the direction to order
 	 * @return boolean true
-	 * @todo   Implement this method
+	 * @todo   implement this method
 	 */
-	public function sort($index, $order = 'ASC')
+	public function sort($index, $order = 'asc')
 	{
 		return true;
 	}
 
 	/**
-	 * Shuffle Records
+	 * shuffle records
 	 *
-	 * Sorts the records in a pseudo-random order.
+	 * sorts the records in a pseudo-random order.
 	 *
 	 * @return boolean true
-	 * @todo   Implement this method
+	 * @todo   implement this method
 	 */
 	public function shuffle()
 	{
@@ -982,9 +924,9 @@ class Model extends Object
 	}
 
 	/**
-	 * Next Record
+	 * next record
 	 *
-	 * Increment the record array to the next member of the record set.
+	 * increment the record array to the next member of the record set.
 	 *
 	 * @return boolean whether or not there was next element
 	 */
@@ -1001,9 +943,9 @@ class Model extends Object
 	}
 
 	/**
-	 * Previous Record
+	 * previous record
 	 *
-	 * Decrement the record array to the next member of the record set.
+	 * decrement the record array to the next member of the record set.
 	 *
 	 * @return boolean whether or not there was previous element
 	 */
@@ -1020,9 +962,9 @@ class Model extends Object
 	}
 
 	/**
-	 * Reset Record
+	 * reset record
 	 *
-	 * Set the pointer to the first element of the record set.
+	 * set the pointer to the first element of the record set.
 	 *
 	 * @return boolean whether or not records is an array (and could be reset)
 	 */
@@ -1039,10 +981,10 @@ class Model extends Object
 	}
 
 	/**
-	 * First Record
+	 * first record
 	 *
-	 * Alias of reset(). "first" is more intuitive to me, but reset stays in
-	 * line with the built in PHP functions. Not sure why I'd want to add some
+	 * alias of reset(). "first" is more intuitive to me, but reset stays in
+	 * line with the built in php functions. not sure why i'd want to add some
 	 * consistency to one of the most inconsistent languages.
 	 *
 	 * @return boolean whether or not records is an array (and could be reset)
@@ -1053,9 +995,9 @@ class Model extends Object
 	}
 
 	/**
-	 * End Record
+	 * end record
 	 *
-	 * Set the pointer to the last element of the record set.
+	 * set the pointer to the last element of the record set.
 	 *
 	 * @return boolean whether or not records is an array (and end() worked)
 	 */
@@ -1072,10 +1014,10 @@ class Model extends Object
 	}
 
 	/**
-	 * Last Record
+	 * last record
 	 *
-	 * Alias of end(). "last" is more intuitive to me, but end stays in line
-	 * with the built in PHP functions.
+	 * alias of end(). "last" is more intuitive to me, but end stays in line
+	 * with the built in php functions.
 	 *
 	 * @return boolean whether or not records is an array (and end() worked)
 	 */
@@ -1085,22 +1027,22 @@ class Model extends Object
 	}
 
 	/**
-	 * Walk Records
+	 * walk records
 	 *
-	 * Returns the current record and advances to the next. Built to allow for
+	 * returns the current record and advances to the next. built to allow for
 	 * simplified code when looping through a record set.
 	 *
 	 * @return mixed either an array of the current record or false
-	 * @todo   Does not currently support "indexed" or "list" return types
+	 * @todo   does not currently support "indexed" or "list" return types
 	 */
 	public function walk()
 	{
-		// Checks if we should start iterating, solves off by one issues with next()
+		// checks if we should start iterating, solves off by one issues with next()
 		if ($this->iterate == false)
 		{
 			$this->iterate = true;
 
-			// Resets the records, saves calling reset() when walking multiple times
+			// resets the records, saves calling reset() when walking multiple times
 			$this->reset();
 		}
 		else
@@ -1112,10 +1054,10 @@ class Model extends Object
 	}
 
 	/**
-	 * Queue Record
+	 * queue record
 	 *
-	 * Stashes the current record and creates an empty record ready to be
-	 * manipulated. Eliminates looping through records and INSERTing each one
+	 * stashes the current record and creates an empty record ready to be
+	 * manipulated. eliminates looping through records and inserting each one
 	 * separately and/or the need for helper methods in the models.
 	 */
 	public function queue()
@@ -1126,33 +1068,33 @@ class Model extends Object
 	}
 
 	// }}}
-	// {{{ Record Manipulation Methods
+	// {{{ record manipulation methods
 
 	/**
-	 * Commit
+	 * commit
 	 *
-	 * Inserts or updates a record in the database.
+	 * inserts or updates a record in the database.
 	 *
 	 * @return boolean results of the query
 	 */
 	public function commit()
 	{
-		// Multiple row query / queries
+		// multiple row query / queries
 		if ($this->commit_type == 'queue')
 		{
 			$update     = false;
 			$cache_keys = [];
 
 			/**
-			 * @todo I outta loop through twice to determine if it's an INSERT
-			 * or an UPDATE. As it stands, you could run into a scenario where
+			 * @todo i outta loop through twice to determine if it's an insert
+			 * or an update. as it stands, you could run into a scenario where
 			 * you could have a mixed lot that would attempt to build out a
-			 * query with both INSERT and UPDATE syntax and would probably cause
+			 * query with both insert and update syntax and would probably cause
 			 * a doomsday scenario for our universe.
 			 */
 			foreach ($this->records as $record)
 			{
-				// Performs an UPDATE with multiple queries
+				// performs an update with multiple queries
 				if (array_key_exists($this->columns['id'], $record))
 				{
 					$update = true;
@@ -1178,18 +1120,18 @@ class Model extends Object
 						}
 					}
 
-					// @todo Check if the column was passed in
+					// @todo check if the column was passed in
 					if ($this->columns['updated_at'] != false)
 					{
 						$update_fields[]    = $this->columns['updated_at'] . ' = ?';
-						$input_parameters[] = Time::timestamp();
+						$input_parameters[] = time::timestamp();
 					}
 
-					// @todo Check if the column was passed in
-					if ($this->columns['updated_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+					// @todo check if the column was passed in
+					if ($this->columns['updated_id'] != false && isset($_session['__pickles']['security']['user_id']))
 					{
 						$update_fields[]    = $this->columns['updated_id'] . ' = ?';
-						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
+						$input_parameters[] = $_session['__pickles']['security']['user_id'];
 					}
 
 					if ($sql != '')
@@ -1197,7 +1139,7 @@ class Model extends Object
 						$sql .= '; ';
 					}
 
-					$sql .= 'UPDATE ' . $this->table . ' SET ' . implode(', ', $update_fields) . ' WHERE ';
+					$sql .= 'update ' . $this->table . ' set ' . implode(', ', $update_fields) . ' where ';
 
 					if (isset($record[$this->columns['id']]))
 					{
@@ -1206,10 +1148,10 @@ class Model extends Object
 					}
 					else
 					{
-						throw new Exception('Missing UID field');
+						throw new exception('missing uid field');
 					}
 				}
-				// Performs a multiple row INSERT
+				// performs a multiple row insert
 				else
 				{
 					if (!isset($sql))
@@ -1223,7 +1165,7 @@ class Model extends Object
 							$field_count++;
 						}
 
-						if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+						if ($this->columns['created_id'] != false && isset($_session['__pickles']['security']['user_id']))
 						{
 							$insert_fields[] = $this->columns['created_id'];
 							$field_count++;
@@ -1232,8 +1174,8 @@ class Model extends Object
 						$values           = '(' . implode(', ', array_fill(0, $field_count, '?')) . ')';
 						$input_parameters = [];
 
-						// INSERT INTO ...
-						$sql = 'INSERT INTO ' . $this->table . ' (' . implode(', ', $insert_fields) . ') VALUES ' . $values;
+						// insert into ...
+						$sql = 'insert into ' . $this->table . ' (' . implode(', ', $insert_fields) . ') values ' . $values;
 					}
 					else
 					{
@@ -1247,30 +1189,30 @@ class Model extends Object
 						$input_parameters[] = (is_array($value) ? json_encode($value) : $value);
 					}
 
-					// @todo Check if the column was passed in
+					// @todo check if the column was passed in
 					if ($this->columns['created_at'] != false)
 					{
-						$input_parameters[] = Time::timestamp();
+						$input_parameters[] = time::timestamp();
 						$record_field_count++;
 					}
 
-					// @todo Check if the column was passed in
-					if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+					// @todo check if the column was passed in
+					if ($this->columns['created_id'] != false && isset($_session['__pickles']['security']['user_id']))
 					{
-						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
+						$input_parameters[] = $_session['__pickles']['security']['user_id'];
 						$record_field_count++;
 					}
 
 					if ($record_field_count != $field_count)
 					{
-						throw new Exception('Record does not match the excepted field count');
+						throw new exception('record does not match the excepted field count');
 					}
 				}
 			}
 
 			$results = $this->db->execute($sql . ';', $input_parameters);
 
-			// Clears the cache
+			// clears the cache
 			if ($update && $this->use_cache)
 			{
 				$this->cache->delete($cache_keys);
@@ -1278,77 +1220,77 @@ class Model extends Object
 
 			return $results;
 		}
-		// Single row INSERT or UPDATE
+		// single row insert or update
 		elseif (count($this->record) > 0)
 		{
-			// Determines if it's an UPDATE or INSERT
+			// determines if it's an update or insert
 			$update = (isset($this->record[$this->columns['id']]) && trim($this->record[$this->columns['id']]) != '');
 
-			// Starts to build the query, optionally sets PRIORITY, DELAYED and IGNORE syntax
+			// starts to build the query, optionally sets priority, delayed and ignore syntax
 			if ($this->replace === true && $this->mysql)
 			{
-				$sql = 'REPLACE';
+				$sql = 'replace';
 
-				if (strtoupper($this->priority) == 'LOW')
+				if (strtoupper($this->priority) == 'low')
 				{
-					$sql .= ' LOW_PRIORITY';
+					$sql .= ' low_priority';
 				}
 				elseif ($this->delayed == true)
 				{
-					$sql .= ' DELAYED';
+					$sql .= ' delayed';
 				}
 
-				$sql .= ' INTO ' . $this->table;
+				$sql .= ' into ' . $this->table;
 			}
 			else
 			{
 				if ($update == true)
 				{
-					$sql = 'UPDATE';
+					$sql = 'update';
 				}
 				else
 				{
-					$sql = 'INSERT';
+					$sql = 'insert';
 
-					// PRIORITY syntax takes priority over DELAYED
+					// priority syntax takes priority over delayed
 					if ($this->mysql)
 					{
 						if ($this->priority !== false
-							&& in_array(strtoupper($this->priority), ['LOW', 'HIGH']))
+							&& in_array(strtoupper($this->priority), ['low', 'high']))
 						{
-							$sql .= ' ' . strtoupper($this->priority) . '_PRIORITY';
+							$sql .= ' ' . strtoupper($this->priority) . '_priority';
 						}
 						elseif ($this->delayed == true)
 						{
-							$sql .= ' DELAYED';
+							$sql .= ' delayed';
 						}
 
 						if ($this->ignore == true)
 						{
-							$sql .= ' IGNORE';
+							$sql .= ' ignore';
 						}
 					}
 
-					$sql .= ' INTO';
+					$sql .= ' into';
 				}
 
-				$sql .= ' ' . $this->table . ($update ? ' SET ' : ' ');
+				$sql .= ' ' . $this->table . ($update ? ' set ' : ' ');
 			}
 
 			$input_parameters = null;
 
-			// Limits the columns being updated
+			// limits the columns being updated
 			$record = ($update ? array_diff_assoc(
 				$this->record,
 				isset($this->original[$this->index]) ? $this->original[$this->index] : []
 			) : $this->record);
 
-			// Makes sure there's something to INSERT or UPDATE
+			// makes sure there's something to insert or update
 			if (count($record) > 0)
 			{
 				$insert_fields = [];
 
-				// Loops through all the columns and assembles the query
+				// loops through all the columns and assembles the query
 				foreach ($record as $column => $value)
 				{
 					if ($column != $this->columns['id'])
@@ -1381,7 +1323,7 @@ class Model extends Object
 					}
 				}
 
-				// If it's an UPDATE tack on the ID
+				// if it's an update tack on the id
 				if ($update == true)
 				{
 					if ($this->columns['updated_at'] != false)
@@ -1392,10 +1334,10 @@ class Model extends Object
 						}
 
 						$sql                .= $this->columns['updated_at'] . ' = ?';
-						$input_parameters[]  = Time::timestamp();
+						$input_parameters[]  = time::timestamp();
 					}
 
-					if ($this->columns['updated_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+					if ($this->columns['updated_id'] != false && isset($_session['__pickles']['security']['user_id']))
 					{
 						if ($input_parameters != null)
 						{
@@ -1403,10 +1345,10 @@ class Model extends Object
 						}
 
 						$sql                .= $this->columns['updated_id'] . ' = ?';
-						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
+						$input_parameters[] = $_session['__pickles']['security']['user_id'];
 					}
 
-					$sql                .= ' WHERE ' . $this->columns['id'] . ' = ?' . ($this->mysql ? ' LIMIT 1' : '') . ';';
+					$sql                .= ' where ' . $this->columns['id'] . ' = ?' . ($this->mysql ? ' limit 1' : '') . ';';
 					$input_parameters[]  = $this->record[$this->columns['id']];
 				}
 				else
@@ -1414,27 +1356,27 @@ class Model extends Object
 					if ($this->columns['created_at'] != false)
 					{
 						$insert_fields[]    = $this->columns['created_at'];
-						$input_parameters[] = Time::timestamp();
+						$input_parameters[] = time::timestamp();
 					}
 
-					if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
+					if ($this->columns['created_id'] != false && isset($_session['__pickles']['security']['user_id']))
 					{
 						$insert_fields[]    = $this->columns['created_id'];
-						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
+						$input_parameters[] = $_session['__pickles']['security']['user_id'];
 					}
 
-					$sql .= '(' . implode(', ', $insert_fields) . ') VALUES (' . implode(', ', array_fill(0, count($input_parameters), '?')) . ')';
+					$sql .= '(' . implode(', ', $insert_fields) . ') values (' . implode(', ', array_fill(0, count($input_parameters), '?')) . ')';
 
-					// PDO::lastInsertId() doesn't work so we return the ID with the query
+					// pdo::lastinsertid() doesn't work so we return the id with the query
 					if ($this->postgresql)
 					{
-						$sql .= ' RETURNING ' . $this->columns['id'];
+						$sql .= ' returning ' . $this->columns['id'];
 					}
 
 					$sql .= ';';
 				}
 
-				// Executes the query
+				// executes the query
 				if ($this->postgresql && $update == false)
 				{
 					$results = $this->db->fetch($sql, $input_parameters);
@@ -1445,7 +1387,7 @@ class Model extends Object
 				{
 					$results = $this->db->execute($sql, $input_parameters);
 
-					// Clears the cache
+					// clears the cache
 					if ($update && $this->use_cache)
 					{
 						$this->cache->delete(strtoupper($this->model) . '-' . $this->record[$this->columns['id']]);
@@ -1460,9 +1402,9 @@ class Model extends Object
 	}
 
 	/**
-	 * Delete Record
+	 * delete record
 	 *
-	 * Deletes the current record from the database.
+	 * deletes the current record from the database.
 	 *
 	 * @return boolean status of the query
 	 */
@@ -1470,36 +1412,36 @@ class Model extends Object
 	{
 		if (isset($this->record[$this->columns['id']]))
 		{
-			// Logical deletion
+			// logical deletion
 			if ($this->columns['is_deleted'])
 			{
-				$sql              = 'UPDATE ' . $this->table . ' SET ' . $this->columns['is_deleted'] . ' = ?';
+				$sql              = 'update ' . $this->table . ' set ' . $this->columns['is_deleted'] . ' = ?';
 				$input_parameters = ['1'];
 
 				if ($this->columns['deleted_at'])
 				{
 					$sql                .= ', ' . $this->columns['deleted_at'] . ' = ?';
-					$input_parameters[]  = Time::timestamp();
+					$input_parameters[]  = time::timestamp();
 				}
 
-				if ($this->columns['deleted_id'] && isset($_SESSION['__pickles']['security']['user_id']))
+				if ($this->columns['deleted_id'] && isset($_session['__pickles']['security']['user_id']))
 				{
 					$sql                .= ', ' . $this->columns['deleted_id'] . ' = ?';
-					$input_parameters[]  = $_SESSION['__pickles']['security']['user_id'];
+					$input_parameters[]  = $_session['__pickles']['security']['user_id'];
 				}
 
-				$sql .= ' WHERE ' . $this->columns['id'] . ' = ?';
+				$sql .= ' where ' . $this->columns['id'] . ' = ?';
 			}
-			// For reals deletion
+			// for reals deletion
 			else
 			{
-				$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $this->columns['id'] . ' = ?' . ($this->mysql ? ' LIMIT 1' : '') . ';';
+				$sql = 'delete from ' . $this->table . ' where ' . $this->columns['id'] . ' = ?' . ($this->mysql ? ' limit 1' : '') . ';';
 			}
 
 			$input_parameters[] = $this->record[$this->columns['id']];
 			$results            = $this->db->execute($sql, $input_parameters);
 
-			// Clears the cache
+			// clears the cache
 			if ($this->use_cache)
 			{
 				$this->cache->delete(strtoupper($this->model) . '-' . $this->record[$this->columns['id']]);
@@ -1514,18 +1456,17 @@ class Model extends Object
 	}
 
 	// }}}
-	// {{{ Utility Methods
+	// {{{ utility methods
 
 	/**
-	 * Prepare Parameters
+	 * prepare parameters
 	 *
-	 * Checks if the parameters array is only integers and reconstructs the
+	 * checks if the parameters array is only integers and reconstructs the
 	 * array with the proper conditions format.
 	 *
-	 * @access private
-	 * @param  array $array parameters array, passed by reference
+	 * @param array $array parameters array, passed by reference
 	 */
-	private function prepareParameters(&$parameters)
+	public function prepareparameters(&$parameters)
 	{
 		$all_integers = true;
 
@@ -1544,27 +1485,26 @@ class Model extends Object
 	}
 
 	/**
-	 * Load Parameters
+	 * load parameters
 	 *
-	 * Loads the passed parameters back into the object.
+	 * loads the passed parameters back into the object.
 	 *
-	 * @access private
-	 * @param  array $parameters key / value list
-	 * @param  boolean whether or not the parameters were loaded
+	 * @param array $parameters key / value list
+	 * @param boolean whether or not the parameters were loaded
 	 */
-	private function loadParameters($parameters)
+	public function loadparameters($parameters)
 	{
 		if (is_array($parameters))
 		{
 			$conditions = true;
 
-			// Adds the parameters to the object
+			// adds the parameters to the object
 			foreach ($parameters as $key => $value)
 			{
-				// Clean up the variable just in case
+				// clean up the variable just in case
 				$key = trim(strtolower($key));
 
-				// Assigns valid keys to the appropriate class property
+				// assigns valid keys to the appropriate class property
 				if (in_array($key, ['fields', 'table', 'conditions', 'group', 'having', 'order', 'limit', 'offset']))
 				{
 					$this->$key = $value;
@@ -1572,7 +1512,7 @@ class Model extends Object
 				}
 			}
 
-			// If no valid properties were found, assume it's the conditionals
+			// if no valid properties were found, assume it's the conditionals
 			if ($conditions == true)
 			{
 				$this->conditions = $parameters;
@@ -1585,15 +1525,15 @@ class Model extends Object
 	}
 
 	/**
-	 * Field Values
+	 * field values
 	 *
-	 * Pulls the value from a single field and returns an array without any
-	 * duplicates. Perfect for extracting foreign keys to use in later queries.
+	 * pulls the value from a single field and returns an array without any
+	 * duplicates. perfect for extracting foreign keys to use in later queries.
 	 *
 	 * @param  string $field field we want the values for
 	 * @return array values for the passed field
 	 */
-	public function fieldValues($field)
+	public function fieldvalues($field)
 	{
 		$values = [];
 
