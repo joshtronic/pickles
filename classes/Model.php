@@ -1103,6 +1103,10 @@ class Model extends Object
 			 *       where you could have a mixed lot that would attempt to
 			 *       build out a query with both INSERT and UPDATE syntax and
 			 *       would probably cause a doomsday scenario for our universe.
+			 * @todo Doesn't play nice with ->walk() at all. Ends up stuck in
+			 *       an infinite loop and never executes. Could be part of the
+			 *       aforementioned doomsday scenario and fortunately PHP isn't
+			 *       letting it happen thanks to memory constraints.
 			 */
 			foreach ($this->records as $record)
 			{
@@ -1151,17 +1155,11 @@ class Model extends Object
 						$sql .= '; ';
 					}
 
-					$sql .= 'UPDATE ' . $this->table . ' SET ' . implode(', ', $update_fields) . ' WHERE ';
+					$sql .= 'UPDATE ' . $this->table
+					     .  ' SET ' . implode(', ', $update_fields)
+					     .  ' WHERE ' .  $this->columns['id'] . ' = ?';
 
-					if (isset($record[$this->columns['id']]))
-					{
-						$sql                .= $this->columns['id'] . ' = ?';
-						$input_parameters[]  = $record[$this->columns['id']];
-					}
-					else
-					{
-						throw new Exception('Missing UID field.');
-					}
+					$input_parameters[] = $record[$this->columns['id']];
 				}
 				// Performs a multiple row INSERT
 				else
@@ -1224,7 +1222,7 @@ class Model extends Object
 			return $results;
 		}
 		// Single row INSERT or UPDATE
-		elseif (count($this->record) > 0)
+		else
 		{
 			// Determines if it's an UPDATE or INSERT
 			$update = (isset($this->record[$this->columns['id']]) && trim($this->record[$this->columns['id']]) != '');

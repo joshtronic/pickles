@@ -603,20 +603,21 @@ class ModelTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($count + 5, $model->record['count']);
 	}
 
-#	public function testMultipleQueueUpdate()
-#	{
-#		$model = new MockModel(['conditions' => ['id <=' => 5]]);
-#
-#		var_dump($model->records);
-#
-#		# while ($model->walk())
-#		# {
-#		# 	$model->record['field1'] = String::random();
-#		# 	$model->queue();
-#		# }
-#
-#		# $model->commit();
-#	}
+	public function testMultipleQueueUpdate()
+	{
+		$_SESSION['__pickles']['security']['user_id'] = 1;
+		$model = new MockModel();
+
+		for ($i = 3; $i <= 5; $i++)
+		{
+			$model->record['id'] = $i;
+			$model->record['field1'] = String::random();
+			$model->record['updated_id'] = 1;
+			$model->queue();
+		}
+
+		$model->commit();
+	}
 }
 
 ?>
