@@ -631,6 +631,11 @@ class Model extends Object
 				}
 			}
 
+			if (!preg_match('/^[0-9]+$/', implode('', array_keys($this->records))))
+			{
+				$this->records = [$this->records];
+			}
+
 			$this->index    = 0;
 			$this->original = $this->records;
 		}
@@ -892,7 +897,14 @@ class Model extends Object
 	 */
 	public function count()
 	{
-		return count($this->records);
+		if (isset($this->records[0]) &&  $this->records[0] == [])
+		{
+			return 0;
+		}
+		else
+		{
+			return count($this->records);
+		}
 	}
 
 	/**
@@ -1087,14 +1099,14 @@ class Model extends Object
 
 			/**
 			 * @todo I outta loop through twice to determine if it's an INSERT
-			 * or an UPDATE. As it stands, you could run into a scenario where
-			 * you could have a mixed lot that would attempt to build out a
-			 * query with both insert and update syntax and would probably
-			 * cause a doomsday scenario for our universe.
+			 *       or an UPDATE. As it stands, you could run into a scenario
+			 *       where you could have a mixed lot that would attempt to
+			 *       build out a query with both INSERT and UPDATE syntax and
+			 *       would probably cause a doomsday scenario for our universe.
 			 */
 			foreach ($this->records as $record)
 			{
-				// Performs an update with multiple queries
+				// Performs an UPDATE with multiple queries
 				if (array_key_exists($this->columns['id'], $record))
 				{
 					$update = true;
@@ -1124,14 +1136,14 @@ class Model extends Object
 					if ($this->columns['updated_at'] != false)
 					{
 						$update_fields[]    = $this->columns['updated_at'] . ' = ?';
-						$input_parameters[] = time::timestamp();
+						$input_parameters[] = Time::timestamp();
 					}
 
 					// @todo Check if the column was passed in
-					if ($this->columns['updated_id'] != false && isset($_session['__pickles']['security']['user_id']))
+					if ($this->columns['updated_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
 					{
 						$update_fields[]    = $this->columns['updated_id'] . ' = ?';
-						$input_parameters[] = $_session['__pickles']['security']['user_id'];
+						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
 					}
 
 					if ($sql != '')
@@ -1139,7 +1151,7 @@ class Model extends Object
 						$sql .= '; ';
 					}
 
-					$sql .= 'update ' . $this->table . ' set ' . implode(', ', $update_fields) . ' where ';
+					$sql .= 'UPDATE ' . $this->table . ' SET ' . implode(', ', $update_fields) . ' WHERE ';
 
 					if (isset($record[$this->columns['id']]))
 					{
@@ -1151,7 +1163,7 @@ class Model extends Object
 						throw new Exception('Missing UID field.');
 					}
 				}
-				// Performs a multiple row insert
+				// Performs a multiple row INSERT
 				else
 				{
 					if (!isset($sql))
@@ -1165,7 +1177,7 @@ class Model extends Object
 							$field_count++;
 						}
 
-						if ($this->columns['created_id'] != false && isset($_session['__pickles']['security']['user_id']))
+						if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
 						{
 							$insert_fields[] = $this->columns['created_id'];
 							$field_count++;
@@ -1175,7 +1187,7 @@ class Model extends Object
 						$input_parameters = [];
 
 						// INSERT INTO ...
-						$sql = 'insert into ' . $this->table . ' (' . implode(', ', $insert_fields) . ') values ' . $values;
+						$sql = 'INSERT INTO ' . $this->table . ' (' . implode(', ', $insert_fields) . ') VALUES ' . $values;
 					}
 					else
 					{
@@ -1192,14 +1204,14 @@ class Model extends Object
 					// @todo Check if the column was passed in
 					if ($this->columns['created_at'] != false)
 					{
-						$input_parameters[] = time::timestamp();
+						$input_parameters[] = Time::timestamp();
 						$record_field_count++;
 					}
 
 					// @todo Check if the column was passed in
-					if ($this->columns['created_id'] != false && isset($_session['__pickles']['security']['user_id']))
+					if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
 					{
-						$input_parameters[] = $_session['__pickles']['security']['user_id'];
+						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
 						$record_field_count++;
 					}
 
@@ -1226,12 +1238,12 @@ class Model extends Object
 			// Determines if it's an UPDATE or INSERT
 			$update = (isset($this->record[$this->columns['id']]) && trim($this->record[$this->columns['id']]) != '');
 
-			// Starts to build the query, optionally sets priority, delayed and ignore syntax
+			// Starts to build the query, optionally sets PRIORITY, DELAYED and IGNORE syntax
 			if ($this->replace === true && $this->mysql)
 			{
 				$sql = 'REPLACE';
 
-				if (strtoupper($this->priority) == 'low')
+				if (strtoupper($this->priority) == 'LOW')
 				{
 					$sql .= ' LOW_PRIORITY';
 				}
@@ -1288,6 +1300,11 @@ class Model extends Object
 			// Makes sure there's something to INSERT or UPDATE
 			if (count($record) > 0)
 			{
+				if ($this->replace && $update)
+				{
+					$update = false;
+				}
+
 				$insert_fields = [];
 
 				// Loops through all the columns and assembles the query
@@ -1323,7 +1340,7 @@ class Model extends Object
 					}
 				}
 
-				// If it's an UPDATE tack on the id
+				// If it's an UPDATE tack on the ID
 				if ($update == true)
 				{
 					if ($this->columns['updated_at'] != false)
@@ -1334,43 +1351,49 @@ class Model extends Object
 						}
 
 						$sql                .= $this->columns['updated_at'] . ' = ?';
-						$input_parameters[]  = time::timestamp();
+						$input_parameters[]  = Time::timestamp();
 					}
 
-					if ($this->columns['updated_id'] != false && isset($_session['__pickles']['security']['user_id']))
+					if ($this->columns['updated_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
 					{
 						if ($input_parameters != null)
 						{
 							$sql .= ', ';
 						}
 
-						$sql                .= $this->columns['updated_id'] . ' = ?';
-						$input_parameters[] = $_session['__pickles']['security']['user_id'];
+						$sql .= $this->columns['updated_id'] . ' = ?';
+
+						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
 					}
 
-					$sql                .= ' where ' . $this->columns['id'] . ' = ?' . ($this->mysql ? ' limit 1' : '') . ';';
+					$sql                .= ' WHERE ' . $this->columns['id'] . ' = ?' . ($this->mysql ? ' LIMIT 1' : '') . ';';
 					$input_parameters[]  = $this->record[$this->columns['id']];
 				}
 				else
 				{
-					if ($this->columns['created_at'] != false)
+					// @todo REPLACE should be grabbing the previous values so
+					//       that we're not wiping out pertinent data when the
+					//       internal columns are in use. This includes the
+					//       `id` column that is needed to keep it from doing
+					//       an INSERT instead of an UPDATE
+					if ($this->columns['created_at'] != false || $this->replace)
 					{
 						$insert_fields[]    = $this->columns['created_at'];
 						$input_parameters[] = Time::timestamp();
 					}
 
-					if ($this->columns['created_id'] != false && isset($_session['__pickles']['security']['user_id']))
+					if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
 					{
 						$insert_fields[]    = $this->columns['created_id'];
-						$input_parameters[] = $_session['__pickles']['security']['user_id'];
+						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
 					}
 
-					$sql .= '(' . implode(', ', $insert_fields) . ') values (' . implode(', ', array_fill(0, count($input_parameters), '?')) . ')';
+					$sql .= '(' . implode(', ', $insert_fields) . ') VALUES (' . implode(', ', array_fill(0, count($input_parameters), '?')) . ')';
 
 					// PDO::lastInsertID() doesn't work so we return the ID with the query
 					if ($this->postgresql)
 					{
-						$sql .= ' returning ' . $this->columns['id'];
+						$sql .= ' RETURNING ' . $this->columns['id'];
 					}
 
 					$sql .= ';';
@@ -1387,7 +1410,7 @@ class Model extends Object
 				{
 					$results = $this->db->execute($sql, $input_parameters);
 
-					// clears the cache
+					// Clears the cache
 					if ($update && $this->use_cache)
 					{
 						$this->cache->delete(strtoupper($this->model) . '-' . $this->record[$this->columns['id']]);
@@ -1424,10 +1447,10 @@ class Model extends Object
 					$input_parameters[]  = Time::timestamp();
 				}
 
-				if ($this->columns['deleted_id'] && isset($_session['__pickles']['security']['user_id']))
+				if ($this->columns['deleted_id'] && isset($_SESSION['__pickles']['security']['user_id']))
 				{
 					$sql                .= ', ' . $this->columns['deleted_id'] . ' = ?';
-					$input_parameters[]  = $_session['__pickles']['security']['user_id'];
+					$input_parameters[]  = $_SESSION['__pickles']['security']['user_id'];
 				}
 
 				$sql .= ' WHERE ' . $this->columns['id'] . ' = ?';

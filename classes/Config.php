@@ -203,7 +203,7 @@ class Config extends Object
 	 * @param  array $array configuration error to flatten
 	 * @return array flattened configuration array
 	 */
-	private function flatten($environment, $array)
+	public function flatten($environment, $array)
 	{
 		if (is_array($array))
 		{

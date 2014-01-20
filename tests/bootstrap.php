@@ -61,6 +61,7 @@ function setUpConfig($config)
 }
 
 `mysql -e 'TRUNCATE TABLE test.pickles;'`;
+`mysql -e 'TRUNCATE TABLE test.mypickles;'`;
 `mysql -e 'TRUNCATE TABLE test.users;'`;
 `echo 'flush_all' | nc localhost 11211`;
 

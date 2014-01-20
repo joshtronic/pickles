@@ -6,16 +6,25 @@ class MockModelWithoutColumns extends Model
 	public $columns = false;
 }
 
+// InnoDB
 class MockModel extends Model
 {
 	public $table   = 'pickles';
 	public $columns = ['created_at' => 'created_at'];
 }
 
+// MyISAM
+class MyMockModel extends Model
+{
+	public $table   = 'mypickles';
+}
+
 class ModelTest extends PHPUnit_Framework_TestCase
 {
 	public static function setUpBeforeClass()
 	{
+		// Clears out the Config for ease of testing
+		Object::$instances = [];
 		$config = Config::getInstance();
 
 		$config->data = [
@@ -352,6 +361,126 @@ class ModelTest extends PHPUnit_Framework_TestCase
 	{
 		$model = new MockModel();
 		$conditions = $model->generateConditions(['id BETWEEN' => '1']);
+	}
+
+	public function testCommitSingleRecord()
+	{
+		$value = String::random();
+		$model = new MockModel(1);
+		$model->record['field1'] = $value;
+		$model->commit();
+
+		$model = new MockModel(1);
+		$this->assertEquals($value, $model->record['field1']);
+	}
+
+	public function testCommitSingleRecordReplace()
+	{
+#		$value = String::random();
+#		$model = new MockModel(1);
+#		$model->replace = true;
+#		$model->record['field1'] = $value;
+#		$model->commit();
+#		$model = new MockModel(1);
+#		$this->assertEquals($value, $model->record['field1']);
+	}
+
+	public function testCommitInsertPriority()
+	{
+		$value = String::random();
+		$model = new MockModel();
+		$model->priority = 'low';
+		$model->record['field1'] = $value;
+		$id = $model->commit();
+		$model = new MockModel($id);
+		$this->assertEquals($value, $model->record['field1']);
+	}
+
+	public function testCommitInsertDelayed()
+	{
+		$value = String::random();
+		$model = new MyMockModel();
+		$model->delayed = true;
+		$model->record['field1'] = $value;
+		$model->commit();
+		$model = new MyMockModel(1);
+		$this->assertEquals($value, $model->record['field1']);
+	}
+
+	public function testCommitInsertIgnore()
+	{
+		$value = String::random();
+		$model = new MockModel();
+		$model->ignore = true;
+		$model->record['field1'] = $value;
+		$id = $model->commit();
+		$model = new MockModel($id);
+		$this->assertEquals($value, $model->record['field1']);
+	}
+
+	public function testCommitReplacePriority()
+	{
+		$value = String::random();
+		$model = new MockModel();
+		$model->replace = true;
+		$model->priority = 'low';
+		$model->record['field1'] = $value;
+		$id = $model->commit();
+		$model = new MockModel($id);
+		$this->assertEquals($value, $model->record['field1']);
+	}
+
+	public function testCommitReplaceDelayed()
+	{
+		$value = String::random();
+		$model = new MyMockModel();
+		$model->replace = true;
+		$model->delayed = true;
+		$model->record['field1'] = $value;
+		$model->commit();
+		$model = new MyMockModel(2);
+		$this->assertEquals($value, $model->record['field1']);
+	}
+
+	public function testCommitReplaceIgnore()
+	{
+		$value = String::random();
+		$model = new MockModel();
+		$model->replace = true;
+		$model->ignore = true;
+		$model->record['field1'] = $value;
+		$id = $model->commit();
+		$model = new MockModel($id);
+		$this->assertEquals($value, $model->record['field1']);
+	}
+
+	public function testDeleteLogical()
+	{
+		$_SESSION['__pickles']['security']['user_id'] = 1;
+		$model = new MockModel(1);
+		$model->delete();
+		$model = new MockModelWithoutColumns(1);
+		$this->assertEquals(1, $model->record['is_deleted']);
+	}
+
+	public function testDeleteActual()
+	{
+		$model = new MockModelWithoutColumns(1);
+		$model->delete();
+		$model = new MockModelWithoutColumns(1);
+		$this->assertEquals(0, $model->count());
+	}
+
+	public function testDeleteNothing()
+	{
+		$model = new MockModelWithoutColumns(100);
+		$this->assertFalse($model->delete());
+	}
+
+	public function testLoadParametersWithString()
+	{
+		$model = new MockModel();
+		$this->assertFalse($model->loadParameters(''));
 	}
 }
 

@@ -28,42 +28,37 @@ class Object
 	 * Object Instances
 	 *
 	 * @static
-	 * @access private
 	 * @var    array
 	 */
-	protected static $instances = [];
+	public static $instances = [];
 
 	/**
 	 * Instance of the Config object
 	 *
-	 * @access protected
-	 * @var    object
+	 * @var object
 	 */
-	protected $config = null;
+	public $config = null;
 
 	/**
 	 * Instance of the Cache object
 	 *
-	 * @access protected
-	 * @var    object
+	 * @var object
 	 */
-	protected $cache = null;
+	public $cache = null;
 
 	/**
 	 * Instance of the Database object
 	 *
-	 * @access protected
-	 * @var    object
+	 * @var object
 	 */
-	protected $db = null;
+	public $db = null;
 
 	/**
 	 * Profiler flag
 	 *
-	 * @access private
-	 * @var    mixed
+	 * @var mixed
 	 */
-	private $profiler = false;
+	public $profiler = false;
 
 	/**
 	 * Constructor
