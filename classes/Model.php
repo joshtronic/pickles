@@ -1194,8 +1194,6 @@ class Model extends Object
 						$sql .= ', ' . $values;
 					}
 
-					$record_field_count = count($record);
-
 					foreach ($record as $variable => $value)
 					{
 						$input_parameters[] = (is_array($value) ? json_encode($value) : $value);
@@ -1205,19 +1203,12 @@ class Model extends Object
 					if ($this->columns['created_at'] != false)
 					{
 						$input_parameters[] = Time::timestamp();
-						$record_field_count++;
 					}
 
 					// @todo Check if the column was passed in
 					if ($this->columns['created_id'] != false && isset($_SESSION['__pickles']['security']['user_id']))
 					{
 						$input_parameters[] = $_SESSION['__pickles']['security']['user_id'];
-						$record_field_count++;
-					}
-
-					if ($record_field_count != $field_count)
-					{
-						throw new Exception('Record does not match the excepted field count.');
 					}
 				}
 			}
@@ -1402,9 +1393,7 @@ class Model extends Object
 				// Executes the query
 				if ($this->postgresql && $update == false)
 				{
-					$results = $this->db->fetch($sql, $input_parameters);
-
-					return $results[0][$this->columns['id']];
+					return $this->db->fetch($sql, $input_parameters);
 				}
 				else
 				{

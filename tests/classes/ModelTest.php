@@ -374,15 +374,17 @@ class ModelTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($value, $model->record['field1']);
 	}
 
+	// Handles filling coverage gaps but isn't a reliable test. Would need to
+	// test against a table without a UID column so we can see this in action,
+	// else it just takes a shit because the ID isn't injected back in.
 	public function testCommitSingleRecordReplace()
 	{
-#		$value = String::random();
-#		$model = new MockModel(1);
-#		$model->replace = true;
-#		$model->record['field1'] = $value;
-#		$model->commit();
-#		$model = new MockModel(1);
-#		$this->assertEquals($value, $model->record['field1']);
+		$value = String::random();
+		$model = new MockModel(1);
+		$model->replace = true;
+		$model->record['field1'] = $value;
+		$model->commit();
+		$model = new MockModel(1);
 	}
 
 	public function testCommitInsertPriority()
@@ -454,20 +456,119 @@ class ModelTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($value, $model->record['field1']);
 	}
 
+	public function testCommitMultipleFields()
+	{
+		$value1 = String::random();
+		$value2 = String::random();
+		$model = new MockModelWithoutColumns(1);
+		$model->record['field1'] = $value1;
+		$model->record['field2'] = $value2;
+		$model->commit();
+		$model = new MockModelWithoutColumns(1);
+		$this->assertEquals($value1, $model->record['field1']);
+		$this->assertEquals($value2, $model->record['field2']);
+	}
+
+	public function testCommitIncrement()
+	{
+		$model = new MockModelWithoutColumns(1);
+		$model->record['field1'] = 100;;
+		$model->commit();
+		$model = new MockModelWithoutColumns(1);
+		$model->record['field1'] = '++';
+		$model->commit();
+		$model = new MockModelWithoutColumns(1);
+		$this->assertEquals(101, $model->record['field1']);
+	}
+
+	public function testCommitUpdatedID()
+	{
+		$_SESSION['__pickles']['security']['user_id'] = 1;
+		$value = String::random();
+		$model = new MockModel(1);
+		$model->record['field1'] = $value;
+		$model->commit();
+		$model = new MockModel(1);
+		$this->assertEquals($value, $model->record['field1']);
+		$this->assertEquals(1, $model->record['updated_id']);
+	}
+
+	public function testCommitCreatedID()
+	{
+		$_SESSION['__pickles']['security']['user_id'] = 1;
+		$value = String::random();
+		$model = new MockModel();
+		$model->record['field1'] = $value;
+		$id = $model->commit();
+		$model = new MockModel($id);
+		$this->assertEquals(1, $model->record['created_id']);
+	}
+
+	// Doesn't test against actual PostgreSQL instance, just for valid syntax
+	public function testCommitInsertPostgreSQL()
+	{
+		$_SESSION['__pickles']['security']['user_id'] = 1;
+		$value = String::random();
+		$model = new MockModel();
+		$model->mysql = false;
+		$model->postgresql = true;
+		$model->record['field1'] = $value;
+
+		try
+		{
+			$model->commit();
+		}
+		catch (Exception $e)
+		{
+
+		}
+
+		$this->assertRegExp('/RETURNING id/', $model->db->results->queryString);
+	}
+
+	// Doesn't test against actual PostgreSQL instance, just for valid syntax
+	public function testCommitUpdatePostgreSQL()
+	{
+		$_SESSION['__pickles']['security']['user_id'] = 1;
+		$value = String::random();
+		$model = new MockModel(1);
+		$model->mysql = false;
+		$model->postgresql = true;
+		$model->record['field1'] = $value;
+
+		try
+		{
+			$model->commit();
+		}
+		catch (Exception $e)
+		{
+
+		}
+
+		$model = new MockModel(1);
+		$this->assertEquals($value, $model->record['field1']);
+	}
+
+	public function testCommitNothing()
+	{
+		$model = new MockModel();
+		$this->assertFalse($model->commit());
+	}
+
 	public function testDeleteLogical()
 	{
 		$_SESSION['__pickles']['security']['user_id'] = 1;
 		$model = new MockModel(1);
 		$model->delete();
-		$model = new MockModelWithoutColumns(1);
-		$this->assertEquals(1, $model->record['is_deleted']);
+		$model = new MockModel(1);
+		$this->assertEquals([], $model->record);
 	}
 
 	public function testDeleteActual()
 	{
-		$model = new MockModelWithoutColumns(1);
+		$model = new MockModelWithoutColumns(2);
 		$model->delete();
-		$model = new MockModelWithoutColumns(1);
+		$model = new MockModelWithoutColumns(2);
 		$this->assertEquals(0, $model->count());
 	}
 
@@ -482,6 +583,40 @@ class ModelTest extends PHPUnit_Framework_TestCase
 		$model = new MockModel();
 		$this->assertFalse($model->loadParameters(''));
 	}
+
+	public function testMultipleQueueInsert()
+	{
+		$_SESSION['__pickles']['security']['user_id'] = 1;
+		$model = new MockModel('count');
+		$count = $model->record['count'];
+		$model = new MockModel();
+
+		for ($i = 0; $i < 5; $i++)
+		{
+			$model->record['field1'] = String::random();
+			$model->record['updated_id'] = 1;
+			$model->queue();
+		}
+
+		$model->commit();
+		$model = new MockModel('count');
+		$this->assertEquals($count + 5, $model->record['count']);
+	}
+
+#	public function testMultipleQueueUpdate()
+#	{
+#		$model = new MockModel(['conditions' => ['id <=' => 5]]);
+#
+#		var_dump($model->records);
+#
+#		# while ($model->walk())
+#		# {
+#		# 	$model->record['field1'] = String::random();
+#		# 	$model->queue();
+#		# }
+#
+#		# $model->commit();
+#	}
 }
 
 ?>
