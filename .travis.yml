@@ -17,7 +17,7 @@ services:
 install:
   - composer install
   - mkdir vendor/php-test-helpers
-  - git clone git@github.com:php-test-helpers/php-test-helpers.git /tmp/php-test-helpers
+  - git clone https://github.com/php-test-helpers/php-test-helpers.git /tmp/php-test-helpers
   - cd vendor/php-test-helpers
   - phpize
   - ./configure --enable-test-helpers
