@@ -37,4 +37,4 @@ script:
   - phpunit --colors --coverage-clover /home/travis/build/joshtronic/pickles/vendor/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
 
 after_success:
-  - php vendor/composer/bin/coveralls --config ../.coveralls.yml -v
+  - php vendor/bin/coveralls --config ../.coveralls.yml -v
