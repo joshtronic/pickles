@@ -124,7 +124,7 @@ $config = Config::getInstance();
 $config->data['pickles']['path'] = dirname(__FILE__) . '/';
 
 // Requires the Composer autoloader
-require_once $config->pickles['path'] . 'vendor/autoload.php';
+require_once $config->pickles['path'] . '../vendor/autoload.php';
 
 // Configures any available PHP configuration options
 if (is_array($config->php) && count($config->php))

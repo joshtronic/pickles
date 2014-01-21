@@ -24,7 +24,7 @@ if (!defined('SITE_PATH'))
 	define('SITE_PATH', org\bovigo\vfs\vfsStream::url('site/'));
 }
 
-require_once 'pickles.php';
+require_once 'src/pickles.php';
 
 if (!file_exists(SITE_MODULE_PATH))
 {
