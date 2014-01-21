@@ -1,4 +1,17 @@
 {
+	"name":        "joshtronic/pickles",
+	"description": "PHP Interface Collection of Killer Libraries to Enhance Stuff",
+	"license":     "MIT",
+	"authors": [
+		{
+			"name":     "Joshua Sherman",
+			"email":    "josh@gravityblvd.com",
+			"homepage": "https://github.com/joshtronic/pickles"
+		}
+	],
+	"autoload": {
+		"classmap": ["src/"]
+	},
 	"require-dev": {
 		"mikey179/vfsStream":     "1.2.0",
 		"satooshi/php-coveralls": "dev-master"
