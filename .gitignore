@@ -8,6 +8,7 @@
 !.travis.yml
 !.coveralls.yml
 *~
+vendor
 
 # Global/OSX.gitignore #
 ########################
