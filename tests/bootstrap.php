@@ -13,7 +13,7 @@ set_exit_overload(function($status = false)
 ob_start();
 @session_start();
 
-require_once 'vendor/composer/autoload.php';
+require_once 'vendor/autoload.php';
 
 $root = org\bovigo\vfs\vfsStream::setup('site');
 
