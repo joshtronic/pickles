@@ -84,7 +84,6 @@ function __autoload($class)
 	$pickles_path  = dirname(__FILE__) . '/';
 	$pickles_paths = [
 		'class'  => $pickles_path . 'classes/',
-		'vendor' => $pickles_path . 'vendors/',
 	];
 
 	// Path as the key, boolean value is whether ot not to convert back to hyphenated
@@ -125,7 +124,7 @@ $config = Config::getInstance();
 $config->data['pickles']['path'] = dirname(__FILE__) . '/';
 
 // Requires the Composer autoloader
-require_once $config->pickles['path'] . 'vendors/composer/autoload.php';
+require_once $config->pickles['path'] . 'vendor/composer/autoload.php';
 
 // Configures any available PHP configuration options
 if (is_array($config->php) && count($config->php))
