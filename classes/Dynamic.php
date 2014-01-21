@@ -155,8 +155,6 @@ class Dynamic extends Object
 			{
 				$compiled_filename = str_replace('.min', '', $minified_filename);
 
-				require_once $this->config->pickles['path'] . 'vendors/composer/autoload.php';
-
 				if ($less)
 				{
 					$less = new lessc();
@@ -241,9 +239,7 @@ class Dynamic extends Object
 
 			if ($this->config->pickles['minify'] === true)
 			{
-				require_once $this->config->pickles['path'] . 'vendors/composer/autoload.php';
-
-				$compiler = new Devize\ClosureCompiler\ClosureCompiler;
+				$compiler = new Devize\ClosureCompiler\ClosureCompiler();
 				$compiler->setSourceBaseDir(dirname($original_filename));
 				$compiler->setTargetBaseDir(dirname($minified_filename));
 				$compiler->addSourceFile(basename($original_filename));

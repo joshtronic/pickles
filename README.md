@@ -21,7 +21,7 @@ PICKLES is in fact not a true MVC system and won’t be masquerading around as o
 ### Required Software
 
 * Web server of your choice (nginx is highly recommended)
-* PHP 5.5+
+* PHP 5.4+
 
 Please note that strides are being made to be compatible with bleeding edge technologies. PICKLES is currently developed against PHP 5.5 and does not pass build tests against prior versions. This effort will be with somewhat of a reckless abandon towards backwards compatibility to keep up with deprecations within PHP.
 
@@ -35,7 +35,9 @@ As developers we make demands that our end users use modern day browsers while w
 * PostgreSQL with PDO and PDO_PGSQL drivers
 * SQLite 3 with PDO and PDO_SQLITE drivers
 * Memcached with the Memcache module
-* composer if you want to compile LESS, SCSS or JS also necessary if you want to run the unit tests
+* composer if you want to compile LESS, SCSS or JS also necessary if you want
+  to run the unit tests
+* [ext/test_helpers](https://github.com/php-test-helpers/php-test-helpers) if you want to be able to run the test suite
 
 ## Installation
 

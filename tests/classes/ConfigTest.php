@@ -123,18 +123,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('objects,timers', $config->pickles['profiler']);
 	}
 
-	public function testProfilerForceTrue()
-	{
-		setUpConfig([
-			'environment' => 'local',
-			'pickles'     => ['profiler' => ['unknown']],
-		]);
-
-		$config = new Config();
-
-		$this->assertTrue($config->pickles['profiler']);
-	}
-
 	public function testSecurityConstant()
 	{
 		setUpConfig([

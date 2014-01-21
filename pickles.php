@@ -87,33 +87,26 @@ function __autoload($class)
 		'vendor' => $pickles_path . 'vendors/',
 	];
 
-	if ($class == 'AYAH')
-	{
-		$loaded = require_once $pickles_paths['vendor'] . 'ayah/' . strtolower($filename);
-	}
-	else
-	{
-		// Path as the key, boolean value is whether ot not to convert back to hyphenated
-		$paths = [
-			$pickles_paths['class'] => false,
-			SITE_CLASS_PATH         => false,
-			SITE_MODEL_PATH         => false,
-			SITE_MODULE_PATH        => true,
-		];
+	// Path as the key, boolean value is whether ot not to convert back to hyphenated
+	$paths = [
+		$pickles_paths['class'] => false,
+		SITE_CLASS_PATH         => false,
+		SITE_MODEL_PATH         => false,
+		SITE_MODULE_PATH        => true,
+	];
 
-		foreach ($paths as $path => $hyphenated)
+	foreach ($paths as $path => $hyphenated)
+	{
+		// Converts the filename back to hypenated
+		if ($hyphenated == true)
 		{
-			// Converts the filename back to hypenated
-			if ($hyphenated == true)
-			{
-				$filename = strtolower(preg_replace('/([A-Z]{1})/', '-$1', $filename));;
-			}
+			$filename = strtolower(preg_replace('/([A-Z]{1})/', '-$1', $filename));;
+		}
 
-			if (file_exists($path . $filename))
-			{
-				$loaded = require_once $path . $filename;
-				break;
-			}
+		if (file_exists($path . $filename))
+		{
+			$loaded = require_once $path . $filename;
+			break;
 		}
 	}
 
@@ -130,6 +123,9 @@ $config = Config::getInstance();
 
 // Injects PICKLES variables into the config
 $config->data['pickles']['path'] = dirname(__FILE__) . '/';
+
+// Requires the Composer autoloader
+require_once $config->pickles['path'] . 'vendors/composer/autoload.php';
 
 // Configures any available PHP configuration options
 if (is_array($config->php) && count($config->php))
