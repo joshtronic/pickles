@@ -31,12 +31,10 @@ before_script:
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "zend_extension = /home/travis/build/joshtronic/pickles/vendor/php-test-helpers/modules/test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   - mysql test < tests/schema.sql
-  - mkdir -p vendor/build/logs
+  - mkdir -p build/logs
 
 script:
-  - phpunit --colors --coverage-clover /home/travis/build/joshtronic/pickles/vendor/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
+  - phpunit --colors --coverage-clover /home/travis/build/joshtronic/pickles/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
 
 after_success:
-  - php vendor/bin/coveralls --config ../../.coveralls.yml -v
   - php vendor/bin/coveralls --config ../.coveralls.yml -v
-  - php vendor/bin/coveralls --config .coveralls.yml -v
