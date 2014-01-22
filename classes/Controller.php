@@ -487,7 +487,14 @@ class Controller extends Object
 		// Scrubs class names with hyphens
 		if (strpos($module_class, '-') !== false)
 		{
-			$module_class = preg_replace('/(-(.{1}))/e', 'strtoupper("$2")', $module_class);
+			$module_class = preg_replace_callback(
+				'/(-(.{1}))/',
+				function ($matches)
+				{
+					return strtoupper($matches[2]);
+				},
+				$module_class
+			);
 		}
 
 		return array($module_class, $module_filename, $template_basename, $css_class, $js_basename);
