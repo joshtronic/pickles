@@ -1,6 +1,6 @@
 # PHP Interface Collection of Killer Libraries to Enhance Stuff
 
-[![Build Status](https://travis-ci.org/joshtronic/pickles.png)](https://travis-ci.org/joshtronic/pickles)
+[![Build Status](https://travis-ci.org/joshtronic/pickles.png?branch=master)](https://travis-ci.org/joshtronic/pickles)
 [![Coverage Status](https://coveralls.io/repos/joshtronic/pickles/badge.png)](https://coveralls.io/r/joshtronic/pickles)
 [![Dependency Status](https://gemnasium.com/joshtronic/pickles.png)](https://gemnasium.com/joshtronic/pickles)
 
