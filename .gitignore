@@ -5,6 +5,7 @@
 ##########################
 .*
 !.gitignore
+!.travis.yml
 *~
 
 # Global/OSX.gitignore #
