@@ -225,11 +225,11 @@ class String
 		{
 			if ($hover == true)
 			{
-				$string = '<span title="' . $string . '">' . substr($string, 0, $length) . '&hellip;</span>';
+				$string = '<span title="' . $string . '">' . mb_strcut($string, 0, $length, 'UTF-8') . '&hellip;</span>';
 			}
 			else
 			{
-				$string = substr($string, 0, $length) . '...';
+				$string = mb_strcut($string, 0, $length, 'UTF-8') . '&hellip;';
 			}
 		}
 
