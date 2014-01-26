@@ -1,8 +1,4 @@
-# PICKLES
-
-[![Build Status](https://travis-ci.org/joshtronic/pickles.png?branch=master)](https://travis-ci.org/joshtronic/pickles)
-[![Coverage Status](https://coveralls.io/repos/joshtronic/pickles/badge.png)](https://coveralls.io/r/joshtronic/pickles)
-[![Dependency Status](https://www.versioneye.com/user/projects/52d1bc1eec13751bde00002a/badge.png)](https://www.versioneye.com/user/projects/52d1bc1eec13751bde00002a)
+# PICKLES [![Build Status](https://travis-ci.org/joshtronic/pickles.png?branch=master)](https://travis-ci.org/joshtronic/pickles) [![Coverage Status](https://coveralls.io/repos/joshtronic/pickles/badge.png)](https://coveralls.io/r/joshtronic/pickles) [![Dependency Status](https://www.versioneye.com/user/projects/52d1bc1eec13751bde00002a/badge.png)](https://www.versioneye.com/user/projects/52d1bc1eec13751bde00002a)
 
 PICKLES (PHP Interface Collection of Killer Libraries to Enhance Stuff) is an open source framework for rapid PHP development. PICKLES aims to be an “API First” system for building APIs as well as AJAX/AJAJ-centric web applications.
 
@@ -44,4 +40,4 @@ Installation is quite simple as there is no installer to run, and all server con
 
 ## Thanks
 
-Special thanks goes out to @deanproxy for helping to name this project and @geoffoliver for being a long time user and contributor of this project.
+Special thanks to [Geoff Oliver](https://github.com/geoffoliver) for being a long time user and contributor of PICKLES and to [Dean Jones](https://github.com/deanproxy) for coming up with the PICKLES acronym.
