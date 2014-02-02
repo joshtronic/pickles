@@ -176,40 +176,80 @@ class Time
 				$time_ago = 'seconds';
 			}
 			// Less than 1 hour ago (minutes ago)
-			elseif ($difference < 3600)
+			elseif ($difference < Time::HOUR)
 			{
-				$minutes  = round($difference / 60);
-				$time_ago = $minutes . ' minute' . ($minutes != 1 ? 's' : '');
+				$minutes = round($difference / 60);
+
+				if ($minutes == 60)
+				{
+					$time_ago = 'an hour';
+				}
+				else
+				{
+					$time_ago = ($minutes == 1 ? 'a' : $minutes) . ' minute' . ($minutes != 1 ? 's' : '');
+				}
 			}
 			// Less than 1 day ago (hours ago)
-			elseif ($difference < 86400)
+			elseif ($difference < Time::DAY)
 			{
-				$hours    = round($difference / 3600);
-				$time_ago = $hours . ' hour' . ($hours != 1 ? 's' : '');
+				$hours = round($difference / Time::HOUR);
+
+				if ($hours == 24)
+				{
+					$time_ago = 'a day';
+				}
+				else
+				{
+					$time_ago = ($hours == 1 ? 'an' : $hours) . ' hour' . ($hours != 1 ? 's' : '');
+				}
 			}
 			// Less than 1 week ago (days ago)
-			elseif ($difference < 604800)
+			elseif ($difference < Time::WEEK)
 			{
-				$days     = round($difference / 86400);
-				$time_ago = $days . ' day' . ($days != 1 ? 's' : '');
+				$days = round($difference / Time::DAY);
+
+				if ($days == 7)
+				{
+					$time_ago = 'a week';
+				}
+				else
+				{
+					$time_ago = ($days == 1 ? 'a' : $days) . ' day' . ($days != 1 ? 's' : '');
+				}
 			}
 			// Less than 1 month ago (weeks ago)
-			elseif ($difference < 2419200)
+			elseif ($difference < Time::MONTH)
 			{
-				$weeks    = round($difference / 604800);
-				$time_ago = $weeks . ' week' . ($weeks != 1 ? 's' : '');
+				$weeks = round($difference / Time::WEEK);
+
+				if ($weeks == 4)
+				{
+					$time_ago = 'a month';
+				}
+				else
+				{
+					$time_ago = ($weeks == 1 ? 'a' : $weeks) . ' week' . ($weeks != 1 ? 's' : '');
+				}
 			}
 			// Less than 1 year ago (months ago)
-			elseif ($difference < 31449600)
+			elseif ($difference < Time::YEAR)
 			{
-				$months   = round($difference / 2419200);
-				$time_ago = $months . ' month' . ($months != 1 ? 's' : '');
+				$months = round($difference / Time::MONTH);
+
+				if ($months == 12)
+				{
+					$time_ago = 'a year';
+				}
+				else
+				{
+					$time_ago = ($months == 1 ? 'a' : $months) . ' month' . ($months != 1 ? 's' : '');
+				}
 			}
 			// Over 1 year ago (years ago)
 			else
 			{
-				$years    = round($difference / 31449600);
-				$time_ago = $years . ' year' . ($years != 1 ? 's' : '');
+				$years    = round($difference / Time::YEAR);
+				$time_ago = ($years == 1 ? 'a' : $years) . ' year' . ($years != 1 ? 's' : '');
 			}
 
 			$time_ago .= $suffix;
