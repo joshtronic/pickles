@@ -11,7 +11,7 @@ PICKLES (PHP Interface Collection of Killer Libraries to Enhance Stuff) is an op
 
 Please note that PICKLES development is focused on the most recent stable version of PHP (currently 5.5) but will maintain backwards compatibility with the previous stable version. It may not be immediate, but when PHP 5.6 is released compatibility for PHP 5.4 will be dropped in favor of modern niceties.
 
-For anyone stuck using PHP 5.3 is welcome to use [PICKLES v13.12.x](https://github.com/joshtronic/pickles/tree/v13.12.x) which at this time is still receiving bug fixes but will not be seeing any new development by myself. Pull requests are welcome.
+For anyone stuck using PHP 5.3 is welcome to use [PICKLES v13.12.x](https://github.com/joshtronic/pickles/tree/13.12) which at this time is still receiving bug fixes but will not be seeing any new development by myself. Pull requests are welcome.
 
 My rant about outdated server stacks can be found [on my blog](http://joshtronic.com/2014/01/13/your-stack-is-outdated/#.UuVzI3n0A18).
 
