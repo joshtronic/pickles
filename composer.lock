@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "34fec617e973fcd94cae8d9158e5ce4b",
+    "hash": "02e47a40235974136fdc20e03dc179b3",
     "packages": [
         {
             "name": "devize/closure-compiler",
@@ -44,11 +44,17 @@
         },
         {
             "name": "joshtronic/php-ayah",
-            "version": "v1.1.8",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/joshtronic/php-ayah.git",
-                "reference": "cc0ebf289394f80a83372e36e097afe2d3355b45"
+                "reference": "98e39e2e16de9c77267a6dea4230f6387d5bd1aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/joshtronic/php-ayah/zipball/98e39e2e16de9c77267a6dea4230f6387d5bd1aa",
+                "reference": "98e39e2e16de9c77267a6dea4230f6387d5bd1aa",
+                "shasum": ""
             },
             "type": "library",
             "autoload": {
@@ -61,7 +67,7 @@
             ],
             "authors": [
                 {
-                    "name": "Some awesome developer over at AreYouAHuman.com",
+                    "name": "Elvis “Bear” Jakupovic",
                     "email": "support@areyouahuman.com"
                 },
                 {
@@ -70,7 +76,10 @@
                 }
             ],
             "description": "Are You a Human PHP Bundle",
-            "time": "2014-01-21 02:56:55"
+            "support": {
+                "source": "https://github.com/joshtronic/php-ayah/tree/master"
+            },
+            "time": "2014-02-02 14:58:38"
         },
         {
             "name": "leafo/lessphp",
@@ -163,16 +172,16 @@
     "packages-dev": [
         {
             "name": "guzzle/guzzle",
-            "version": "v3.8.0",
+            "version": "v3.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "b4a3ce8c05e777fa18b802956d5d0e38ad338a69"
+                "reference": "4de0618a01b34aa1c8c33a3f13f396dcd3882eba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/b4a3ce8c05e777fa18b802956d5d0e38ad338a69",
-                "reference": "b4a3ce8c05e777fa18b802956d5d0e38ad338a69",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/4de0618a01b34aa1c8c33a3f13f396dcd3882eba",
+                "reference": "4de0618a01b34aa1c8c33a3f13f396dcd3882eba",
                 "shasum": ""
             },
             "require": {
@@ -210,8 +219,8 @@
                 "phpunit/phpunit": "3.7.*",
                 "psr/log": "1.0.*",
                 "symfony/class-loader": "*",
-                "zendframework/zend-cache": "2.0.*",
-                "zendframework/zend-log": "2.0.*"
+                "zendframework/zend-cache": "<2.3",
+                "zendframework/zend-log": "<2.3"
             },
             "type": "library",
             "extra": {
@@ -221,8 +230,8 @@
             },
             "autoload": {
                 "psr-0": {
-                    "Guzzle\\Tests": "tests/",
-                    "Guzzle": "src/"
+                    "Guzzle": "src/",
+                    "Guzzle\\Tests": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -251,7 +260,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2013-12-05 23:39:20"
+            "time": "2014-01-28 22:29:15"
         },
         {
             "name": "mikey179/vfsStream",
@@ -694,6 +703,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "devize/closure-compiler": 20,
+        "joshtronic/php-ayah": 20,
         "satooshi/php-coveralls": 20
     },
     "platform": [
