@@ -3,20 +3,18 @@ language: php
 php:
   - 5.4
   - 5.5
+  - 5.6
   - hhvm
 
 matrix:
   allow_failures:
+    - php: 5.6
     - php: hhvm
 
 services:
   - memcache
   - memcached
   - redis
-
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install php5-dev
 
 install:
   - composer install
