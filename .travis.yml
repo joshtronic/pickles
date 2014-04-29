@@ -14,6 +14,10 @@ services:
   - memcached
   - redis
 
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install php5-dev
+
 install:
   - composer install
   - mkdir vendor/php-test-helpers
