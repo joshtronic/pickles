@@ -86,7 +86,7 @@ class StringTest extends PHPUnit_Framework_TestCase
 	{
 		return [
 			['foo bar', 3, true,  '<span title="foo bar">foo&hellip;</span>'],
-			['foo bar', 3, false, 'foo...'],
+			['foo bar', 3, false, 'foo&hellip;'],
 			['foo bar', 7, true,  'foo bar'],
 			['foo bar', 8, true,  'foo bar'],
 		];

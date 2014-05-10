@@ -8,8 +8,8 @@
  * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
- * @author    Joshua Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2014, Joshua Sherman
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2014, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -225,11 +225,11 @@ class String
 		{
 			if ($hover == true)
 			{
-				$string = '<span title="' . $string . '">' . substr($string, 0, $length) . '&hellip;</span>';
+				$string = '<span title="' . $string . '">' . mb_strcut($string, 0, $length, 'UTF-8') . '&hellip;</span>';
 			}
 			else
 			{
-				$string = substr($string, 0, $length) . '...';
+				$string = mb_strcut($string, 0, $length, 'UTF-8') . '&hellip;';
 			}
 		}
 

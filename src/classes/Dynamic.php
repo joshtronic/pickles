@@ -8,8 +8,8 @@
  * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
- * @author    Joshua Sherman <josh@gravityblvd.com>
- * @copyright Copyright 2007-2014, Joshua Sherman
+ * @author    Josh Sherman <josh@gravityblvd.com>
+ * @copyright Copyright 2007-2014, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
  * @package   PICKLES
  * @link      https://github.com/joshtronic/pickles
@@ -150,31 +150,31 @@ class Dynamic extends Object
 		{
 			$reference = $original_reference;
 
-			// Compiles LESS & SASS to CSS before minifying
-			if ($less || $sass)
-			{
-				$compiled_filename = str_replace('.min', '', $minified_filename);
-
-				if ($less)
-				{
-					$less = new lessc();
-					$less->compileFile($original_filename, $compiled_filename);
-				}
-				elseif ($sass)
-				{
-					$scss = new scssc();
-
-					file_put_contents(
-						$compiled_filename,
-						$scss->compile(file_get_contents($original_filename))
-					);
-				}
-
-				$original_filename = $compiled_filename;
-			}
-
 			if ($this->config->pickles['minify'] === true)
 			{
+				// Compiles LESS & SASS to CSS before minifying
+				if ($less || $sass)
+				{
+					$compiled_filename = str_replace('.min', '', $minified_filename);
+
+					if ($less)
+					{
+						$less = new lessc();
+						$less->compileFile($original_filename, $compiled_filename);
+					}
+					elseif ($sass)
+					{
+						$scss = new scssc();
+
+						file_put_contents(
+							$compiled_filename,
+							$scss->compile(file_get_contents($original_filename))
+						);
+					}
+
+					$original_filename = $compiled_filename;
+				}
+
 				// Minifies CSS with a few basic character replacements.
 				$stylesheet = file_get_contents($original_filename);
 				$stylesheet = str_replace(
