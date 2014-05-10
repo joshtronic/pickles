@@ -138,6 +138,18 @@ class Browser extends Object
 	}
 
 	/**
+	 * Refresh
+	 *
+	 * Forces a browser refresh of the currently requested page.
+	 *
+	 * @static
+	 */
+	public static function refresh()
+	{
+		Browser::redirect($_SERVER['REQUEST_URI']);
+	}
+
+	/**
 	 * Remote IP
 	 *
 	 * Returns the user's IP address.

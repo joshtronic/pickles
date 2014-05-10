@@ -93,6 +93,14 @@ class BrowserTest extends  PHPUnit_Framework_TestCase
 		Browser::status(500);
 		$this->assertTrue(in_array('Status: 500 Internal Server Error', xdebug_get_headers()));
 	}
+
+	public function testRefresh()
+	{
+		$_SERVER['REQUEST_URI'] = '/some/uri';
+		Browser::goHome();
+		Browser::refresh();
+		$this->assertTrue(in_array('Location: http://testsite.com/some/uri', xdebug_get_headers()));
+	}
 }
 
 ?>
