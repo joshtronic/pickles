@@ -25,12 +25,12 @@ install:
   - pecl install uopz
 
 before_script:
-  - echo "extension = memcache.so"  >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "extension = redis.so"     >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "zend_extension = uopz.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "[uopz]"                   >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "uopz.overloads=1"         >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "zend_extension = /home/travis/.phpenv/versions/$(php -r 'echo phpversion();')/lib/php/extensions/no-debug-zts-20121212/uopz.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "[uopz]" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "uopz.overloads=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - mysql test < tests/schema.sql
   - mkdir -p build/logs
