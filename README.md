@@ -22,7 +22,7 @@ My rant about outdated server stacks can be found [on my blog](http://joshtronic
 * SQLite 3 with the `PDO_SQLITE` driver
 * Memcached server with the `Memcache` module
 * `composer` if you want to compile LESS, SCSS or JS also necessary if you want to use AYAH integration or run the test suite
-* [ext/test_helpers](https://github.com/php-test-helpers/php-test-helpers) if you want to be able to run the test suite
+* [UOPZ](https://github.com/krakjoe/uopz) if you want to be able to run the test suite
 
 ## Installation
 
