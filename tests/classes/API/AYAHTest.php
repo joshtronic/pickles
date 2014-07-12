@@ -28,7 +28,7 @@ class API_AYAHTest extends PHPUnit_Framework_TestCase
 			'scoring_key'   => '80cc3f9c6e1da29369c238d55bd8528a968473ad',
 		];
 
-		$this->assertRegExp('/<div id=\'AYAH\'><\/div><script src=\'https:\/\/ws.areyouahuman.com\/ws\/script\/[a-z0-9]{40}\/[a-zA-Z0-9]{45}\' type=\'text\/javascript\' language=\'JavaScript\'><\/script>/', API_AYAH::getHTML());
+		$this->assertRegExp('/<div id=\'AYAH\'><\/div><script src=\'https:\/\/ws.areyouahuman.com\/ws\/script\/[a-z0-9]{40}(\/[a-zA-Z0-9]{45})?\' type=\'text\/javascript\' language=\'JavaScript\'><\/script>/', API_AYAH::getHTML());
 	}
 
 	public function testIsNotHuman()
