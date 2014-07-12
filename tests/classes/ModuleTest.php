@@ -29,7 +29,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
 	public function testAutoRunParentError()
 	{
-		$this->expectOutputString('Errors encountered, this is a @todo for form validation when calling modules from inside of modules');
+		$this->expectOutputString('');
 		$model = new MockChildModule(true);
 	}
 

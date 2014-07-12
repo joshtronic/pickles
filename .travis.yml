@@ -22,20 +22,14 @@ services:
 
 install:
   - composer install
-  - mkdir vendor/php-test-helpers
-  - git clone https://github.com/php-test-helpers/php-test-helpers.git vendor/php-test-helpers
-  - cd vendor/php-test-helpers
-  - phpize
-  - ./configure --enable-test-helpers
-  - make
-  - sudo make install
-  - cd -
+  - pecl install uopz
 
 before_script:
-  - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = memcache.so"  >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "zend_extension = /home/travis/build/joshtronic/pickles/vendor/php-test-helpers/modules/test_helpers.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
+  - echo "extension = redis.so"     >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "zend_extension = uopz.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "uopz.overloads=1"         >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - mysql test < tests/schema.sql
   - mkdir -p build/logs
 

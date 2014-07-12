@@ -1,14 +1,6 @@
 <?php
 
-set_exit_overload(function($status = false)
-{
-	if ($status)
-	{
-		echo $status;
-	}
-
-	return false;
-});
+uopz_overload(ZEND_EXIT, function(){});
 
 ob_start();
 @session_start();
