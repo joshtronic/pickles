@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "308d3bbe435c467ea541155bdbdc90c3",
+    "hash": "1f18d04c78af4e106e88d1a126e8486c",
     "packages": [
         {
             "name": "devize/closure-compiler",
@@ -48,12 +48,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/joshtronic/php-ayah.git",
-                "reference": "98e39e2e16de9c77267a6dea4230f6387d5bd1aa"
+                "reference": "230e4d686c605bc7b7388dee288baea51519ba6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/joshtronic/php-ayah/zipball/98e39e2e16de9c77267a6dea4230f6387d5bd1aa",
-                "reference": "98e39e2e16de9c77267a6dea4230f6387d5bd1aa",
+                "url": "https://api.github.com/repos/joshtronic/php-ayah/zipball/230e4d686c605bc7b7388dee288baea51519ba6c",
+                "reference": "230e4d686c605bc7b7388dee288baea51519ba6c",
                 "shasum": ""
             },
             "type": "library",
@@ -71,7 +71,7 @@
                     "email": "support@areyouahuman.com"
                 },
                 {
-                    "name": "Joshua Sherman",
+                    "name": "Josh Sherman",
                     "email": "josh@gravityblvd.com"
                 }
             ],
@@ -79,7 +79,7 @@
             "support": {
                 "source": "https://github.com/joshtronic/php-ayah/tree/master"
             },
-            "time": "2014-02-02 14:58:38"
+            "time": "2014-07-27 22:09:32"
         },
         {
             "name": "leafo/lessphp",
