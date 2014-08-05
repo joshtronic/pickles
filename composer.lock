@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1f18d04c78af4e106e88d1a126e8486c",
+    "hash": "160402cf03ce165a6eabbff5001abfa0",
     "packages": [
         {
             "name": "devize/closure-compiler",
@@ -124,16 +124,16 @@
         },
         {
             "name": "leafo/scssphp",
-            "version": "v0.0.12",
+            "version": "v0.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/scssphp.git",
-                "reference": "ff76df3e45af45e808f3fcd516a2cb5cbc77f45e"
+                "reference": "dfb793daf3ecdce82c40fb6e6c3a84b6ab230364"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp/zipball/ff76df3e45af45e808f3fcd516a2cb5cbc77f45e",
-                "reference": "ff76df3e45af45e808f3fcd516a2cb5cbc77f45e",
+                "url": "https://api.github.com/repos/leafo/scssphp/zipball/dfb793daf3ecdce82c40fb6e6c3a84b6ab230364",
+                "reference": "dfb793daf3ecdce82c40fb6e6c3a84b6ab230364",
                 "shasum": ""
             },
             "require": {
@@ -166,7 +166,7 @@
             ],
             "description": "scssphp is a compiler for SCSS written in PHP.",
             "homepage": "http://leafo.net/scssphp/",
-            "time": "2014-07-07 01:51:39"
+            "time": "2014-08-05 05:45:15"
         }
     ],
     "packages-dev": [

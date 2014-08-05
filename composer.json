@@ -24,6 +24,6 @@
 		"devize/closure-compiler": "@dev",
 		"joshtronic/php-ayah":     "@dev",
 		"leafo/lessphp":           "0.4.0",
-		"leafo/scssphp":           "0.0.12"
+		"leafo/scssphp":           "0.0.14"
 	}
 }
