@@ -59,7 +59,7 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
 				'type'     => 'mysql',
 				'driver'   => 'pdo_mysql',
 				'hostname' => 'localhost',
-				'username' => '',
+				'username' => 'root',
 				'password' => '',
 				'database' => 'test',
 			],
