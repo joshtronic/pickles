@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "e73ce8a837b044c21ddf317d18efaf9b",
+    "hash": "c1295374b2aa31be498559bf94ba36db",
     "packages": [
         {
             "name": "devize/closure-compiler",
@@ -124,33 +124,32 @@
         },
         {
             "name": "leafo/scssphp",
-            "version": "v0.0.15",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/scssphp.git",
-                "reference": "85348dde6f193fe390aff76b21d816415ffef93b"
+                "reference": "10cda4bd3ab76623d18bfbb9731992670df9b00b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp/zipball/85348dde6f193fe390aff76b21d816415ffef93b",
-                "reference": "85348dde6f193fe390aff76b21d816415ffef93b",
+                "url": "https://api.github.com/repos/leafo/scssphp/zipball/10cda4bd3ab76623d18bfbb9731992670df9b00b",
+                "reference": "10cda4bd3ab76623d18bfbb9731992670df9b00b",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2.0"
+                "php": ">=5.3.0"
             },
             "require-dev": {
-                "php": ">=5.3.0",
                 "phpunit/phpunit": "3.7.*"
             },
             "bin": [
-                "pscss"
+                "bin/pscss"
             ],
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "scss.inc.php"
-                ]
+                "psr-4": {
+                    "Leafo\\ScssPhp\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -166,7 +165,14 @@
             ],
             "description": "scssphp is a compiler for SCSS written in PHP.",
             "homepage": "http://leafo.net/scssphp/",
-            "time": "2014-08-05 15:11:40"
+            "keywords": [
+                "css",
+                "less",
+                "sass",
+                "scss",
+                "stylesheet"
+            ],
+            "time": "2014-08-10 03:44:06"
         }
     ],
     "packages-dev": [
