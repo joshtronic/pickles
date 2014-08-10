@@ -21,6 +21,7 @@
 		"satooshi/php-coveralls": "dev-master"
 	},
 	"require": {
+		"php":                     ">=5.4.0",
 		"devize/closure-compiler": "@dev",
 		"joshtronic/php-ayah":     "@dev",
 		"leafo/lessphp":           "0.4.0",

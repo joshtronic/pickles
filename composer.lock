@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c1295374b2aa31be498559bf94ba36db",
+    "hash": "c8aa2b9ac64b8d11af844b3367f4f78f",
     "packages": [
         {
             "name": "devize/closure-compiler",
@@ -728,6 +728,8 @@
         "joshtronic/php-ayah": 20,
         "satooshi/php-coveralls": 20
     },
-    "platform": [],
+    "platform": {
+        "php": ">=5.4.0"
+    },
     "platform-dev": []
 }
