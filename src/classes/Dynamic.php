@@ -164,7 +164,7 @@ class Dynamic extends Object
 					}
 					elseif ($sass)
 					{
-						$scss = new scssc();
+						$scss = new Leafo\ScssPhp\Compiler();
 
 						file_put_contents(
 							$compiled_filename,
