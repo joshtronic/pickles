@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c8aa2b9ac64b8d11af844b3367f4f78f",
+    "hash": "fa6cb8389d7f11270a215c225a69ab09",
     "packages": [
         {
             "name": "devize/closure-compiler",
@@ -124,16 +124,16 @@
         },
         {
             "name": "leafo/scssphp",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/scssphp.git",
-                "reference": "10cda4bd3ab76623d18bfbb9731992670df9b00b"
+                "reference": "8c08da585537e97efd528c7d278463d2b9396371"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp/zipball/10cda4bd3ab76623d18bfbb9731992670df9b00b",
-                "reference": "10cda4bd3ab76623d18bfbb9731992670df9b00b",
+                "url": "https://api.github.com/repos/leafo/scssphp/zipball/8c08da585537e97efd528c7d278463d2b9396371",
+                "reference": "8c08da585537e97efd528c7d278463d2b9396371",
                 "shasum": ""
             },
             "require": {
@@ -147,6 +147,9 @@
             ],
             "type": "library",
             "autoload": {
+                "classmap": [
+                    "classmap.php"
+                ],
                 "psr-4": {
                     "Leafo\\ScssPhp\\": "src/"
                 }
@@ -172,7 +175,7 @@
                 "scss",
                 "stylesheet"
             ],
-            "time": "2014-08-10 03:44:06"
+            "time": "2014-08-12 22:41:53"
         }
     ],
     "packages-dev": [
