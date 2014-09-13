@@ -30,16 +30,16 @@ before_script:
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo -e "zend_$(cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini)" > ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "zend_extension = /home/travis/.phpenv/versions/$(php -r 'echo phpversion();')/lib/php/extensions/no-debug-zts-20100525/uopz.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "[uopz]" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "uopz.overloads=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - phpunit --version
   - mysql -e "create database IF NOT EXISTS test;" -u root
   - mysql test < tests/schema.sql -u root
   - mkdir -p build/logs
   - phpenv rehash
 
 script:
-  - phpunit --colors --coverage-clover /home/travis/build/joshtronic/pickles/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
+  - phpunit --stderr --colors --coverage-clover /home/travis/build/joshtronic/pickles/build/logs/clover.xml --bootstrap ./tests/bootstrap.php ./tests
 
 after_success:
   - php vendor/bin/coveralls --config ../.coveralls.yml -v

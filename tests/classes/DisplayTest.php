@@ -40,6 +40,9 @@ class DisplayTest extends PHPUnit_Framework_TestCase
 	{
 		$this->display->return = 'invalid';
 		$this->assertEquals('Invalid return type.', $this->display->render());
+
+		// Gotta do this or the test will be considered "risky"
+		ob_end_clean();
 	}
 
 	public function testPHPSESSID()
@@ -50,6 +53,9 @@ class DisplayTest extends PHPUnit_Framework_TestCase
 
 		$this->assertTrue(in_array('Location: ' . $request_uri, xdebug_get_headers()));
 		$this->assertEquals('Requested URI contains PHPSESSID, redirecting.', $return);
+
+		// Gotta do this or the test will be considered "risky"
+		ob_end_clean();
 	}
 
 	public function testNoParentTemplate()
