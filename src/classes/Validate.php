@@ -24,153 +24,152 @@
  */
 class Validate
 {
-	/**
-	 * Is Valid?
-	 *
-	 * Checks if a variable is valid based on the passed rules.
-	 *
-	 * @param  mixed $value the value to be validated
-	 * @param  array $rules an array of rules (and messages) to validate with
-	 * @return mixed boolean true if valid, array of errors if invalid
-	 */
-	public static function isValid($value, $rules)
-	{
-		$errors = [];
+    /**
+     * Is Valid?
+     *
+     * Checks if a variable is valid based on the passed rules.
+     *
+     * @param  mixed $value the value to be validated
+     * @param  array $rules an array of rules (and messages) to validate with
+     * @return mixed boolean true if valid, array of errors if invalid
+     */
+    public static function isValid($value, $rules)
+    {
+        $errors = [];
 
-		if (is_array($rules))
-		{
-			foreach ($rules as $rule => $message)
-			{
-				$rule = explode(':', $rule);
+        if (is_array($rules))
+        {
+            foreach ($rules as $rule => $message)
+            {
+                $rule = explode(':', $rule);
 
-				switch (strtolower($rule[0]))
-				{
-					// @todo case 'alpha':
-					// @todo case 'alphanumeric':
-					// @todo case 'date':
+                switch (strtolower($rule[0]))
+                {
+                    // @todo case 'alpha':
+                    // @todo case 'alphanumeric':
+                    // @todo case 'date':
 
-					// {{{ Checks using filter_var()
+                    // {{{ Checks using filter_var()
 
-					case 'filter':
-						if (count($rule) < 2)
-						{
-							throw new Exception('Invalid validation rule, expected: "validate:boolean|email|float|int|ip|url".');
-						}
-						else
-						{
-							switch (strtolower($rule[1]))
-							{
-								case 'boolean':
-								case 'email':
-								case 'float':
-								case 'int':
-								case 'ip':
-								case 'url':
-									$filter = constant('FILTER_VALIDATE_' . strtoupper($rule[1]));
-									break;
+                    case 'filter':
+                        if (count($rule) < 2)
+                        {
+                            throw new Exception('Invalid validation rule, expected: "validate:boolean|email|float|int|ip|url".');
+                        }
+                        else
+                        {
+                            switch (strtolower($rule[1]))
+                            {
+                                case 'boolean':
+                                case 'email':
+                                case 'float':
+                                case 'int':
+                                case 'ip':
+                                case 'url':
+                                    $filter = constant('FILTER_VALIDATE_' . strtoupper($rule[1]));
+                                    break;
 
-								default:
-									throw new Exception('Invalid filter, expecting boolean, email, float, int, ip or url.');
-									break;
-							}
+                                default:
+                                    throw new Exception('Invalid filter, expecting boolean, email, float, int, ip or url.');
+                                    break;
+                            }
 
-							if (!filter_var($value, $filter))
-							{
-								$errors[] = $message;
-							}
-						}
+                            if (!filter_var($value, $filter))
+                            {
+                                $errors[] = $message;
+                            }
+                        }
 
-						break;
+                        break;
 
-					// }}}
-					// {{{ Checks using strlen()
+                    // }}}
+                    // {{{ Checks using strlen()
 
-					case 'length':
-						if (count($rule) < 3)
-						{
-							throw new Exception('Invalid validation rule, expected: "length:<|<=|==|!=|>=|>:integer".');
-						}
-						else
-						{
-							if (!filter_var($rule[2], FILTER_VALIDATE_INT))
-							{
-								throw new Exception('Invalid length value, expecting an integer.');
-							}
-							else
-							{
-								$length = strlen($value);
+                    case 'length':
+                        if (count($rule) < 3)
+                        {
+                            throw new Exception('Invalid validation rule, expected: "length:<|<=|==|!=|>=|>:integer".');
+                        }
+                        else
+                        {
+                            if (!filter_var($rule[2], FILTER_VALIDATE_INT))
+                            {
+                                throw new Exception('Invalid length value, expecting an integer.');
+                            }
+                            else
+                            {
+                                $length = strlen($value);
 
-								switch ($rule[1])
-								{
-									case '<':
-										$valid = $length < $rule[2];
-										break;
+                                switch ($rule[1])
+                                {
+                                    case '<':
+                                        $valid = $length < $rule[2];
+                                        break;
 
-									case '<=':
-										$valid = $length <= $rule[2];
-										break;
+                                    case '<=':
+                                        $valid = $length <= $rule[2];
+                                        break;
 
-									case '==':
-										$valid = $length == $rule[2];
-										break;
+                                    case '==':
+                                        $valid = $length == $rule[2];
+                                        break;
 
-									case '!=':
-										$valid = $length != $rule[2];
-										break;
+                                    case '!=':
+                                        $valid = $length != $rule[2];
+                                        break;
 
-									case '>=':
-										$valid = $length >= $rule[2];
-										break;
+                                    case '>=':
+                                        $valid = $length >= $rule[2];
+                                        break;
 
-									case '>':
-										$valid = $length >  $rule[2];
-										break;
+                                    case '>':
+                                        $valid = $length >  $rule[2];
+                                        break;
 
-									default:
-										throw new Exception('Invalid operator, expecting <, <=, ==, !=, >= or >.');
-										break;
-								}
+                                    default:
+                                        throw new Exception('Invalid operator, expecting <, <=, ==, !=, >= or >.');
+                                        break;
+                                }
 
-								if (!$valid)
-								{
-									$errors[] = $message;
-								}
-							}
-						}
+                                if (!$valid)
+                                {
+                                    $errors[] = $message;
+                                }
+                            }
+                        }
 
-						break;
+                        break;
 
-					// }}}
+                    // }}}
 
-					// @todo case 'range':
+                    // @todo case 'range':
 
-					// {{{ Checks using preg_match()
+                    // {{{ Checks using preg_match()
 
-					case 'regex':
-						if (count($rule) < 3)
-						{
-							throw new Exception('Invalid validation rule, expected: "regex:is|not:string".');
-						}
-						else
-						{
-							$rule[1] = strtolower($rule[1]);
+                    case 'regex':
+                        if (count($rule) < 3)
+                        {
+                            throw new Exception('Invalid validation rule, expected: "regex:is|not:string".');
+                        }
+                        else
+                        {
+                            $rule[1] = strtolower($rule[1]);
 
-							if (($rule[1] == 'is' && preg_match($rule[2], $value))
-								|| ($rule[1] == 'not' && !preg_match($rule[2], $value)))
-							{
-								$errors[] = $message;
-							}
-						}
-						break;
+                            if (($rule[1] == 'is' && preg_match($rule[2], $value))
+                                || ($rule[1] == 'not' && !preg_match($rule[2], $value)))
+                            {
+                                $errors[] = $message;
+                            }
+                        }
+                        break;
 
-					// }}}
-				}
+                    // }}}
+                }
 
-			}
-		}
+            }
+        }
 
-		return count($errors) ? $errors : true;
-	}
+        return count($errors) ? $errors : true;
+    }
 }
 
-?>

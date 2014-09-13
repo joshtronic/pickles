@@ -22,33 +22,32 @@
  */
 class API_AYAH
 {
-	public static function getHTML()
-	{
-		$config = Config::getInstance();
+    public static function getHTML()
+    {
+        $config = Config::getInstance();
 
-		if (!$config->api['ayah'])
-		{
-			throw new Exception('Missing API configuration.');
-		}
+        if (!$config->api['ayah'])
+        {
+            throw new Exception('Missing API configuration.');
+        }
 
-		$ayah = new AYAH($config->api['ayah']);
+        $ayah = new AYAH($config->api['ayah']);
 
-		return $ayah->getPublisherHTML();
-	}
+        return $ayah->getPublisherHTML();
+    }
 
-	public static function isHuman()
-	{
-		$config = Config::getInstance();
+    public static function isHuman()
+    {
+        $config = Config::getInstance();
 
-		if (!$config->api['ayah'])
-		{
-			throw new Exception('Missing API configuration.');
-		}
+        if (!$config->api['ayah'])
+        {
+            throw new Exception('Missing API configuration.');
+        }
 
-		$ayah = new AYAH($config->api['ayah']);
+        $ayah = new AYAH($config->api['ayah']);
 
-		return $ayah->scoreResult();
-	}
+        return $ayah->scoreResult();
+    }
 }
 
-?>

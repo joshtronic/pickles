@@ -26,20 +26,20 @@
 // @todo Finish reworking constants to be part of the Config object
 if (!defined('SITE_PATH'))
 {
-	// Establishes our site paths, sanity check is to allow vfsStream in our tests
-	define('SITE_PATH', getcwd() . '/../');
+    // Establishes our site paths, sanity check is to allow vfsStream in our tests
+    define('SITE_PATH', getcwd() . '/../');
 }
 
 if (!defined('SITE_CLASS_PATH'))
 {
-	define('SITE_CLASS_PATH',    SITE_PATH . 'classes/');
-	define('SITE_MODEL_PATH',    SITE_PATH . 'models/');
-	// @todo The following 2 constants are being used in sites will need to update them before removing
-	define('SITE_MODULE_PATH',   SITE_PATH . 'modules/');
-	define('SITE_TEMPLATE_PATH', SITE_PATH . 'templates/');
+    define('SITE_CLASS_PATH',    SITE_PATH . 'classes/');
+    define('SITE_MODEL_PATH',    SITE_PATH . 'models/');
+    // @todo The following 2 constants are being used in sites will need to update them before removing
+    define('SITE_MODULE_PATH',   SITE_PATH . 'modules/');
+    define('SITE_TEMPLATE_PATH', SITE_PATH . 'templates/');
 
-	define('PRIVATE_PATH', SITE_PATH    . 'private/');
-	define('LOG_PATH',     PRIVATE_PATH . 'logs/');
+    define('PRIVATE_PATH', SITE_PATH    . 'private/');
+    define('LOG_PATH',     PRIVATE_PATH . 'logs/');
 }
 
 // }}}
@@ -52,7 +52,7 @@ error_reporting(-1);
 // Defaults timezone to UTC if not set
 if (ini_get('date.timezone') == '')
 {
-	ini_set('date.timezone', 'Etc/UTC');
+    ini_set('date.timezone', 'Etc/UTC');
 }
 
 // Sets the session variables
@@ -78,38 +78,38 @@ ini_set('session.hash_function',  1);
  */
 function __autoload($class)
 {
-	$loaded   = false;
-	$filename = preg_replace('/_/', '/', $class) . '.php';
+    $loaded   = false;
+    $filename = preg_replace('/_/', '/', $class) . '.php';
 
-	$pickles_path  = dirname(__FILE__) . '/';
-	$pickles_paths = [
-		'class'  => $pickles_path . 'classes/',
-	];
+    $pickles_path  = dirname(__FILE__) . '/';
+    $pickles_paths = [
+        'class'  => $pickles_path . 'classes/',
+    ];
 
-	// Path as the key, boolean value is whether ot not to convert back to hyphenated
-	$paths = [
-		$pickles_paths['class'] => false,
-		SITE_CLASS_PATH         => false,
-		SITE_MODEL_PATH         => false,
-		SITE_MODULE_PATH        => true,
-	];
+    // Path as the key, boolean value is whether ot not to convert back to hyphenated
+    $paths = [
+        $pickles_paths['class'] => false,
+        SITE_CLASS_PATH         => false,
+        SITE_MODEL_PATH         => false,
+        SITE_MODULE_PATH        => true,
+    ];
 
-	foreach ($paths as $path => $hyphenated)
-	{
-		// Converts the filename back to hypenated
-		if ($hyphenated == true)
-		{
-			$filename = strtolower(preg_replace('/([A-Z]{1})/', '-$1', $filename));;
-		}
+    foreach ($paths as $path => $hyphenated)
+    {
+        // Converts the filename back to hypenated
+        if ($hyphenated == true)
+        {
+            $filename = strtolower(preg_replace('/([A-Z]{1})/', '-$1', $filename));;
+        }
 
-		if (file_exists($path . $filename))
-		{
-			$loaded = require_once $path . $filename;
-			break;
-		}
-	}
+        if (file_exists($path . $filename))
+        {
+            $loaded = require_once $path . $filename;
+            break;
+        }
+    }
 
-	return $loaded;
+    return $loaded;
 }
 
 spl_autoload_register('__autoload');
@@ -129,28 +129,28 @@ require_once $config->pickles['path'] . '../vendor/autoload.php';
 // Configures any available PHP configuration options
 if (is_array($config->php) && count($config->php))
 {
-	foreach ($config->php as $variable => $value)
-	{
-		ini_set($variable, $value);
-	}
+    foreach ($config->php as $variable => $value)
+    {
+        ini_set($variable, $value);
+    }
 }
 
 // Starts session handling (old)
 if (isset($config->pickles['session']))
 {
-	if (session_id() == '' && $config->pickles['session'] !== false)
-	{
-		new Session();
-	}
+    if (session_id() == '' && $config->pickles['session'] !== false)
+    {
+        new Session();
+    }
 }
 
 // Starts session handling (new)
 if (isset($config->pickles['sessions']))
 {
-	if (session_id() == '' && $config->pickles['sessions'] !== false)
-	{
-		new Session();
-	}
+    if (session_id() == '' && $config->pickles['sessions'] !== false)
+    {
+        new Session();
+    }
 }
 
 // }}}
@@ -158,9 +158,8 @@ if (isset($config->pickles['sessions']))
 
 if (!isset($_REQUEST['request']))
 {
-	$_REQUEST['request'] = 'home';
+    $_REQUEST['request'] = 'home';
 }
 
 // }}}
 
-?>

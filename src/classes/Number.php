@@ -23,49 +23,48 @@
  */
 class Number
 {
-	/**
-	 * Ordinal Indiciator
-	 *
-	 * Formats a number by appending an ordinal indicator.
-	 *
-	 * @static
-	 * @link   http://en.wikipedia.org/wiki/Ordinal_indicator
-	 * @link   http://en.wikipedia.org/wiki/English_numerals#Ordinal_numbers
-	 * @param  string $number number to format
-	 * @param  boolean $superscript include <sup> tags
-	 * @return string formatted number
-	 */
-	public static function ordinalIndicator($number, $superscript = false)
-	{
-		if (!in_array(($number % 100), [11, 12, 13]))
-		{
-			switch ($number % 10)
-			{
-				case 1:
-					$suffix = 'st';
-					break;
+    /**
+     * Ordinal Indiciator
+     *
+     * Formats a number by appending an ordinal indicator.
+     *
+     * @static
+     * @link   http://en.wikipedia.org/wiki/Ordinal_indicator
+     * @link   http://en.wikipedia.org/wiki/English_numerals#Ordinal_numbers
+     * @param  string $number number to format
+     * @param  boolean $superscript include <sup> tags
+     * @return string formatted number
+     */
+    public static function ordinalIndicator($number, $superscript = false)
+    {
+        if (!in_array(($number % 100), [11, 12, 13]))
+        {
+            switch ($number % 10)
+            {
+                case 1:
+                    $suffix = 'st';
+                    break;
 
-				case 2:
-					$suffix = 'nd';
-					break;
+                case 2:
+                    $suffix = 'nd';
+                    break;
 
-				case 3:
-					$suffix = 'rd';
-					break;
+                case 3:
+                    $suffix = 'rd';
+                    break;
 
-				default:
-					$suffix = 'th';
-					break;
-			}
-		}
+                default:
+                    $suffix = 'th';
+                    break;
+            }
+        }
 
-		if ($superscript)
-		{
-			$suffix = '<sup>' . $suffix . '</sup>';
-		}
+        if ($superscript)
+        {
+            $suffix = '<sup>' . $suffix . '</sup>';
+        }
 
-		return $number . $suffix;
-	}
+        return $number . $suffix;
+    }
 }
 
-?>

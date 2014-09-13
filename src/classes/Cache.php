@@ -36,188 +36,187 @@
  */
 class Cache extends Object
 {
-	/**
-	 * Namespace (prefix)
-	 *
-	 * @access private
-	 * @var    string
-	 */
-	private $namespace = '';
+    /**
+     * Namespace (prefix)
+     *
+     * @access private
+     * @var    string
+     */
+    private $namespace = '';
 
-	/**
-	 * Servers
-	 *
-	 * @access private
-	 * @var    integer
-	 */
-	private $servers = 0;
+    /**
+     * Servers
+     *
+     * @access private
+     * @var    integer
+     */
+    private $servers = 0;
 
-	/**
-	 * Connection resource to Memcached
-	 *
-	 * @access private
-	 * @var    object
-	 */
-	private $connection = null;
+    /**
+     * Connection resource to Memcached
+     *
+     * @access private
+     * @var    object
+     */
+    private $connection = null;
 
-	/**
-	 * Constructor
-	 *
-	 * Sets up our connection variables.
-	 *
-	 * @param string $hostname optional hostname to connect to
-	 * @param string $database optional port to use
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * Constructor
+     *
+     * Sets up our connection variables.
+     *
+     * @param string $hostname optional hostname to connect to
+     * @param string $database optional port to use
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		// @todo Shouldn't need the isset() but Travis is failing some tests
-		if (isset($this->config->pickles['cache']) && $this->config->pickles['cache'])
-		{
-			$datasources = $this->config->pickles['cache'];
+        // @todo Shouldn't need the isset() but Travis is failing some tests
+        if (isset($this->config->pickles['cache']) && $this->config->pickles['cache'])
+        {
+            $datasources = $this->config->pickles['cache'];
 
-			if (!is_array($datasources))
-			{
-				$datasources = [$datasources];
-			}
+            if (!is_array($datasources))
+            {
+                $datasources = [$datasources];
+            }
 
-			$this->connection = new Memcache();
+            $this->connection = new Memcache();
 
-			foreach ($datasources as $name)
-			{
-				if (isset($this->config->datasources[$name]))
-				{
-					$datasource = $this->config->datasources[$name];
+            foreach ($datasources as $name)
+            {
+                if (isset($this->config->datasources[$name]))
+                {
+                    $datasource = $this->config->datasources[$name];
 
-					$this->connection->addServer($datasource['hostname'], $datasource['port']);
-					$this->servers++;
+                    $this->connection->addServer($datasource['hostname'], $datasource['port']);
+                    $this->servers++;
 
-					if (isset($datasource['namespace']))
-					{
-						$this->namespace = $datasource['namespace'];
-					}
-				}
-			}
-		}
+                    if (isset($datasource['namespace']))
+                    {
+                        $this->namespace = $datasource['namespace'];
+                    }
+                }
+            }
+        }
 
-		if ($this->namespace != '')
-		{
-			$this->namespace .= '-';
-		}
-	}
+        if ($this->namespace != '')
+        {
+            $this->namespace .= '-';
+        }
+    }
 
-	/**
-	 * Destructor
-	 *
-	 * Closes the connection when the object dies.
-	 */
-	public function __destruct()
-	{
-		if ($this->servers)
-		{
-			$this->connection->close();
-		}
-	}
+    /**
+     * Destructor
+     *
+     * Closes the connection when the object dies.
+     */
+    public function __destruct()
+    {
+        if ($this->servers)
+        {
+            $this->connection->close();
+        }
+    }
 
-	/**
-	 * Get Instance
-	 *
-	 * Let's the parent class do all the work.
-	 *
-	 * @static
-	 * @param  string $class name of the class to instantiate
-	 * @return object self::$instance instance of the Cache class
-	 */
-	public static function getInstance($class = 'Cache')
-	{
-		return parent::getInstance($class);
-	}
+    /**
+     * Get Instance
+     *
+     * Let's the parent class do all the work.
+     *
+     * @static
+     * @param  string $class name of the class to instantiate
+     * @return object self::$instance instance of the Cache class
+     */
+    public static function getInstance($class = 'Cache')
+    {
+        return parent::getInstance($class);
+    }
 
-	/**
-	 * Get Key
-	 *
-	 * Gets the value of the key(s) and returns it.
-	 *
-	 * @param  mixed $keys key(s) to retrieve
-	 * @return mixed value(s) of the requested key(s), false if not set
-	 */
-	public function get($keys)
-	{
-		if (is_array($keys))
-		{
-			foreach ($keys as $index => $key)
-			{
-				$keys[$index] = strtoupper($this->namespace . $key);
-			}
-		}
-		else
-		{
-			$keys = strtoupper($this->namespace . $keys);
-		}
+    /**
+     * Get Key
+     *
+     * Gets the value of the key(s) and returns it.
+     *
+     * @param  mixed $keys key(s) to retrieve
+     * @return mixed value(s) of the requested key(s), false if not set
+     */
+    public function get($keys)
+    {
+        if (is_array($keys))
+        {
+            foreach ($keys as $index => $key)
+            {
+                $keys[$index] = strtoupper($this->namespace . $key);
+            }
+        }
+        else
+        {
+            $keys = strtoupper($this->namespace . $keys);
+        }
 
-		return $this->connection->get($keys);
-	}
+        return $this->connection->get($keys);
+    }
 
-	/**
-	 * Set Key
-	 *
-	 * Sets key to the specified value. I've found that compression can lead to
-	 * issues with integers and can slow down the storage and retrieval of data
-	 * (defeats the purpose of caching if you ask me) and isn't supported. I've
-	 * also been burned by data inadvertantly being cached for infinity, but
-	 * have had great success caching data for a full day, hence defaulting the
-	 * expiration to a full day.
-	 *
-	 * @param  string  $key key to set
-	 * @param  mixed   $value value to set
-	 * @param  integer $expiration optional expiration, defaults to 1 day
-	 * @return boolean status of writing the data to the key
-	 */
-	public function set($key, $value, $expire = Time::DAY)
-	{
-		$key = strtoupper($key);
+    /**
+     * Set Key
+     *
+     * Sets key to the specified value. I've found that compression can lead to
+     * issues with integers and can slow down the storage and retrieval of data
+     * (defeats the purpose of caching if you ask me) and isn't supported. I've
+     * also been burned by data inadvertantly being cached for infinity, but
+     * have had great success caching data for a full day, hence defaulting the
+     * expiration to a full day.
+     *
+     * @param  string  $key key to set
+     * @param  mixed   $value value to set
+     * @param  integer $expiration optional expiration, defaults to 1 day
+     * @return boolean status of writing the data to the key
+     */
+    public function set($key, $value, $expire = Time::DAY)
+    {
+        $key = strtoupper($key);
 
-		return $this->connection->set(strtoupper($this->namespace . $key), $value, 0, $expire);
-	}
+        return $this->connection->set(strtoupper($this->namespace . $key), $value, 0, $expire);
+    }
 
-	/**
-	 * Delete Key
-	 *
-	 * Deletes the specified key(s).
-	 *
-	 * @param  mixed $keys key(s) to delete
-	 * @return boolean status of deleting the key
-	 */
-	public function delete($keys)
-	{
-		if (!is_array($keys))
-		{
-			$keys = [$keys];
-		}
+    /**
+     * Delete Key
+     *
+     * Deletes the specified key(s).
+     *
+     * @param  mixed $keys key(s) to delete
+     * @return boolean status of deleting the key
+     */
+    public function delete($keys)
+    {
+        if (!is_array($keys))
+        {
+            $keys = [$keys];
+        }
 
-		// Memcache() doesn't let you pass an array to delete all records the same way you can with get()
-		foreach ($keys as $key)
-		{
-			$this->connection->delete(strtoupper($this->namespace . $key));
-		}
+        // Memcache() doesn't let you pass an array to delete all records the same way you can with get()
+        foreach ($keys as $key)
+        {
+            $this->connection->delete(strtoupper($this->namespace . $key));
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Increment Key
-	 *
-	 * Increments the value of an existing key.
-	 *
-	 * @param  string $key key to increment
-	 * @return boolean status of incrementing the key
-	 * @todo   Check if it's set as Memcache() doesn't and won't inc if it doesn't exist
-	 */
-	public function increment($key)
-	{
-		return $this->connection->increment(strtoupper($this->namespace . $key));
-	}
+    /**
+     * Increment Key
+     *
+     * Increments the value of an existing key.
+     *
+     * @param  string $key key to increment
+     * @return boolean status of incrementing the key
+     * @todo   Check if it's set as Memcache() doesn't and won't inc if it doesn't exist
+     */
+    public function increment($key)
+    {
+        return $this->connection->increment(strtoupper($this->namespace . $key));
+    }
 }
 
-?>

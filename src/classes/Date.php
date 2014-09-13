@@ -23,19 +23,18 @@
  */
 class Date
 {
-	/**
-	 * Age
-	 *
-	 * Calculates age based on the passed date.
-	 *
-	 * @static
-	 * @param  string $date birth / inception date
-	 * @return integer $age number of years old
-	 */
-	public static function age($date)
-	{
-		return Time::age($date);
-	}
+    /**
+     * Age
+     *
+     * Calculates age based on the passed date.
+     *
+     * @static
+     * @param  string $date birth / inception date
+     * @return integer $age number of years old
+     */
+    public static function age($date)
+    {
+        return Time::age($date);
+    }
 }
 
-?>

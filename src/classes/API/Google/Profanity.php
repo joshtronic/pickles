@@ -20,30 +20,29 @@
  */
 class API_Google_Profanity
 {
-	/**
-	 * Check
-	 *
-	 * Checks if a word is considered profanity.
-	 *
-	 * @usage API_Google_Profanity::check('fuck'); // returns true
-	 * @param string $word word to check
-	 * @param string $endpoint the endpoint to call (helps testing)
-	 * @return boolean whether or not the word is profanity
-	 */
-	public static function check($word, $endpoint = 'http://www.wdyl.com/profanity?q=')
-	{
-		$response = json_decode(file_get_contents($endpoint . $word), true);
+    /**
+     * Check
+     *
+     * Checks if a word is considered profanity.
+     *
+     * @usage API_Google_Profanity::check('fuck'); // returns true
+     * @param string $word word to check
+     * @param string $endpoint the endpoint to call (helps testing)
+     * @return boolean whether or not the word is profanity
+     */
+    public static function check($word, $endpoint = 'http://www.wdyl.com/profanity?q=')
+    {
+        $response = json_decode(file_get_contents($endpoint . $word), true);
 
-		if ($response == null || !isset($response['response'])
-			|| !in_array($response['response'], ['true', 'false']))
-		{
-			throw new Exception('Invalid response from API.');
-		}
-		else
-		{
-			return $response['response'] == 'true';
-		}
-	}
+        if ($response == null || !isset($response['response'])
+            || !in_array($response['response'], ['true', 'false']))
+        {
+            throw new Exception('Invalid response from API.');
+        }
+        else
+        {
+            return $response['response'] == 'true';
+        }
+    }
 }
 
-?>
