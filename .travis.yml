@@ -32,8 +32,7 @@ before_script:
   - echo -e "zend_$(cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini)" > ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "[uopz]" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "uopz.overloads=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - php -i
-  - php --version
+  - phpunit --version
   - mysql -e "create database IF NOT EXISTS test;" -u root
   - mysql test < tests/schema.sql -u root
   - mkdir -p build/logs
