@@ -1,30 +1,33 @@
 {
 	"name":        "joshtronic/pickles",
 	"description": "PHP Interface Collection of Killer Libraries to Enhance Stuff",
+    "type":        "library",
+    "keywords":    ["pickles", "framework", "rapid", "development", "mvc"],
+	"homepage":    "https://github.com/joshtronic/pickles",
 	"license":     "MIT",
 	"authors": [
 		{
 			"name":     "Josh Sherman",
 			"email":    "josh@gravityblvd.com",
-			"homepage": "https://github.com/joshtronic/pickles"
+            "homepage": "http://joshtronic.com"
 		}
 	],
-	"autoload": {
-		"classmap": ["src/"]
-	},
 	"repositories": [{
 		"type": "vcs",
 		"url":  "https://github.com/joshtronic/php-ayah"
 	}],
 	"require-dev": {
-		"mikey179/vfsStream":     "1.3.0",
+		"mikey179/vfsStream":     "dev-master",
 		"satooshi/php-coveralls": "dev-master"
 	},
 	"require": {
-		"php":                     ">=5.4.0",
-		"devize/closure-compiler": "@dev",
-		"joshtronic/php-ayah":     "@dev",
-		"leafo/lessphp":           "0.4.0",
-		"leafo/scssphp":           "0.1.1"
+		"php":                     ">=5.4",
+		"devize/closure-compiler": "dev-master",
+		"joshtronic/php-ayah":     "dev-master",
+		"leafo/lessphp":           "dev-master",
+		"leafo/scssphp":           "dev-master"
+	},
+	"autoload": {
+		"classmap": ["src/"]
 	}
 }
