@@ -21,11 +21,8 @@
         "satooshi/php-coveralls": "dev-master"
     },
     "require": {
-        "php":                     ">=5.4",
-        "devize/closure-compiler": "dev-master",
-        "joshtronic/php-ayah":     "dev-master",
-        "leafo/lessphp":           "dev-master",
-        "leafo/scssphp":           "dev-master"
+        "php":                 ">=5.4",
+        "joshtronic/php-ayah": "dev-master"
     },
     "autoload": {
         "classmap": ["src/"]
