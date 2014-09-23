@@ -214,7 +214,12 @@ class Controller extends Object
                     if ($_SERVER['REQUEST_METHOD'] == 'POST')
                     {
                         // @todo Perhaps I could force a logout / redirect to the login page
-                        throw new Exception('{"status": "error", "message": "You are not properly authenticated, try logging out and back in."}');
+                        Browser::status(401);
+
+                        throw new Exception(json_encode([
+                            'status'  => 401,
+                            'message' => 'You are not properly authenticated, try logging out and back in.',
+                        ]));
                     }
                     else
                     {
@@ -348,12 +353,20 @@ class Controller extends Object
                     }
                 }
 
+                if (!isset($module_return))
+                {
+                    $module_return = [
+                        'status'  => 'error',
+                        'message' => $error_message,
+                    ];
+                }
+
                 // @todo Should simplify this, give Display direct acess to
                 //       $module instead of all these variable assignment
                 $display            = new Display();
                 $display->output    = $module->output;
                 $display->templates = $module->template;
-                $display->module    = isset($module_return) ? $module_return : ['status' => 'error', 'message' => $error_message];
+                $display->module    = $module_return;
 
                 // @todo Check for $module->meta variable first, then remove entirely when sites are updated
                 $display->meta      = [
