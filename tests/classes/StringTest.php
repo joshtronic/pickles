@@ -25,22 +25,6 @@ class StringTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerGenerateGravatarHash
-     */
-    public function testGenerateGravatarHash($a, $b)
-    {
-        $this->assertEquals(String::generateGravatarHash($a), $b);
-    }
-
-    public function providerGenerateGravatarHash()
-    {
-        return [
-            ['foo@bar.com', 'f3ada405ce890b6f8204094deb12d8a8'],
-            ['FOO@BAR.COM', 'f3ada405ce890b6f8204094deb12d8a8'],
-        ];
-    }
-
     public function testIsEmpty()
     {
         $this->assertTrue(String::isEmpty(''));

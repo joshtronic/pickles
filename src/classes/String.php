@@ -45,25 +45,6 @@ class String
     }
 
     // }}}
-    // {{{ Generate Gravatar Hash
-
-    /**
-     * Generate Gravatar Hash
-     *
-     * Generates a hash from the passed string that can then be used for
-     * fetching an avatar from Gravatar.com
-     *
-     * @deprecated
-     * @static
-     * @param  string $string string to hash, should be an email address
-     * @return string resulting hash
-     */
-    public static function generateGravatarHash($string)
-    {
-        return API_Gravatar::hash($string);
-    }
-
-    // }}}
     // {{{ Generate Slug
 
     /**
