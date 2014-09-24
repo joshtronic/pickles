@@ -3,48 +3,8 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "640eef08d54f04334875c0743919a751",
-    "packages": [
-        {
-            "name": "joshtronic/php-ayah",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/joshtronic/php-ayah.git",
-                "reference": "230e4d686c605bc7b7388dee288baea51519ba6c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/joshtronic/php-ayah/zipball/230e4d686c605bc7b7388dee288baea51519ba6c",
-                "reference": "230e4d686c605bc7b7388dee288baea51519ba6c",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Elvis “Bear” Jakupovic",
-                    "email": "support@areyouahuman.com"
-                },
-                {
-                    "name": "Josh Sherman",
-                    "email": "josh@gravityblvd.com"
-                }
-            ],
-            "description": "Are You a Human PHP Bundle",
-            "support": {
-                "source": "https://github.com/joshtronic/php-ayah/tree/master"
-            },
-            "time": "2014-07-27 22:09:32"
-        }
-    ],
+    "hash": "072c3455e32a8fe13eedc5d6ae22867b",
+    "packages": [],
     "packages-dev": [
         {
             "name": "guzzle/guzzle",
@@ -594,7 +554,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "joshtronic/php-ayah": 20,
         "satooshi/php-coveralls": 20
     },
     "platform": {
