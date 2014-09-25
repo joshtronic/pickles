@@ -89,11 +89,6 @@ class Display extends Object
 
             if ($return_template && $this->module->templates)
             {
-                // Determines if we're using a custom class or not
-                $dynamic_class = (class_exists('CustomDynamic') ? 'CustomDynamic' : 'Dynamic');
-                $form_class    = (class_exists('CustomForm')    ? 'CustomForm'    : 'Form');
-                $html_class    = (class_exists('CustomHTML')    ? 'CustomHTML'    : 'HTML');
-
                 // Exposes some objects and variables to the local scope of the template
                 $this->request   = $this->js_file = $_REQUEST['request'];
                 $this->css_class = strtr($this->request, '/', '-');
