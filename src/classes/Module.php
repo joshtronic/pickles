@@ -79,20 +79,6 @@ class Module extends Object
     public $security = null;
 
     /**
-     * AJAX
-     *
-     * Whether or not the module is being called via AJAX. This determines if
-     * errors should be returned as JSON or if it should use the Error class
-     * which can be interrogated from within a template.
-     *
-     * @var  boolean, false (not AJAX) by default
-     * @todo Doesn't seem to be in use, but I have it defined on Clipinary
-     *       don't want to remove until I drop it else it would end up in the
-     *       module return array.
-     */
-    public $ajax = false;
-
-    /**
      * Method
      *
      * Request methods that are allowed to access the module.
@@ -122,18 +108,15 @@ class Module extends Object
     public $template = 'index';
 
     /**
-     * Return
+     * Response
      *
-     * Array that is returned to the template in the case of the module not
-     * returning anything itself. This is somewhat of a one way trip as you
-     * cannot get the variable unless you reference the return array explicitly
-     * $this->return['variable']
+     * Array of data that will be rendered as part of the display. This is
+     * somewhat of a one way trip as you cannot get the variable unless you
+     * reference the response array explicitly, $this->response['variable']
      *
-     * @var  array
-     * @todo Rename __return so it's kinda obscured
-     * @todo Will need to update leaderbin and sndcrd to use new variable
+     * @var array
      */
-    public $return = [];
+    public $response = [];
 
     /**
      * Output
@@ -146,6 +129,16 @@ class Module extends Object
      */
     public $output = ['template', 'json'];
 
+    // @todo
+    public $status  = 200;
+    public $message = 'OK';
+    public $echo = false;
+    public $limit = false;
+    public $offset = false;
+    public $errors = [];
+
+    // @todo if $status != 200 && $message == 'OK' ...
+
     /**
      * Constructor
      *
@@ -155,19 +148,26 @@ class Module extends Object
      * controller (the registration page calls the login page in this manner.
      *
      * @param boolean $autorun optional flag to autorun __default()
+     @ @param boolean $filter optional flag to disable autorun filtering
      * @param boolean $valiate optional flag to disable autorun validation
      */
-    public function __construct($autorun = false, $validate = true)
+    public function __construct($autorun = false, $filter = true, $validate = true)
     {
         parent::__construct(['cache', 'db']);
 
-        if ($autorun === true)
+        if ($autorun)
         {
-            if ($validate === true)
+            if ($filter)
+            {
+                // @todo
+                //$this->__filter();
+            }
+
+            if ($validate)
             {
                 $errors = $this->__validate();
 
-                if ($errors !== false)
+                if (!$errors)
                 {
                     // @todo Fatal error perhaps?
                     exit('Errors encountered, this is a @todo for form validation when calling modules from inside of modules');
@@ -192,35 +192,35 @@ class Module extends Object
     /**
      * Magic Setter Method
      *
-     * Places undefined properties into the return array as part of the
+     * Places undefined properties into the response array as part of the
      * module's payload.
      *
-     * @param string $name name of the variable to be set
+     * @param string $variable name of the variable to be set
      * @param mixed $value value of the variable to be set
      */
-    public function __set($name, $value)
+    public function __set($variable, $value)
     {
-        $this->return[$name] = $value;
+        $this->response[$variable] = $value;
     }
 
     /**
      * Magic Getter Method
      *
-     * Any variables not defined in this class are set in the return array and
-     * default to false if not defined there.
+     * Any variables not defined in this class are set in the response array
+     * and default to false if not defined there.
      *
      * @param  string $name name of the variable requested
      * @return mixed value of the variable or boolean false
      */
     public function __get($name)
     {
-        if (!isset($this->return[$name]))
+        if (!isset($this->response[$name]))
         {
             return false;
         }
         else
         {
-            return $this->return[$name];
+            return $this->response[$name];
         }
     }
 

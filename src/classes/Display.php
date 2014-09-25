@@ -23,54 +23,19 @@
 class Display extends Object
 {
     /**
-     * Return Type
+     * Module
      *
-     * This class supports loading a PHP template, displaying JSON, XML and an
-     * RSS flavored XML. Inside your modules you can specify either a string or
-     * array. Possible values include "template", "json", "xml" and "rss".
-     * Default behavior is to try to load a template and fallback to displaying
-     * JSON. The "template" option always takes precedence when used with the
-     * other types.
-     *
-     * @var mixed string or array to determine how to return
-     */
-    public $return = ['template', 'json'];
-
-    /**
-     * Templates
-     *
-     * Templates are found in the ./templates directory of your site. The
-     * template workflow is to load ./templates/__shared/index.phtml and you
-     * would set that template up to require $this->template, the path and
-     * filename for the module template (named based on the structure of the
-     * requested URI. Inside your module you can specify the basename of the
-     * parent template you would like to use or false to not use a parent
-     * template.
-     *
-     * @var string or boolean false the basename of the parent template
-     */
-    public $templates = false;
-
-    /**
-     * Meta Data
-     *
-     * An array of meta data that you want exposed to the template. Currently
-     * you set the meta data from inside your module using the class variables
-     * title, description and keywords. The newer [preferred] method is to
-     * set an array in your module using the meta variable using title,
-     * description and keywords as the keys. You can also specify any other
-     * meta keys in the array that you would like to be exposed to your
-     * templates. The meta data is only used by TEMPLATE and RSS return types.
-     */
-    public $meta = [];
-
-    /**
-     * Module Data
-     *
-     * Any data the module returns or is assigned inside of the module will
-     * be available here and exposed to the template.
+     * This is the module we are attempting to display output for.
      */
     public $module = null;
+
+    public function __construct($module = null)
+    {
+        if ($module && $module instanceof Module)
+        {
+            $this->module = $module;
+        }
+    }
 
     public function render()
     {
@@ -79,21 +44,23 @@ class Display extends Object
             // Starts up the buffer so we can capture it
             ob_start();
 
-            if (!is_array($this->return))
+            if (!is_array($this->module->response))
             {
-                $this->return = [$this->return];
+                $this->module->response = [$this->module->response];
             }
 
-            $return_json = $return_rss = $return_template = $return_xml = false;
+            $return_json     = false;
+            $return_template = false;
+            $return_xml      = false;
 
-            foreach ($this->return as $return)
+            foreach ($this->module->output as $return)
             {
                 $variable  = 'return_' . $return;
                 $$variable = true;
             }
 
             // Makes sure the return type is valid
-            if (!$return_json && !$return_rss && !$return_template && !$return_xml)
+            if (!$return_json && !$return_template && !$return_xml)
             {
                 throw new Exception('Invalid return type.');
             }
@@ -118,8 +85,6 @@ class Display extends Object
                 throw new Exception('Requested URI contains PHPSESSID, redirecting.');
             }
 
-            // @todo Derrive CSS and JS from _REQUEST['request'] no need to pass around
-
             $loaded = false;
 
             if ($return_template)
@@ -131,22 +96,14 @@ class Display extends Object
 
                 // Exposes some objects and variables to the local scope of the template
                 $this->request   = $this->js_file = $_REQUEST['request'];
-                // @todo replace _ with - as it's more appropriate for CSS naming
-                $this->css_class = strtr($this->request, '/', '_');
+                $this->css_class = strtr($this->request, '/', '-');
 
-                // @todo Remove the magic $__variable when all sites are ported
-                $__config    = $this->config;
-                $__css_class = $this->css_class;
-                $__js_file   = $this->js_file;
-                $__meta      = $this->meta;
-                $__module    = $this->module;
-
-                $__dynamic   = $this->dynamic = new $dynamic_class();
-                $__form      = $this->form    = new $form_class();
-                $__html      = $this->html    = new $html_class();
+                $this->dynamic = new $dynamic_class();
+                $this->form    = new $form_class();
+                $this->html    = new $html_class();
 
                 // Checks for the parent template and tries to load it
-                if ($this->templates)
+                if ($this->module->template)
                 {
                     $profiler = $this->config->pickles['profiler'];
                     $profiler = $profiler === true || stripos($profiler, 'timers') !== false;
@@ -158,9 +115,9 @@ class Display extends Object
                     }
 
                     // Assigns old variable
-                    $required_template = $this->templates[0];
-                    $__template        = $this->template = end($this->templates);
-                    $loaded            = require_once $required_template;
+                    $required_template      = $this->module->templates[0];
+                    $this->module->template = end($this->module->templates);
+                    $loaded                 = require_once $required_template;
 
                     // Stops the template loading timer
                     if ($profiler)
@@ -170,16 +127,26 @@ class Display extends Object
                 }
             }
 
+            $meta = [
+                'status'  => $this->module->status,
+                'message' => $this->module->message,
+            ];
+
+            $response = [
+                'meta'     => $meta,
+                'response' => $this->module->response,
+            ];
+
             if (!$loaded)
             {
                 if ($return_json)
                 {
                     $pretty = isset($_REQUEST['pretty']) ? JSON_PRETTY_PRINT : false;
-                    echo json_encode($this->module, $pretty);
+                    echo json_encode($response, $pretty);
                 }
                 elseif ($return_xml)
                 {
-                    echo Convert::arrayToXML($this->module, isset($_REQUEST['pretty']));
+                    echo Convert::arrayToXML($response, isset($_REQUEST['pretty']));
                 }
             }
 
@@ -189,7 +156,8 @@ class Display extends Object
             // Kills any whitespace and HTML comments in templates
             if ($loaded)
             {
-                // The BSA exception is because their system sucks and demands there be comments present
+                // The BSA exception is because their system sucks and demands
+                // there be comments present
                 $buffer = preg_replace(['/^[\s]+/m', '/<!--(?:(?!BuySellAds).)+-->/U'], '', $buffer);
             }
 

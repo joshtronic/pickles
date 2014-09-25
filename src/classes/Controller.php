@@ -317,11 +317,11 @@ class Controller extends Object
 
                     if (!is_array($module_return))
                     {
-                        $module_return = $module->return;
+                        $module_return = $module->response;
                     }
                     else
                     {
-                        $module_return = array_merge($module_return, $module->return);
+                        $module_return = array_merge($module_return, $module->response);
                     }
                 }
 
@@ -353,27 +353,7 @@ class Controller extends Object
                     }
                 }
 
-                if (!isset($module_return))
-                {
-                    $module_return = [
-                        'status'  => 'error',
-                        'message' => $error_message,
-                    ];
-                }
-
-                // @todo Should simplify this, give Display direct acess to
-                //       $module instead of all these variable assignment
-                $display            = new Display();
-                $display->output    = $module->output;
-                $display->templates = $module->template;
-                $display->module    = $module_return;
-
-                // @todo Check for $module->meta variable first, then remove entirely when sites are updated
-                $display->meta      = [
-                    'title'       => $module->title,
-                    'description' => $module->description,
-                    'keywords'    => $module->keywords
-                ];
+                $display = new Display($module);
             }
 
             // Starts a timer for the display rendering
