@@ -132,24 +132,6 @@ if (is_array($config->php) && count($config->php))
     }
 }
 
-// Starts session handling (old)
-if (isset($config->pickles['session']))
-{
-    if (session_id() == '' && $config->pickles['session'] !== false)
-    {
-        new Session();
-    }
-}
-
-// Starts session handling (new)
-if (isset($config->pickles['sessions']))
-{
-    if (session_id() == '' && $config->pickles['sessions'] !== false)
-    {
-        new Session();
-    }
-}
-
 // }}}
 // {{{ Defaults some internals for ease of use
 

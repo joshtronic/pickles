@@ -38,55 +38,8 @@ class Controller extends Object
     {
         parent::__construct();
 
-        // Generate a generic "site down" message if the site is set to be disabled
         try
         {
-            // @todo Clean this up to be just a single sanity check
-            if (isset($this->config->pickles['disabled']) && $this->config->pickles['disabled'])
-            {
-                $custom_template = SITE_TEMPLATE_PATH . '__shared/maintenance.phtml';
-
-                if (file_exists($custom_template))
-                {
-                    require_once $custom_template;
-                }
-                else
-                {
-                    echo '
-                        <h1>Down for Maintenance</h1>
-                        <p>
-                            ' . $_SERVER['SERVER_NAME'] . ' is currently down for maintenance.
-                            Please check back in a few minutes.
-                        </p>
-                        <p>Additionally, a custom maintenance template was not found.</p>
-                        <hr>
-                        <em>Powered by <a href="https://github.com/joshtronic/pickles">PICKLES</a></em>
-                    ';
-                }
-
-                throw new Exception();
-            }
-
-            // Checks for attributes passed in the URI
-            if (strstr($_REQUEST['request'], ':'))
-            {
-                $parts               = explode('/', $_REQUEST['request']);
-                $_REQUEST['request'] = '';
-
-                foreach ($parts as $part)
-                {
-                    if (strstr($part, ':'))
-                    {
-                        list($variable, $value) = explode(':', $part);
-                        Browser::set($variable, $value);
-                    }
-                    else
-                    {
-                        $_REQUEST['request'] .= ($_REQUEST['request'] ? '/' : '') . $part;
-                    }
-                }
-            }
-
             // Catches requests that aren't lowercase
             $lowercase_request = strtolower($_REQUEST['request']);
 
@@ -132,125 +85,12 @@ class Controller extends Object
                 throw new Exception();
             }
 
-            // Validates security level
-            if ($module->security)
-            {
-                $is_authenticated = false;
-
-                if (is_array($module->security))
-                {
-                    $module_security      = $module->security;
-                    $security_check_class = 'isLevel';
-
-                    // Checks the type and validates it
-                    if (isset($module_security['type']))
-                    {
-                        $security_check_type = strtoupper($module_security['type']);
-
-                        if (in_array($security_check_type, ['IS', 'HAS', 'BETWEEN']))
-                        {
-                            $security_check_class = $security_check_type;
-                        }
-
-                        unset($module_security['type']);
-                    }
-
-                    $module_security_levels = [];
-
-                    // If there's a level(s) key use it
-                    foreach (['level', 'levels'] as $security_level_key)
-                    {
-                        if (isset($module_security[$security_level_key]))
-                        {
-                            if (is_array($module_security[$security_level_key]))
-                            {
-                                $module_security_levels = array_merge($module_security_levels, $module_security[$security_level_key]);
-                            }
-                            else
-                            {
-                                $module_security_levels[] = $module_security[$security_level_key];
-                            }
-
-                            unset($module_security[$security_level_key]);
-                        }
-                    }
-
-                    // Assume everything left in the array is a level and add it to the array
-                    array_merge($module_security_levels, $module_security);
-                    $security_level_count = count($module_security_levels);
-
-                    switch ($security_check_class)
-                    {
-                        // @todo Thinking of removing this?
-                        case 'BETWEEN':
-                            if ($security_level_count == 2)
-                            {
-                                $is_authenticated = Security::betweenLevel($module_security_levels[0], array_pop($module_security_levels));
-                            }
-                            break;
-
-                        case 'HAS':
-                            if ($security_level_count)
-                            {
-                                $is_authenticated = Security::hasLevel($module_security_levels);
-                            }
-                            break;
-
-                        case 'IS':
-                            if ($security_level_count)
-                            {
-                                $is_authenticated = Security::isLevel($module_security_levels);
-                            }
-                            break;
-                    }
-                }
-                else
-                {
-                    $is_authenticated = Security::isLevel($module->security);
-                }
-
-                if (!$is_authenticated)
-                {
-                    if ($_SERVER['REQUEST_METHOD'] == 'POST')
-                    {
-                        // @todo Perhaps I could force a logout / redirect to the login page
-                        Browser::status(401);
-
-                        throw new Exception(json_encode([
-                            'status'  => 401,
-                            'message' => 'You are not properly authenticated, try logging out and back in.',
-                        ]));
-                    }
-                    else
-                    {
-                        // Sets variable for the destination
-                        $_SESSION['__pickles']['login']['destination'] = $_REQUEST['request'] ? $_REQUEST['request'] : '/';
-
-                        // Redirect to login page
-                        Browser::redirect('/login');
-
-                        // Resolves testing error due to undefined $output
-                        $output = '';
-                    }
-                }
-            }
-
             // Gets the profiler status
             $profiler = $this->config->pickles['profiler'];
             $profiler = $profiler === true || stripos($profiler, 'timers') !== false;
 
             $default_method = '__default';
             $role_method    = null;
-
-            if (isset($_SESSION['__pickles']['security']['role']) && !String::isEmpty($_SESSION['__pickles']['security']['role']))
-            {
-                $role_method = '__default_' . $_SESSION['__pickles']['security']['role'];
-
-                if (method_exists($module, $role_method))
-                {
-                    $default_method = $role_method;
-                }
-            }
 
             // Attempts to execute the default method
             // @todo Seems a bit redundant, refactor
@@ -331,28 +171,6 @@ class Controller extends Object
                     Profiler::timer('module ' . $default_method);
                 }
 
-                // Checks if we have any templates
-                $parent_template = $module->template;
-                $template_exists = $this->validateTemplates($module, $parent_template);
-
-                // No templates? 404 that shit
-                if (!$module_exists && !$template_exists)
-                {
-                    Browser::status(404);
-                    $_REQUEST['request'] = '__shared/404';
-
-                    if (!$this->validateTemplates($module, $parent_template))
-                    {
-                        throw new Exception('
-                            <h1>Not Found</h1>
-                            <p>The requested URL /' . $request . ' was not found on this server.</p>
-                            <p>Additionally, a custom error template was not found.</p>
-                            <hr>
-                            <em>Powered by <a href="https://github.com/joshtronic/pickles">PICKLES</a></em>
-                        ');
-                    }
-                }
-
                 $display = new Display($module);
             }
 
@@ -383,31 +201,6 @@ class Controller extends Object
         {
             Profiler::report();
         }
-    }
-
-    // @todo Document me
-    private function validateTemplates(&$module, $parent_template)
-    {
-        $templates = [
-            SITE_TEMPLATE_PATH . '__shared/' . $parent_template . '.phtml',
-            SITE_TEMPLATE_PATH . $_REQUEST['request'] . '.phtml',
-        ];
-
-        $module->template = [];
-        $child_exists     = file_exists($templates[1]);
-
-        if (file_exists($templates[0]) && $child_exists)
-        {
-            $module->template = $templates;
-            return true;
-        }
-        elseif ($child_exists)
-        {
-            $module->template = [$templates[1]];
-            return true;
-        }
-
-        return false;
     }
 }
 

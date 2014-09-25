@@ -49,9 +49,8 @@ class Display extends Object
                 $this->module->response = [$this->module->response];
             }
 
-            $return_json     = false;
-            $return_template = false;
-            $return_xml      = false;
+            $return_json = false;
+            $return_xml  = false;
 
             foreach ($this->module->output as $return)
             {
@@ -60,7 +59,7 @@ class Display extends Object
             }
 
             // Makes sure the return type is valid
-            if (!$return_json && !$return_template && !$return_xml)
+            if (!$return_json && !$return_xml)
             {
                 throw new Exception('Invalid return type.');
             }
@@ -85,83 +84,31 @@ class Display extends Object
                 throw new Exception('Requested URI contains PHPSESSID, redirecting.');
             }
 
-            $loaded = false;
+            $response = [
+                'meta' => [
+                    'status'  => $this->module->status,
+                    'message' => $this->module->message,
+                ],
+            ];
 
-            if ($return_template && $this->module->templates)
+            if ($this->module->response)
             {
-                // Exposes some objects and variables to the local scope of the template
-                $this->request   = $this->js_file = $_REQUEST['request'];
-                $this->css_class = strtr($this->request, '/', '-');
-
-                $this->dynamic = new $dynamic_class();
-                $this->form    = new $form_class();
-                $this->html    = new $html_class();
-
-                // Checks for the parent template and tries to load it
-                if ($this->module->template)
-                {
-                    $profiler = $this->config->pickles['profiler'];
-                    $profiler = $profiler === true || stripos($profiler, 'timers') !== false;
-
-                    // Starts a timer for the loading of the template
-                    if ($profiler)
-                    {
-                        Profiler::timer('loading template');
-                    }
-
-                    // Assigns old variable
-                    $required_template      = $this->module->templates[0];
-                    $this->module->template = end($this->module->templates);
-                    $loaded                 = require_once $required_template;
-
-                    // Stops the template loading timer
-                    if ($profiler)
-                    {
-                        Profiler::timer('loading template');
-                    }
-                }
+                $response['response'] = $this->module->response;
             }
 
-            if (!$loaded)
+            if ($return_json)
             {
-                if (!$return_template || !$this->module->templates)
-                {
-                    $meta = [
-                        'status'  => $this->module->status,
-                        'message' => $this->module->message,
-                    ];
-
-                    $response = [
-                        'meta'     => $meta,
-                        'response' => $this->module->response,
-                    ];
-                }
-
-                if ($return_json)
-                {
-                    header('Content-type: application/json');
-                    $pretty = isset($_REQUEST['pretty']) ? JSON_PRETTY_PRINT : false;
-                    echo json_encode($response, $pretty);
-                }
-                elseif ($return_xml)
-                {
-                    header('Content-type: text/xml');
-                    echo Convert::arrayToXML($response, isset($_REQUEST['pretty']));
-                }
+                header('Content-type: application/json');
+                $pretty = isset($_REQUEST['pretty']) ? JSON_PRETTY_PRINT : false;
+                echo json_encode($response, $pretty);
+            }
+            elseif ($return_xml)
+            {
+                header('Content-type: text/xml');
+                echo Convert::arrayToXML($response, isset($_REQUEST['pretty']));
             }
 
-            // Grabs the buffer so we can massage it a bit
-            $buffer = ob_get_clean();
-
-            // Kills any whitespace and HTML comments in templates
-            if ($loaded)
-            {
-                // The BSA exception is because their system sucks and demands
-                // there be comments present
-                $buffer = preg_replace(['/^[\s]+/m', '/<!--(?:(?!BuySellAds).)+-->/U'], '', $buffer);
-            }
-
-            return $buffer;
+            return ob_get_clean();
         }
         catch (Exception $e)
         {
