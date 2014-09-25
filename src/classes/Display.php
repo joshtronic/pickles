@@ -49,21 +49,6 @@ class Display extends Object
                 $this->module->response = [$this->module->response];
             }
 
-            $return_json = false;
-            $return_xml  = false;
-
-            foreach ($this->module->output as $return)
-            {
-                $variable  = 'return_' . $return;
-                $$variable = true;
-            }
-
-            // Makes sure the return type is valid
-            if (!$return_json && !$return_xml)
-            {
-                throw new Exception('Invalid return type.');
-            }
-
             // Checks for the PHPSESSID in the query string
             if (stripos($_SERVER['REQUEST_URI'], '?PHPSESSID=') === false)
             {
@@ -96,17 +81,9 @@ class Display extends Object
                 $response['response'] = $this->module->response;
             }
 
-            if ($return_json)
-            {
-                header('Content-type: application/json');
-                $pretty = isset($_REQUEST['pretty']) ? JSON_PRETTY_PRINT : false;
-                echo json_encode($response, $pretty);
-            }
-            elseif ($return_xml)
-            {
-                header('Content-type: text/xml');
-                echo Convert::arrayToXML($response, isset($_REQUEST['pretty']));
-            }
+            header('Content-type: application/json');
+            $pretty = isset($_REQUEST['pretty']) ? JSON_PRETTY_PRINT : false;
+            echo json_encode($response, $pretty);
 
             return ob_get_clean();
         }
