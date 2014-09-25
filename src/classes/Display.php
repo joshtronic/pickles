@@ -87,7 +87,7 @@ class Display extends Object
 
             $loaded = false;
 
-            if ($return_template)
+            if ($return_template && $this->module->templates)
             {
                 // Determines if we're using a custom class or not
                 $dynamic_class = (class_exists('CustomDynamic') ? 'CustomDynamic' : 'Dynamic');
@@ -127,25 +127,30 @@ class Display extends Object
                 }
             }
 
-            $meta = [
-                'status'  => $this->module->status,
-                'message' => $this->module->message,
-            ];
-
-            $response = [
-                'meta'     => $meta,
-                'response' => $this->module->response,
-            ];
-
             if (!$loaded)
             {
+                if (!$return_template || !$this->module->templates)
+                {
+                    $meta = [
+                        'status'  => $this->module->status,
+                        'message' => $this->module->message,
+                    ];
+
+                    $response = [
+                        'meta'     => $meta,
+                        'response' => $this->module->response,
+                    ];
+                }
+
                 if ($return_json)
                 {
+                    header('Content-type: application/json');
                     $pretty = isset($_REQUEST['pretty']) ? JSON_PRETTY_PRINT : false;
                     echo json_encode($response, $pretty);
                 }
                 elseif ($return_xml)
                 {
+                    header('Content-type: text/xml');
                     echo Convert::arrayToXML($response, isset($_REQUEST['pretty']));
                 }
             }

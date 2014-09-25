@@ -25,7 +25,7 @@
  * be JSON encoded. In the future this may need to be changed out for logic
  * that allows the requested module to specify what display type(s) it can use.
  */
-class Module extends Object
+abstract class Module extends Object
 {
     /**
      * Page Title
@@ -181,13 +181,12 @@ class Module extends Object
     /**
      * Default "Magic" Method
      *
-     * This function is overloaded by the module. The __default() method is
-     * where you want to place any code that needs to be executed at runtime.
+     * The __default() method is where you want to place any code that needs to
+     * be executed at runtime.
+     *
+     * @abstract
      */
-    public function __default()
-    {
-
-    }
+    abstract public function __default();
 
     /**
      * Magic Setter Method
