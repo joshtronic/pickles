@@ -11,8 +11,6 @@ $root = org\bovigo\vfs\vfsStream::setup('site');
 
 if (!defined('SITE_PATH'))
 {
-    define('SECURITY_LEVEL_USER',  10);
-    define('SECURITY_LEVEL_ADMIN', 20);
     define('SITE_PATH', org\bovigo\vfs\vfsStream::url('site/'));
 }
 
