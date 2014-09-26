@@ -4,7 +4,7 @@ $_POST['field2']    = 'short';
 $_GET['field2']     = 'short';
 $_REQUEST['field2'] = 'short';
 
-class MockParentModule extends Module
+class MockParentResource extends Resource
 {
     public $validate = [
         'field1',
@@ -15,53 +15,53 @@ class MockParentModule extends Module
     ];
 }
 
-class MockChildModule extends MockParentModule
+class MockChildResource extends MockParentResource
 {
     public $method = ['POST', 'GET'];
 }
 
-class ModuleTest extends PHPUnit_Framework_TestCase
+class ResourceTest extends PHPUnit_Framework_TestCase
 {
     public function testAutoRun()
     {
-        $this->assertInstanceOf('Module', new Module(true));
+        $this->assertInstanceOf('Resource', new Resource(true));
     }
 
     public function testAutoRunParentError()
     {
         $this->expectOutputString('');
-        $model = new MockChildModule(true);
+        $model = new MockChildResource(true);
     }
 
     public function testSetGetReturn()
     {
-        $module = new Module();
+        $module = new Resource();
         $module->foo = 'bar';
         $this->assertEquals('bar', $module->foo);
     }
 
     public function testGetMissing()
     {
-        $module = new Module();
+        $module = new Resource();
         $this->assertFalse($module->missing);
     }
 
     public function testValidateGet()
     {
-        $module = new MockParentModule();
+        $module = new MockParentResource();
         $module->method = 'GET';
         $this->assertEquals(['The field1 field is required.', 'Too long'], $module->__validate());
     }
 
     public function testValidatePost()
     {
-        $module = new MockParentModule();
+        $module = new MockParentResource();
         $this->assertEquals(['The field1 field is required.', 'Too long'], $module->__validate());
     }
 
     public function testValidateRequest()
     {
-        $module = new MockParentModule();
+        $module = new MockParentResource();
         $module->method = null;
         $this->assertEquals(['The field1 field is required.', 'Too long'], $module->__validate());
     }

@@ -25,7 +25,7 @@
  * be JSON encoded. In the future this may need to be changed out for logic
  * that allows the requested module to specify what display type(s) it can use.
  */
-abstract class Resource extends Object
+class Resource extends Object
 {
     /**
      * Secure
