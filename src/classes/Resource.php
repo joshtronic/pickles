@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Module Class File for PICKLES
+ * Resource Class File for PICKLES
  *
  * PHP version 5
  *
@@ -16,7 +16,7 @@
  */
 
 /**
- * Module Class
+ * Resource Class
  *
  * This is a parent class that all PICKLES modules should be extending. Each
  * module can specify it's own meta data and whether or not a user must be
@@ -25,7 +25,7 @@
  * be JSON encoded. In the future this may need to be changed out for logic
  * that allows the requested module to specify what display type(s) it can use.
  */
-abstract class Module extends Object
+abstract class Resource extends Object
 {
     /**
      * Secure
