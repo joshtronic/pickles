@@ -39,7 +39,7 @@ before_script:
   - phpenv rehash
 
 script:
-  - phpunit --configuration phpunit.xml --coverage-clover /home/travis/build/joshtronic/pickles/build/logs/clover.xml
+  - phpunit --coverage-clover /home/travis/build/joshtronic/pickles/build/logs/clover.xml
 
 after_success:
   - php vendor/bin/coveralls --config ../.coveralls.yml -v
