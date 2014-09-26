@@ -28,41 +28,6 @@
 abstract class Module extends Object
 {
     /**
-     * Page Title
-     *
-     * @var  string, null by default
-     * @todo Abandon for $this->meta
-     */
-    public $title = null;
-
-    /**
-     * Meta Description
-     *
-     * @var  string, null by default
-     * @todo Abandon for $this->meta
-     */
-    public $description = null;
-
-    /**
-     * Meta Keywords (comma separated)
-     *
-     * @var  string, null by default
-     * @todo Abandon for $this->meta
-     */
-    public $keywords = null;
-
-    /**
-     * Meta Data
-     *
-     * @var array
-     */
-    public $meta = [
-        'title'       => '',
-        'description' => '',
-        'keywords'    => '',
-    ];
-
-    /**
      * Secure
      *
      * Whether or not the page should be loaded via SSL.
@@ -72,20 +37,13 @@ abstract class Module extends Object
     public $secure = false;
 
     /**
-     * Security Settings
+     * Filter
      *
-     * @var boolean, null by default
+     * Variables to filter.
+     *
+     * @var array
      */
-    public $security = null;
-
-    /**
-     * Method
-     *
-     * Request methods that are allowed to access the module.
-     *
-     * @var string or array, null by default
-     */
-    public $method = null;
+    public $filter = [];
 
     /**
      * Validate
@@ -96,46 +54,13 @@ abstract class Module extends Object
      */
     public $validate = [];
 
-    /**
-     * Template
-     *
-     * This is the parent template that will be loaded if you are using the
-     * 'template' return type in the Display class. Parent templates are found
-     * in ./templates/__shared and use the phtml extension.
-     *
-     * @var string, 'index' by default
-     */
-    public $template = 'index';
-
-    /**
-     * Response
-     *
-     * Array of data that will be rendered as part of the display. This is
-     * somewhat of a one way trip as you cannot get the variable unless you
-     * reference the response array explicitly, $this->response['variable']
-     *
-     * @var array
-     */
-    public $response = [];
-
-    /**
-     * Output
-     *
-     * What should the class render as output? This can be a string or an array
-     * containing either 'json', 'rss', 'template' or 'xml'. Default is to use
-     * templates and if the template is not present, fall back to JSON.
-     *
-     * @var mixed string or array
-     */
-    public $output = ['template', 'json'];
-
     // @todo
     public $status  = 200;
     public $message = 'OK';
-    public $echo = false;
-    public $limit = false;
-    public $offset = false;
-    public $errors = [];
+    public $echo    = false;
+    public $limit   = false;
+    public $offset  = false;
+    public $errors  = [];
 
     // @todo if $status != 200 && $message == 'OK' ...
 
@@ -146,81 +71,10 @@ abstract class Module extends Object
      * variable to tell it to automatically run the __default() method. This is
      * typically used when a module is called outside of the scope of the
      * controller (the registration page calls the login page in this manner.
-     *
-     * @param boolean $autorun optional flag to autorun __default()
-     @ @param boolean $filter optional flag to disable autorun filtering
-     * @param boolean $valiate optional flag to disable autorun validation
      */
-    public function __construct($autorun = false, $filter = true, $validate = true)
+    public function __construct()
     {
         parent::__construct(['cache', 'db']);
-
-        if ($autorun)
-        {
-            if ($filter)
-            {
-                // @todo
-                //$this->__filter();
-            }
-
-            if ($validate)
-            {
-                $errors = $this->__validate();
-
-                if (!$errors)
-                {
-                    // @todo Fatal error perhaps?
-                    exit('Errors encountered, this is a @todo for form validation when calling modules from inside of modules');
-                }
-            }
-
-            $this->__default();
-        }
-    }
-
-    /**
-     * Default "Magic" Method
-     *
-     * The __default() method is where you want to place any code that needs to
-     * be executed at runtime.
-     *
-     * @abstract
-     */
-    abstract public function __default();
-
-    /**
-     * Magic Setter Method
-     *
-     * Places undefined properties into the response array as part of the
-     * module's payload.
-     *
-     * @param string $variable name of the variable to be set
-     * @param mixed $value value of the variable to be set
-     */
-    public function __set($variable, $value)
-    {
-        $this->response[$variable] = $value;
-    }
-
-    /**
-     * Magic Getter Method
-     *
-     * Any variables not defined in this class are set in the response array
-     * and default to false if not defined there.
-     *
-     * @param  string $name name of the variable requested
-     * @return mixed value of the variable or boolean false
-     */
-    public function __get($name)
-    {
-        if (!isset($this->response[$name]))
-        {
-            return false;
-        }
-        else
-        {
-            return $this->response[$name];
-        }
     }
 
     /**
