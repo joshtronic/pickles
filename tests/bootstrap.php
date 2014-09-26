@@ -23,16 +23,6 @@ if (!file_exists(SITE_MODULE_PATH))
     mkdir(SITE_MODULE_PATH, 0644);
 }
 
-if (!file_exists(SITE_TEMPLATE_PATH))
-{
-    mkdir(SITE_TEMPLATE_PATH, 0644);
-}
-
-if (!file_exists(SITE_TEMPLATE_PATH . '__shared/'))
-{
-    mkdir(SITE_TEMPLATE_PATH . '__shared/', 0644);
-}
-
 $_SERVER['HTTP_HOST']   = 'testsite.com';
 $_SERVER['SERVER_NAME'] = 'Test Server';
 $_SERVER['SERVER_ADDR'] = '127.0.0.1';

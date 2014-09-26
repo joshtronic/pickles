@@ -7,10 +7,8 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->config = Config::getInstance();
-        $this->config->data['pickles']['disabled']    = false;
-        $this->config->data['pickles']['profiler']    = false;
-        $this->config->data['security']['levels'][10] = 'USER';
-        $this->config->data['security']['levels'][20] = 'ADMIN';
+        $this->config->data['pickles']['disabled'] = false;
+        $this->config->data['pickles']['profiler'] = false;
 
         setUpRequest('home');
 

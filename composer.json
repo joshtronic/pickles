@@ -12,10 +12,6 @@
             "homepage": "http://joshtronic.com"
         }
     ],
-    "repositories": [{
-        "type": "vcs",
-        "url":  "https://github.com/joshtronic/php-ayah"
-    }],
     "require-dev": {
         "mikey179/vfsStream":     "1.3.0",
         "satooshi/php-coveralls": "dev-master"

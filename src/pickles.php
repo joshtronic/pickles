@@ -34,9 +34,7 @@ if (!defined('SITE_CLASS_PATH'))
 {
     define('SITE_CLASS_PATH',    SITE_PATH . 'classes/');
     define('SITE_MODEL_PATH',    SITE_PATH . 'models/');
-    // @todo The following 2 constants are being used in sites will need to update them before removing
     define('SITE_MODULE_PATH',   SITE_PATH . 'modules/');
-    define('SITE_TEMPLATE_PATH', SITE_PATH . 'templates/');
 
     define('PRIVATE_PATH', SITE_PATH    . 'private/');
     define('LOG_PATH',     PRIVATE_PATH . 'logs/');
@@ -83,7 +81,7 @@ function __autoload($class)
 
     $pickles_path  = dirname(__FILE__) . '/';
     $pickles_paths = [
-        'class'  => $pickles_path . 'classes/',
+        'class'  => $pickles_path,
     ];
 
     // Path as the key, boolean value is whether ot not to convert back to hyphenated
@@ -130,14 +128,6 @@ if (is_array($config->php) && count($config->php))
     {
         ini_set($variable, $value);
     }
-}
-
-// }}}
-// {{{ Defaults some internals for ease of use
-
-if (!isset($_REQUEST['request']))
-{
-    $_REQUEST['request'] = 'home';
 }
 
 // }}}

@@ -98,7 +98,10 @@ class Object
         $this->profiler = (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] != '' ? $this->config->pickles['profiler'] : false);
 
         // Optionally logs the constructor to the profiler
-        if ($this->profiler === true || ((is_array($this->profiler) && in_array('objects', $this->profiler)) || stripos($this->profiler, 'objects') !== false))
+        if ($this->profiler === true
+            || ((is_array($this->profiler)
+            && in_array('objects', $this->profiler))
+            || stripos($this->profiler, 'objects') !== false))
         {
             Profiler::log($this, '__construct');
         }
@@ -140,7 +143,10 @@ class Object
     public function __destruct()
     {
         // Optionally logs the destructor to the profiler
-        if ($this->profiler === true || ((is_array($this->profiler) && in_array('objects', $this->profiler)) || stripos($this->profiler, 'objects') !== false))
+        if ($this->profiler === true
+            || ((is_array($this->profiler)
+            && in_array('objects', $this->profiler))
+            || stripos($this->profiler, 'objects') !== false))
         {
             Profiler::log($this, '__destruct');
         }
