@@ -72,6 +72,8 @@ class Router extends Object
 
             if (!file_exists($filename))
             {
+                // @todo Should be a 404, will need to change it up after I add
+                //       namespaces and a Pickles\Exception
                 throw new Exception('Cannot find the file ' . $filename);
             }
 
