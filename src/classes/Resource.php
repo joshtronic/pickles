@@ -134,10 +134,16 @@ class Resource extends Object
                     // Applies any filters
                     if ($filter && isset($this->filter[$method][$variable]))
                     {
-                        // @todo Definitely could see the need to expand this out
-                        //       to allow for more robust filters to be applied
-                        //       similar to how the validation logic work.
-                        $global[$variable] = $this->filter[$method][$variable]($value);
+                        $function = $this->filter[$method][$variable];
+
+                        if ($function == 'password_hash')
+                        {
+                            $global[$variable] = password_hash($value, PASSWORD_DEFAULT);
+                        }
+                        else
+                        {
+                            $global[$variable] = $function($value);
+                        }
                     }
 
                     if ($validate && isset($this->validate[$method][$variable]))
