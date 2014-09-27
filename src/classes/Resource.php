@@ -77,6 +77,8 @@ class Resource extends Object
      */
     public function __construct($uids = false)
     {
+        parent::__construct();
+
         $this->uids = $uids;
         $method     = $_SERVER['REQUEST_METHOD'];
 
@@ -96,8 +98,28 @@ class Resource extends Object
             if ($this->auth === true
                 || (isset($this->auth[$method]) && $this->auth[$method]))
             {
-                print_r($_SERVER);
-                exit('needs auth');
+                if (!$this->config->pickles['auth'])
+                {
+                    throw new Exception('401 - Authentication is not configured properly.');
+                }
+
+                // This class should be in the classes directory of the service
+                $auth = new Auth();
+
+                switch ($this->config->pickles['auth'])
+                {
+                    case 'basic':
+                        $auth->basic();
+                        break;
+
+                    case 'oauth2':
+                        $auth->oauth2();
+                        break;
+
+                    default:
+                        throw new Exception('401 - Invalid authentication scheme.');
+                        break;
+                }
             }
 
             $filter   = isset($this->filter[$method]);

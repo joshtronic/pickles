@@ -84,6 +84,14 @@ function __autoload($class)
         'class'  => $pickles_path,
     ];
 
+    // Hack to deal with namespaces
+    if (strpos($class, '\\') !== false)
+    {
+        list($namespace, $class) = explode('\\', $class);
+
+        return require_once $pickles_path . 'classes/' . $class . '.php';
+    }
+
     // Path as the key, boolean value is whether ot not to convert back to hyphenated
     $paths = [
         $pickles_paths['class'] => false,
