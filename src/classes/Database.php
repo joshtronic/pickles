@@ -296,24 +296,11 @@ class Database extends Object
      *
      * @param  string $sql statement to execute
      * @param  array $input_parameters optional key/values to be bound
-     * @param  boolean $force_slow optional, force slow query logging
      * @return integer ID of the last inserted row or sequence number
      */
-    public function execute($sql, $input_parameters = null, $force_slow = false)
+    public function execute($sql, $input_parameters = null)
     {
         $this->open();
-
-        if (isset($this->config->pickles['logging']) && $this->config->pickles['logging'])
-        {
-            $loggable_query = $sql;
-
-            if ($input_parameters != null)
-            {
-                $loggable_query .= ' -- ' . json_encode($input_parameters);
-            }
-
-            Log::query($loggable_query);
-        }
 
         $sql = trim($sql);
 
@@ -374,11 +361,6 @@ class Database extends Object
 
             $end_time = microtime(true);
             $duration = $end_time - $start_time;
-
-            if ($duration >= 1 || $force_slow)
-            {
-                Log::slowQuery($duration . ' seconds: ' . $loggable_query);
-            }
 
             // Logs the information to the profiler
             if (Profiler::enabled('explains', 'queries'))

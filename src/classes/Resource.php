@@ -55,15 +55,17 @@ class Resource extends Object
     public $validate = [];
 
     // @todo Document this
-    public $status   = 200;
-    public $message  = 'OK';
-    public $echo     = false;
-    public $limit    = false;
-    public $offset   = false;
-    public $errors   = [];
-    public $uids     = [];
-    public $response = false;
-    public $profiler = false;
+    public $description = [];
+    public $auth        = false;
+    public $status      = 200;
+    public $message     = 'OK';
+    public $echo        = false;
+    public $limit       = false;
+    public $offset      = false;
+    public $errors      = [];
+    public $uids        = [];
+    public $response    = false;
+    public $profiler    = false;
 
     /**
      * Constructor
@@ -76,16 +78,28 @@ class Resource extends Object
     public function __construct($uids = false)
     {
         $this->uids = $uids;
+        $method     = $_SERVER['REQUEST_METHOD'];
 
         try
         {
             // Determines if we need to serve over HTTP or HTTPS
-            if ($this->https && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false))
+            if ($this->https === true
+                || (isset($this->https[$method]) && $this->https[$method]))
             {
-                throw new Exception('400 - SSL is required.');
+                if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false)
+                {
+                    throw new Exception('400 - SSL is required.');
+                }
             }
 
-            $method   = $_SERVER['REQUEST_METHOD'];
+            // Check auth if flag is  explicitly true or is true for the method
+            if ($this->auth === true
+                || (isset($this->auth[$method]) && $this->auth[$method]))
+            {
+                print_r($_SERVER);
+                exit('needs auth');
+            }
+
             $filter   = isset($this->filter[$method]);
             $validate = isset($this->validate[$method]);
 
