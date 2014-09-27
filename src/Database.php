@@ -17,6 +17,8 @@
  * @todo      More assumptions for the datasource variables
  */
 
+namespace Pickles;
+
 /**
  * Database Class
  *

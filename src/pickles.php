@@ -63,64 +63,6 @@ ini_set('session.gc_divisor',     1000);
 ini_set('session.hash_function',  1);
 
 // }}}
-// {{{ Auto[magical] Loader
-
-/**
- * Magic function to automatically load classes
- *
- * Attempts to load a core PICKLES class or a site level data model or
- * module class.
- *
- * @param  string $class Name of the class to be loaded
- * @return boolean Return value of require_once() or false (default)
- */
-function __autoload($class)
-{
-    $loaded   = false;
-    $filename = preg_replace('/_/', '/', $class) . '.php';
-
-    $pickles_path  = dirname(__FILE__) . '/';
-    $pickles_paths = [
-        'class'  => $pickles_path,
-    ];
-
-    // Hack to deal with namespaces
-    if (strpos($class, '\\') !== false)
-    {
-        list($namespace, $class) = explode('\\', $class);
-
-        return require_once $pickles_path . 'classes/' . $class . '.php';
-    }
-
-    // Path as the key, boolean value is whether ot not to convert back to hyphenated
-    $paths = [
-        $pickles_paths['class'] => false,
-        SITE_CLASS_PATH         => false,
-        SITE_MODEL_PATH         => false,
-        SITE_RESOURCE_PATH      => true,
-    ];
-
-    foreach ($paths as $path => $hyphenated)
-    {
-        // Converts the filename back to hypenated
-        if ($hyphenated == true)
-        {
-            $filename = strtolower(preg_replace('/([A-Z]{1})/', '-$1', $filename));;
-        }
-
-        if (file_exists($path . $filename))
-        {
-            $loaded = require_once $path . $filename;
-            break;
-        }
-    }
-
-    return $loaded;
-}
-
-spl_autoload_register('__autoload');
-
-// }}}
 // {{{ Loads the configuration file and sets any configuration options
 
 // Loads the base config

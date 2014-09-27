@@ -15,6 +15,8 @@
  * @link      https://github.com/joshtronic/pickles
  */
 
+namespace Pickles;
+
 /**
  * Sort Class
  *
