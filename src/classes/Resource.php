@@ -28,13 +28,13 @@
 class Resource extends Object
 {
     /**
-     * Secure
+     * HTTPS
      *
-     * Whether or not the page should be loaded via SSL.
+     * Whether or not the page should be loaded via HTTP Secure.
      *
      * @var boolean defaults to false
      */
-    public $secure = false;
+    public $https = false;
 
     /**
      * Filter
@@ -80,8 +80,7 @@ class Resource extends Object
         try
         {
             // Determines if we need to serve over HTTP or HTTPS
-            if ($this->secure
-                && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false))
+            if ($this->https && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false))
             {
                 throw new Exception('400 - SSL is required.');
             }
