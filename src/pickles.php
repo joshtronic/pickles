@@ -34,7 +34,7 @@ if (!defined('SITE_CLASS_PATH'))
 {
     define('SITE_CLASS_PATH',    SITE_PATH . 'classes/');
     define('SITE_MODEL_PATH',    SITE_PATH . 'models/');
-    define('SITE_MODULE_PATH',   SITE_PATH . 'modules/');
+    define('SITE_RESOURCE_PATH', SITE_PATH . 'resources/');
 
     define('PRIVATE_PATH', SITE_PATH    . 'private/');
     define('LOG_PATH',     PRIVATE_PATH . 'logs/');
@@ -89,7 +89,7 @@ function __autoload($class)
         $pickles_paths['class'] => false,
         SITE_CLASS_PATH         => false,
         SITE_MODEL_PATH         => false,
-        SITE_MODULE_PATH        => true,
+        SITE_RESOURCE_PATH      => true,
     ];
 
     foreach ($paths as $path => $hyphenated)

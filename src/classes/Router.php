@@ -67,7 +67,7 @@ class Router extends Object
             $class = implode('_', $nouns);
 
             // Creates our filename
-            array_unshift($nouns, SITE_MODULE_PATH);
+            array_unshift($nouns, SITE_RESOURCE_PATH);
             $filename = implode('/', $nouns) . '.php';
 
             if (!file_exists($filename))
