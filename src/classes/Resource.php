@@ -340,7 +340,8 @@ class Resource extends Object
 
     public function respond()
     {
-        header('Content-type: application/json');
+        header('Content-Type: application/json');
+        header('X-Powered-By: Pickles v2 - https://github.com/joshtronic/pickles');
 
         $meta = [
             'status'  => $this->status,
