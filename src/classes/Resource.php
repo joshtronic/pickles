@@ -124,7 +124,7 @@ class Resource extends Object
                     {
                         foreach ($missing_variables as $variable)
                         {
-                            $this->errors[$variable] = 'The ' . $variable . ' parameter is required.';
+                            $this->errors[$variable][] = 'The ' . $variable . ' parameter is required.';
                         }
                     }
                 }
@@ -156,11 +156,129 @@ class Resource extends Object
                             {
                                 if (is_array($rules))
                                 {
-                                    $rule_errors = Validate::isValid($global[$variable], $rules);
-
-                                    if (is_array($rule_errors))
+                                    foreach ($rules as $rule => $message)
                                     {
-                                        $this->errors[$variable] = $rule_errors[0];
+                                        $rule = explode(':', $rule);
+
+                                        switch (strtolower($rule[0]))
+                                        {
+                                            // {{{ Checks using filter_var()
+
+                                            case 'filter':
+                                                if (count($rule) < 2)
+                                                {
+                                                    throw new Exception('Invalid validation rule, expected: "validate:boolean|email|float|int|ip|url".');
+                                                }
+                                                else
+                                                {
+                                                    switch (strtolower($rule[1]))
+                                                    {
+                                                        case 'boolean':
+                                                        case 'email':
+                                                        case 'float':
+                                                        case 'int':
+                                                        case 'ip':
+                                                        case 'url':
+                                                            $filter = constant('FILTER_VALIDATE_' . strtoupper($rule[1]));
+                                                            break;
+
+                                                        default:
+                                                            throw new Exception('Invalid filter, expecting boolean, email, float, int, ip or url.');
+                                                            break;
+                                                    }
+
+                                                    if (!filter_var($value, $filter))
+                                                    {
+                                                        $this->errors[$variable][] = $message;
+                                                    }
+                                                }
+
+                                                break;
+
+                                            // }}}
+                                            // {{{ Checks using strlen()
+
+                                            case 'length':
+                                                if (count($rule) < 3)
+                                                {
+                                                    throw new Exception('Invalid validation rule, expected: "length:<|<=|==|!=|>=|>:integer".');
+                                                }
+                                                else
+                                                {
+                                                    if (!filter_var($rule[2], FILTER_VALIDATE_INT))
+                                                    {
+                                                        throw new Exception('Invalid length value, expecting an integer.');
+                                                    }
+                                                    else
+                                                    {
+                                                        $length = strlen($value);
+
+                                                        switch ($rule[1])
+                                                        {
+                                                            case '<':
+                                                                $valid = $length < $rule[2];
+                                                                break;
+
+                                                            case '<=':
+                                                                $valid = $length <= $rule[2];
+                                                                break;
+
+                                                            case '==':
+                                                                $valid = $length == $rule[2];
+                                                                break;
+
+                                                            case '!=':
+                                                                $valid = $length != $rule[2];
+                                                                break;
+
+                                                            case '>=':
+                                                                $valid = $length >= $rule[2];
+                                                                break;
+
+                                                            case '>':
+                                                                $valid = $length >  $rule[2];
+                                                                break;
+
+                                                            default:
+                                                                throw new Exception('Invalid operator, expecting <, <=, ==, !=, >= or >.');
+                                                                break;
+                                                        }
+
+                                                        if (!$valid)
+                                                        {
+                                                            $this->errors[$variable][] = $message;
+                                                        }
+                                                    }
+                                                }
+
+                                                break;
+
+                                            // }}}
+                                            // {{{ Checks using preg_match()
+
+                                            case 'regex':
+                                                if (count($rule) < 3)
+                                                {
+                                                    throw new Exception('Invalid validation rule, expected: "regex:is|not:string".');
+                                                }
+                                                else
+                                                {
+                                                    $rule[1] = strtolower($rule[1]);
+
+                                                    if (($rule[1] == 'is' && preg_match($rule[2], $value))
+                                                        || ($rule[1] == 'not' && !preg_match($rule[2], $value)))
+                                                    {
+                                                        $this->errors[$variable][] = $message;
+                                                    }
+                                                }
+                                                break;
+
+                                            // }}}
+                                            // @todo case 'alpha':
+                                            // @todo case 'alphanumeric':
+                                            // @todo case 'date':
+                                            // @todo case 'range':
+                                        }
                                     }
                                 }
                             }
@@ -228,6 +346,18 @@ class Resource extends Object
             'status'  => $this->status,
             'message' => $this->message,
         ];
+
+        // Forces errors to be an array of arrays
+        if ($this->errors)
+        {
+            foreach ($this->errors as $key => $error)
+            {
+                if (!is_array($error))
+                {
+                    $this->errors[$key] = [$error];
+                }
+            }
+        }
 
         foreach (['echo', 'limit', 'offset', 'errors'] as $variable)
         {
