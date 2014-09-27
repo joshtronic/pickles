@@ -37,6 +37,15 @@ class Resource extends Object
     public $secure = false;
 
     /**
+     * Required
+     *
+     * Variables that are required.
+     *
+     * @var array
+     */
+    public $required = [];
+
+    /**
      * Filter
      *
      * Variables to filter.
@@ -61,6 +70,7 @@ class Resource extends Object
     public $limit   = false;
     public $offset  = false;
     public $errors  = [];
+    public $uids    = [];
 
     // @todo if $status != 200 && $message == 'OK' ...
 
@@ -72,75 +82,94 @@ class Resource extends Object
      * typically used when a module is called outside of the scope of the
      * controller (the registration page calls the login page in this manner.
      */
-    public function __construct()
+    public function __construct($uids = false)
     {
+        $this->uids = $uids;
+
         parent::__construct(['cache', 'db']);
-    }
 
-    /**
-     * Validate
-     *
-     * Internal validation for data passed to a Module. Grabs the super global
-     * based on the Module's request method and loops through the data using the
-     * Module's validation array (if present) sanity checking each variable
-     * against the rules.
-     *
-     * @return mixed boolean false if everything is fine or an array or errors
-     */
-    public function __validate()
-    {
-        $errors = [];
+        $method   = $_SERVER['REQUEST_METHOD'];
+        $filter   = isset($this->filter[$method]);
+        $validate = isset($this->validate[$method]);
 
-        if ($this->validate)
+        if ($filter || $validate)
         {
-            if (is_array($this->method))
+            // Hack together some new globals
+            if (in_array($method, ['PUT', 'DELETE']))
             {
-                $this->method = $this->method[0];
+                $GLOBALS['_' . $method] = [];
+
+                // @todo Populate it
             }
 
-            switch (strtoupper($this->method))
+            $global =& $GLOBALS['_' . $method];
+
+            // Checks that the required parameters are present
+            // @todo Add in support for uid:* variables
+            if ($validate)
             {
-                case 'GET':
-                    $global = &$_GET;
-                    break;
+                $variables = [];
 
-                case 'POST':
-                    $global = &$_POST;
-                    break;
-
-                default:
-                    $global = &$_REQUEST;
-                    break;
-            }
-
-            foreach ($this->validate as $variable => $rules)
-            {
-                if (!is_array($rules) && $rules !== true)
+                foreach ($this->validate[$method] as $variable => $rules)
                 {
-                    $variable = $rules;
-                    $rules    = true;
+                    if (!is_array($rules))
+                    {
+                        $variable = $rules;
+                    }
+
+                    $variables[] = $variable;
                 }
 
-                if (isset($global[$variable]) && !String::isEmpty($global[$variable]))
+                $missing_variables = array_diff($variables, array_keys($global));
+
+                if ($missing_variables !== array())
                 {
+                    foreach ($missing_variables as $variable)
+                    {
+                        $this->errors[$variable] = 'The ' . $variable . ' parameter is required.';
+                    }
+                }
+            }
+
+            foreach ($global as $variable => $value)
+            {
+                // Applies any filters
+                if ($filter && isset($this->filter[$method][$variable]))
+                {
+                    // @todo Definitely could see the need to expand this out
+                    //       to allow for more robust filters to be applied
+                    //       similar to how the validation logic work.
+                    $global[$variable] = $this->filter[$method][$variable]($value);
+                }
+
+                if ($validate && isset($this->validate[$method][$variable]))
+                {
+                    $rules = $this->validate[$method][$variable];
+
                     if (is_array($rules))
                     {
-                        $rule_errors = Validate::isValid($global[$variable], $rules);
-
-                        if (is_array($rule_errors))
+                        if (isset($global[$variable]) && !String::isEmpty($global[$variable]))
                         {
-                            $errors = array_merge($errors, $rule_errors);
+                            if (is_array($rules))
+                            {
+                                $rule_errors = Validate::isValid($global[$variable], $rules);
+
+                                if (is_array($rule_errors))
+                                {
+                                    $this->errors[$variable] = $rule_errors[0];
+                                }
+                            }
                         }
                     }
                 }
-                else
-                {
-                    $errors[] = 'The ' . $variable . ' field is required.';
-                }
             }
-        }
 
-        return $errors == [] ? false : $errors;
+            // if PUT or DELETE, need to update the super globals directly as
+            // they do not stay in sync. Probably need to make them global in
+            // this class method
+            //
+            // $_PUT = $GLOBALS['_PUT'];
+        }
     }
 }
 
