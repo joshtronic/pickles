@@ -37,15 +37,6 @@ class Resource extends Object
     public $secure = false;
 
     /**
-     * Required
-     *
-     * Variables that are required.
-     *
-     * @var array
-     */
-    public $required = [];
-
-    /**
      * Filter
      *
      * Variables to filter.
@@ -63,16 +54,16 @@ class Resource extends Object
      */
     public $validate = [];
 
-    // @todo
-    public $status  = 200;
-    public $message = 'OK';
-    public $echo    = false;
-    public $limit   = false;
-    public $offset  = false;
-    public $errors  = [];
-    public $uids    = [];
-
-    // @todo if $status != 200 && $message == 'OK' ...
+    // @todo Document this
+    public $status   = 200;
+    public $message  = 'OK';
+    public $echo     = false;
+    public $limit    = false;
+    public $offset   = false;
+    public $errors   = [];
+    public $uids     = [];
+    public $response = false;
+    public $profiler = false;
 
     /**
      * Constructor
@@ -86,90 +77,173 @@ class Resource extends Object
     {
         $this->uids = $uids;
 
-        parent::__construct(['cache', 'db']);
-
-        $method   = $_SERVER['REQUEST_METHOD'];
-        $filter   = isset($this->filter[$method]);
-        $validate = isset($this->validate[$method]);
-
-        if ($filter || $validate)
+        try
         {
-            // Hack together some new globals
-            if (in_array($method, ['PUT', 'DELETE']))
+            // Determines if we need to serve over HTTP or HTTPS
+            if ($this->secure
+                && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false))
             {
-                $GLOBALS['_' . $method] = [];
-
-                // @todo Populate it
+                throw new Exception('400 - SSL is required.');
             }
 
-            $global =& $GLOBALS['_' . $method];
+            $method   = $_SERVER['REQUEST_METHOD'];
+            $filter   = isset($this->filter[$method]);
+            $validate = isset($this->validate[$method]);
 
-            // Checks that the required parameters are present
-            // @todo Add in support for uid:* variables
-            if ($validate)
+            if ($filter || $validate)
             {
-                $variables = [];
-
-                foreach ($this->validate[$method] as $variable => $rules)
+                // Hack together some new globals
+                if (in_array($method, ['PUT', 'DELETE']))
                 {
-                    if (!is_array($rules))
-                    {
-                        $variable = $rules;
-                    }
+                    $GLOBALS['_' . $method] = [];
 
-                    $variables[] = $variable;
+                    // @todo Populate it
                 }
 
-                $missing_variables = array_diff($variables, array_keys($global));
+                $global =& $GLOBALS['_' . $method];
 
-                if ($missing_variables !== array())
+                // Checks that the required parameters are present
+                // @todo Add in support for uid:* variables
+                if ($validate)
                 {
-                    foreach ($missing_variables as $variable)
+                    $variables = [];
+
+                    foreach ($this->validate[$method] as $variable => $rules)
                     {
-                        $this->errors[$variable] = 'The ' . $variable . ' parameter is required.';
-                    }
-                }
-            }
-
-            foreach ($global as $variable => $value)
-            {
-                // Applies any filters
-                if ($filter && isset($this->filter[$method][$variable]))
-                {
-                    // @todo Definitely could see the need to expand this out
-                    //       to allow for more robust filters to be applied
-                    //       similar to how the validation logic work.
-                    $global[$variable] = $this->filter[$method][$variable]($value);
-                }
-
-                if ($validate && isset($this->validate[$method][$variable]))
-                {
-                    $rules = $this->validate[$method][$variable];
-
-                    if (is_array($rules))
-                    {
-                        if (isset($global[$variable]) && !String::isEmpty($global[$variable]))
+                        if (!is_array($rules))
                         {
-                            if (is_array($rules))
-                            {
-                                $rule_errors = Validate::isValid($global[$variable], $rules);
+                            $variable = $rules;
+                        }
 
-                                if (is_array($rule_errors))
+                        $variables[] = $variable;
+                    }
+
+                    $missing_variables = array_diff($variables, array_keys($global));
+
+                    if ($missing_variables !== array())
+                    {
+                        foreach ($missing_variables as $variable)
+                        {
+                            $this->errors[$variable] = 'The ' . $variable . ' parameter is required.';
+                        }
+                    }
+                }
+
+                foreach ($global as $variable => $value)
+                {
+                    // Applies any filters
+                    if ($filter && isset($this->filter[$method][$variable]))
+                    {
+                        // @todo Definitely could see the need to expand this out
+                        //       to allow for more robust filters to be applied
+                        //       similar to how the validation logic work.
+                        $global[$variable] = $this->filter[$method][$variable]($value);
+                    }
+
+                    if ($validate && isset($this->validate[$method][$variable]))
+                    {
+                        $rules = $this->validate[$method][$variable];
+
+                        if (is_array($rules))
+                        {
+                            if (isset($global[$variable]) && !String::isEmpty($global[$variable]))
+                            {
+                                if (is_array($rules))
                                 {
-                                    $this->errors[$variable] = $rule_errors[0];
+                                    $rule_errors = Validate::isValid($global[$variable], $rules);
+
+                                    if (is_array($rule_errors))
+                                    {
+                                        $this->errors[$variable] = $rule_errors[0];
+                                    }
                                 }
                             }
                         }
                     }
                 }
+
+                // if PUT or DELETE, need to update the super globals directly as
+                // they do not stay in sync. Probably need to make them global in
+                // this class method
+                //
+                // $_PUT = $GLOBALS['_PUT'];
             }
 
-            // if PUT or DELETE, need to update the super globals directly as
-            // they do not stay in sync. Probably need to make them global in
-            // this class method
-            //
-            // $_PUT = $GLOBALS['_PUT'];
+            if ($this->errors)
+            {
+                throw new Exception('400 - Missing or invalid parameters.');
+            }
+
+            parent::__construct(['cache', 'db']);
+
+            // Checks if the request method has been implemented
+            //if (get_class($this) != 'Resource')
+            {
+                if (!method_exists($this, $method))
+                {
+                    throw new Exception('405 - Method not allowed.');
+                }
+                else
+                {
+                    // Gets the profiler status
+                    // @todo Refactor out that stripos
+                    $profiler = $this->config->pickles['profiler'];
+                    $profiler = $profiler === true
+                                || stripos($profiler, 'timers') !== false;
+
+                    // Starts a timer before the resource is executed
+                    if ($profiler)
+                    {
+                        Profiler::timer('resource ' . $method);
+                    }
+
+                    $this->response = $this->$method();
+
+                    // Stops the resource timer
+                    if ($profiler)
+                    {
+                        Profiler::timer('resource ' . $method);
+                    }
+                }
+            }
+        }
+        catch (Exception $e)
+        {
+            $this->status  = 400;
+            $this->message = $e->getMessage();
         }
     }
+
+    public function respond()
+    {
+        header('Content-type: application/json');
+
+        $meta = [
+            'status'  => $this->status,
+            'message' => $this->message,
+        ];
+
+        foreach (['echo', 'limit', 'offset', 'errors'] as $variable)
+        {
+            if ($this->$variable)
+            {
+                $meta[$variable] = $this->$variable;
+            }
+        }
+
+        $response = ['meta' => $meta];
+
+        foreach (['response', 'profiler'] as $variable)
+        {
+            if ($this->$variable)
+            {
+                $response[$variable] = $this->$variable;
+            }
+        }
+
+        $pretty = isset($_REQUEST['pretty']) ? JSON_PRETTY_PRINT : false;
+
+        echo json_encode($response, $pretty);
+   }
 }
 

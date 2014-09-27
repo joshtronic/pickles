@@ -38,8 +38,6 @@ class Router extends Object
     {
         parent::__construct();
 
-        $response = new Response();
-
         try
         {
             // Grabs the requested page
@@ -70,81 +68,28 @@ class Router extends Object
             array_unshift($nouns, SITE_RESOURCE_PATH);
             $filename = implode('/', $nouns) . '.php';
 
-            if (!file_exists($filename))
+            // Checks that the file is present and contains our class
+            if (!file_exists($filename) || !class_exists($class))
             {
-                // @todo Should be a 404, will need to change it up after I add
-                //       namespaces and a Pickles\Exception
-                throw new Exception('Cannot find the file ' . $filename);
+                throw new Exception('404 - Not Found.');
             }
 
-            if (!class_exists($class))
-            {
-                throw new Exception('Cannot find the class ' . $class);
-            }
-
+            // Instantiates our resource with the UIDs
             $resource = new $class($uids);
-
-            // Determines if we need to serve over HTTP or HTTPS
-            if ($resource->secure == false && isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'])
-            {
-                throw new Exception('This resource expects HTTPS communication.');
-            }
-            elseif ($resource->secure == true && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false))
-            {
-                throw new Exception('This resource expects HTTP communication.');
-            }
-
-            // Gets the profiler status
-            $profiler = $this->config->pickles['profiler'];
-            $profiler = $profiler === true || stripos($profiler, 'timers') !== false;
-
-            $method = strtolower($_SERVER['REQUEST_METHOD']);
-
-            if (!method_exists($resource, $method))
-            {
-                throw new Exception('Cannot find the method ' . $class . '::' . $method);
-            }
-
-            // Starts a timer before the resource is executed
-            if ($profiler)
-            {
-                Profiler::timer('resource ' . $method);
-            }
-
-            if ($resource->validate)
-            {
-                $validation_errors = $resource->__validate();
-
-                if ($validation_errors)
-                {
-                    $response->status  = 400;
-                    $response->message = implode(' ', $validation_errors);
-                }
-            }
-
-            if ($response->status == 200)
-            {
-                $resource_return = $resource->$method();
-
-                if ($resource_return)
-                {
-                    $response->response = $resource_return;
-                }
-            }
-
-            // Stops the resource timer
-            if ($profiler)
-            {
-                Profiler::timer('resource ' . $method);
-            }
         }
         catch (Exception $e)
         {
-            $response->status  = 500;
-            $response->message = $e->getMessage();
+            // Creates a resource object if we don't have one
+            if (!isset($resource))
+            {
+                $resource = new Resource();
+            }
+
+            $resource->status  = 400;
+            $resource->message = $e->getMessage();
         }
 
-        $response->respond();
+        $resource->respond();
     }
 }
 
