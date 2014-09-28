@@ -52,7 +52,6 @@ class Config extends Object
         $environment  = false;
         $is_cli       = !isset($_SERVER['REQUEST_METHOD']);
 
-
         // Sanity checks the config file
         if (file_exists($filename) && is_file($filename) && is_readable($filename))
         {
@@ -77,7 +76,7 @@ class Config extends Object
                     // @todo is checking for argc enough?
                     if ($is_cli && $_SERVER['argc'] < 2)
                     {
-                        throw new Exception('You must pass an environment (e.g. php script.php <environment>)');
+                        throw new \Exception('You must pass an environment (e.g. php script.php <environment>)');
                     }
 
                     // Loops through the environments and tries to match on IP or name
@@ -172,7 +171,7 @@ class Config extends Object
                     // Checks if constant is already defined, and throws an error
                     if (defined($constant))
                     {
-                        throw new Exception('The constant ' . $constant . ' is already defined');
+                        throw new \Exception('The constant ' . $constant . ' is already defined');
                     }
                     else
                     {

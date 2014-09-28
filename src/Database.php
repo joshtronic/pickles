@@ -43,9 +43,9 @@ class Database extends Object
      * @var    string
      */
     protected $attributes = [
-        PDO::ATTR_PERSISTENT   => true,
-        PDO::ATTR_ERRMODE      => PDO::ERRMODE_EXCEPTION,
-        PDO::NULL_EMPTY_STRING => true,
+        \PDO::ATTR_PERSISTENT   => true,
+        \PDO::ATTR_ERRMODE      => \PDO::ERRMODE_EXCEPTION,
+        \PDO::NULL_EMPTY_STRING => true,
     ];
 
     /**
@@ -160,14 +160,14 @@ class Database extends Object
             {
                 if (!isset($config->datasources[$datasource_name]))
                 {
-                    throw new Exception('The specified datasource is not defined in the config.');
+                    throw new \Exception('The specified datasource is not defined in the config.');
                 }
 
                 $datasource = $config->datasources[$datasource_name];
 
                 if (!isset($datasource['driver']))
                 {
-                    throw new Exception('The specified datasource lacks a driver.');
+                    throw new \Exception('The specified datasource lacks a driver.');
                 }
 
                 $datasource['driver'] = strtolower($datasource['driver']);
@@ -194,7 +194,7 @@ class Database extends Object
                         break;
 
                     default:
-                        throw new Exception('Datasource driver "' . $datasource['driver'] . '" is invalid');
+                        throw new \Exception('Datasource driver "' . $datasource['driver'] . '" is invalid');
                         break;
                 }
 
@@ -240,15 +240,15 @@ class Database extends Object
                 case 'pdo_mysql':
                     // Resolves "Invalid UTF-8 sequence" issues when encoding as JSON
                     // @todo Didn't resolve that issue, borked some other characters though
-                    //$this->attributes[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES utf8';
+                    //$this->attributes[\PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES utf8';
                     break;
 
                 case 'pdo_pgsql':
                     // This combats a bug: https://bugs.php.net/bug.php?id=62571&edit=1
-                    $this->attributes[PDO::ATTR_PERSISTENT] = false;
+                    $this->attributes[\PDO::ATTR_PERSISTENT] = false;
 
                     // This allows for multiple prepared queries
-                    $this->attributes[PDO::ATTR_EMULATE_PREPARES] = true;
+                    $this->attributes[\PDO::ATTR_EMULATE_PREPARES] = true;
                     break;
             }
 
@@ -265,11 +265,13 @@ class Database extends Object
                 $this->dsn = str_replace(['host=;', 'port=;', 'unix_socket=;'], '', $this->dsn);
 
                 // Attempts to establish a connection
-                $this->connection = new PDO($this->dsn, $this->username, $this->password, $this->attributes);
+                $this->connection = new \PDO(
+                    $this->dsn, $this->username, $this->password, $this->attributes
+                );
             }
             else
             {
-                throw new Exception('There was an error loading the database configuration.');
+                throw new \Exception('There was an error loading the database configuration.');
             }
         }
 
@@ -372,7 +374,7 @@ class Database extends Object
         }
         else
         {
-            throw new Exception('No query to execute.');
+            throw new \Exception('No query to execute.');
         }
 
         return $this->connection->lastInsertId();
@@ -396,7 +398,7 @@ class Database extends Object
         }
 
         // Pulls the results based on the type
-        $results = $this->results->fetchAll(PDO::FETCH_ASSOC);
+        $results = $this->results->fetchAll(\PDO::FETCH_ASSOC);
 
         return $results;
     }

@@ -2,7 +2,7 @@
 
 namespace Pickles;
 
-abstract class Auth extends \Object
+abstract class Auth extends Object
 {
     public function basic()
     {

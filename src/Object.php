@@ -70,7 +70,7 @@ class Object
     public function __construct($objects = null)
     {
         // Gets an instance of the config, unless we ARE the config
-        if (get_class($this) == 'Config')
+        if (get_class($this) == 'Pickles\\Config')
         {
             $this->config = true;
         }
@@ -122,21 +122,14 @@ class Object
      */
     public static function getInstance($class = false)
     {
-        // In < 5.3 arguments must match in child, hence defaulting $class
-        // @todo Remove this, as we're no longer supporting 5.3
-        if ($class == false)
-        {
-            return false;
-        }
-        else
-        {
-            if (!isset(self::$instances[$class]))
-            {
-                self::$instances[$class] = new $class();
-            }
+        $class = 'Pickles\\' . $class;
 
-            return self::$instances[$class];
+        if (!isset(self::$instances[$class]))
+        {
+            self::$instances[$class] = new $class();
         }
+
+        return self::$instances[$class];
     }
 
     /**

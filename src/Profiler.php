@@ -222,6 +222,8 @@ class Profiler
      */
     public static function timer($timer)
     {
+        var_dump(time());
+        exit('EOF');
         if (self::enabled('timers'))
         {
             // Starts the timer

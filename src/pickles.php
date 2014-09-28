@@ -66,7 +66,7 @@ ini_set('session.hash_function',  1);
 // {{{ Loads the configuration file and sets any configuration options
 
 // Loads the base config
-$config = Config::getInstance();
+$config = Pickles\Config::getInstance();
 
 // Injects PICKLES variables into the config
 $config->data['pickles']['path'] = dirname(__FILE__) . '/';

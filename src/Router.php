@@ -63,23 +63,19 @@ class Router extends Object
             }
 
             // Creates our class name
-            array_unshift($nouns, $version);
-            $class = implode('_', $nouns);
-
-            // Creates our filename
-            array_unshift($nouns, SITE_RESOURCE_PATH);
-            $filename = implode('/', $nouns) . '.php';
+            array_unshift($nouns, '', $this->config->pickles['namespace'], 'Resources', $version);
+            $class = implode('\\', $nouns);
 
             // Checks that the file is present and contains our class
-            if (!file_exists($filename) || !class_exists($class))
+            if (!class_exists($class))
             {
-                throw new Exception('404 - Not Found.');
+                throw new \Exception('Not Found.', 404);
             }
 
             // Instantiates our resource with the UIDs
             $resource = new $class($uids);
         }
-        catch (Exception $e)
+        catch (\Exception $e)
         {
             // Creates a resource object if we don't have one
             if (!isset($resource))
@@ -87,7 +83,9 @@ class Router extends Object
                 $resource = new Resource();
             }
 
-            $resource->status  = 400;
+            $code = $e->getCode();
+
+            $resource->status  = $code ? $code : 400;
             $resource->message = $e->getMessage();
         }
 

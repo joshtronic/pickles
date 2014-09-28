@@ -92,7 +92,7 @@ class Resource extends Object
             {
                 if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false)
                 {
-                    throw new Exception('400 - SSL is required.');
+                    throw new \Exception('SSL is required.', 400);
                 }
             }
 
@@ -102,11 +102,14 @@ class Resource extends Object
             {
                 if (!$this->config->pickles['auth'])
                 {
-                    throw new Exception('401 - Authentication is not configured properly.');
+                    throw new \Exception('Authentication is not configured properly.', 401);
                 }
 
+                /*
                 // This class should be in the classes directory of the service
-                $auth = new Auth();
+                $auth = '\\' . $this->config->pickles['namespace'] . '\\Auth';
+                var_dump($auth);
+                $auth = new $auth();
 
                 switch ($this->config->pickles['auth'])
                 {
@@ -119,9 +122,10 @@ class Resource extends Object
                         break;
 
                     default:
-                        throw new Exception('401 - Invalid authentication scheme.');
+                        throw new \Exception('Invalid authentication scheme.', 401);
                         break;
                 }
+                */
             }
 
             $filter   = isset($this->filter[$method]);
@@ -204,7 +208,7 @@ class Resource extends Object
                                             case 'filter':
                                                 if (count($rule) < 2)
                                                 {
-                                                    throw new Exception('Invalid validation rule, expected: "validate:boolean|email|float|int|ip|url".');
+                                                    throw new \Exception('Invalid validation rule, expected: "validate:boolean|email|float|int|ip|url".');
                                                 }
                                                 else
                                                 {
@@ -220,7 +224,7 @@ class Resource extends Object
                                                             break;
 
                                                         default:
-                                                            throw new Exception('Invalid filter, expecting boolean, email, float, int, ip or url.');
+                                                            throw new \Exception('Invalid filter, expecting boolean, email, float, int, ip or url.');
                                                             break;
                                                     }
 
@@ -238,13 +242,13 @@ class Resource extends Object
                                             case 'length':
                                                 if (count($rule) < 3)
                                                 {
-                                                    throw new Exception('Invalid validation rule, expected: "length:<|<=|==|!=|>=|>:integer".');
+                                                    throw new \Exception('Invalid validation rule, expected: "length:<|<=|==|!=|>=|>:integer".');
                                                 }
                                                 else
                                                 {
                                                     if (!filter_var($rule[2], FILTER_VALIDATE_INT))
                                                     {
-                                                        throw new Exception('Invalid length value, expecting an integer.');
+                                                        throw new \Exception('Invalid length value, expecting an integer.');
                                                     }
                                                     else
                                                     {
@@ -277,7 +281,7 @@ class Resource extends Object
                                                                 break;
 
                                                             default:
-                                                                throw new Exception('Invalid operator, expecting <, <=, ==, !=, >= or >.');
+                                                                throw new \Exception('Invalid operator, expecting <, <=, ==, !=, >= or >.');
                                                                 break;
                                                         }
 
@@ -296,7 +300,7 @@ class Resource extends Object
                                             case 'regex':
                                                 if (count($rule) < 3)
                                                 {
-                                                    throw new Exception('Invalid validation rule, expected: "regex:is|not:string".');
+                                                    throw new \Exception('Invalid validation rule, expected: "regex:is|not:string".');
                                                 }
                                                 else
                                                 {
@@ -332,17 +336,17 @@ class Resource extends Object
 
             if ($this->errors)
             {
-                throw new Exception('400 - Missing or invalid parameters.');
+                throw new \Exception('Missing or invalid parameters.', 400);
             }
 
             parent::__construct(['cache', 'db']);
 
             // Checks if the request method has been implemented
-            //if (get_class($this) != 'Resource')
+            if (get_class($this) != 'Pickles\\Resource')
             {
                 if (!method_exists($this, $method))
                 {
-                    throw new Exception('405 - Method not allowed.');
+                    throw new \Exception('Method not allowed.', 405);
                 }
                 else
                 {
@@ -368,7 +372,7 @@ class Resource extends Object
                 }
             }
         }
-        catch (Exception $e)
+        catch (\Exception $e)
         {
             $this->status  = 400;
             $this->message = $e->getMessage();

@@ -84,7 +84,7 @@ class Cache extends Object
                 $datasources = [$datasources];
             }
 
-            $this->connection = new Memcache();
+            $this->connection = new \Memcache();
 
             foreach ($datasources as $name)
             {

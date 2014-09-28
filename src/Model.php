@@ -265,7 +265,7 @@ class Model extends Object
         // Errors if a table is not set. You're welcome, Geoff.
         if ($this->table == false)
         {
-            throw new Exception('You must set the table variable');
+            throw new \Exception('You must set the table variable.');
         }
 
         // Runs the parent constructor so we have the config
@@ -353,7 +353,7 @@ class Model extends Object
             {
                 if (is_array($parameters_or_key))
                 {
-                    throw new Exception('You cannot pass in 2 query parameter arrays');
+                    throw new \Exception('You cannot pass in 2 query parameter arrays.');
                 }
 
                 $this->prepareParameters($type_or_parameters);
@@ -830,7 +830,7 @@ class Model extends Object
                             // Checks the number of values, between expects 2
                             if (count($value) != 2)
                             {
-                                throw new Exception('BETWEEN expects an array with 2 values.');
+                                throw new \Exception('BETWEEN expects an array with 2 values.');
                             }
                             else
                             {
@@ -849,7 +849,7 @@ class Model extends Object
                         }
                         else
                         {
-                            throw new Exception('BETWEEN expects an array.');
+                            throw new \Exception('BETWEEN expects an array.');
                         }
                     }
                     else
