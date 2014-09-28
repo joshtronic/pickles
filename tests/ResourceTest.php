@@ -1,69 +1,138 @@
 <?php
 
-$_POST['field2']    = 'short';
-$_GET['field2']     = 'short';
-$_REQUEST['field2'] = 'short';
-
-class MockParentResource extends Pickles\Resource
+namespace Resources\v1
 {
-    public $validate = [
-        'field1',
-        'field2' => [
-            'length:<:10' => 'Too short',
-            'length:>:50' => 'Too long',
-        ],
-    ];
+    class resource extends \Pickles\Resource
+    {
+        public $https = [
+            'POST' => true,
+        ];
+
+        public $auth = [
+            'DELETE' => true,
+        ];
+
+        public $filter = [
+            'GET' => [
+                'foo' => 'trim',
+                'bar' => 'password_hash',
+            ],
+        ];
+
+        public $validate = [
+            'GET' => [
+                'missing',
+                'isBoolean'    => ['filter:boolean' => 'Error'],
+                'isNotBoolean' => ['filter:boolean' => 'Error'],
+                'isEmail'      => ['filter:email'   => 'Error'],
+                'isNotEmail'   => ['filter:email'   => 'Error'],
+                'isFloat'      => ['filter:float'   => 'Error'],
+                'isNotFloat'   => ['filter:float'   => 'Error'],
+                'isInt'        => ['filter:int'     => 'Error'],
+                'isNotInt'     => ['filter:int'     => 'Error'],
+                'isIP'         => ['filter:ip'      => 'Error'],
+                'isNotIP'      => ['filter:ip'      => 'Error'],
+                'isURL'        => ['filter:url'     => 'Error'],
+                'isNotURL'     => ['filter:url'     => 'Error'],
+                'invalidRule'  => ['filter' => 'Error'],
+            ],
+        ];
+
+        public function GET()
+        {
+            return ['foo' => 'bar'];
+        }
+    }
 }
 
-class MockChildResource extends MockParentResource
+namespace
 {
-    public $method = ['POST', 'GET'];
-}
-
-class ResourceTest extends PHPUnit_Framework_TestCase
-{
-    public function testAutoRun()
+    class ResourceTest extends PHPUnit_Framework_TestCase
     {
-        $this->assertInstanceOf('Pickles\\Resource', new Pickles\Resource(true));
-    }
+        public function testFilterAndValidate()
+        {
+            $response = json_encode([
+                'meta' => [
+                    'status' => 500,
+                    'message' => 'Invalid filter, expecting boolean, email, float, int, ip or url.',
+                    'errors' => [
+                        'missing'      => ['The missing parameter is required.'],
+                        'isNotBoolean' => ['Error'],
+                        'isNotEmail'   => ['Error'],
+                        'isNotFloat'   => ['Error'],
+                        'isNotInt'     => ['Error'],
+                        'isNotIP'      => ['Error'],
+                        'isNotURL'     => ['Error'],
+                    ],
+                ],
+            ]);
 
-    public function testAutoRunParentError()
-    {
-        $this->expectOutputString('');
-        $model = new MockChildResource(true);
-    }
+            $this->expectOutputString($response);
 
-    public function testSetGetReturn()
-    {
-        $module = new Pickles\Resource();
-        $module->foo = 'bar';
-        $this->assertEquals('bar', $module->foo);
-    }
+            $_SERVER['REQUEST_METHOD'] = 'GET';
+            $_REQUEST['request'] = 'v1/resource/1';
+            $_GET = [
+                'foo'          => '     bar     ',
+                'bar'          => 'unencrypted',
+                'isBoolean'    => true,
+                'isNotBoolean' => 'invalid',
+                'isEmail'      => 'foo@bar.com',
+                'isNotEmail'   => 'nope',
+                'isFloat'      => 1.234567890,
+                'isNotFloat'   => 'five',
+                'isInt'        => 22381,
+                'isNotInt'     => 'pretzel',
+                'isIP'         => '127.0.0.1',
+                'isNotIP'      => 'home',
+                'isURL'        => 'http://joshtronic.com',
+                'isNotURL'     => 'doubleUdoubleUdoubleUdot',
+                'invalidRule'  => 'invalid',
+            ];
 
-    public function testGetMissing()
-    {
-        $module = new Pickles\Resource();
-        $this->assertFalse($module->missing);
-    }
+            new Pickles\Router();
 
-    public function testValidateGet()
-    {
-        $module = new MockParentResource();
-        $module->method = 'GET';
-        $this->assertEquals(['The field1 field is required.', 'Too long'], $module->__validate());
-    }
+            $this->assertEquals('bar', $_GET['foo']);
+            $this->assertFalse('unencrypted' == $_GET['bar']);
+        }
 
-    public function testValidatePost()
-    {
-        $module = new MockParentResource();
-        $this->assertEquals(['The field1 field is required.', 'Too long'], $module->__validate());
-    }
+        public function testHTTPS()
+        {
+            $response = json_encode([
+                'meta' => [
+                    'status' => 400,
+                    'message' => 'HTTPS is required.',
+                ],
+            ]);
 
-    public function testValidateRequest()
-    {
-        $module = new MockParentResource();
-        $module->method = null;
-        $this->assertEquals(['The field1 field is required.', 'Too long'], $module->__validate());
+            $this->expectOutputString($response);
+
+            $_SERVER['REQUEST_METHOD'] = 'POST';
+            $_REQUEST['request'] = 'v1/resource/1';
+
+            new Pickles\Router();
+        }
+
+        public function testAuthMisconfigured()
+        {
+            $response = json_encode([
+                'meta' => [
+                    'status' => 401,
+                    'message' => 'Authentication is not configured properly.',
+                ],
+            ]);
+
+            $this->expectOutputString($response);
+
+            $_SERVER['REQUEST_METHOD'] = 'DELETE';
+            $_REQUEST['request'] = 'v1/resource/1';
+
+            new Pickles\Router();
+        }
+
+        public function testValidation()
+        {
+
+        }
     }
 }
 

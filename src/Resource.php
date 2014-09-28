@@ -87,13 +87,11 @@ class Resource extends Object
         try
         {
             // Determines if we need to serve over HTTP or HTTPS
-            if ($this->https === true
+            if (($this->https === true
                 || (isset($this->https[$method]) && $this->https[$method]))
+                && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false))
             {
-                if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false)
-                {
-                    throw new \Exception('SSL is required.', 400);
-                }
+                throw new \Exception('HTTPS is required.', 400);
             }
 
             // Check auth if flag is  explicitly true or is true for the method
@@ -201,37 +199,35 @@ class Resource extends Object
                                     {
                                         $rule = explode(':', $rule);
 
-                                        switch (strtolower($rule[0]))
+                                        switch ($rule[0])
                                         {
                                             // {{{ Checks using filter_var()
 
                                             case 'filter':
-                                                if (count($rule) < 2)
+                                                if (!isset($rule[1]))
                                                 {
-                                                    throw new \Exception('Invalid validation rule, expected: "validate:boolean|email|float|int|ip|url".');
+                                                    $rule[1] = false;
                                                 }
-                                                else
+
+                                                switch ($rule[1])
                                                 {
-                                                    switch (strtolower($rule[1]))
-                                                    {
-                                                        case 'boolean':
-                                                        case 'email':
-                                                        case 'float':
-                                                        case 'int':
-                                                        case 'ip':
-                                                        case 'url':
-                                                            $filter = constant('FILTER_VALIDATE_' . strtoupper($rule[1]));
-                                                            break;
+                                                    case 'boolean':
+                                                    case 'email':
+                                                    case 'float':
+                                                    case 'int':
+                                                    case 'ip':
+                                                    case 'url':
+                                                        $filter = constant('FILTER_VALIDATE_' . strtoupper($rule[1]));
+                                                        break;
 
-                                                        default:
-                                                            throw new \Exception('Invalid filter, expecting boolean, email, float, int, ip or url.');
-                                                            break;
-                                                    }
+                                                    default:
+                                                        throw new \Exception('Invalid filter, expecting boolean, email, float, int, ip or url.');
+                                                        break;
+                                                }
 
-                                                    if (!filter_var($value, $filter))
-                                                    {
-                                                        $this->errors[$variable][] = $message;
-                                                    }
+                                                if (!filter_var($value, $filter))
+                                                {
+                                                    $this->errors[$variable][] = $message;
                                                 }
 
                                                 break;
@@ -374,7 +370,16 @@ class Resource extends Object
         }
         catch (\Exception $e)
         {
-            throw $e;
+            $code = $e->getCode();
+
+            // Anything below 200 is probably a PHP error
+            if ($code < 200)
+            {
+                $code = 500;
+            }
+
+            $this->status  = $code;
+            $this->message = $e->getMessage();
         }
     }
 
