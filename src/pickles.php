@@ -30,16 +30,6 @@ if (!defined('SITE_PATH'))
     define('SITE_PATH', getcwd() . '/../');
 }
 
-if (!defined('SITE_CLASS_PATH'))
-{
-    define('SITE_CLASS_PATH',    SITE_PATH . 'classes/');
-    define('SITE_MODEL_PATH',    SITE_PATH . 'models/');
-    define('SITE_RESOURCE_PATH', SITE_PATH . 'resources/');
-
-    define('PRIVATE_PATH', SITE_PATH    . 'private/');
-    define('LOG_PATH',     PRIVATE_PATH . 'logs/');
-}
-
 // }}}
 // {{{ Defaults some important configuration options
 
@@ -67,9 +57,6 @@ ini_set('session.hash_function',  1);
 
 // Loads the base config
 $config = Pickles\Config::getInstance();
-
-// Injects PICKLES variables into the config
-$config->data['pickles']['path'] = dirname(__FILE__) . '/';
 
 // Configures any available PHP configuration options
 if (is_array($config->php) && count($config->php))
