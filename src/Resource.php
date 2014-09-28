@@ -374,8 +374,7 @@ class Resource extends Object
         }
         catch (\Exception $e)
         {
-            $this->status  = 400;
-            $this->message = $e->getMessage();
+            throw $e;
         }
     }
 

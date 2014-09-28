@@ -66,6 +66,12 @@ class Router extends Object
             array_unshift($nouns, '', $this->config->pickles['namespace'], 'Resources', $version);
             $class = implode('\\', $nouns);
 
+            // Strips preceding slashs when there is no namespace
+            if (strpos($class, '\\\\') === 0)
+            {
+                $class = substr($class, 2);
+            }
+
             // Checks that the file is present and contains our class
             if (!class_exists($class))
             {
@@ -85,7 +91,13 @@ class Router extends Object
 
             $code = $e->getCode();
 
-            $resource->status  = $code ? $code : 400;
+            // Anything below 200 is probably a PHP error
+            if ($code < 200)
+            {
+                $code = 500;
+            }
+
+            $resource->status  = $code;
             $resource->message = $e->getMessage();
         }
 
