@@ -7,7 +7,7 @@ class NumberTest extends PHPUnit_Framework_TestCase
      */
     public function testOrdinalIndicatorNoSuper($a, $b)
     {
-        $this->assertEquals($b, Number::ordinalIndicator($a));
+        $this->assertEquals($b, Pickles\Number::ordinalIndicator($a));
     }
 
     public function providerOrginalIndicatorNoSuper()
@@ -29,7 +29,7 @@ class NumberTest extends PHPUnit_Framework_TestCase
      */
     public function testOrdinalIndicatorSuper($a, $b)
     {
-        $this->assertEquals($b, Number::ordinalIndicator($a, true));
+        $this->assertEquals($b, Pickles\Number::ordinalIndicator($a, true));
     }
 
     public function providerOrginalIndicatorSuper()

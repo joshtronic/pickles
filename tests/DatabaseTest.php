@@ -4,7 +4,7 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
 {
     public function testGetInstanceFalse()
     {
-        $this->assertFalse(Database::getInstance());
+        $this->assertFalse(Pickles\Database::getInstance());
     }
 
     /**
@@ -13,9 +13,9 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInstanceDatasourceNotDefined()
     {
-        $config = Config::getInstance();
+        $config = Pickles\Config::getInstance();
         $config->data['pickles']['datasource'] = 'bad';
-        Database::getInstance();
+        Pickles\Database::getInstance();
     }
 
     /**
@@ -24,13 +24,13 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInstanceDatasourceLacksDriver()
     {
-        $config = Config::getInstance();
+        $config = Pickles\Config::getInstance();
         $config->data['datasources'] = [
             'bad' => [
                 'type' => 'mysql',
             ],
         ];
-        $this->assertInstanceOf('Database', Database::getInstance());
+        $this->assertInstanceOf('Pickles\\Database', Pickles\Database::getInstance());
     }
 
     /**
@@ -39,7 +39,7 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
      */
     public function testOpenConfigError()
     {
-        $config = Config::getInstance();
+        $config = Pickles\Config::getInstance();
         $config->data['datasources'] = [
             'bad' => [
                 'type'     => 'mysql',
@@ -47,13 +47,13 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
                 'database' => 'test',
             ],
         ];
-        $db = Database::getInstance();
+        $db = Pickles\Database::getInstance();
         $db->open();
     }
 
     public function testGetInstanceDatasourcesArray()
     {
-        $config = Config::getInstance();
+        $config = Pickles\Config::getInstance();
         $config->data['datasources'] = [
             'mysql' => [
                 'type'     => 'mysql',
@@ -64,28 +64,28 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
                 'database' => 'test',
             ],
         ];
-        $this->assertInstanceOf('Database', Database::getInstance());
+        $this->assertInstanceOf('Pickles\\Database', Pickles\Database::getInstance());
     }
 
     // Also tests the datasource being missing and selecting the first one
     public function testGetInstanceMySQL()
     {
-        $config = Config::getInstance();
+        $config = Pickles\Config::getInstance();
         unset($config->data['pickles']['datasource']);
-        $this->assertInstanceOf('Database', Database::getInstance());
+        $this->assertInstanceOf('Pickles\\Database', Pickles\Database::getInstance());
     }
 
     public function testOpenMySQL()
     {
-        $config = Config::getInstance();
+        $config = Pickles\Config::getInstance();
         $config->data['pickles']['datasource'] = 'mysql';
-        $db = Database::getInstance();
+        $db = Pickles\Database::getInstance();
         $db->open();
     }
 
     public function testExecute()
     {
-        $db = Database::getInstance();
+        $db = Pickles\Database::getInstance();
         $this->assertEquals('0', $db->execute('SHOW TABLES'));
     }
 
@@ -95,35 +95,35 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
      */
     public function testExecuteNoQuery()
     {
-        $db = Database::getInstance();
+        $db = Pickles\Database::getInstance();
         $db->execute(' ');
     }
 
     public function testFetch()
     {
-        $config = Config::getInstance();
+        $config = Pickles\Config::getInstance();
         $config->data['pickles']['logging'] = true;
         $config->data['pickles']['profiler'] = true;
-        $db = Database::getInstance();
+        $db = Pickles\Database::getInstance();
         $this->assertEquals([], $db->fetch('SELECT * FROM pickles WHERE id != ?', ['0']));
     }
 
     public function testExplainNoInput()
     {
-        $config = Config::getInstance();
-        $db = Database::getInstance();
+        $config = Pickles\Config::getInstance();
+        $db = Pickles\Database::getInstance();
         $this->assertEquals([], $db->fetch('SELECT * FROM pickles WHERE id != 0'));
     }
 
     public function testSlowQuery()
     {
-        $db = Database::getInstance();
+        $db = Pickles\Database::getInstance();
         $this->assertEquals('0', $db->execute('SHOW DATABASES', null, true));
     }
 
     public function testCloseMySQL()
     {
-        $db = Database::getInstance();
+        $db = Pickles\Database::getInstance();
         $db->open();
 
         $this->assertTrue($db->close());
@@ -131,7 +131,7 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
 
     public function testGetInstancePostgreSQL()
     {
-        $config = Config::getInstance();
+        $config = Pickles\Config::getInstance();
         $config->data['pickles']['datasource'] = 'pgsql';
         $config->data['datasources']['pgsql'] = [
             'type'     => 'pgsql',
@@ -141,7 +141,7 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
             'password' => '',
             'database' => 'test',
         ];
-        $this->assertInstanceOf('Database', Database::getInstance());
+        $this->assertInstanceOf('Pickles\\Database', Pickles\Database::getInstance());
     }
 
     /**
@@ -151,14 +151,14 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
     public function testOpenPostgreSQL()
     {
         // Also throws an exception since I don't have PostgreSQL set up
-        $config = Config::getInstance();
-        $db = Database::getInstance();
+        $config = Pickles\Config::getInstance();
+        $db = Pickles\Database::getInstance();
         $db->open();
     }
 
     public function testGetInstanceSQLite()
     {
-        $config = Config::getInstance();
+        $config = Pickles\Config::getInstance();
         $config->data['pickles']['datasource'] = 'sqlite';
         $config->data['datasources']['sqlite'] = [
             'type'     => 'sqlite',
@@ -168,7 +168,7 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
             'password' => '',
             'database' => 'test',
         ];
-        $this->assertInstanceOf('Database', Database::getInstance());
+        $this->assertInstanceOf('Pickles\\Database', Pickles\Database::getInstance());
     }
 
     /**
@@ -177,7 +177,7 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInstanceInvalidDriver()
     {
-        $config = Config::getInstance();
+        $config = Pickles\Config::getInstance();
         $config->data['pickles']['datasource'] = 'invalid';
         $config->data['datasources']['invalid'] = [
             'type'     => 'invalid',
@@ -187,7 +187,7 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
             'password' => '',
             'database' => 'test',
         ];
-        Database::getInstance();
+        Pickles\Database::getInstance();
     }
 }
 

@@ -7,7 +7,7 @@ class StringTest extends PHPUnit_Framework_TestCase
      */
     public function testFormatPhoneNumber($a, $b)
     {
-        $this->assertEquals(String::formatPhoneNumber($a), $b);
+        $this->assertEquals(Pickles\String::formatPhoneNumber($a), $b);
     }
 
     public function providerFormatPhoneNumber()
@@ -27,35 +27,35 @@ class StringTest extends PHPUnit_Framework_TestCase
 
     public function testIsEmpty()
     {
-        $this->assertTrue(String::isEmpty(''));
-        $this->assertTrue(String::isEmpty(' '));
-        $this->assertTrue(String::isEmpty(false));
-        $this->assertTrue(String::isEmpty(null));
-        $this->assertTrue(String::isEmpty(true, false));
+        $this->assertTrue(Pickles\String::isEmpty(''));
+        $this->assertTrue(Pickles\String::isEmpty(' '));
+        $this->assertTrue(Pickles\String::isEmpty(false));
+        $this->assertTrue(Pickles\String::isEmpty(null));
+        $this->assertTrue(Pickles\String::isEmpty(true, false));
 
-        $this->assertFalse(String::isEmpty(0));
-        $this->assertFalse(String::isEmpty('foo'));
-        $this->assertFalse(String::isEmpty(' bar '));
-        $this->assertFalse(String::isEmpty(true));
+        $this->assertFalse(Pickles\String::isEmpty(0));
+        $this->assertFalse(Pickles\String::isEmpty('foo'));
+        $this->assertFalse(Pickles\String::isEmpty(' bar '));
+        $this->assertFalse(Pickles\String::isEmpty(true));
     }
 
     public function testRandom()
     {
-        $this->assertEquals(strlen(String::random()),   8);
-        $this->assertEquals(strlen(String::random(16)), 16);
+        $this->assertEquals(strlen(Pickles\String::random()),   8);
+        $this->assertEquals(strlen(Pickles\String::random(16)), 16);
 
-        $this->assertEquals(preg_match('/[a-z0-9]/', String::random(32, true,  true)),  1);
-        $this->assertEquals(preg_match('/[a-z]/',    String::random(32, true,  false)), 1);
-        $this->assertEquals(preg_match('/[0-9]/',    String::random(32, false, true)),  1);
+        $this->assertEquals(preg_match('/[a-z0-9]/', Pickles\String::random(32, true,  true)),  1);
+        $this->assertEquals(preg_match('/[a-z]/',    Pickles\String::random(32, true,  false)), 1);
+        $this->assertEquals(preg_match('/[0-9]/',    Pickles\String::random(32, false, true)),  1);
 
-        $this->assertEquals(preg_match('/[0-9]/',    String::random(32, true,  false)), 0);
-        $this->assertEquals(preg_match('/[a-z]/',    String::random(32, false, true)),  0);
-        $this->assertEquals(preg_match('/[a-z0-9]/', String::random(32, false, false)), 0);
+        $this->assertEquals(preg_match('/[0-9]/',    Pickles\String::random(32, true,  false)), 0);
+        $this->assertEquals(preg_match('/[a-z]/',    Pickles\String::random(32, false, true)),  0);
+        $this->assertEquals(preg_match('/[a-z0-9]/', Pickles\String::random(32, false, false)), 0);
     }
 
     public function testRandomSimilarFalse()
     {
-        $this->assertRegExp('/[a-hj-np-z2-9]{8}/', String::random(8, true, true, false));
+        $this->assertRegExp('/[a-hj-np-z2-9]{8}/', Pickles\String::random(8, true, true, false));
     }
 
     /**
@@ -63,7 +63,7 @@ class StringTest extends PHPUnit_Framework_TestCase
      */
     public function testTruncate($a, $b, $c, $d)
     {
-        $this->assertEquals(String::truncate($a, $b, $c), $d);
+        $this->assertEquals(Pickles\String::truncate($a, $b, $c), $d);
     }
 
     public function providerTruncate()
@@ -81,7 +81,7 @@ class StringTest extends PHPUnit_Framework_TestCase
      */
     public function testUpperWords($a, $b)
     {
-        $this->assertEquals(String::upperWords($a), $b);
+        $this->assertEquals(Pickles\String::upperWords($a), $b);
     }
 
     public function providerUpperWords()
@@ -100,7 +100,7 @@ class StringTest extends PHPUnit_Framework_TestCase
      */
     public function testGenerateSlug($a, $b)
     {
-        $this->assertEquals($b, String::generateSlug($a));
+        $this->assertEquals($b, Pickles\String::generateSlug($a));
     }
 
     public function providerGenerateSlug()
@@ -116,10 +116,10 @@ class StringTest extends PHPUnit_Framework_TestCase
 
     public function testPluralize()
     {
-        $this->assertEquals('test',    String::pluralize('test', 1, false));
-        $this->assertEquals('1 test',  String::pluralize('test', 1, true));
-        $this->assertEquals('tests',   String::pluralize('test', 2, false));
-        $this->assertEquals('2 tests', String::pluralize('test', 2, true));
+        $this->assertEquals('test',    Pickles\String::pluralize('test', 1, false));
+        $this->assertEquals('1 test',  Pickles\String::pluralize('test', 1, true));
+        $this->assertEquals('tests',   Pickles\String::pluralize('test', 2, false));
+        $this->assertEquals('2 tests', Pickles\String::pluralize('test', 2, true));
     }
 }
 

@@ -7,7 +7,7 @@ class DateTest extends PHPUnit_Framework_TestCase
      */
     public function testAge($a, $b)
     {
-        $this->assertEquals(Date::age($a), $b);
+        $this->assertEquals(Pickles\Date::age($a), $b);
     }
 
     public function providerAge()
@@ -22,7 +22,7 @@ class DateTest extends PHPUnit_Framework_TestCase
             [date('r',     $time), '25'],
             ['today',              '0'],
             ['400 days ago',       '1'],
-            [true,                 Date::age('1969-12-31')],
+            [true,                 Pickles\Date::age('1969-12-31')],
         ];
     }
 }

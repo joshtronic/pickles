@@ -4,7 +4,7 @@ $_POST['field2']    = 'short';
 $_GET['field2']     = 'short';
 $_REQUEST['field2'] = 'short';
 
-class MockParentResource extends Resource
+class MockParentResource extends Pickles\Resource
 {
     public $validate = [
         'field1',
@@ -24,7 +24,7 @@ class ResourceTest extends PHPUnit_Framework_TestCase
 {
     public function testAutoRun()
     {
-        $this->assertInstanceOf('Resource', new Resource(true));
+        $this->assertInstanceOf('Pickles\\Resource', new Pickles\Resource(true));
     }
 
     public function testAutoRunParentError()
@@ -35,14 +35,14 @@ class ResourceTest extends PHPUnit_Framework_TestCase
 
     public function testSetGetReturn()
     {
-        $module = new Resource();
+        $module = new Pickles\Resource();
         $module->foo = 'bar';
         $this->assertEquals('bar', $module->foo);
     }
 
     public function testGetMissing()
     {
-        $module = new Resource();
+        $module = new Pickles\Resource();
         $this->assertFalse($module->missing);
     }
 

@@ -15,7 +15,7 @@ class FileTest extends PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-        File::removeDirectory('/tmp/pickles-fs');
+        Pickles\File::removeDirectory('/tmp/pickles-fs');
     }
 
     public function testRemoveDirectory()
@@ -26,7 +26,7 @@ class FileTest extends PHPUnit_Framework_TestCase
         touch($directory . 'test/ing');
         touch($directory . 'test/test/ing');
 
-        File::removeDirectory($directory);
+        Pickles\File::removeDirectory($directory);
 
         $this->assertFalse(file_exists($directory));
     }
@@ -38,7 +38,7 @@ class FileTest extends PHPUnit_Framework_TestCase
         mkdir($directory, 0777, true);
         touch(SITE_PATH . 'missing/slash');
 
-        File::removeDirectory($directory);
+        Pickles\File::removeDirectory($directory);
 
         $this->assertFalse(file_exists($directory));
     }
@@ -51,11 +51,11 @@ class FileTest extends PHPUnit_Framework_TestCase
         mkdir($directory, 0777, true);
         touch($file);
 
-        File::removeDirectory($file);
+        Pickles\File::removeDirectory($file);
 
         $this->assertFalse(file_exists($file));
 
-        File::removeDirectory($directory);
+        Pickles\File::removeDirectory($directory);
     }
 }
 

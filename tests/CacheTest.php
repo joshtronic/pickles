@@ -7,7 +7,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->config = Config::getInstance();
+        $this->config = Pickles\Config::getInstance();
         $this->config->data['pickles']['cache'] = 'mc';
         $this->config->data['datasources']['mc'] = [
             'type'      => 'memcache',
@@ -16,18 +16,18 @@ class CacheTest extends PHPUnit_Framework_TestCase
             'namespace' => 'ns',
         ];
 
-        $this->cache = Cache::getInstance();
+        $this->cache = Pickles\Cache::getInstance();
     }
 
     public function testGetInstance()
     {
-        $this->assertInstanceOf('Cache', $this->cache);
+        $this->assertInstanceOf('Pickles\\Cache', $this->cache);
     }
 
     public function testSetAndGet()
     {
-        $key   = String::random();
-        $value = String::random();
+        $key   = Pickles\String::random();
+        $value = Pickles\String::random();
 
         $this->cache->set($key, $value);
 
@@ -40,8 +40,8 @@ class CacheTest extends PHPUnit_Framework_TestCase
 
         for ($i = 0; $i < 5; $i++)
         {
-            $keys[]   = String::random();
-            $values[] = String::random();
+            $keys[]   = Pickles\String::random();
+            $values[] = Pickles\String::random();
         }
 
         foreach ($keys as $key => $key_name)
@@ -56,8 +56,8 @@ class CacheTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $key   = String::random();
-        $value = String::random();
+        $key   = Pickles\String::random();
+        $value = Pickles\String::random();
 
         $this->cache->set($key, $value);
         $this->cache->delete($key);
@@ -67,7 +67,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 
     public function testIncrement()
     {
-        $key = String::random();
+        $key = Pickles\String::random();
 
         $this->assertFalse($this->cache->increment($key));
 

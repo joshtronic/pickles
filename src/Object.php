@@ -122,14 +122,19 @@ class Object
      */
     public static function getInstance($class = false)
     {
-        $class = 'Pickles\\' . $class;
-
-        if (!isset(self::$instances[$class]))
+        if ($class)
         {
-            self::$instances[$class] = new $class();
+            $class = 'Pickles\\' . $class;
+
+            if (!isset(self::$instances[$class]))
+            {
+                self::$instances[$class] = new $class();
+            }
+
+            return self::$instances[$class];
         }
 
-        return self::$instances[$class];
+        return false;
     }
 
     /**

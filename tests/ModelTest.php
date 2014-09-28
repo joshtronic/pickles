@@ -1,20 +1,20 @@
 <?php
 
-class MockModelWithoutColumns extends Model
+class MockModelWithoutColumns extends Pickles\Model
 {
     public $table   = 'pickles';
     public $columns = false;
 }
 
 // InnoDB
-class MockModel extends Model
+class MockModel extends Pickles\Model
 {
     public $table   = 'pickles';
     public $columns = ['created_at' => 'created_at'];
 }
 
 // MyISAM
-class MyMockModel extends Model
+class MyMockModel extends Pickles\Model
 {
     public $table   = 'mypickles';
 }
@@ -24,8 +24,8 @@ class ModelTest extends PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         // Clears out the Config for ease of testing
-        Object::$instances = [];
-        $config = Config::getInstance();
+        Pickles\Object::$instances = [];
+        $config = Pickles\Config::getInstance();
 
         $config->data = [
             'pickles' => [
@@ -69,7 +69,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
      */
     public function testNoTable()
     {
-        new Model();
+        new Pickles\Model();
     }
 
     public function testWithoutColumns()
@@ -232,7 +232,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
         for ($i = 1; $i <= 5; $i++)
         {
-            $model->record['field' . $i] = String::random();
+            $model->record['field' . $i] = Pickles\String::random();
         }
 
         $model->commit();
@@ -246,7 +246,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
         {
             for ($j = 1; $j <= 5; $j++)
             {
-                $model->record['field' . $j] = String::random();
+                $model->record['field' . $j] = Pickles\String::random();
             }
 
             $model->queue();
@@ -365,7 +365,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCommitSingleRecord()
     {
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MockModel(1);
         $model->record['field1'] = $value;
         $model->commit();
@@ -379,7 +379,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
     // else it just takes a shit because the ID isn't injected back in.
     public function testCommitSingleRecordReplace()
     {
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MockModel(1);
         $model->replace = true;
         $model->record['field1'] = $value;
@@ -389,7 +389,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCommitInsertPriority()
     {
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MockModel();
         $model->priority = 'low';
         $model->record['field1'] = $value;
@@ -400,7 +400,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCommitInsertDelayed()
     {
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MyMockModel();
         $model->delayed = true;
         $model->record['field1'] = $value;
@@ -411,7 +411,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCommitInsertIgnore()
     {
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MockModel();
         $model->ignore = true;
         $model->record['field1'] = $value;
@@ -422,7 +422,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCommitReplacePriority()
     {
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MockModel();
         $model->replace = true;
         $model->priority = 'low';
@@ -434,7 +434,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCommitReplaceDelayed()
     {
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MyMockModel();
         $model->replace = true;
         $model->delayed = true;
@@ -446,7 +446,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCommitReplaceIgnore()
     {
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MockModel();
         $model->replace = true;
         $model->ignore = true;
@@ -458,8 +458,8 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCommitMultipleFields()
     {
-        $value1 = String::random();
-        $value2 = String::random();
+        $value1 = Pickles\String::random();
+        $value2 = Pickles\String::random();
         $model = new MockModelWithoutColumns(1);
         $model->record['field1'] = $value1;
         $model->record['field2'] = $value2;
@@ -484,7 +484,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
     public function testCommitUpdatedID()
     {
         $_SESSION['__pickles']['security']['user_id'] = 1;
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MockModel(1);
         $model->record['field1'] = $value;
         $model->commit();
@@ -496,7 +496,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
     public function testCommitCreatedID()
     {
         $_SESSION['__pickles']['security']['user_id'] = 1;
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MockModel();
         $model->record['field1'] = $value;
         $id = $model->commit();
@@ -508,7 +508,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
     public function testCommitInsertPostgreSQL()
     {
         $_SESSION['__pickles']['security']['user_id'] = 1;
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MockModel();
         $model->mysql = false;
         $model->postgresql = true;
@@ -530,7 +530,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
     public function testCommitUpdatePostgreSQL()
     {
         $_SESSION['__pickles']['security']['user_id'] = 1;
-        $value = String::random();
+        $value = Pickles\String::random();
         $model = new MockModel(1);
         $model->mysql = false;
         $model->postgresql = true;
@@ -593,7 +593,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
         for ($i = 0; $i < 5; $i++)
         {
-            $model->record['field1'] = String::random();
+            $model->record['field1'] = Pickles\String::random();
             $model->record['updated_id'] = 1;
             $model->queue();
         }
@@ -611,7 +611,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
         for ($i = 3; $i <= 5; $i++)
         {
             $model->record['id'] = $i;
-            $model->record['field1'] = String::random();
+            $model->record['field1'] = Pickles\String::random();
             $model->record['updated_id'] = 1;
             $model->queue();
         }

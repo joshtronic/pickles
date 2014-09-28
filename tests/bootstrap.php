@@ -1,10 +1,5 @@
 <?php
 
-uopz_overload(ZEND_EXIT, function(){});
-
-ob_start();
-@session_start();
-
 require_once 'vendor/autoload.php';
 
 $root = org\bovigo\vfs\vfsStream::setup('site');
@@ -16,10 +11,13 @@ if (!defined('SITE_PATH'))
 
 require_once 'src/pickles.php';
 
+/*
+// @todo Update to resources path??
 if (!file_exists(SITE_MODULE_PATH))
 {
     mkdir(SITE_MODULE_PATH, 0644);
 }
+*/
 
 $_SERVER['HTTP_HOST']   = 'testsite.com';
 $_SERVER['SERVER_NAME'] = 'Test Server';

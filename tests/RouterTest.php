@@ -6,7 +6,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->config = Config::getInstance();
+        $this->config = Pickles\Config::getInstance();
         $this->config->data['pickles']['disabled'] = false;
         $this->config->data['pickles']['profiler'] = false;
 
@@ -25,7 +25,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         file_put_contents(SITE_MODULE_PATH . 'secure.php', $module);
 
-        new Router();
+        new Pickles\Router();
 
         $this->assertTrue(in_array('Location: https://testsite.com/secure', xdebug_get_headers()));
     }
@@ -39,7 +39,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         file_put_contents(SITE_MODULE_PATH . 'insecure.php', $module);
 
-        new Router();
+        new Pickles\Router();
 
         $this->assertTrue(in_array('Location: http://testsite.com/insecure', xdebug_get_headers()));
     }
@@ -55,7 +55,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         file_put_contents(SITE_MODULE_PATH . 'validationerrors.php', $module);
 
-        new Router();
+        new Pickles\Router();
 
         $this->expectOutputString('{"status":"error","message":"The test field is required."}');
     }

@@ -6,7 +6,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->config      = Config::getInstance();
+        $this->config      = Pickles\Config::getInstance();
         setupConfig([]);
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
@@ -14,14 +14,14 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
     public function testConfigProperty()
     {
-        $config = new Config();
+        $config = new Pickles\Config();
 
         $this->assertTrue(PHPUnit_Framework_Assert::readAttribute($config, 'config'));
     }
 
     public function testInstanceOf()
     {
-        $this->assertInstanceOf('Config', $this->config);
+        $this->assertInstanceOf('Pickles\\Config', $this->config);
     }
 
     public function testUndefined()
@@ -35,7 +35,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'environment' => 'local',
         ]);
 
-        $config = new Config();
+        $config = new Pickles\Config();
 
         $this->assertEquals('local', $config->environment);
     }
@@ -49,7 +49,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $config = new Config();
+        $config = new Pickles\Config();
 
         $this->assertEquals('local', $config->environment);
     }
@@ -63,7 +63,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $config = new Config();
+        $config = new Pickles\Config();
 
         $this->assertEquals('prod', $config->environment);
     }
@@ -80,7 +80,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $config = new Config();
+        $config = new Pickles\Config();
 
         $this->assertEquals('prod', $config->environment);
     }
@@ -96,7 +96,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
         setUpConfig(['environments' => []]);
 
-        $config = new Config();
+        $config = new Pickles\Config();
     }
 
     public function testProfiler()
@@ -106,7 +106,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'pickles'     => ['profiler' => true],
         ]);
 
-        $config = new Config();
+        $config = new Pickles\Config();
 
         $this->assertTrue($config->pickles['profiler']);
     }
@@ -118,7 +118,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'pickles'     => ['profiler' => ['objects', 'timers']],
         ]);
 
-        $config = new Config();
+        $config = new Pickles\Config();
 
         $this->assertEquals('objects,timers', $config->pickles['profiler']);
     }
@@ -130,7 +130,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'security'    => ['levels' => [10 => 'level']],
         ]);
 
-        $config = new Config();
+        $config = new Pickles\Config();
 
         $this->assertEquals(10, SECURITY_LEVEL_USER);
     }
@@ -146,7 +146,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'security'    => ['levels' => [10 => 'level']],
         ]);
 
-        $config = new Config();
+        $config = new Pickles\Config();
 
         $this->assertEquals(10, SECURITY_LEVEL_USER);
     }
@@ -155,7 +155,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     public function testConfigArrayMissing()
     {
         file_put_contents(SITE_PATH . 'config.php', '');
-        new Config();
+        new Pickles\Config();
     }
 }
 
