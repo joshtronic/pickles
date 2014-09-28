@@ -380,6 +380,7 @@ class Resource extends Object
 
     public function respond()
     {
+        http_response_code($this->status);
         header('Content-Type: application/json');
         header('X-Powered-By: Pickles v2 - https://github.com/joshtronic/pickles');
 

@@ -32,35 +32,5 @@ class BrowserTest extends PHPUnit_Framework_TestCase
     {
 
     }
-
-    public function testStatus1xx()
-    {
-        Pickles\Browser::status(100);
-        $this->assertTrue(in_array('Status: 100 Continue', xdebug_get_headers()));
-    }
-
-    public function testStatus2xx()
-    {
-        Pickles\Browser::status(200);
-        $this->assertTrue(in_array('Status: 200 OK', xdebug_get_headers()));
-    }
-
-    public function testStatus3xx()
-    {
-        Pickles\Browser::status(300);
-        $this->assertTrue(in_array('Status: 300 Multiple Choices', xdebug_get_headers()));
-    }
-
-    public function testStatus4xx()
-    {
-        Pickles\Browser::status(400);
-        $this->assertTrue(in_array('Status: 400 Bad Request', xdebug_get_headers()));
-    }
-
-    public function testStatus5xx()
-    {
-        Pickles\Browser::status(500);
-        $this->assertTrue(in_array('Status: 500 Internal Server Error', xdebug_get_headers()));
-    }
 }
 
