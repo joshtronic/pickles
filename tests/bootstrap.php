@@ -11,14 +11,6 @@ if (!defined('SITE_PATH'))
 
 require_once 'src/pickles.php';
 
-/*
-// @todo Update to resources path??
-if (!file_exists(SITE_MODULE_PATH))
-{
-    mkdir(SITE_MODULE_PATH, 0644);
-}
-*/
-
 $_SERVER['HTTP_HOST']   = 'testsite.com';
 $_SERVER['SERVER_NAME'] = 'Test Server';
 $_SERVER['SERVER_ADDR'] = '127.0.0.1';
