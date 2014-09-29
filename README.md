@@ -1,4 +1,4 @@
-# PICKLES
+# Pickles
 
 [![Build Status](https://travis-ci.org/joshtronic/pickles.png?branch=master)](https://travis-ci.org/joshtronic/pickles) [![Coverage Status](https://coveralls.io/repos/joshtronic/pickles/badge.png)](https://coveralls.io/r/joshtronic/pickles) [![Dependency Status](https://www.versioneye.com/user/projects/52d1bc1eec13751bde00002a/badge.png)](https://www.versioneye.com/user/projects/52d1bc1eec13751bde00002a)
 [![Stories in Ready](https://badge.waffle.io/joshtronic/pickles.png?label=ready&title=Ready)](https://waffle.io/joshtronic/pickles)
