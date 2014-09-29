@@ -126,19 +126,19 @@ class Resource extends Object
                 */
             }
 
+            // Hack together some new globals
+            if (in_array($method, ['PUT', 'DELETE']))
+            {
+                $GLOBALS['_' . $method] = [];
+
+                // @todo Populate it
+            }
+
             $filter   = isset($this->filter[$method]);
             $validate = isset($this->validate[$method]);
 
             if ($filter || $validate)
             {
-                // Hack together some new globals
-                if (in_array($method, ['PUT', 'DELETE']))
-                {
-                    $GLOBALS['_' . $method] = [];
-
-                    // @todo Populate it
-                }
-
                 $global =& $GLOBALS['_' . $method];
 
                 // Checks that the required parameters are present
@@ -199,16 +199,19 @@ class Resource extends Object
                                     {
                                         $rule = explode(':', $rule);
 
+                                        for ($i = 1; $i <= 2; $i++)
+                                        {
+                                            if (!isset($rule[$i]))
+                                            {
+                                                $rule[$i] = false;
+                                            }
+                                        }
+
                                         switch ($rule[0])
                                         {
                                             // {{{ Checks using filter_var()
 
                                             case 'filter':
-                                                if (!isset($rule[1]))
-                                                {
-                                                    $rule[1] = false;
-                                                }
-
                                                 switch ($rule[1])
                                                 {
                                                     case 'boolean':
@@ -218,16 +221,16 @@ class Resource extends Object
                                                     case 'ip':
                                                     case 'url':
                                                         $filter = constant('FILTER_VALIDATE_' . strtoupper($rule[1]));
+
+                                                        if (!filter_var($value, $filter))
+                                                        {
+                                                            $this->errors[$variable][] = $message;
+                                                        }
                                                         break;
 
                                                     default:
-                                                        throw new \Exception('Invalid filter, expecting boolean, email, float, int, ip or url.');
+                                                        $this->errors[$variable] = 'Invalid filter, expecting boolean, email, float, int, ip or url.';
                                                         break;
-                                                }
-
-                                                if (!filter_var($value, $filter))
-                                                {
-                                                    $this->errors[$variable][] = $message;
                                                 }
 
                                                 break;
@@ -236,56 +239,43 @@ class Resource extends Object
                                             // {{{ Checks using strlen()
 
                                             case 'length':
-                                                if (count($rule) < 3)
+                                                $length = strlen($value);
+
+                                                switch ($rule[1])
                                                 {
-                                                    throw new \Exception('Invalid validation rule, expected: "length:<|<=|==|!=|>=|>:integer".');
+                                                    case '<':
+                                                        $valid = $length < $rule[2];
+                                                        break;
+
+                                                    case '<=':
+                                                        $valid = $length <= $rule[2];
+                                                        break;
+
+                                                    case '==':
+                                                        $valid = $length == $rule[2];
+                                                        break;
+
+                                                    case '!=':
+                                                        $valid = $length != $rule[2];
+                                                        break;
+
+                                                    case '>=':
+                                                        $valid = $length >= $rule[2];
+                                                        break;
+
+                                                    case '>':
+                                                        $valid = $length >  $rule[2];
+                                                        break;
+
+                                                    default:
+                                                        $valid   = false;
+                                                        $message = 'Invalid operator, expecting <, <=, ==, !=, >= or >.';
+                                                        break;
                                                 }
-                                                else
+
+                                                if (!$valid)
                                                 {
-                                                    if (!filter_var($rule[2], FILTER_VALIDATE_INT))
-                                                    {
-                                                        throw new \Exception('Invalid length value, expecting an integer.');
-                                                    }
-                                                    else
-                                                    {
-                                                        $length = strlen($value);
-
-                                                        switch ($rule[1])
-                                                        {
-                                                            case '<':
-                                                                $valid = $length < $rule[2];
-                                                                break;
-
-                                                            case '<=':
-                                                                $valid = $length <= $rule[2];
-                                                                break;
-
-                                                            case '==':
-                                                                $valid = $length == $rule[2];
-                                                                break;
-
-                                                            case '!=':
-                                                                $valid = $length != $rule[2];
-                                                                break;
-
-                                                            case '>=':
-                                                                $valid = $length >= $rule[2];
-                                                                break;
-
-                                                            case '>':
-                                                                $valid = $length >  $rule[2];
-                                                                break;
-
-                                                            default:
-                                                                throw new \Exception('Invalid operator, expecting <, <=, ==, !=, >= or >.');
-                                                                break;
-                                                        }
-
-                                                        if (!$valid)
-                                                        {
-                                                            $this->errors[$variable][] = $message;
-                                                        }
-                                                    }
+                                                    $this->errors[$variable][] = $message;
                                                 }
 
                                                 break;
@@ -294,19 +284,9 @@ class Resource extends Object
                                             // {{{ Checks using preg_match()
 
                                             case 'regex':
-                                                if (count($rule) < 3)
+                                                if (preg_match($rule[1], $value))
                                                 {
-                                                    throw new \Exception('Invalid validation rule, expected: "regex:is|not:string".');
-                                                }
-                                                else
-                                                {
-                                                    $rule[1] = strtolower($rule[1]);
-
-                                                    if (($rule[1] == 'is' && preg_match($rule[2], $value))
-                                                        || ($rule[1] == 'not' && !preg_match($rule[2], $value)))
-                                                    {
-                                                        $this->errors[$variable][] = $message;
-                                                    }
+                                                    $this->errors[$variable][] = $message;
                                                 }
                                                 break;
 
@@ -346,25 +326,26 @@ class Resource extends Object
                 }
                 else
                 {
+                    /*
                     // Gets the profiler status
-                    // @todo Refactor out that stripos
-                    $profiler = $this->config->pickles['profiler'];
-                    $profiler = $profiler === true
-                                || stripos($profiler, 'timers') !== false;
+                    $profiler = $this->config['pickles']['profiler'];
 
                     // Starts a timer before the resource is executed
                     if ($profiler)
                     {
                         Profiler::timer('resource ' . $method);
                     }
+                    */
 
                     $this->response = $this->$method();
 
+                    /*
                     // Stops the resource timer
                     if ($profiler)
                     {
                         Profiler::timer('resource ' . $method);
                     }
+                    */
                 }
             }
         }

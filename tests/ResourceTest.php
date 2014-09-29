@@ -22,25 +22,43 @@ namespace Resources\v1
         public $validate = [
             'GET' => [
                 'missing',
-                'isBoolean'    => ['filter:boolean' => 'Error'],
-                'isNotBoolean' => ['filter:boolean' => 'Error'],
-                'isEmail'      => ['filter:email'   => 'Error'],
-                'isNotEmail'   => ['filter:email'   => 'Error'],
-                'isFloat'      => ['filter:float'   => 'Error'],
-                'isNotFloat'   => ['filter:float'   => 'Error'],
-                'isInt'        => ['filter:int'     => 'Error'],
-                'isNotInt'     => ['filter:int'     => 'Error'],
-                'isIP'         => ['filter:ip'      => 'Error'],
-                'isNotIP'      => ['filter:ip'      => 'Error'],
-                'isURL'        => ['filter:url'     => 'Error'],
-                'isNotURL'     => ['filter:url'     => 'Error'],
-                'invalidRule'  => ['filter' => 'Error'],
+                'isBoolean'        => ['filter:boolean'  => 'Error'],
+                'isNotBoolean'     => ['filter:boolean'  => 'Error'],
+                'isEmail'          => ['filter:email'    => 'Error'],
+                'isNotEmail'       => ['filter:email'    => 'Error'],
+                'isFloat'          => ['filter:float'    => 'Error'],
+                'isNotFloat'       => ['filter:float'    => 'Error'],
+                'isInt'            => ['filter:int'      => 'Error'],
+                'isNotInt'         => ['filter:int'      => 'Error'],
+                'isIP'             => ['filter:ip'       => 'Error'],
+                'isNotIP'          => ['filter:ip'       => 'Error'],
+                'isURL'            => ['filter:url'      => 'Error'],
+                'isNotURL'         => ['filter:url'      => 'Error'],
+                'invalidRule'      => ['filter'          => 'Error'],
+                'lessThan'         => ['length:<:10'     => 'Error'],
+                'lessThanEqual'    => ['length:<=:10'    => 'Error'],
+                'equal'            => ['length:==:10'    => 'Error'],
+                'notEqual'         => ['length:!=:10'    => 'Error'],
+                'greaterThan'      => ['length:>=:10'    => 'Error'],
+                'greaterThanEqual' => ['length:>:10'     => 'Error'],
+                'greaterLessThan'  => ['length:><:10'    => 'Error'],
+                'regex'            => ['regex:/[a-z]+/'  => 'Error'],
             ],
         ];
 
         public function GET()
         {
+
+        }
+
+        public function PUT()
+        {
             return ['foo' => 'bar'];
+        }
+
+        public function ERROR()
+        {
+            throw new \Exception('Error');
         }
     }
 }
@@ -53,16 +71,19 @@ namespace
         {
             $response = json_encode([
                 'meta' => [
-                    'status' => 500,
-                    'message' => 'Invalid filter, expecting boolean, email, float, int, ip or url.',
+                    'status' => 400,
+                    'message' => 'Missing or invalid parameters.',
                     'errors' => [
-                        'missing'      => ['The missing parameter is required.'],
-                        'isNotBoolean' => ['Error'],
-                        'isNotEmail'   => ['Error'],
-                        'isNotFloat'   => ['Error'],
-                        'isNotInt'     => ['Error'],
-                        'isNotIP'      => ['Error'],
-                        'isNotURL'     => ['Error'],
+                        'missing'         => ['The missing parameter is required.'],
+                        'isNotBoolean'    => ['Error'],
+                        'isNotEmail'      => ['Error'],
+                        'isNotFloat'      => ['Error'],
+                        'isNotInt'        => ['Error'],
+                        'isNotIP'         => ['Error'],
+                        'isNotURL'        => ['Error'],
+                        'invalidRule'     => ['Invalid filter, expecting boolean, email, float, int, ip or url.'],
+                        'greaterLessThan' => ['Invalid operator, expecting <, <=, ==, !=, >= or >.'],
+                        'regex'           => ['Error'],
                     ],
                 ],
             ]);
@@ -72,21 +93,29 @@ namespace
             $_SERVER['REQUEST_METHOD'] = 'GET';
             $_REQUEST['request'] = 'v1/resource/1';
             $_GET = [
-                'foo'          => '     bar     ',
-                'bar'          => 'unencrypted',
-                'isBoolean'    => true,
-                'isNotBoolean' => 'invalid',
-                'isEmail'      => 'foo@bar.com',
-                'isNotEmail'   => 'nope',
-                'isFloat'      => 1.234567890,
-                'isNotFloat'   => 'five',
-                'isInt'        => 22381,
-                'isNotInt'     => 'pretzel',
-                'isIP'         => '127.0.0.1',
-                'isNotIP'      => 'home',
-                'isURL'        => 'http://joshtronic.com',
-                'isNotURL'     => 'doubleUdoubleUdoubleUdot',
-                'invalidRule'  => 'invalid',
+                'foo'              => '     bar     ',
+                'bar'              => 'unencrypted',
+                'isBoolean'        => true,
+                'isNotBoolean'     => 'invalid',
+                'isEmail'          => 'foo@bar.com',
+                'isNotEmail'       => 'nope',
+                'isFloat'          => 1.234567890,
+                'isNotFloat'       => 'five',
+                'isInt'            => 22381,
+                'isNotInt'         => 'pretzel',
+                'isIP'             => '127.0.0.1',
+                'isNotIP'          => 'home',
+                'isURL'            => 'http://joshtronic.com',
+                'isNotURL'         => 'doubleUdoubleUdoubleUdot',
+                'invalidRule'      => 'invalid',
+                'lessThan'         => '...',
+                'lessThanEqual'    => '.......',
+                'equal'            => '..........',
+                'notEqual'         => '.......',
+                'greaterThan'      => '............',
+                'greaterThanEqual' => '............',
+                'greaterLessThan'  => '......',
+                'regex'            => 'abc',
             ];
 
             new Pickles\Router();
@@ -112,7 +141,27 @@ namespace
             new Pickles\Router();
         }
 
-        public function testAuthMisconfigured()
+        public function testPUT()
+        {
+            $response = json_encode([
+                'meta' => [
+                    'status' => 200,
+                    'message' => 'OK',
+                ],
+                'response' => [
+                    'foo' => 'bar',
+                ],
+            ]);
+
+            $this->expectOutputString($response);
+
+            $_SERVER['REQUEST_METHOD'] = 'PUT';
+            $_REQUEST['request'] = 'v1/resource/1';
+
+            new Pickles\Router();
+        }
+
+        public function testMisconfiguredAuth()
         {
             $response = json_encode([
                 'meta' => [
@@ -129,9 +178,55 @@ namespace
             new Pickles\Router();
         }
 
-        public function testValidation()
+        public function testMisconfiguredAuth()
         {
+            $response = json_encode([
+                'meta' => [
+                    'status' => 401,
+                    'message' => 'Authentication is not configured properly.',
+                ],
+            ]);
 
+            $this->expectOutputString($response);
+
+            $_SERVER['REQUEST_METHOD'] = 'DELETE';
+            $_REQUEST['request'] = 'v1/resource/1';
+
+            new Pickles\Router();
+        }
+
+        public function testMethodNotAllowed()
+        {
+            $response = json_encode([
+                'meta' => [
+                    'status' => 405,
+                    'message' => 'Method not allowed.',
+                ],
+            ]);
+
+            $this->expectOutputString($response);
+
+            $_SERVER['REQUEST_METHOD'] = 'NOPE';
+            $_REQUEST['request'] = 'v1/resource/1';
+
+            new Pickles\Router();
+        }
+
+        public function testLowErrorCode()
+        {
+            $response = json_encode([
+                'meta' => [
+                    'status' => 500,
+                    'message' => 'Error',
+                ],
+            ]);
+
+            $this->expectOutputString($response);
+
+            $_SERVER['REQUEST_METHOD'] = 'ERROR';
+            $_REQUEST['request'] = 'v1/resource/1';
+
+            new Pickles\Router();
         }
     }
 }
