@@ -178,23 +178,6 @@ namespace
             new Pickles\Router();
         }
 
-        public function testMisconfiguredAuth()
-        {
-            $response = json_encode([
-                'meta' => [
-                    'status' => 401,
-                    'message' => 'Authentication is not configured properly.',
-                ],
-            ]);
-
-            $this->expectOutputString($response);
-
-            $_SERVER['REQUEST_METHOD'] = 'DELETE';
-            $_REQUEST['request'] = 'v1/resource/1';
-
-            new Pickles\Router();
-        }
-
         public function testMethodNotAllowed()
         {
             $response = json_encode([
