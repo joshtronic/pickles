@@ -36,109 +36,109 @@ class Config extends \ArrayObject
      *
      * Calls the parent constructor and loads the passed file.
      */
-    public function __construct()
+    public function __construct($config_filename = false)
     {
-        ini_set('display_errors', true);
-        error_reporting(-1);
-
-        $filename     = getcwd() . '/../../pickles.php';
-        $environments = false;
-        $environment  = false;
-        $cli          = PHP_SAPI == 'cli';
-
-        // Only require in case you want to reload the config
-        require $filename;
-
-        // Checks that we have the config array
-        if (!isset($config))
+        try
         {
-            throw new \Exception('Missing $config array.');
-        }
+            ini_set('display_errors', true);
+            error_reporting(-1);
 
-        // Determines the environment
-        if (isset($config['environment']))
-        {
-            $environment = $config['environment'];
-        }
-        else
-        {
-            if (isset($config['environments']) && is_array($config['environments']))
+            $filename     = getcwd() . '/../../pickles.php';
+            $environments = false;
+            $environment  = false;
+            // Why not PHP_SAPI? because I wanted it to be convenient to unit test
+            $cli          = !isset($_SERVER['REQUEST_METHOD']);
+
+            if ($config_filename)
             {
-                $environments = $config['environments'];
+                $filename = $config_filename;
+            }
 
-                // If we're on the CLI, check an environment was even passed in
-                if ($cli && $_SERVER['argc'] < 2)
+            // Only require in case you want to reload the config
+            require $filename;
+
+            // Checks that we have the config array
+            if (!isset($config))
+            {
+                throw new \Exception('Missing $config array.');
+            }
+
+            // Determines the environment
+            if (!isset($config['environments']) || !is_array($config['environments']))
+            {
+                throw new \Exception('Environments are misconfigured.');
+            }
+
+            $environments = $config['environments'];
+
+            // If we're on the CLI, check an environment was even passed in
+            if ($cli && $_SERVER['argc'] < 2)
+            {
+                throw new \Exception('You must pass an environment (e.g. php script.php <environment>)');
+            }
+
+            // Loops through the environments and looks for a match
+            foreach ($config['environments'] as $name => $hosts)
+            {
+                if (!is_array($hosts))
                 {
-                    throw new \Exception('You must pass an environment (e.g. php script.php <environment>)');
+                    $hosts = [$hosts];
                 }
 
-                // Loops through the environments and looks for a match
-                foreach ($config['environments'] as $name => $hosts)
+                // Tries to determine the environment name
+                foreach ($hosts as $host)
                 {
-                    if (!is_array($hosts))
+                    if ($cli)
                     {
-                        $hosts = [$hosts];
-                    }
-
-                    // Tries to determine the environment name
-                    foreach ($hosts as $host)
-                    {
-                        if ($cli)
+                        // Checks the first argument on the command line
+                        if ($_SERVER['argv'][1] == $name)
                         {
-                            // Checks the first argument on the command line
-                            if ($_SERVER['argv'][1] == $name)
-                            {
-                                $environment = $name;
-                                break;
-                            }
+                            $environment = $name;
+                            break;
                         }
-                        else
+                    }
+                    else
+                    {
+                        // Exact match
+                        if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host)
+                            && $_SERVER['SERVER_ADDR'] == $host)
+                            || (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == $host))
                         {
-                            // Exact match
-                            if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host)
-                                && $_SERVER['SERVER_ADDR'] == $host)
-                                || (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == $host))
-                            {
-                                $environment = $name;
-                                break;
-                            }
-                            // Fuzzy match
-                            elseif (substr($host,0,1) == '/'
-                                && (preg_match($host, $_SERVER['SERVER_NAME'], $matches) > 0
-                                || preg_match($host, $_SERVER['HTTP_HOST'], $matches) > 0))
-                            {
-                                $environments[$name]           = $matches[0];
-                                $environment                   = $name;
-                                $config['environments'][$name] = $matches[0];
-                                break;
-                            }
+                            $environment = $name;
+                            break;
+                        }
+                        // Fuzzy match
+                        elseif (substr($host, 0, 1) == '/'
+                            && (preg_match($host, $_SERVER['SERVER_NAME'], $matches) > 0
+                            || preg_match($host, $_SERVER['HTTP_HOST'], $matches) > 0))
+                        {
+                            $environments[$name]           = $matches[0];
+                            $environment                   = $name;
+                            $config['environments'][$name] = $matches[0];
+                            break;
                         }
                     }
                 }
+            }
+
+            if (!isset($environment))
+            {
+                throw new \Exception('Unable to determine the environment.');
             }
 
             // Flattens the array based on the environment
             $config = $this->flatten($environment, $config);
 
-            // Restore environments value
-            if ($environments != false)
-            {
-                $config['environments'] = $environments;
-            }
-
-            // Sets the environment if it's not set already
-            if (!isset($config['environment']))
-            {
-                $config['environment'] = $environment;
-            }
-
-            // Disable display errors in production
+            // Disables display errors in production
             if ($environment == 'production')
             {
                 ini_set('display_errors', false);
             }
 
-            // Defaults expected Pickles options to false
+            // Assigns the environment
+            $this['environment'] = $environment;
+
+            // Defaults expected Pickles variables to false
             $this['pickles'] = [
                 'cache'    => false,
                 'profiler' => false,
@@ -149,6 +149,10 @@ class Config extends \ArrayObject
             {
                 $this[$variable] = $value;
             }
+        }
+        catch (\Exception $e)
+        {
+            throw $e;
         }
     }
 
@@ -161,7 +165,7 @@ class Config extends \ArrayObject
      * @param  array $array configuration error to flatten
      * @return array flattened configuration array
      */
-    public function flatten($environment, $array)
+    private function flatten($environment, $array)
     {
         if (is_array($array))
         {

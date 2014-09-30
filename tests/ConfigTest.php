@@ -2,160 +2,99 @@
 
 class ConfigTest extends PHPUnit_Framework_TestCase
 {
-    private $config;
-
-    public function setUp()
+    public static function setUpBeforeClass()
     {
-        $this->config      = Pickles\Config::getInstance();
-        setupConfig([]);
-
-        $_SERVER['REQUEST_METHOD'] = 'GET';
+        touch('/tmp/pickles.php');
     }
 
-    public function testConfigProperty()
+    public static function tearDownAfterClass()
     {
-        $config = new Pickles\Config();
-
-        $this->assertTrue(PHPUnit_Framework_Assert::readAttribute($config, 'config'));
+        unlink('/tmp/pickles.php');
     }
 
-    public function testInstanceOf()
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Missing $config array.
+     */
+    public function testMissingConfig()
     {
-        $this->assertInstanceOf('Pickles\\Config', $this->config);
+        $config = new Pickles\Config('/tmp/pickles.php');
     }
 
-    public function testUndefined()
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Environments are misconfigured.
+     */
+    public function testMissingEnvironments()
     {
-        $this->assertFalse($this->config->undefined);
+        file_put_contents('/tmp/pickles.php', '
+            <?php
+            $config = [];
+        ');
+
+        $config = new Pickles\Config('/tmp/pickles.php');
     }
 
-    public function testDefinedEnvironment()
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage You must pass an environment (e.g. php script.php <environment>)
+     */
+    public function testMissingCLIEnvironment()
     {
-        setUpConfig([
-            'environment' => 'local',
-        ]);
+        $_SERVER['argc'] = 1;
 
-        $config = new Pickles\Config();
+        file_put_contents('/tmp/pickles.php', '
+            <?php
+            $config = [
+                "environments" => [
+                    "local" => "127.0.0.1",
+                    "production" => "123.456.798.0",
+                ],
+            ];
+        ');
 
-        $this->assertEquals('local', $config->environment);
+        $config = new Pickles\Config('/tmp/pickles.php');
     }
 
-    public function testMultipleEnvironmentsByIP()
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage You must pass an environment (e.g. php script.php <environment>)
+     */
+    public function testCLIEnvironmentMissingParameter()
     {
-        setUpConfig([
-            'environments' => [
-                'local' => '127.0.0.1',
-                'prod'  => '123.456.789.0',
-            ],
-        ]);
+        $_SERVER['argc'] = 1;
 
-        $config = new Pickles\Config();
+        file_put_contents('/tmp/pickles.php', '
+            <?php
+            $config = [
+                "environments" => [
+                    "local" => "127.0.0.1",
+                    "production" => "123.456.798.0",
+                ],
+            ];
+        ');
 
-        $this->assertEquals('local', $config->environment);
-    }
-
-    public function testMultipleEnvironmentsByRegex()
-    {
-        setUpConfig([
-            'environments' => [
-                'local' => '/^local\.testsite\.com$/',
-                'prod'  => '/^testsite\.com$/',
-            ],
-        ]);
-
-        $config = new Pickles\Config();
-
-        $this->assertEquals('prod', $config->environment);
+        $config = new Pickles\Config('/tmp/pickles.php');
     }
 
     public function testCLIEnvironment()
     {
-        unset($_SERVER['REQUEST_METHOD']);
-        $_SERVER['argv'][1] = 'prod';
+        $_SERVER['argc'] = 2;
+        $_SERVER['argv'][1] = 'local';
 
-        setUpConfig([
-            'environments' => [
-                'local' => '127.0.0.1',
-                'prod'  => '123.456.789.0',
-            ],
-        ]);
+        file_put_contents('/tmp/pickles.php', '
+            <?php
+            $config = [
+                "environments" => [
+                    "local" => "127.0.0.1",
+                    "production" => "123.456.798.0",
+                ],
+            ];
+        ');
 
-        $config = new Pickles\Config();
+        $config = new Pickles\Config('/tmp/pickles.php');
 
-        $this->assertEquals('prod', $config->environment);
-    }
-
-    /**
-     * @expectedException        Exception
-     * @expectedExceptionMessage You must pass an environment (e.g. php script.php <environment>)
-     */
-    public function testCLIMissingEnvironment()
-    {
-        unset($_SERVER['REQUEST_METHOD']);
-        $_SERVER['argc'] = 1;
-
-        setUpConfig(['environments' => []]);
-
-        $config = new Pickles\Config();
-    }
-
-    public function testProfiler()
-    {
-        setUpConfig([
-            'environment' => 'local',
-            'pickles'     => ['profiler' => true],
-        ]);
-
-        $config = new Pickles\Config();
-
-        $this->assertTrue($config->pickles['profiler']);
-    }
-
-    public function testProfilerArray()
-    {
-        setUpConfig([
-            'environment' => 'local',
-            'pickles'     => ['profiler' => ['objects', 'timers']],
-        ]);
-
-        $config = new Pickles\Config();
-
-        $this->assertEquals('objects,timers', $config->pickles['profiler']);
-    }
-
-    public function testSecurityConstant()
-    {
-        setUpConfig([
-            'environment' => 'local',
-            'security'    => ['levels' => [10 => 'level']],
-        ]);
-
-        $config = new Pickles\Config();
-
-        $this->assertEquals(10, SECURITY_LEVEL_USER);
-    }
-
-    /**
-     * @expectedException        Exception
-     * @expectedExceptionMessage The constant SECURITY_LEVEL_LEVEL is already defined
-     */
-    public function testSecurityConstantAlreadyDefined()
-    {
-        setUpConfig([
-            'environment' => 'local',
-            'security'    => ['levels' => [10 => 'level']],
-        ]);
-
-        $config = new Pickles\Config();
-
-        $this->assertEquals(10, SECURITY_LEVEL_USER);
-    }
-
-    // This test is just for coverage
-    public function testConfigArrayMissing()
-    {
-        file_put_contents(SITE_PATH . 'config.php', '');
-        new Pickles\Config();
+        $this->assertEquals('local', $config['environment']);
     }
 }
 
