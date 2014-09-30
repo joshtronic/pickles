@@ -75,9 +75,9 @@ class Cache extends Object
         parent::__construct();
 
         // @todo Shouldn't need the isset() but Travis is failing some tests
-        if (isset($this->config->pickles['cache']) && $this->config->pickles['cache'])
+        if (isset($this->config['pickles']['cache']) && $this->config['pickles']['cache'])
         {
-            $datasources = $this->config->pickles['cache'];
+            $datasources = $this->config['pickles']['cache'];
 
             if (!is_array($datasources))
             {
@@ -88,9 +88,9 @@ class Cache extends Object
 
             foreach ($datasources as $name)
             {
-                if (isset($this->config->datasources[$name]))
+                if (isset($this->config['datasources'][$name]))
                 {
-                    $datasource = $this->config->datasources[$name];
+                    $datasource = $this->config['datasources'][$name];
 
                     $this->connection->addServer($datasource['hostname'], $datasource['port']);
                     $this->servers++;

@@ -98,18 +98,18 @@ class Resource extends Object
             if ($this->auth === true
                 || (isset($this->auth[$method]) && $this->auth[$method]))
             {
-                if (!$this->config->pickles['auth'])
+                if (!$this->config['pickles']['auth'])
                 {
                     throw new \Exception('Authentication is not configured properly.', 401);
                 }
 
                 /*
                 // This class should be in the classes directory of the service
-                $auth = '\\' . $this->config->pickles['namespace'] . '\\Auth';
+                $auth = '\\' . $this->config['pickles']['namespace'] . '\\Auth';
                 var_dump($auth);
                 $auth = new $auth();
 
-                switch ($this->config->pickles['auth'])
+                switch ($this->config['pickles']['auth'])
                 {
                     case 'basic':
                         $auth->basic();
@@ -327,11 +327,8 @@ class Resource extends Object
                 else
                 {
                     /*
-                    // Gets the profiler status
-                    $profiler = $this->config['pickles']['profiler'];
-
                     // Starts a timer before the resource is executed
-                    if ($profiler)
+                    if ($this->config['pickles']['profiler'])
                     {
                         Profiler::timer('resource ' . $method);
                     }
@@ -341,7 +338,7 @@ class Resource extends Object
 
                     /*
                     // Stops the resource timer
-                    if ($profiler)
+                    if ($this->config['pickles']['profiler'])
                     {
                         Profiler::timer('resource ' . $method);
                     }

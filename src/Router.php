@@ -63,7 +63,7 @@ class Router extends Object
             }
 
             // Creates our class name
-            array_unshift($nouns, '', $this->config->pickles['namespace'], 'Resources', $version);
+            array_unshift($nouns, '', $this->config['pickles']['namespace'], 'Resources', $version);
             $class = implode('\\', $nouns);
 
             // Strips preceding slashs when there is no namespace

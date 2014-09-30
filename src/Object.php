@@ -56,13 +56,6 @@ class Object
     public $db = null;
 
     /**
-     * Profiler flag
-     *
-     * @var mixed
-     */
-    public $profiler = false;
-
-    /**
      * Constructor
      *
      * Establishes a Config instance for all children to enjoy
@@ -96,14 +89,8 @@ class Object
             }
         }
 
-        // Assigns the profiler flag
-        $this->profiler = (isset($this->config->pickles['profiler']) && $this->config->pickles['profiler'] != '' ? $this->config->pickles['profiler'] : false);
-
         // Optionally logs the constructor to the profiler
-        if ($this->profiler === true
-            || ((is_array($this->profiler)
-            && in_array('objects', $this->profiler))
-            || stripos($this->profiler, 'objects') !== false))
+        if ($this->config['pickles']['profiler'])
         {
             Profiler::log($this, '__construct');
         }
@@ -143,10 +130,7 @@ class Object
     public function __destruct()
     {
         // Optionally logs the destructor to the profiler
-        if ($this->profiler === true
-            || ((is_array($this->profiler)
-            && in_array('objects', $this->profiler))
-            || stripos($this->profiler, 'objects') !== false))
+        if ($this->config['pickles']['profiler'])
         {
             Profiler::log($this, '__destruct');
         }

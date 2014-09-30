@@ -26,17 +26,10 @@ namespace Pickles;
  * custom config files on the fly as well. The core of PICKLES uses the class
  * as a Singleton so we're not loading the configuration multiple times per
  * page load.
- *
- * @usage <code>$config = new Config($filename);</code>
  */
-class Config extends Object
+class Config extends \ArrayObject
 {
-    /**
-     * Config data
-     *
-     * @var array
-     */
-    public $data = [];
+    private static $_instance = false;
 
     /**
      * Constructor
@@ -45,78 +38,76 @@ class Config extends Object
      */
     public function __construct()
     {
-        parent::__construct();
-
-        $filename     = SITE_PATH . 'config.php';
+        $filename     = getcwd() . '/../../pickles.php';
         $environments = false;
         $environment  = false;
-        $is_cli       = !isset($_SERVER['REQUEST_METHOD']);
+        $cli          = PHP_SAPI == 'cli';
 
-        // Sanity checks the config file
-        if (file_exists($filename) && is_file($filename) && is_readable($filename))
-        {
-            require $filename;
-        }
+        // Only require in case you want to reload the config
+        require $filename;
 
         // Checks that we have the config array
-        if (isset($config))
+        if (!isset($config))
         {
-            // Determines the environment
-            if (isset($config['environment']))
-            {
-                $environment = $config['environment'];
-            }
-            else
-            {
-                if (isset($config['environments']) && is_array($config['environments']))
-                {
-                    $environments = $config['environments'];
+            throw new \Exception('Missing $config array.');
+        }
 
-                    // If we're on the CLI, check an environment was even passed in
-                    // @todo is checking for argc enough?
-                    if ($is_cli && $_SERVER['argc'] < 2)
+        // Determines the environment
+        if (isset($config['environment']))
+        {
+            $environment = $config['environment'];
+        }
+        else
+        {
+            if (isset($config['environments']) && is_array($config['environments']))
+            {
+                $environments = $config['environments'];
+
+                // If we're on the CLI, check an environment was even passed in
+                if ($cli && $_SERVER['argc'] < 2)
+                {
+                    throw new \Exception('You must pass an environment (e.g. php script.php <environment>)');
+                }
+
+                // Loops through the environments and looks for a match
+                foreach ($config['environments'] as $name => $hosts)
+                {
+                    if (!is_array($hosts))
                     {
-                        throw new \Exception('You must pass an environment (e.g. php script.php <environment>)');
+                        $hosts = [$hosts];
                     }
 
-                    // Loops through the environments and tries to match on IP or name
-                    foreach ($config['environments'] as $name => $hosts)
+                    // Tries to determine the environment name
+                    foreach ($hosts as $host)
                     {
-                        if (!is_array($hosts))
+                        if ($cli)
                         {
-                            $hosts = [$hosts];
-                        }
-
-                        // Tries to determine the environment name
-                        foreach ($hosts as $host)
-                        {
-                            if ($is_cli)
+                            // Checks the first argument on the command line
+                            if ($_SERVER['argv'][1] == $name)
                             {
-                                // Checks the first argument on the command line
-                                if ($_SERVER['argv'][1] == $name)
-                                {
-                                    $environment = $name;
-                                    break;
-                                }
+                                $environment = $name;
+                                break;
                             }
-                            else
+                        }
+                        else
+                        {
+                            // Exact match
+                            if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host)
+                                && $_SERVER['SERVER_ADDR'] == $host)
+                                || (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == $host))
                             {
-                                // Exact match
-                                if ((preg_match('/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $host)
-                                    && $_SERVER['SERVER_ADDR'] == $host)
-                                    || (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == $host))
-                                {
-                                    $environment = $name;
-                                    break;
-                                }
-                                // Fuzzy match
-                                elseif (substr($host,0,1) == '/' && (preg_match($host, $_SERVER['SERVER_NAME'], $matches) > 0 || preg_match($host, $_SERVER['HTTP_HOST'], $matches) > 0))
-                                {
-                                    $environments[$name]           = $matches[0];
-                                    $environment                   = $name;
-                                    $config['environments'][$name] = $matches[0];
-                                    break;
-                                }
+                                $environment = $name;
+                                break;
+                            }
+                            // Fuzzy match
+                            elseif (substr($host,0,1) == '/'
+                                && (preg_match($host, $_SERVER['SERVER_NAME'], $matches) > 0
+                                || preg_match($host, $_SERVER['HTTP_HOST'], $matches) > 0))
+                            {
+                                $environments[$name]           = $matches[0];
+                                $environment                   = $name;
+                                $config['environments'][$name] = $matches[0];
+                                break;
                             }
                         }
                     }
@@ -124,66 +115,32 @@ class Config extends Object
             }
 
             // Flattens the array based on the environment
-            $this->data = $this->flatten($environment, $config);
+            $config = $this->flatten($environment, $config);
 
             // Restore environments value
             if ($environments != false)
             {
-                $this->data['environments'] = $environments;
+                $config['environments'] = $environments;
             }
 
             // Sets the environment if it's not set already
-            if (!isset($this->data['environment']))
+            if (!isset($config['environment']))
             {
-                $this->data['environment'] = $environment;
+                $config['environment'] = $environment;
             }
 
-            // Defaults profiler to true if it doesn't match an option exactly
-            if (isset($this->data['pickles']['profiler']))
-            {
-                // If we have an array convert to a string
-                if (is_array($this->data['pickles']['profiler']))
-                {
-                    $this->data['pickles']['profiler'] = implode(',', $this->data['pickles']['profiler']);
-                }
-            }
-            else
-            {
-                $this->data['pickles']['profiler'] = false;
-            }
+            // Defaults expected Pickles options to false
+            $this['pickles'] = [
+                'cache'    => false,
+                'profiler' => false,
+            ];
 
-            // Defaults expected PICKLES options to false
-            foreach (['cache', 'logging', 'minify'] as $variable)
+            // Assigns the config variables to the object
+            foreach ($config as $variable => $value)
             {
-                if (!isset($this->data['pickles'][$variable]))
-                {
-                    $this->data['pickles'][$variable] = false;
-                }
+                $this[$variable] = $value;
             }
-
-            // Creates constants for the security levels
-            if (isset($this->data['security']['levels']) && is_array($this->data['security']['levels']))
-            {
-                foreach ($this->data['security']['levels'] as $value => $name)
-                {
-                    $constant = 'SECURITY_LEVEL_' . strtoupper($name);
-
-                    // Checks if constant is already defined, and throws an error
-                    if (defined($constant))
-                    {
-                        throw new \Exception('The constant ' . $constant . ' is already defined');
-                    }
-                    else
-                    {
-                        define($constant, $value);
-                    }
-                }
-            }
-
-            return true;
         }
-
-        return false;
     }
 
     /**
@@ -229,28 +186,14 @@ class Config extends Object
      * @param  string $class name of the class to instantiate
      * @return object self::$instance instance of the Config class
      */
-    public static function getInstance($class = 'Config')
+    public static function getInstance()
     {
-        return parent::getInstance($class);
-    }
-
-    /**
-     * Magic Getter Method
-     *
-     * Attempts to load the config variable. If it's not set, will override
-     * the variable with boolean false.
-     *
-     * @param  string $name name of the variable requested
-     * @return mixed value of the variable or boolean false
-     */
-    public function __get($name)
-    {
-        if (!isset($this->data[$name]))
+        if (!self::$_instance)
         {
-            $this->data[$name] = false;
+            self::$_instance = new Config();
         }
 
-        return $this->data[$name];
+        return self::$_instance;
     }
 }
 

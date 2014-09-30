@@ -21,18 +21,6 @@
  * @usage     <code>require_once 'pickles.php';</code>
  */
 
-// {{{ PICKLES Constants
-
-// @todo Finish reworking constants to be part of the Config object
-if (!defined('SITE_PATH'))
-{
-    // Establishes our site paths, sanity check is to allow vfsStream in our tests
-    define('SITE_PATH', getcwd() . '/../');
-}
-
-// }}}
-// {{{ Defaults some important configuration options
-
 // Turns on error before the config is loaded to help catch parse errors
 ini_set('display_errors', true);
 error_reporting(-1);
@@ -43,29 +31,15 @@ if (ini_get('date.timezone') == '')
     ini_set('date.timezone', 'Etc/UTC');
 }
 
-// Sets the session variables
-ini_set('session.cache_expire',   86400);
-ini_set('session.entropy_file',   '/dev/urandom');
-ini_set('session.entropy_length', 512);
-ini_set('session.gc_maxlifetime', 86400);
-ini_set('session.gc_probability', 1);
-ini_set('session.gc_divisor',     1000);
-ini_set('session.hash_function',  1);
-
-// }}}
-// {{{ Loads the configuration file and sets any configuration options
-
 // Loads the base config
 $config = Pickles\Config::getInstance();
 
 // Configures any available PHP configuration options
-if (is_array($config->php) && count($config->php))
+if (isset($config['php']) && is_array($config['php']))
 {
-    foreach ($config->php as $variable => $value)
+    foreach ($config['php'] as $variable => $value)
     {
         ini_set($variable, $value);
     }
 }
-
-// }}}
 

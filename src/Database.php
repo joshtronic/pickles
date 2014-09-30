@@ -135,13 +135,13 @@ class Database extends Object
         // Tries to load a datasource if one wasn't specified
         if (!$datasource_name)
         {
-            if (isset($config->pickles['datasource']))
+            if (isset($config['pickles']['datasource']))
             {
-                $datasource_name = $config->pickles['datasource'];
+                $datasource_name = $config['pickles']['datasource'];
             }
-            elseif (is_array($config->datasources))
+            elseif (is_array($config['datasources']))
             {
-                $datasources = $config->datasources;
+                $datasources = $config['datasources'];
 
                 foreach ($datasources as $name => $datasource)
                 {
@@ -158,12 +158,12 @@ class Database extends Object
         {
             if (!isset(self::$instances['Database'][$datasource_name]))
             {
-                if (!isset($config->datasources[$datasource_name]))
+                if (!isset($config['datasources'][$datasource_name]))
                 {
                     throw new \Exception('The specified datasource is not defined in the config.');
                 }
 
-                $datasource = $config->datasources[$datasource_name];
+                $datasource = $config['datasources'][$datasource_name];
 
                 if (!isset($datasource['driver']))
                 {
@@ -328,13 +328,13 @@ class Database extends Object
             $sql .= "\n" . '/* [' . implode('|', $files) . '] */';
 
             // Establishes if we're working on an EXPLAIN
-            if (Profiler::enabled('explains'))
+            if ($this->config['pickles']['profiler'])
             {
                 $explain = preg_match('/^SELECT /i',  $sql);
             }
             else
             {
-                $explain = null;
+                $explain = false;
             }
 
             // Executes a standard query
@@ -367,9 +367,9 @@ class Database extends Object
             $duration = $end_time - $start_time;
 
             // Logs the information to the profiler
-            if (Profiler::enabled('explains', 'queries'))
+            if ($this->config['pickles']['profiler'])
             {
-                Profiler::logQuery($sql, $input_parameters, (isset($explain) ? $explain : false), $duration);
+                Profiler::logQuery($sql, $input_parameters, $explain, $duration);
             }
         }
         else
