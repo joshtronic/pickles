@@ -1,8 +1,8 @@
 {
     "name":        "joshtronic/pickles",
-    "description": "PHP Interface Collection of Killer Libraries to Enhance Stuff",
+    "description": "The Pickles SOA Framework",
     "type":        "library",
-    "keywords":    ["pickles", "framework", "rapid", "development", "mvc"],
+    "keywords":    ["framework", "api", "soa", "oauth"],
     "homepage":    "https://github.com/joshtronic/pickles",
     "license":     "MIT",
     "authors": [
@@ -12,8 +12,12 @@
             "homepage": "http://joshtronic.com"
         }
     ],
+    "support": {
+        "issues": "https://github.com/joshtronic/pickles/issues",
+        "source": "https://github.com/joshtronic/pickles"
+    },
     "require-dev": {
-        "mikey179/vfsStream":     "1.3.0",
+        "phpunit/phpunit":        "dev-master",
         "satooshi/php-coveralls": "dev-master"
     },
     "require": {
