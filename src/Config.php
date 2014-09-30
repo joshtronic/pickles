@@ -121,7 +121,7 @@ class Config extends \ArrayObject
                 }
             }
 
-            if (!isset($environment))
+            if (!$environment)
             {
                 throw new \Exception('Unable to determine the environment.');
             }
@@ -196,14 +196,14 @@ class Config extends \ArrayObject
      * Let's the parent class do all the work
      *
      * @static
-     * @param  string $class name of the class to instantiate
-     * @return object self::$instance instance of the Config class
+     * @param  string $file name of config to load
+     * @return object self::$_instance instance of the Config class
      */
-    public static function getInstance()
+    public static function getInstance($file = false)
     {
         if (!self::$_instance)
         {
-            self::$_instance = new Config();
+            self::$_instance = new Config($file);
         }
 
         return self::$_instance;
