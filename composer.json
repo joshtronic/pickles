@@ -16,6 +16,7 @@
         "issues": "https://github.com/joshtronic/pickles/issues",
         "source": "https://github.com/joshtronic/pickles"
     },
+    "minimum-stability" : "dev",
     "require-dev": {
         "phpunit/phpunit":        "dev-master",
         "satooshi/php-coveralls": "dev-master"
