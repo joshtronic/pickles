@@ -1,8 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
-        "This file is @generated automatically"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
     "hash": "16033f40d01b3ada4064b0b7488d4cb7",
     "packages": [],
@@ -1267,7 +1266,6 @@
         "phpunit/phpunit": 20,
         "satooshi/php-coveralls": 20
     },
-    "prefer-stable": false,
     "platform": {
         "php": ">=5.4"
     },
