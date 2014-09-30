@@ -38,6 +38,9 @@ class Config extends \ArrayObject
      */
     public function __construct()
     {
+        ini_set('display_errors', true);
+        error_reporting(-1);
+
         $filename     = getcwd() . '/../../pickles.php';
         $environments = false;
         $environment  = false;
@@ -127,6 +130,12 @@ class Config extends \ArrayObject
             if (!isset($config['environment']))
             {
                 $config['environment'] = $environment;
+            }
+
+            // Disable display errors in production
+            if ($environment == 'production')
+            {
+                ini_set('display_errors', false);
             }
 
             // Defaults expected Pickles options to false
