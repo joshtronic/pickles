@@ -62,15 +62,7 @@ class Object
      */
     public function __construct($objects = null)
     {
-        // Gets an instance of the config, unless we ARE the config
-        if (get_class($this) == 'Pickles\\Config')
-        {
-            $this->config = true;
-        }
-        else
-        {
-            $this->config = Config::getInstance();
-        }
+        $this->config = Config::getInstance();
 
         if ($objects)
         {

@@ -136,13 +136,16 @@ class Config extends \ArrayObject
             }
 
             // Assigns the environment
-            $this['environment'] = $environment;
+            $config['environment'] = $environment;
 
             // Defaults expected Pickles variables to false
-            $this['pickles'] = [
-                'cache'    => false,
-                'profiler' => false,
-            ];
+            foreach (['cache', 'profiler'] as $variable)
+            {
+                if (!isset($config['pickles'][$variable]))
+                {
+                    $config['pickles'][$variable] = false;
+                }
+            }
 
             // Assigns the config variables to the object
             foreach ($config as $variable => $value)
@@ -201,7 +204,7 @@ class Config extends \ArrayObject
      */
     public static function getInstance($file = false)
     {
-        if (!self::$_instance)
+        if (!self::$_instance || $file)
         {
             self::$_instance = new Config($file);
         }
