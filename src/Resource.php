@@ -326,23 +326,20 @@ class Resource extends Object
                 }
                 else
                 {
-                    /*
                     // Starts a timer before the resource is executed
                     if ($this->config['pickles']['profiler'])
                     {
-                        Profiler::timer('resource ' . $method);
+                        $timer = get_class($this) . '->' . $method . '()';
+                        Profiler::timer($timer);
                     }
-                    */
 
                     $this->response = $this->$method();
 
-                    /*
                     // Stops the resource timer
                     if ($this->config['pickles']['profiler'])
                     {
-                        Profiler::timer('resource ' . $method);
+                        Profiler::timer($timer);
                     }
-                    */
                 }
             }
         }
@@ -400,6 +397,11 @@ class Resource extends Object
             {
                 $response[$variable] = $this->$variable;
             }
+        }
+
+        if ($this->config['pickles']['profiler'])
+        {
+            $response['profiler'] = Profiler::report();
         }
 
         $pretty = isset($_REQUEST['pretty']) ? JSON_PRETTY_PRINT : false;

@@ -311,22 +311,6 @@ class Database extends Object
         // Checks if the query is blank
         if ($sql != '')
         {
-            // Builds out stack trace for queries
-            $files = [];
-
-            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-            krsort($backtrace);
-
-            foreach ($backtrace as $file)
-            {
-                if (isset($file['class'], $file['line']))
-                {
-                    $files[] = $file['class'] . ':' . $file['line'];
-                }
-            }
-
-            $sql .= "\n" . '/* [' . implode('|', $files) . '] */';
-
             // Establishes if we're working on an EXPLAIN
             if ($this->config['pickles']['profiler'])
             {
