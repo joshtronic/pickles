@@ -139,7 +139,7 @@ class Config extends \ArrayObject
             $config['environment'] = $environment;
 
             // Defaults expected Pickles variables to false
-            foreach (['cache', 'profiler'] as $variable)
+            foreach (['auth', 'cache', 'profiler'] as $variable)
             {
                 if (!isset($config['pickles'][$variable]))
                 {

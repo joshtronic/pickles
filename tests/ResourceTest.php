@@ -67,6 +67,32 @@ namespace
 {
     class ResourceTest extends PHPUnit_Framework_TestCase
     {
+        public function setUp()
+        {
+            $_SERVER['REQUEST_METHOD'] = 'GET';
+            $_SERVER['SERVER_NAME']    = '127.0.0.1';
+
+            file_put_contents('/tmp/pickles.php', '<?php
+                $config = [
+                    "environments" => [
+                        "local"      => "127.0.0.1",
+                        "production" => "123.456.789.0",
+                    ],
+                    "pickles" => [
+                        "namespace"  => "",
+                        "datasource" => "mysql",
+                    ],
+                    "datasources" => [
+                        "mysql" => [
+                            "driver" => "pdo_mysql",
+                        ],
+                    ],
+                ];
+            ');
+
+            Pickles\Config::getInstance('/tmp/pickles.php');
+        }
+
         public function testFilterAndValidate()
         {
             $response = json_encode([
@@ -207,6 +233,37 @@ namespace
             $this->expectOutputString($response);
 
             $_SERVER['REQUEST_METHOD'] = 'ERROR';
+            $_REQUEST['request'] = 'v1/resource/1';
+
+            new Pickles\Router();
+        }
+
+        public function testProfiler()
+        {
+            $this->expectOutputRegex('/"profiler":{/');
+
+            file_put_contents('/tmp/pickles.php', '<?php
+                $config = [
+                    "environments" => [
+                        "local"      => "127.0.0.1",
+                        "production" => "123.456.789.0",
+                    ],
+                    "pickles" => [
+                        "namespace"  => "",
+                        "datasource" => "mysql",
+                        "profiler"   => true,
+                    ],
+                    "datasources" => [
+                        "mysql" => [
+                            "driver" => "pdo_mysql",
+                        ],
+                    ],
+                ];
+            ');
+
+            Pickles\Config::getInstance('/tmp/pickles.php');
+
+            $_SERVER['REQUEST_METHOD'] = 'PUT';
             $_REQUEST['request'] = 'v1/resource/1';
 
             new Pickles\Router();
