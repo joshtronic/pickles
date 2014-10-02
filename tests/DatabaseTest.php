@@ -2,8 +2,54 @@
 
 class DatabaseTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['SERVER_NAME']    = '127.0.0.1';
+
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "mysql",
+                ],
+                "datasources" => [
+                    "mysql" => [
+                        "type"     => "mysql",
+                        "driver"   => "pdo_mysql",
+                        "database" => "test",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+    }
+
     public function testGetInstanceFalse()
     {
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "datasources" => [
+
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
         $this->assertFalse(Pickles\Database::getInstance());
     }
 
@@ -13,8 +59,21 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInstanceDatasourceNotDefined()
     {
-        $config = Pickles\Config::getInstance();
-        $config->data['pickles']['datasource'] = 'bad';
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "bad",
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
         Pickles\Database::getInstance();
     }
 
@@ -24,12 +83,26 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInstanceDatasourceLacksDriver()
     {
-        $config = Pickles\Config::getInstance();
-        $config->data['datasources'] = [
-            'bad' => [
-                'type' => 'mysql',
-            ],
-        ];
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "bad",
+                ],
+                "datasources" => [
+                    "bad" => [
+                        "type" => "mysql",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
         $this->assertInstanceOf('Pickles\\Database', Pickles\Database::getInstance());
     }
 
@@ -39,46 +112,122 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
      */
     public function testOpenConfigError()
     {
-        $config = Pickles\Config::getInstance();
-        $config->data['datasources'] = [
-            'bad' => [
-                'type'     => 'mysql',
-                'driver'   => 'pdo_mysql',
-                'database' => 'test',
-            ],
-        ];
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "bad",
+                ],
+                "datasources" => [
+                    "bad" => [
+                        "type"     => "mysql",
+                        "driver"   => "pdo_mysql",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
         $db = Pickles\Database::getInstance();
         $db->open();
     }
 
     public function testGetInstanceDatasourcesArray()
     {
-        $config = Pickles\Config::getInstance();
-        $config->data['datasources'] = [
-            'mysql' => [
-                'type'     => 'mysql',
-                'driver'   => 'pdo_mysql',
-                'hostname' => 'localhost',
-                'username' => 'root',
-                'password' => '',
-                'database' => 'test',
-            ],
-        ];
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "bad",
+                ],
+                "datasources" => [
+                    "bad" => [
+                        "type"     => "mysql",
+                        "driver"   => "pdo_mysql",
+                        "database" => "test",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
         $this->assertInstanceOf('Pickles\\Database', Pickles\Database::getInstance());
     }
 
     // Also tests the datasource being missing and selecting the first one
     public function testGetInstanceMySQL()
     {
-        $config = Pickles\Config::getInstance();
-        unset($config->data['pickles']['datasource']);
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                ],
+                "datasources" => [
+                    "bad" => [
+                        "type"     => "mysql",
+                        "driver"   => "pdo_mysql",
+                        "database" => "test",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
         $this->assertInstanceOf('Pickles\\Database', Pickles\Database::getInstance());
     }
 
     public function testOpenMySQL()
     {
-        $config = Pickles\Config::getInstance();
-        $config->data['pickles']['datasource'] = 'mysql';
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "mysql",
+                ],
+                "datasources" => [
+                    "mysql" => [
+                        "type"     => "mysql",
+                        "driver"   => "pdo_mysql",
+                        "database" => "test",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
         $db = Pickles\Database::getInstance();
         $db->open();
     }
@@ -101,9 +250,33 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
 
     public function testFetch()
     {
-        $config = Pickles\Config::getInstance();
-        $config->data['pickles']['logging'] = true;
-        $config->data['pickles']['profiler'] = true;
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "mysql",
+                    "profiler" => true,
+                ],
+                "datasources" => [
+                    "mysql" => [
+                        "type"     => "mysql",
+                        "driver"   => "pdo_mysql",
+                        "database" => "test",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
         $db = Pickles\Database::getInstance();
         $this->assertEquals([], $db->fetch('SELECT * FROM pickles WHERE id != ?', ['0']));
     }
@@ -131,16 +304,32 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
 
     public function testGetInstancePostgreSQL()
     {
-        $config = Pickles\Config::getInstance();
-        $config->data['pickles']['datasource'] = 'pgsql';
-        $config->data['datasources']['pgsql'] = [
-            'type'     => 'pgsql',
-            'driver'   => 'pdo_pgsql',
-            'hostname' => 'localhost',
-            'username' => '',
-            'password' => '',
-            'database' => 'test',
-        ];
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "pgsql",
+                ],
+                "datasources" => [
+                    "pgsql" => [
+                        "type"     => "pgsql",
+                        "driver"   => "pdo_pgsql",
+                        "database" => "test",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
         $this->assertInstanceOf('Pickles\\Database', Pickles\Database::getInstance());
     }
 
@@ -150,24 +339,65 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
      */
     public function testOpenPostgreSQL()
     {
-        // Also throws an exception since I don't have PostgreSQL set up
-        $config = Pickles\Config::getInstance();
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "pgsql",
+                ],
+                "datasources" => [
+                    "pgsql" => [
+                        "type"     => "pgsql",
+                        "driver"   => "pdo_pgsql",
+                        "database" => "test",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
+        // Throws an error because I don't have PostgreSQL installed
         $db = Pickles\Database::getInstance();
         $db->open();
     }
 
     public function testGetInstanceSQLite()
     {
-        $config = Pickles\Config::getInstance();
-        $config->data['pickles']['datasource'] = 'sqlite';
-        $config->data['datasources']['sqlite'] = [
-            'type'     => 'sqlite',
-            'driver'   => 'pdo_sqlite',
-            'hostname' => 'localhost',
-            'username' => '',
-            'password' => '',
-            'database' => 'test',
-        ];
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "sqlite",
+                ],
+                "datasources" => [
+                    "sqlite" => [
+                        "type"     => "sqlite",
+                        "driver"   => "pdo_sqlite",
+                        "database" => "test",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
         $this->assertInstanceOf('Pickles\\Database', Pickles\Database::getInstance());
     }
 
@@ -177,16 +407,32 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
      */
     public function testGetInstanceInvalidDriver()
     {
-        $config = Pickles\Config::getInstance();
-        $config->data['pickles']['datasource'] = 'invalid';
-        $config->data['datasources']['invalid'] = [
-            'type'     => 'invalid',
-            'driver'   => 'pdo_invalid',
-            'hostname' => 'localhost',
-            'username' => '',
-            'password' => '',
-            'database' => 'test',
-        ];
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "invalid",
+                ],
+                "datasources" => [
+                    "invalid" => [
+                        "type"     => "invalid",
+                        "driver"   => "pdo_invalid",
+                        "database" => "test",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
         Pickles\Database::getInstance();
     }
 }
