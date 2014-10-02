@@ -122,43 +122,17 @@ class Profiler
      */
     public static function query($query, $input_parameters = false, $results = false, $duration = false, $explain = false)
     {
-        $log = [];
-
-        /*
-        if ($input_parameters != 'false' && is_array($input_parameters))
-        {
-            foreach ($input_parameters as $key => $value)
-            {
-                $log .= $key . ' => ' . $value;
-
-                $query = str_replace($key, $key, $query);
-            }
-        }
-
-        $log = $query . ' ' . $log;
-
-        if (is_array($explain))
-        {
-            foreach ($explain as $table)
-            {
-                $log .= 'Possible Keys => ' . ($table['possible_keys'] == '' ? 'NONE' : $table['possible_keys'])
-                     . 'Key => '  . ($table['key'] == '' ? 'NONE' : $table['key'])
-                     . 'Type => ' . $table['type']
-                     . 'Rows => '  . $table['rows']
-                     . ($table['Extra'] != '' ? 'Extra => ' . $table['Extra'] : '');
-            }
-        }
-
-        $log .= 'query_time: ' . $duration;
-        */
-
         $log = [
-            'query' => $query,
-            'parameters' => $input_parameters,
-            'results' => $results,
+            'query'          => $query,
+            'parameters'     => $input_parameters,
+            'results'        => $results,
             'execution_time' => $duration,
-            'explain' => $explain,
         ];
+
+        if ($explain)
+        {
+            $log['explain'] = $explain;
+        }
 
         self::log($log, false, 'database');
     }
