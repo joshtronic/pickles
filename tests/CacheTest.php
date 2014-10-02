@@ -2,19 +2,34 @@
 
 class CacheTest extends PHPUnit_Framework_TestCase
 {
-    private $config;
     private $cache;
 
     public function setUp()
     {
-        $this->config = Pickles\Config::getInstance();
-        $this->config->data['pickles']['cache'] = 'mc';
-        $this->config->data['datasources']['mc'] = [
-            'type'      => 'memcache',
-            'hostname'  => 'localhost',
-            'port'      => 11211,
-            'namespace' => 'ns',
-        ];
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['SERVER_NAME']    = '127.0.0.1';
+
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "cache" => "mc",
+                ],
+                "datasources" => [
+                    "mc" => [
+                        "type"      => "memcache",
+                        "hostname"  => "localhost",
+                        "port"      => 11211,
+                        "namespace" => "ns",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
 
         $this->cache = Pickles\Cache::getInstance();
     }
