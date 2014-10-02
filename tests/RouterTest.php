@@ -24,6 +24,22 @@ namespace
             $this->expectOutputString($response);
 
             $_SERVER['REQUEST_METHOD'] = 'GET';
+            $_SERVER['SERVER_NAME']    = '127.0.0.1';
+
+            file_put_contents('/tmp/pickles.php', '<?php
+                $config = [
+                    "environments" => [
+                        "local"      => "127.0.0.1",
+                        "production" => "123.456.789.0",
+                    ],
+                    "pickles" => [
+                        "namespace" => "",
+                    ],
+                    "datasources" => [],
+                ];
+            ');
+
+            Pickles\Config::getInstance('/tmp/pickles.php');
 
             new Pickles\Router();
         }
