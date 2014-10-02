@@ -38,14 +38,14 @@ class File
      */
     public static function removeDirectory($directory)
     {
-        if (substr($directory, -1) != '/')
-        {
-            $directory .= '/';
-        }
-
         // If directory is a directory, read in all the files
         if (is_dir($directory))
         {
+            if (substr($directory, -1) != '/')
+            {
+                $directory .= '/';
+            }
+
             $files = scandir($directory);
 
             // Loop through said files, check for directories, and unlink files

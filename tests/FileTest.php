@@ -33,10 +33,10 @@ class FileTest extends PHPUnit_Framework_TestCase
 
     public function testMissingTrailingSlash()
     {
-        $directory = '/tmp/missing';
+        $directory = '/tmp/pickles-fs/missing';
 
         mkdir($directory, 0777, true);
-        touch('/tmp/missing/slash');
+        touch('/tmp/pickles-fs/missing/slash');
 
         Pickles\File::removeDirectory($directory);
 
@@ -45,8 +45,8 @@ class FileTest extends PHPUnit_Framework_TestCase
 
     public function testRemoveFileNotDirectory()
     {
-        $directory = '/tmp/dir';
-        $file      = '/tmp/dir/file';
+        $directory = '/tmp/pickles-fs/dir';
+        $file      = '/tmp/pickles-fs/dir/file';
 
         mkdir($directory, 0777, true);
         touch($file);
@@ -56,6 +56,8 @@ class FileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(file_exists($file));
 
         Pickles\File::removeDirectory($directory);
+
+        $this->assertFalse(file_exists($directory));
     }
 }
 
