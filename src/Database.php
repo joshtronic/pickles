@@ -302,7 +302,7 @@ class Database extends Object
      * @param  array $input_parameters optional key/values to be bound
      * @return integer ID of the last inserted row or sequence number
      */
-    public function execute($sql, $input_parameters = null)
+    public function execute($sql, $input_parameters = null, $explain = false)
     {
         $this->open();
 
@@ -314,20 +314,20 @@ class Database extends Object
             // Establishes if we're working on an EXPLAIN
             if ($this->config['pickles']['profiler'])
             {
-                $explain = preg_match('/^SELECT /i',  $sql);
+                $explain_results = preg_match('/^SELECT /i',  $sql);
             }
             else
             {
-                $explain = false;
+                $explain_results = false;
             }
 
             // Executes a standard query
             if ($input_parameters === null)
             {
                 // Explains the query
-                if ($explain)
+                if ($explain_results)
                 {
-                    $explain = $this->fetch('EXPLAIN ' . $sql);
+                    $explain_results = $this->fetch('EXPLAIN ' . $sql, null, true);
                 }
 
                 $start_time    = microtime(true);
@@ -337,9 +337,9 @@ class Database extends Object
             else
             {
                 // Explains the query
-                if ($explain)
+                if ($explain_results)
                 {
-                    $explain = $this->fetch('EXPLAIN ' . $sql, $input_parameters);
+                    $explain_results = $this->fetch('EXPLAIN ' . $sql, $input_parameters, true);
                 }
 
                 $start_time    = microtime(true);
@@ -351,9 +351,15 @@ class Database extends Object
             $duration = $end_time - $start_time;
 
             // Logs the information to the profiler
-            if ($this->config['pickles']['profiler'])
+            if ($this->config['pickles']['profiler'] && !$explain)
             {
-                Profiler::logQuery($sql, $input_parameters, $explain, $duration);
+                Profiler::query(
+                    $sql,
+                    $input_parameters,
+                    $this->results->fetchAll(\PDO::FETCH_ASSOC),
+                    $duration,
+                    $explain_results
+                );
             }
         }
         else
@@ -372,13 +378,13 @@ class Database extends Object
      * @param  string $return_type optional type of return set
      * @return mixed based on return type
      */
-    public function fetch($sql = null, $input_parameters = null)
+    public function fetch($sql = null, $input_parameters = null, $explain = false)
     {
         $this->open();
 
         if ($sql !== null)
         {
-            $this->execute($sql, $input_parameters);
+            $this->execute($sql, $input_parameters, $explain);
         }
 
         // Pulls the results based on the type

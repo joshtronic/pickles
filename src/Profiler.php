@@ -73,10 +73,6 @@ class Profiler
         // Tidys the data by type
         switch ($data_type)
         {
-            case 'array':
-                $details = print_r($data, true);
-                break;
-
             case 'object':
                 $details['class'] = get_class($data);
 
@@ -93,7 +89,6 @@ class Profiler
                 $data_type = $data_type;
                 break;
 
-            case 'string':
             default:
                 if ($type != false)
                 {
@@ -114,17 +109,18 @@ class Profiler
     }
 
     /**
-     * Log Query
+     * Query
      *
      * Serves as a wrapper to get query data to the log function
      *
      * @static
      * @param  string $query the query being executed
      * @param  array $input_parameters optional prepared statement data
-     * @param  array $explain EXPLAIN data for the query
+     * @param  array $results optional results of the query
      * @param  float $duration the speed of the query
+     * @param  array $explain EXPLAIN data for the query
      */
-    public static function logQuery($query, $input_parameters = false, $explain = false, $duration = false)
+    public static function query($query, $input_parameters = false, $results = false, $duration = false, $explain = false)
     {
         $log = [];
 
@@ -156,7 +152,13 @@ class Profiler
         $log .= 'query_time: ' . $duration;
         */
 
-        $log = [$query, $input_parameters, $explain, $duration];
+        $log = [
+            'query' => $query,
+            'parameters' => $input_parameters,
+            'results' => $results,
+            'execution_time' => $duration,
+            'explain' => $explain,
+        ];
 
         self::log($log, false, 'database');
     }

@@ -9,26 +9,6 @@ class ProfilerTest extends PHPUnit_Framework_TestCase
         Pickles\Profiler::report();
     }
 
-    public function testDisabledType()
-    {
-        $config = Pickles\Config::getInstance();
-        $config->data['pickles']['profiler'] = false;
-
-        $this->assertFalse(Pickles\Profiler::enabled('timers'));
-    }
-
-    public function testTimerDisabled()
-    {
-        $this->assertFalse(Pickles\Profiler::timer('disabled'));
-    }
-
-    public function testReportNothing()
-    {
-        $this->expectOutputRegex('/There is nothing to profile/');
-
-        Pickles\Profiler::report();
-    }
-
     public function testEnabled()
     {
         $config = Pickles\Config::getInstance();
@@ -67,9 +47,9 @@ class ProfilerTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        Pickles\Profiler::logQuery('SELECT * FROM table;');
-        Pickles\Profiler::logQuery('SELECT * FROM table WHERE column = ?;', ['foo']);
-        Pickles\Profiler::logQuery('SELECT * FROM table;', false, $explain);
+        Pickles\Profiler::query('SELECT * FROM table;');
+        Pickles\Profiler::query('SELECT * FROM table WHERE column = ?;', ['foo']);
+        Pickles\Profiler::query('SELECT * FROM table;', false, $explain);
     }
 
     public function testTimer()
