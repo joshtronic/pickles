@@ -25,31 +25,42 @@ class ModelTest extends PHPUnit_Framework_TestCase
     {
         // Clears out the Config for ease of testing
         Pickles\Object::$instances = [];
-        $config = Pickles\Config::getInstance();
 
-        $config->data = [
-            'pickles' => [
-                'datasource' => 'mysql',
-                'cache'      => 'memcache',
-            ],
-            'datasources' => [
-                'mysql' => [
-                    'type'     => 'mysql',
-                    'driver'   => 'pdo_mysql',
-                    'hostname' => 'localhost',
-                    'username' => 'root',
-                    'password' => '',
-                    'database' => 'test',
-                    'cache'    => true,
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['SERVER_NAME']    = '127.0.0.1';
+
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
                 ],
-                'memcache' => [
-                    'type'      => 'memcache',
-                    'hostname'  => 'localhost',
-                    'port'      => 11211,
-                    'namespace' => '',
+                "pickles" => [
+                    "namespace"  => "",
+                    "datasource" => "mysql",
+                    "cache"      => "memcache",
                 ],
-            ],
-        ];
+                "datasources" => [
+                    "mysql" => [
+                        "type"     => "mysql",
+                        "driver"   => "pdo_mysql",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                        "cache"    => true,
+                    ],
+                    "memcache" => [
+                        "type"      => "memcache",
+                        "hostname"  => "localhost",
+                        "port"      => 11211,
+                        "namespace" => "",
+                    ],
+                ],
+            ];
+        ');
+
+        $config = Pickles\Config::getInstance('/tmp/pickles.php');
 
         for ($i = 0; $i < 5; $i++)
         {
