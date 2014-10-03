@@ -53,3 +53,5 @@ CREATE TABLE `users` (
   `is_deleted` tinyint(1) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO users (id, username, created_at) VALUES (1000000, 'test', NOW());

@@ -4,6 +4,9 @@ class ProfilerTest extends PHPUnit_Framework_TestCase
 {
     public function testProfiler()
     {
+        // Clears out any previous logging
+        Pickles\Profiler::report();
+
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['SERVER_NAME']    = '127.0.0.1';
 

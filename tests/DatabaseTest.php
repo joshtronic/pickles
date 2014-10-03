@@ -435,5 +435,92 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
 
         Pickles\Database::getInstance();
     }
+
+    public function testProfilerWithoutParameters()
+    {
+        // Clears out the Config for ease of testing
+        Pickles\Object::$instances = [];
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['SERVER_NAME']    = '127.0.0.1';
+
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "datasource" => "mysql",
+                    "profiler"   => true,
+                ],
+                "datasources" => [
+                    "mysql" => [
+                        "type"     => "mysql",
+                        "driver"   => "pdo_mysql",
+                        "database" => "test",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
+        $db = Pickles\Database::getInstance();
+        $db->execute('SELECT * FROM `users`');
+
+        $report = Pickles\Profiler::report();
+        $this->assertEquals(7, count($report));
+        $this->assertEquals(2, count($report['logs']));
+        $this->assertTrue(isset($report['logs'][1]['details']['explain']));
+    }
+
+    public function testProfilerWithParameters()
+    {
+        // Clears out the Config for ease of testing
+        Pickles\Object::$instances = [];
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['SERVER_NAME']    = '127.0.0.1';
+
+        file_put_contents('/tmp/pickles.php', '<?php
+            $config = [
+                "environments" => [
+                    "local"      => "127.0.0.1",
+                    "production" => "123.456.789.0",
+                ],
+                "pickles" => [
+                    "datasource" => "mysql",
+                    "profiler"   => true,
+                ],
+                "datasources" => [
+                    "mysql" => [
+                        "type"     => "mysql",
+                        "driver"   => "pdo_mysql",
+                        "database" => "test",
+                        "hostname" => "localhost",
+                        "username" => "root",
+                        "password" => "",
+                        "database" => "test",
+                    ],
+                ],
+            ];
+        ');
+
+        Pickles\Config::getInstance('/tmp/pickles.php');
+
+        $db = Pickles\Database::getInstance();
+        $db->execute('SELECT * FROM `users` WHERE id = ?', [1000000]);
+
+        $report = Pickles\Profiler::report();
+        $this->assertEquals(7, count($report));
+        $this->assertEquals(3, count($report['logs']));
+        $this->assertEquals([1000000], $report['logs'][2]['details']['parameters']);
+        $this->assertTrue(isset($report['logs'][2]['details']['explain']));
+    }
 }
 

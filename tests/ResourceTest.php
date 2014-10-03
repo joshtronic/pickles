@@ -204,6 +204,49 @@ namespace
             new Pickles\Router();
         }
 
+        public function testBasicAuth()
+        {
+            Pickles\Object::$instances = [];
+
+            $_SERVER['REQUEST_METHOD'] = 'GET';
+            $_SERVER['SERVER_NAME']    = '127.0.0.1';
+
+            file_put_contents('/tmp/pickles.php', '<?php
+                $config = [
+                    "environments" => [
+                        "local"      => "127.0.0.1",
+                        "production" => "123.456.789.0",
+                    ],
+                    "pickles" => [
+                        "namespace"  => "",
+                        "datasource" => "mysql",
+                        "auth"       => "basic",
+                    ],
+                    "datasources" => [
+                        "mysql" => [
+                            "driver" => "pdo_mysql",
+                        ],
+                    ],
+                ];
+            ');
+
+            Pickles\Config::getInstance('/tmp/pickles.php');
+
+            $response = json_encode([
+                'meta' => [
+                    'status' => 405,
+                    'message' => 'Method not allowed.',
+                ],
+            ]);
+
+            $this->expectOutputString($response);
+
+            $_SERVER['REQUEST_METHOD'] = 'DELETE';
+            $_REQUEST['request'] = 'v1/resource/1';
+
+            new Pickles\Router();
+        }
+
         public function testMethodNotAllowed()
         {
             $response = json_encode([
