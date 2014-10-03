@@ -1,18 +1,15 @@
 <?php
 
 /**
- * Resource Class File for PICKLES
- *
- * PHP version 5
+ * Resource Class
  *
  * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
- * @author    Josh Sherman <josh@gravityblvd.com>
  * @copyright Copyright 2007-2014, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
- * @package   PICKLES
- * @link      https://github.com/joshtronic/pickles
+ * @link      http://picklesphp.com
+ * @package   Pickles
  */
 
 namespace Pickles;
@@ -20,7 +17,7 @@ namespace Pickles;
 /**
  * Resource Class
  *
- * This is a parent class that all PICKLES modules should be extending. Each
+ * This is a parent class that all Pickles modules should be extending. Each
  * module can specify it's own meta data and whether or not a user must be
  * properly authenticated to view the page. Currently any pages without a
  * template are treated as pages being requested via AJAX and the return will

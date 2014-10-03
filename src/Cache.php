@@ -1,18 +1,15 @@
 <?php
 
 /**
- * Caching System for PICKLES
- *
- * PHP version 5
+ * Caching System
  *
  * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
- * @author    Josh Sherman <josh@gravityblvd.com>
  * @copyright Copyright 2007-2014, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
- * @package   PICKLES
- * @link      https://github.com/joshtronic/pickles
+ * @link      http://picklesphp.com
+ * @package   Pickles
  */
 
 namespace Pickles;
@@ -26,7 +23,7 @@ namespace Pickles;
  * don't entirely remember specifics, but the reason for not using Memcached()
  * was due to an unexplainable bug in the version in the repository for Ubuntu
  * 10.04 LTS. Memcached() does support more of the memcached protocol and will
- * eventually be what PICKLES uses. Keys are forced to be uppercase for
+ * eventually be what Pickles uses. Keys are forced to be uppercase for
  * consistencies sake as I've been burned by the case sensitivity due to typos
  * in my code.
  *

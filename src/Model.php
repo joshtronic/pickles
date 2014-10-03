@@ -1,18 +1,15 @@
 <?php
 
 /**
- * Model Parent Class for PICKLES
- *
- * PHP version 5
+ * Model Parent Class
  *
  * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
- * @author    Josh Sherman <josh@gravityblvd.com>
  * @copyright Copyright 2007-2014, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
- * @package   PICKLES
- * @link      https://github.com/joshtronic/pickles
+ * @link      http://picklesphp.com
+ * @package   Pickles
  */
 
 namespace Pickles;
@@ -20,9 +17,9 @@ namespace Pickles;
 /**
  * Model Class
  *
- * This is a parent class that all PICKLES data models should be extending. When
- * using the class as designed, objects will function as active record pattern
- * objects.
+ * This is a parent class that all Pickles data models should be extending.
+ * When using the class as designed, objects will function as active record
+ * pattern objects.
  */
 class Model extends Object
 {
