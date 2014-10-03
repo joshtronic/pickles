@@ -1,9 +1,9 @@
 {
-    "name":        "joshtronic/pickles",
+    "name":        "picklesphp/pickles",
     "description": "The Pickles SOA Framework",
     "type":        "library",
     "keywords":    ["framework", "api", "soa", "oauth"],
-    "homepage":    "https://github.com/joshtronic/pickles",
+    "homepage":    "http://picklesphp.com",
     "license":     "MIT",
     "authors": [
         {
@@ -13,8 +13,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/joshtronic/pickles/issues",
-        "source": "https://github.com/joshtronic/pickles"
+        "issues": "https://github.com/picklesphp/pickles/issues",
+        "source": "https://github.com/picklesphp/pickles"
     },
     "minimum-stability" : "dev",
     "require-dev": {

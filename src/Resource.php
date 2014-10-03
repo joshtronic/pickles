@@ -359,7 +359,7 @@ class Resource extends Object
     {
         http_response_code($this->status);
         header('Content-Type: application/json');
-        header('X-Powered-By: Pickles v2 - https://github.com/joshtronic/pickles');
+        header('X-Powered-By: Pickles v2 - https://picklesphp.com');
 
         $meta = [
             'status'  => $this->status,
