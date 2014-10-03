@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "78d6d0f19f6e8766118df89454b9ba14",
+    "hash": "16033f40d01b3ada4064b0b7488d4cb7",
     "packages": [],
     "packages-dev": [
         {
@@ -475,12 +475,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "3d40ae857a3941ede714be45079e85f9e956b4b3"
+                "reference": "cf12676fb7f4a5adf5289a833046c91cb6f9c5b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/3d40ae857a3941ede714be45079e85f9e956b4b3",
-                "reference": "3d40ae857a3941ede714be45079e85f9e956b4b3",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/cf12676fb7f4a5adf5289a833046c91cb6f9c5b9",
+                "reference": "cf12676fb7f4a5adf5289a833046c91cb6f9c5b9",
                 "shasum": ""
             },
             "require": {
@@ -489,7 +489,7 @@
                 "phpunit/php-text-template": "~1.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.3.*@dev"
+                "phpunit/phpunit": "4.4.*@dev"
             },
             "suggest": {
                 "ext-soap": "*"
@@ -497,7 +497,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3.x-dev"
+                    "dev-master": "2.4.x-dev"
                 }
             },
             "autoload": {
@@ -522,7 +522,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2014-09-10 14:10:18"
+            "time": "2014-10-03 05:13:28"
         },
         {
             "name": "psr/log",
@@ -1269,7 +1269,7 @@
     },
     "prefer-stable": false,
     "platform": {
-        "php": ">=5.3"
+        "php": ">=5.4"
     },
     "platform-dev": []
 }
