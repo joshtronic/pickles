@@ -2,7 +2,7 @@
 
 VERSION=`phpenv version-name`
 
-if [ "$VERSION" == "hhvm" ]
+if [ "${VERSION}" = 'hhvm' ]
 then
     PHPINI=/etc/hhvm/php.ini
 else
