@@ -1,18 +1,15 @@
 <?php
 
 /**
- * Configuration Class File for PICKLES
- *
- * PHP version 5
+ * Configuration
  *
  * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
- * @author    Josh Sherman <josh@gravityblvd.com>
  * @copyright Copyright 2007-2014, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
- * @package   PICKLES
- * @link      https://github.com/joshtronic/pickles
+ * @link      http://picklesphp.com
+ * @package   Pickles
  */
 
 namespace Pickles;
@@ -23,7 +20,7 @@ namespace Pickles;
  * Handles loading the site's configuration file (if available). At the moment
  * this class is a very skewed Singleton. The plan is to eventually extend this
  * out to support multiple configuration files, and the ability to load in
- * custom config files on the fly as well. The core of PICKLES uses the class
+ * custom config files on the fly as well. The core of Pickles uses the class
  * as a Singleton so we're not loading the configuration multiple times per
  * page load.
  */

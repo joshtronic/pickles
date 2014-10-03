@@ -1,18 +1,15 @@
 <?php
 
 /**
- * Database Class File for PICKLES
- *
- * PHP version 5
+ * Database Abstraction Layer
  *
  * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
- * @author    Josh Sherman <josh@gravityblvd.com>
  * @copyright Copyright 2007-2014, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
- * @package   PICKLES
- * @link      https://github.com/joshtronic/pickles
+ * @link      http://picklesphp.com
+ * @package   Pickles
  * @todo      Drop driver, hardcode drivers based on the type
  * @todo      More assumptions for the datasource variables
  */

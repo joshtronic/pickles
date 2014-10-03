@@ -1,18 +1,15 @@
 <?php
 
 /**
- * Object Class File for PICKLES
- *
- * PHP version 5
+ * Parent Object
  *
  * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
- * @author    Josh Sherman <josh@gravityblvd.com>
  * @copyright Copyright 2007-2014, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
- * @package   PICKLES
- * @link      https://github.com/joshtronic/pickles
+ * @link      http://picklesphp.com
+ * @package   Pickles
  */
 
 namespace Pickles;
@@ -20,7 +17,7 @@ namespace Pickles;
 /**
  * Object Class
  *
- * Every instantiated class in PICKLES should be extending this class. By doing
+ * Every instantiated class in Pickles should be extending this class. By doing
  * so the class is automatically hooked into the profiler, and the object will
  * have access to some common components as well.
  */

@@ -1,7 +1,9 @@
 # Pickles
 
-[![Build Status](https://travis-ci.org/joshtronic/pickles.png?branch=master)](https://travis-ci.org/joshtronic/pickles) [![Coverage Status](https://coveralls.io/repos/joshtronic/pickles/badge.png)](https://coveralls.io/r/joshtronic/pickles) [![Dependency Status](https://www.versioneye.com/user/projects/52d1bc1eec13751bde00002a/badge.png)](https://www.versioneye.com/user/projects/52d1bc1eec13751bde00002a)
-[![Stories in Ready](https://badge.waffle.io/joshtronic/pickles.png?label=ready&title=Ready)](https://waffle.io/joshtronic/pickles)
+[![Build Status](https://travis-ci.org/picklesphp/pickles.png?branch=master)](https://travis-ci.org/picklesphp/pickles)
+[![Coverage Status](https://coveralls.io/repos/picklesphp/pickles/badge.png)](https://coveralls.io/r/picklesphp/pickles)
+[![Dependency Status](https://www.versioneye.com/user/projects/52d1bc1eec13751bde00002a/badge.png)](https://www.versioneye.com/user/projects/52d1bc1eec13751bde00002a)
+[![Stories in Ready](https://badge.waffle.io/picklesphp/pickles.png?label=ready&title=Ready)](https://waffle.io/picklesphp/pickles)
 
 Pickles f/k/a PICKLES (PHP Interface Collection of Killer Libraries to Enhance
 Stuff) is an open source framework for the rapid development of RESTful
@@ -23,7 +25,6 @@ acronym.
 [JustinDavis]: http://justindavis.co
 
 [HolidayAPI]:  https://github.com/gravityblvd/tools.gravityblvd.com
-[MasterZip]:   https://github.com/joshtronic/pickles/archive/master.zip
+[MasterZip]:   https://github.com/picklesphp/pickles/archive/master.zip
 [StackPost]:   http://joshtronic.com/2014/01/13/your-stack-is-outdated/#.UuVzI3n0A18
-[UPOZ]:        https://github.com/krakjoe/uopz
-[v13.12]:      https://github.com/joshtronic/pickles/tree/13.12
+[v13.12]:      https://github.com/picklesphp/pickles/tree/13.12

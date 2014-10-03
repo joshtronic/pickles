@@ -1,18 +1,15 @@
 <?php
 
 /**
- * Single Entry Router
- *
- * PHP version 5
+ * Endpoint Router
  *
  * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
  *
- * @author    Josh Sherman <josh@gravityblvd.com>
  * @copyright Copyright 2007-2014, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
- * @package   PICKLES
- * @link      https://github.com/joshtronic/pickles
+ * @link      http://picklesphp.com
+ * @package   Pickles
  */
 
 namespace Pickles;
@@ -20,7 +17,7 @@ namespace Pickles;
 /**
  * Router Class
  *
- * The heavy lifter of PICKLES, makes the calls to get the session and
+ * The heavy lifter of Pickles, makes the calls to get the session and
  * configuration loaded.  Loads modules, serves up user authentication when the
  * module asks for it, and loads the viewer that the module requested. Default
  * values are present to make things easier on the user.
