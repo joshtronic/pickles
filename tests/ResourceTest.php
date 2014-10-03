@@ -153,7 +153,7 @@ namespace
 
             $this->assertEquals('bar', $_GET['foo']);
 
-            if (version_compare(PHP_VERSION, '5.5.0', '<'))
+            if (version_compare(PHP_VERSION, '5.5.0', '>='))
             {
                 $this->assertFalse('unencrypted' == $_GET['bar']);
             }
