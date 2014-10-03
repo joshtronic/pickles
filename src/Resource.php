@@ -103,16 +103,17 @@ class Resource extends Object
                     throw new \Exception('Authentication is not configured properly.', 401);
                 }
 
-                /*
                 // This class should be in the classes directory of the service
-                $auth = '\\' . $this->config['pickles']['namespace'] . '\\Auth';
-                var_dump($auth);
+                $auth = '\\' . $this->config['pickles']['namespace'] . '\\Classes\\Auth';
                 $auth = new $auth();
 
                 switch ($this->config['pickles']['auth'])
                 {
                     case 'basic':
-                        $auth->basic();
+                        if (!$auth->basic())
+                        {
+                            throw new \Exception('Invalid authentication credentials.', 401);
+                        }
                         break;
 
                     case 'oauth2':
@@ -123,7 +124,6 @@ class Resource extends Object
                         throw new \Exception('Invalid authentication scheme.', 401);
                         break;
                 }
-                */
             }
 
             // Hack together some new globals
