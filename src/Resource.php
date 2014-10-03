@@ -177,7 +177,7 @@ class Resource extends Object
 
                         if ($function == 'password_hash')
                         {
-                            $global[$variable] = \password_hash($value, PASSWORD_DEFAULT);
+                            $global[$variable] = password_hash($value, PASSWORD_DEFAULT);
                         }
                         else
                         {

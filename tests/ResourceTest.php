@@ -144,10 +144,19 @@ namespace
                 'regex'            => 'abc',
             ];
 
+            if (version_compare(PHP_VERSION, '5.5.0', '<'))
+            {
+                unset($_GET['bar']);
+            }
+
             new Pickles\Router();
 
             $this->assertEquals('bar', $_GET['foo']);
-            $this->assertFalse('unencrypted' == $_GET['bar']);
+
+            if (version_compare(PHP_VERSION, '5.5.0', '<'))
+            {
+                $this->assertFalse('unencrypted' == $_GET['bar']);
+            }
         }
 
         public function testHTTPS()
