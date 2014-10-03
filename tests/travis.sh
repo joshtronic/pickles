@@ -9,8 +9,9 @@ then
     PHPINI=/etc/hhvm/php.ini
 else
     PHPINI=~/.phpenv/versions/$VERSION/etc/php.ini
+
+    echo "extension = memcache.so"  >> $PHPINI
+    echo "extension = memcached.so" >> $PHPINI
+    echo "extension = redis.so"     >> $PHPINI
 fi
 
-echo "extension = memcache.so"  >> $PHPINI
-echo "extension = memcached.so" >> $PHPINI
-echo "extension = redis.so"     >> $PHPINI
