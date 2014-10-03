@@ -17,6 +17,8 @@ matrix:
 branches:
   only:
     - master
+    - 2.0
+    - 1.9
 
 services:
   - memcache
