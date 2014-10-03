@@ -29,9 +29,7 @@ install:
   - composer install
 
 before_script:
-  - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - ./tests/travis.sh
   - mysql -e "create database IF NOT EXISTS test;" -u root
   - mysql test < tests/schema.sql -u root
   - mkdir -p build/logs
