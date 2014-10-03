@@ -1,7 +1,5 @@
 #!/bin/sh
 
-php -i
-
 VERSION=`phpenv version-name`
 
 if [ "${VERSION}" = 'hhvm' ]
