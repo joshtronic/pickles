@@ -65,6 +65,8 @@ namespace
         // work. That logic is off in ResourceTest
         public function testFoundWithUID()
         {
+            Pickles\Object::$instances = [];
+
             $_SERVER['REQUEST_METHOD'] = 'GET';
             $_SERVER['SERVER_NAME']    = '127.0.0.1';
 
