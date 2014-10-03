@@ -4,8 +4,8 @@
 [![Stories in Ready](https://badge.waffle.io/joshtronic/pickles.png?label=ready&title=Ready)](https://waffle.io/joshtronic/pickles)
 
 Pickles f/k/a PICKLES (PHP Interface Collection of Killer Libraries to Enhance
-Stuff) is an open source framework for the rapid development of RESTful API
-systems. The intention of this framework is to allow developers to a means to
+Stuff) is an open source framework for the rapid development of RESTful
+services. The intention of this framework is to allow developers to a means to
 develop service-oriented backend systems that are completely decoupled from the
 front end components. Thus allowing the freedom to build the front end
 implementation(s) using whichever tools they choose, be it Ember.js, Angular.js
