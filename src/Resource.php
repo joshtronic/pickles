@@ -102,8 +102,23 @@ class Resource extends Object
 
                 // This class should be in the classes directory of the service
                 $auth = '\\' . $this->config['pickles']['namespace'] . '\\Classes\\Auth';
+
+                // Strips preceding slashs when there is no namespace
+                if (strpos($auth, '\\\\') === 0)
+                {
+                    $auth = substr($auth, 2);
+                }
+
                 $auth = new $auth();
 
+                // @todo Remove when switch is implemented
+                if (!$auth->basic())
+                {
+                    throw new \Exception('Invalid authentication credentials.', 401);
+                }
+
+                // @todo Not yet implemented
+                /*
                 switch ($this->config['pickles']['auth'])
                 {
                     case 'basic':
@@ -112,7 +127,6 @@ class Resource extends Object
                             throw new \Exception('Invalid authentication credentials.', 401);
                         }
                         break;
-
                     case 'oauth2':
                         $auth->oauth2();
                         break;
@@ -121,6 +135,7 @@ class Resource extends Object
                         throw new \Exception('Invalid authentication scheme.', 401);
                         break;
                 }
+                */
             }
 
             // Hack together some new globals

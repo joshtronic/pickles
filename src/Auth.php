@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Auth Abstraction
+ * Authentication
  *
  * Licensed under The MIT License
  * Redistribution of these files must retain the above copyright notice.
@@ -15,9 +15,9 @@
 namespace Pickles;
 
 /**
- * Auth Abstract Class
+ * Auth Parent Class
  */
-abstract class Auth extends Object
+class Auth extends Object
 {
     /**
      * Basic Auth
@@ -29,12 +29,12 @@ abstract class Auth extends Object
      */
     public function basic()
     {
-
+        return false;
     }
 
     public function oauth2()
     {
-
+        return false;
     }
 }
 

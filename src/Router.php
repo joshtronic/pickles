@@ -63,6 +63,7 @@ class Router extends Object
             array_unshift($nouns, '', $this->config['pickles']['namespace'], 'Resources', $version);
             $class = implode('\\', $nouns);
 
+            // @todo Make namespace mandatory
             // Strips preceding slashs when there is no namespace
             if (strpos($class, '\\\\') === 0)
             {

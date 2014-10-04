@@ -63,6 +63,28 @@ namespace Resources\v1
     }
 }
 
+namespace Classes
+{
+    class Auth extends \Pickles\Auth
+    {
+        private static $count = 0;
+
+        public function basic()
+        {
+            self::$count++;
+
+            if (self::$count % 2)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
+}
+
 namespace
 {
     class ResourceTest extends PHPUnit_Framework_TestCase
@@ -202,6 +224,49 @@ namespace
                 'meta' => [
                     'status' => 401,
                     'message' => 'Authentication is not configured properly.',
+                ],
+            ]);
+
+            $this->expectOutputString($response);
+
+            $_SERVER['REQUEST_METHOD'] = 'DELETE';
+            $_REQUEST['request'] = 'v1/resource/1';
+
+            new Pickles\Router();
+        }
+
+        public function testBasicAuthBadCredentials()
+        {
+            Pickles\Object::$instances = [];
+
+            $_SERVER['REQUEST_METHOD'] = 'GET';
+            $_SERVER['SERVER_NAME']    = '127.0.0.1';
+
+            file_put_contents('/tmp/pickles.php', '<?php
+                $config = [
+                    "environments" => [
+                        "local"      => "127.0.0.1",
+                        "production" => "123.456.789.0",
+                    ],
+                    "pickles" => [
+                        "namespace"  => "",
+                        "datasource" => "mysql",
+                        "auth"       => "basic",
+                    ],
+                    "datasources" => [
+                        "mysql" => [
+                            "driver" => "pdo_mysql",
+                        ],
+                    ],
+                ];
+            ');
+
+            Pickles\Config::getInstance('/tmp/pickles.php');
+
+            $response = json_encode([
+                'meta' => [
+                    'status' => 401,
+                    'message' => 'Invalid authentication credentials.',
                 ],
             ]);
 

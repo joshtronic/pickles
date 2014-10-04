@@ -1,6 +1,6 @@
 {
     "name":        "picklesphp/pickles",
-    "description": "The Pickles SOA Framework",
+    "description": "Pickles is a PHP framework for building kick-ass services",
     "type":        "library",
     "keywords":    ["framework", "api", "soa", "oauth"],
     "homepage":    "http://picklesphp.com",
