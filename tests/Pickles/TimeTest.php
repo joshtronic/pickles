@@ -25,7 +25,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
             [date('r',     $time), '25'],
             ['today',              '0'],
             ['400 days ago',       '1'],
-            [true,                 Pickles\Date::age('1969-12-31')],
+            [true,                 Pickles\Time::age('1969-12-31')],
         ];
     }
 
