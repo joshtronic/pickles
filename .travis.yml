@@ -22,6 +22,7 @@ services:
   - redis
 
 install:
+  - composer self-update
   - composer install
 
 before_script:
