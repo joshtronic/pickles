@@ -7,6 +7,28 @@ class TimeTest extends PHPUnit_Framework_TestCase
         date_default_timezone_set('GMT');
     }
 
+    /**
+     * @dataProvider providerAge
+     */
+    public function testAge($a, $b)
+    {
+        $this->assertEquals(Pickles\Time::age($a), $b);
+    }
+
+    public function providerAge()
+    {
+        $time = strtotime('-25 years');
+
+        return [
+            [date('Y-m-d', $time), '25'],
+            [date('m/d/Y', $time), '25'],
+            [date('r',     $time), '25'],
+            ['today',              '0'],
+            ['400 days ago',       '1'],
+            [true,                 Pickles\Date::age('1969-12-31')],
+        ];
+    }
+
     public function testAgePastTime()
     {
         $this->assertEquals(18, Pickles\Time::age(date('Y-m-d', strtotime('-18 years'))));
