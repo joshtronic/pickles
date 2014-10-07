@@ -483,7 +483,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
     public function testCommitIncrement()
     {
         $model = new MockModelWithoutColumns(1);
-        $model->record['field1'] = 100;;
+        $model->record['field1'] = 100;
         $model->commit();
         $model = new MockModelWithoutColumns(1);
         $model->record['field1'] = '++';
