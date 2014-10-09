@@ -27,14 +27,19 @@ class Auth extends Object
      * Rather use an API key and not worry about the password? Do it. Return
      * true when authentication is successful and false when it is not.
      */
-    public function basic()
+    public static function basic()
     {
         return false;
     }
 
-    public function oauth2()
+    /**
+     * OAuth2
+     *
+     * Handles authentication of the access token.
+     */
+    final static public function oauth2()
     {
-        return false;
+
     }
 }
 

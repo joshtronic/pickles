@@ -95,47 +95,46 @@ class Resource extends Object
             if ($this->auth === true
                 || (isset($this->auth[$method]) && $this->auth[$method]))
             {
-                if (!$this->config['pickles']['auth'])
+                if (!$this->config['auth'][$_SERVER['__version']])
                 {
                     throw new \Exception('Authentication is not configured properly.', 401);
                 }
 
-                // This class should be in the classes directory of the service
-                $auth = '\\' . $this->config['pickles']['namespace'] . '\\Classes\\Auth';
-
-                // Strips preceding slashs when there is no namespace
-                if (strpos($auth, '\\\\') === 0)
-                {
-                    $auth = substr($auth, 2);
-                }
-
-                $auth = new $auth();
-
-                // @todo Remove when switch is implemented
-                if (!$auth->basic())
-                {
-                    throw new \Exception('Invalid authentication credentials.', 401);
-                }
-
-                // @todo Not yet implemented
-                /*
-                switch ($this->config['pickles']['auth'])
+                switch ($this->config['auth'][$_SERVER['__version']]['strategy'])
                 {
                     case 'basic':
-                        if (!$auth->basic())
+                        // @todo Check if Auth class has been implemented, if
+                        //       not, fallback to the parent
+
+                        // This class should be in the classes directory of the service
+                        $auth = '\\' . $this->config['pickles']['namespace'] . '\\Classes\\Auth';
+
+                        // Strips preceding slashs when there is no namespace
+                        if (strpos($auth, '\\\\') === 0)
+                        {
+                            $auth = substr($auth, 2);
+                        }
+
+                        // @todo Custom method
+                        if (!$auth::basic())
                         {
                             throw new \Exception('Invalid authentication credentials.', 401);
                         }
                         break;
+
                     case 'oauth2':
-                        $auth->oauth2();
+                        /*
+                        if (!Auth::oauth2())
+                        {
+                            throw new \Exception('Invalid access token.', 401);
+                        }
+                        */
                         break;
 
                     default:
-                        throw new \Exception('Invalid authentication scheme.', 401);
+                        throw new \Exception('Invalid authentication strategy.', 401);
                         break;
                 }
-                */
             }
 
             // Hack together some new globals

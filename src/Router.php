@@ -46,6 +46,8 @@ class Router extends Object
             $nouns      = [];
             $uids       = [];
 
+            $_SERVER['__version'] = substr($version, 1);
+
             // Loops through the components to determine nouns and IDs
             foreach ($components as $index => $component)
             {
