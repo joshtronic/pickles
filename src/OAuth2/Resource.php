@@ -4,7 +4,7 @@ namespace Pickles\OAuth2;
 
 use \League\OAuth2\Server\AuthorizationServer;
 use \League\OAuth2\Server\Grant\PasswordGrant;
-use \Pickles\App\Model\User;
+use \Pickles\App\Models\User;
 
 class Resource extends \Pickles\Resource
 {

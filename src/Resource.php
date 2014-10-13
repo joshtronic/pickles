@@ -103,26 +103,6 @@ class Resource extends Object
 
                 switch ($this->config['auth'][$_SERVER['__version']]['strategy'])
                 {
-                    case 'basic':
-                        // @todo Check if Auth class has been implemented, if
-                        //       not, fallback to the parent
-
-                        // This class should be in the classes directory of the service
-                        $auth = '\\' . $this->config['pickles']['namespace'] . '\\Classes\\Auth';
-
-                        // Strips preceding slashs when there is no namespace
-                        if (strpos($auth, '\\\\') === 0)
-                        {
-                            $auth = substr($auth, 2);
-                        }
-
-                        // @todo Custom method
-                        if (!$auth::basic())
-                        {
-                            throw new \Exception('Invalid authentication credentials.', 401);
-                        }
-                        break;
-
                     default:
                         throw new \Exception('Invalid authentication strategy.', 401);
                         break;

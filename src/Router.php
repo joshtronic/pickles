@@ -69,15 +69,8 @@ class Router extends Object
                 }
 
                 // Creates our class name
-                array_unshift($nouns, '', $this->config['pickles']['namespace'], 'Resources', $version);
+                array_unshift($nouns, '', 'Pickles', 'App', 'Resources', $version);
                 $class = implode('\\', $nouns);
-
-                // @todo Make namespace mandatory
-                // Strips preceding slashs when there is no namespace
-                if (strpos($class, '\\\\') === 0)
-                {
-                    $class = substr($class, 2);
-                }
             }
 
             // Checks that the file is present and contains our class
