@@ -92,6 +92,7 @@ class Resource extends Object
             }
 
             // Check auth if flag is  explicitly true or is true for the method
+            /*
             if ($this->auth === true
                 || (isset($this->auth[$method]) && $this->auth[$method]))
             {
@@ -122,38 +123,12 @@ class Resource extends Object
                         }
                         break;
 
-                    case 'oauth2':
-                        /*
-                        if (!Auth::oauth2())
-                        {
-                            throw new \Exception('Invalid access token.', 401);
-                        }
-                        */
-
-                        $server = new \League\OAuth2\Server\AuthorizationServer;
-
-                        $server->setSessionStorage(new OAuth2\SessionStorage);
-                        $server->setAccessTokenStorage(new OAuth2\AccessTokenStorage);
-                        $server->setClientStorage(new OAuth2\ClientStorage);
-                        $server->setScopeStorage(new OAuth2\ScopeStorage);
-
-                        $passwordGrant = new \League\OAuth2\Server\Grant\PasswordGrant();
-                        $passwordGrant->setVerifyCredentialsCallback(function ($username, $password)
-                        {
-                            // implement logic here to validate a username and
-                            // password, return an ID if valid, otherwise return false
-                            return false;
-                        });
-
-                        var_dump(microtime());
-                        exit('EOF');
-                        break;
-
                     default:
                         throw new \Exception('Invalid authentication strategy.', 401);
                         break;
                 }
             }
+            */
 
             // Hack together some new globals
             if (in_array($method, ['PUT', 'DELETE']))

@@ -22,7 +22,7 @@ namespace Pickles;
  * module asks for it, and loads the viewer that the module requested. Default
  * values are present to make things easier on the user.
  *
- * @usage <code>new Router();</code>
+ * @usage <code>new Pickles\Router;</code>
  */
 class Router extends Object
 {
@@ -42,34 +42,42 @@ class Router extends Object
             // Grabs the requested page
             $request    = $_REQUEST['request'];
             $components = explode('/', $request);
-            $version    = array_shift($components);
             $nouns      = [];
             $uids       = [];
 
-            $_SERVER['__version'] = substr($version, 1);
-
-            // Loops through the components to determine nouns and IDs
-            foreach ($components as $index => $component)
+            // Checks if we're trying to rock some OAuth
+            if ($components[0] == 'oauth')
             {
-                if ($index % 2)
-                {
-                    $uids[end($nouns)] = $component;
-                }
-                else
-                {
-                    $nouns[] = $component;
-                }
+                $class = 'Pickles\OAuth2\Resource';
             }
-
-            // Creates our class name
-            array_unshift($nouns, '', $this->config['pickles']['namespace'], 'Resources', $version);
-            $class = implode('\\', $nouns);
-
-            // @todo Make namespace mandatory
-            // Strips preceding slashs when there is no namespace
-            if (strpos($class, '\\\\') === 0)
+            else
             {
-                $class = substr($class, 2);
+                $version              = array_shift($components);
+                $_SERVER['__version'] = substr($version, 1);
+
+                // Loops through the components to determine nouns and IDs
+                foreach ($components as $index => $component)
+                {
+                    if ($index % 2)
+                    {
+                        $uids[end($nouns)] = $component;
+                    }
+                    else
+                    {
+                        $nouns[] = $component;
+                    }
+                }
+
+                // Creates our class name
+                array_unshift($nouns, '', $this->config['pickles']['namespace'], 'Resources', $version);
+                $class = implode('\\', $nouns);
+
+                // @todo Make namespace mandatory
+                // Strips preceding slashs when there is no namespace
+                if (strpos($class, '\\\\') === 0)
+                {
+                    $class = substr($class, 2);
+                }
             }
 
             // Checks that the file is present and contains our class
@@ -86,7 +94,7 @@ class Router extends Object
             // Creates a resource object if we don't have one
             if (!isset($resource))
             {
-                $resource = new Resource();
+                $resource = new Resource;
             }
 
             $code = $e->getCode();

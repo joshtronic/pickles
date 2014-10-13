@@ -4,10 +4,9 @@ namespace Pickles\OAuth2;
 
 use \League\OAuth2\Server\Entity\AbstractTokenEntity;
 use \League\OAuth2\Server\Entity\ScopeEntity;
-use \League\OAuth2\Server\Storage\Adapter;
 use \League\OAuth2\Server\Storage\AccessTokenInterface;
 
-class AccessTokenStorage extends Adapter implements AccessTokenInterface
+class AccessTokenStorage extends StorageAdapter implements AccessTokenInterface
 {
     public function get($token)
     {

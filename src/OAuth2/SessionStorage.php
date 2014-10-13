@@ -9,7 +9,7 @@ use \League\OAuth2\Server\Entity\SessionEntity;
 use \League\OAuth2\Server\Storage\Adapter;
 use \League\OAuth2\Server\Storage\SessionInterface;
 
-class SessionStorage extends Adapter implements SessionInterface
+class SessionStorage extends StorageAdapter implements SessionInterface
 {
     public function getByAccessToken(AccessTokenEntity $access_token)
     {
