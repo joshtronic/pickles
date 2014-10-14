@@ -5,13 +5,12 @@ namespace Pickles\OAuth2;
 use \League\OAuth2\Server\AuthorizationServer;
 use \League\OAuth2\Server\Grant\PasswordGrant;
 use \Pickles\App\Models\User;
+use \Pickles\Config;
 
 class Resource extends \Pickles\Resource
 {
-    public function __construct()
+    public function POST()
     {
-        parent::__construct();
-
         if (!isset($this->config['oauth'][$_SERVER['__version']]))
         {
             throw new \Exception('Forbidden.', 403);
@@ -48,7 +47,11 @@ class Resource extends \Pickles\Resource
 
                             $grant->setVerifyCredentialsCallback(function ($username, $password)
                             {
-                                $user = new User(['email' => $username]);
+                                $user = new User([
+                                    'conditions' => [
+                                        'email' => $username,
+                                    ],
+                                ]);
 
                                 return $user->count()
                                     && password_verify($password, $user->record['password']);
@@ -64,6 +67,8 @@ class Resource extends \Pickles\Resource
                     $server->addGrantType($grant);
 
                     $response = $server->issueAccessToken();
+
+                    return $response;
                 }
                 catch (\Exception $e)
                 {
