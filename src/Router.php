@@ -40,10 +40,12 @@ class Router extends Object
         try
         {
             // Grabs the requested page
-            $request    = $_REQUEST['request'];
-            $components = explode('/', $request);
-            $nouns      = [];
-            $uids       = [];
+            $request              = $_REQUEST['request'];
+            $components           = explode('/', $request);
+            $nouns                = [];
+            $uids                 = [];
+            $version              = array_shift($components);
+            $_SERVER['__version'] = substr($version, 1);
 
             // Checks if we're trying to rock some OAuth
             if ($components[0] == 'oauth')
@@ -52,9 +54,6 @@ class Router extends Object
             }
             else
             {
-                $version              = array_shift($components);
-                $_SERVER['__version'] = substr($version, 1);
-
                 // Loops through the components to determine nouns and IDs
                 foreach ($components as $index => $component)
                 {

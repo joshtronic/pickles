@@ -10,7 +10,14 @@ class Resource extends \Pickles\Resource
 {
     public function __construct()
     {
-        switch ($_REQUEST['request'])
+        parent::__construct();
+
+        if (!isset($this->config['oauth'][$_SERVER['__version']]))
+        {
+            throw new \Exception('Forbidden.', 403);
+        }
+
+        switch (substr($_REQUEST['request'], strlen($_SERVER['__version']) + 2))
         {
             case 'oauth/access_token':
                 try
@@ -22,25 +29,44 @@ class Resource extends \Pickles\Resource
                     $server->setClientStorage(new ClientStorage);
                     $server->setScopeStorage(new ScopeStorage);
 
-                    $passwordGrant = new PasswordGrant;
-                    $passwordGrant->setVerifyCredentialsCallback(function ($username, $password)
+                    switch ($_REQUEST['grant_type'])
                     {
-                        $user = new User(['email' => $username]);
+                        case 'authorization_code':
+                            throw new \Exception('Not Implemented', 501);
+                            break;
 
-                        return $user->count()
-                            && password_verify($password, $user->record['password']);
-                    });
+                        case 'client_credentials':
+                            throw new \Exception('Not Implemented', 501);
+                            break;
 
-                    $server->addGrantType($passwordGrant);
+                        case 'implicit':
+                            throw new \Exception('Not Implemented', 501);
+                            break;
 
-                    // @todo Add grant types listed in the config. Password is always added
+                        case 'password':
+                            $grant = new PasswordGrant;
+
+                            $grant->setVerifyCredentialsCallback(function ($username, $password)
+                            {
+                                $user = new User(['email' => $username]);
+
+                                return $user->count()
+                                    && password_verify($password, $user->record['password']);
+                            });
+
+                            break;
+
+                        case 'refresh_token':
+                            throw new \Exception('Not Implemented', 501);
+                            break;
+                    }
+
+                    $server->addGrantType($grant);
 
                     $response = $server->issueAccessToken();
                 }
                 catch (\Exception $e)
                 {
-                    // @todo Set error code's accordingly.
-
                     throw new \Exception($e->getMessage(), $e->httpStatusCode);
                 }
 
