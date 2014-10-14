@@ -4,41 +4,93 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c9883c463f5dad3fc400327e41287cc0",
+    "hash": "76708e9b1bd8a87135b6c5b4c0e38a2a",
     "packages": [
         {
-            "name": "league/oauth2-server",
-            "version": "dev-master",
+            "name": "league/event",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/thephpleague/oauth2-server.git",
-                "reference": "13cd0cacdf1e9ae23fa073d4408a336246babb8e"
+                "url": "https://github.com/thephpleague/event.git",
+                "reference": "06adb7ce55b93346be43a3ba677ac613bbf288a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/13cd0cacdf1e9ae23fa073d4408a336246babb8e",
-                "reference": "13cd0cacdf1e9ae23fa073d4408a336246babb8e",
+                "url": "https://api.github.com/repos/thephpleague/event/zipball/06adb7ce55b93346be43a3ba677ac613bbf288a2",
+                "reference": "06adb7ce55b93346be43a3ba677ac613bbf288a2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0"
             },
+            "require-dev": {
+                "henrikbjorn/phpspec-code-coverage": "1.0.*@dev",
+                "phpspec/phpspec": "2.0.*@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\Event\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frenky.net"
+                }
+            ],
+            "description": "Event package",
+            "keywords": [
+                "emitter",
+                "event",
+                "listener"
+            ],
+            "time": "2014-09-09 14:40:43"
+        },
+        {
+            "name": "league/oauth2-server",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/oauth2-server.git",
+                "reference": "6333a975f8fb51111b447a7e85806e4519fb52b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/6333a975f8fb51111b447a7e85806e4519fb52b9",
+                "reference": "6333a975f8fb51111b447a7e85806e4519fb52b9",
+                "shasum": ""
+            },
+            "require": {
+                "league/event": "1.0.*",
+                "php": ">=5.4.0",
+                "symfony/http-foundation": "~2.1"
+            },
             "replace": {
+                "league/oauth2server": "*",
                 "lncd/oauth2": "*"
             },
             "require-dev": {
+                "alexbilbie/fizzfuzz": "dev-develop",
+                "codeception/codeception": "2.0.*",
                 "league/phpunit-coverage-listener": "~1.0",
-                "mockery/mockery": "~0.8"
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~1.5"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2.x-dev"
+                    "dev-develop": "4.0.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "League\\OAuth2\\Server": "src/"
+                "psr-4": {
+                    "League\\OAuth2\\Server\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -54,19 +106,76 @@
                 }
             ],
             "description": "A lightweight and powerful OAuth 2.0 authorization and resource server library with support for all the core specification grants. This library will allow you to secure your API with OAuth and allow your applications users to approve apps that want to access their data from your API.",
+            "homepage": "http://oauth2.thephpleague.com/",
             "keywords": [
                 "Authentication",
                 "api",
                 "auth",
+                "authorisation",
                 "authorization",
                 "oauth",
+                "oauth 2",
+                "oauth 2.0",
                 "oauth2",
                 "protect",
                 "resource",
                 "secure",
                 "server"
             ],
-            "time": "2014-09-08 21:01:33"
+            "time": "2014-10-03 13:42:01"
+        },
+        {
+            "name": "symfony/http-foundation",
+            "version": "dev-master",
+            "target-dir": "Symfony/Component/HttpFoundation",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/HttpFoundation.git",
+                "reference": "c24942a7ec2d8409d1f60d02c4460ca8317e885a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/c24942a7ec2d8409d1f60d02c4460ca8317e885a",
+                "reference": "c24942a7ec2d8409d1f60d02c4460ca8317e885a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/expression-language": "~2.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\HttpFoundation\\": ""
+                },
+                "classmap": [
+                    "Symfony/Component/HttpFoundation/Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Symfony HttpFoundation Component",
+            "homepage": "http://symfony.com",
+            "time": "2014-10-07 14:06:18"
         }
     ],
     "packages-dev": [
@@ -76,16 +185,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "4bdc0421209a00e6f425f4c3554d1b0df3a7e897"
+                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/4bdc0421209a00e6f425f4c3554d1b0df3a7e897",
-                "reference": "4bdc0421209a00e6f425f4c3554d1b0df3a7e897",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/f976e5de371104877ebc89bd8fecb0019ed9c119",
+                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119",
                 "shasum": ""
             },
             "require": {
-                "php": "~5.3"
+                "php": ">=5.3,<8.0-DEV"
             },
             "require-dev": {
                 "athletic/athletic": "~0.1.8",
@@ -122,7 +231,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2014-10-05 00:20:37"
+            "time": "2014-10-13 12:58:55"
         },
         {
             "name": "guzzle/guzzle",
