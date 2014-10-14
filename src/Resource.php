@@ -14,6 +14,12 @@
 
 namespace Pickles;
 
+use \League\OAuth2\Server\ResourceServer;
+use Pickles\OAuth2\AccessTokenStorage;
+use Pickles\OAuth2\ClientStorage;
+use Pickles\OAuth2\ScopeStorage;
+use Pickles\OAuth2\SessionStorage;
+
 /**
  * Resource Class
  *
@@ -74,11 +80,22 @@ class Resource extends Object
 
         try
         {
-            // Check auth if flag is explicitly true or is true for the method
+            // Checks if auth flag is explicity true or true for the method
             if ($this->auth === true
                 || (isset($this->auth[$method]) && $this->auth[$method]))
             {
-                if (!isset($this->config['oauth2'][$_SERVER['__version']]))
+                if (isset($this->config['oauth'][$_SERVER['__version']]))
+                {
+                    $server = new ResourceServer(
+                        new SessionStorage,
+                        new AccessTokenStorage,
+                        new ClientStorage,
+                        new ScopeStorage
+                    );
+
+                    $server->isValidRequest();
+                }
+                else
                 {
                     throw new \Exception('Authentication is not configured properly.', 401);
                 }

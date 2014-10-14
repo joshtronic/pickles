@@ -55,25 +55,27 @@ class ClientStorage extends StorageAdapter implements ClientInterface
 
     public function getBySession(SessionEntity $session)
     {
-        /*
-        $result = Capsule::table('oauth_clients')
-                            ->select(['oauth_clients.id', 'oauth_clients.name'])
-                            ->join('oauth_sessions', 'oauth_clients.id', '=', 'oauth_sessions.client_id')
-                            ->where('oauth_sessions.id', $session->getId())
-                            ->get();
+        $sql = 'SELECT oauth_clients.id, oauth_clients.name'
+             . ' FROM oauth_clients'
+             . ' JOIN oauth_sessions'
+             . ' ON oauth_clients.id = oauth_sessions.client_id'
+             . ' WHERE oauth_sessions.id = ?';
 
-        if (count($result) === 1) {
+        $results = $this->db->fetch($sql, [$session->getId()]);
+
+        if (count($results) === 1)
+        {
             $client = new ClientEntity($this->server);
+
             $client->hydrate([
-                'id'    =>  $result[0]['id'],
-                'name'  =>  $result[0]['name']
+                'id'   => $results[0]['id'],
+                'name' => $results[0]['name']
             ]);
 
             return $client;
         }
 
         return null;
-        */
     }
 }
 
