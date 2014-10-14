@@ -1,6 +1,6 @@
 <?php
 
-namespace Resources\v1
+namespace Pickles\App\Resources\v1
 {
     class resource extends \Pickles\Resource
     {
@@ -59,28 +59,6 @@ namespace Resources\v1
         public function ERROR()
         {
             throw new \Exception('Error');
-        }
-    }
-}
-
-namespace Classes
-{
-    class Auth extends \Pickles\Auth
-    {
-        private static $count = 0;
-
-        public function basic()
-        {
-            self::$count++;
-
-            if (self::$count % 2)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
         }
     }
 }
@@ -224,92 +202,6 @@ namespace
                 'meta' => [
                     'status' => 401,
                     'message' => 'Authentication is not configured properly.',
-                ],
-            ]);
-
-            $this->expectOutputString($response);
-
-            $_SERVER['REQUEST_METHOD'] = 'DELETE';
-            $_REQUEST['request'] = 'v1/resource/1';
-
-            new Pickles\Router();
-        }
-
-        public function testBasicAuthBadCredentials()
-        {
-            Pickles\Object::$instances = [];
-
-            $_SERVER['REQUEST_METHOD'] = 'GET';
-            $_SERVER['SERVER_NAME']    = '127.0.0.1';
-
-            file_put_contents('/tmp/pickles.php', '<?php
-                $config = [
-                    "environments" => [
-                        "local"      => "127.0.0.1",
-                        "production" => "123.456.789.0",
-                    ],
-                    "pickles" => [
-                        "namespace"  => "",
-                        "datasource" => "mysql",
-                        "auth"       => "basic",
-                    ],
-                    "datasources" => [
-                        "mysql" => [
-                            "driver" => "pdo_mysql",
-                        ],
-                    ],
-                ];
-            ');
-
-            Pickles\Config::getInstance('/tmp/pickles.php');
-
-            $response = json_encode([
-                'meta' => [
-                    'status' => 401,
-                    'message' => 'Invalid authentication credentials.',
-                ],
-            ]);
-
-            $this->expectOutputString($response);
-
-            $_SERVER['REQUEST_METHOD'] = 'DELETE';
-            $_REQUEST['request'] = 'v1/resource/1';
-
-            new Pickles\Router();
-        }
-
-        public function testBasicAuth()
-        {
-            Pickles\Object::$instances = [];
-
-            $_SERVER['REQUEST_METHOD'] = 'GET';
-            $_SERVER['SERVER_NAME']    = '127.0.0.1';
-
-            file_put_contents('/tmp/pickles.php', '<?php
-                $config = [
-                    "environments" => [
-                        "local"      => "127.0.0.1",
-                        "production" => "123.456.789.0",
-                    ],
-                    "pickles" => [
-                        "namespace"  => "",
-                        "datasource" => "mysql",
-                        "auth"       => "basic",
-                    ],
-                    "datasources" => [
-                        "mysql" => [
-                            "driver" => "pdo_mysql",
-                        ],
-                    ],
-                ];
-            ');
-
-            Pickles\Config::getInstance('/tmp/pickles.php');
-
-            $response = json_encode([
-                'meta' => [
-                    'status' => 405,
-                    'message' => 'Method not allowed.',
                 ],
             ]);
 

@@ -91,24 +91,15 @@ class Resource extends Object
                 throw new \Exception('HTTPS is required.', 400);
             }
 
-            // Check auth if flag is  explicitly true or is true for the method
-            /*
+            // Check auth if flag is explicitly true or is true for the method
             if ($this->auth === true
                 || (isset($this->auth[$method]) && $this->auth[$method]))
             {
-                if (!$this->config['auth'][$_SERVER['__version']])
+                if (!isset($this->config['oauth2'][$_SERVER['__version']]))
                 {
                     throw new \Exception('Authentication is not configured properly.', 401);
                 }
-
-                switch ($this->config['auth'][$_SERVER['__version']]['strategy'])
-                {
-                    default:
-                        throw new \Exception('Invalid authentication strategy.', 401);
-                        break;
-                }
             }
-            */
 
             // Hack together some new globals
             if (in_array($method, ['PUT', 'DELETE']))

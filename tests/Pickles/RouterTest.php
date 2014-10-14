@@ -1,6 +1,6 @@
 <?php
 
-namespace Resources\v1
+namespace Pickles\App\Resources\v1
 {
     class router extends \Pickles\Resource
     {
@@ -75,9 +75,6 @@ namespace
                     "environments" => [
                         "local"      => "127.0.0.1",
                         "production" => "123.456.789.0",
-                    ],
-                    "pickles" => [
-                        "namespace" => "",
                     ],
                     "datasources" => [],
                 ];
