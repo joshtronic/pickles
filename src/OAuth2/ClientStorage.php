@@ -57,7 +57,7 @@ class ClientStorage extends StorageAdapter implements ClientInterface
     {
         $sql = 'SELECT oauth_clients.id, oauth_clients.name'
              . ' FROM oauth_clients'
-             . ' JOIN oauth_sessions'
+             . ' INNER JOIN oauth_sessions'
              . ' ON oauth_clients.id = oauth_sessions.client_id'
              . ' WHERE oauth_sessions.id = ?';
 
