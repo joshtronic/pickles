@@ -1,14 +1,14 @@
 {
-    "name":        "picklesphp/pickles",
+    "name": "picklesphp/pickles",
     "description": "Pickles is a PHP framework for building kick-ass services",
-    "type":        "library",
-    "keywords":    ["framework", "api", "soa", "oauth"],
-    "homepage":    "http://picklesphp.com",
-    "license":     "MIT",
+    "type": "library",
+    "keywords": ["framework", "api", "soa", "oauth"],
+    "homepage": "http://picklesphp.com",
+    "license": "MIT",
     "authors": [
         {
-            "name":     "Josh Sherman",
-            "email":    "josh@gravityblvd.com",
+            "name": "Josh Sherman",
+            "email": "josh@gravityblvd.com",
             "homepage": "http://joshtronic.com"
         }
     ],
@@ -18,12 +18,12 @@
     },
     "minimum-stability" : "dev",
     "require-dev": {
-        "phpunit/phpunit":        "dev-master",
+        "phpunit/phpunit": "dev-master",
         "satooshi/php-coveralls": "dev-master"
     },
     "require": {
-        "php":                  ">=5.4",
-        "league/oauth2-server": "3.2.*"
+        "php": ">=5.4",
+        "bshaffer/oauth2-server-php": "v1.5"
     },
     "autoload": {
         "psr-4": {
