@@ -23,7 +23,7 @@
     },
     "require": {
         "php": ">=5.4",
-        "bshaffer/oauth2-server-php": "v1.5"
+        "thephpleague/oauth2-server": "4.0.*"
     },
     "autoload": {
         "psr-4": {
