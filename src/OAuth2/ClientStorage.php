@@ -16,8 +16,8 @@ class ClientStorage extends StorageAdapter implements ClientInterface
         if ($redirect_uri)
         {
             $sql .= ', oauth_client_redirect_uris.*'
-                 .  ' INNER JOIN oauth_client_redirect_uris'
-                 .  ' ON oauth_clients.id = oauth_client_redirect_uris.client_id';
+                 .  ' INNER JOIN oauth_redirect_uris'
+                 .  ' ON oauth_clients.id = oauth_redirect_uris.client_id';
         }
 
         $sql .= ' FROM oauth_clients WHERE oauth_clients.id = ?';
@@ -32,7 +32,7 @@ class ClientStorage extends StorageAdapter implements ClientInterface
 
         if ($redirect_uri)
         {
-            $sql          .= 'AND oauth_client_redirect_uris.redirect_uri = ?';
+            $sql          .= 'AND oauth_redirect_uris.redirect_uri = ?';
             $parameters[]  = $redirect_uri;
         }
 
