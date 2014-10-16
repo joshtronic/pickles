@@ -2,6 +2,7 @@
 
 namespace Pickles\OAuth2;
 
+use \League\OAuth2\Exception\OAuthException;
 use \League\OAuth2\Server\AuthorizationServer;
 use \League\OAuth2\Server\Grant\PasswordGrant;
 use \League\OAuth2\Server\Grant\RefreshTokenGrant;
@@ -16,6 +17,12 @@ class Resource extends \Pickles\Resource
         {
             throw new \Exception('Forbidden.', 403);
         }
+        elseif (!isset($_REQUEST['grant_type']))
+        {
+            throw new \Exception('Bad Request.', 400);
+        }
+
+        $config = $this->config['oauth'][$_SERVER['__version']];
 
         switch (substr($_REQUEST['request'], strlen($_SERVER['__version']) + 2))
         {
@@ -30,7 +37,29 @@ class Resource extends \Pickles\Resource
                     $server->setScopeStorage(new ScopeStorage);
                     $server->setRefreshTokenStorage(new RefreshTokenStorage);
 
-                    switch ($_REQUEST['grant_type'])
+                    $grant_type = $_REQUEST['grant_type'];
+                    $grants     = ['password'];
+
+                    if (isset($config['grants']))
+                    {
+                        $grants = array_unique(array_merge($grants, $config['grants']));
+                    }
+
+                    if (!in_array($grant_type, $grants))
+                    {
+                        throw new \Exception('Unsupported grant type.', 403);
+                    }
+
+                    // Defaults TTLs to 1 day and 1 week respectively
+                    $token_ttl   = 3600;
+                    $refresh_ttl = 604800;
+
+                    if (isset($config['ttl']['access_token']))
+                    {
+                        $token_ttl = $config['ttl']['access_token'];
+                    }
+
+                    switch ($grant_type)
                     {
                         case 'authorization_code':
                             throw new \Exception('Not Implemented', 501);
@@ -46,8 +75,7 @@ class Resource extends \Pickles\Resource
 
                         case 'password':
                             $grant = new PasswordGrant;
-                            $grant->setAccessTokenTTL(3600);
-                            // @todo ^^^ check config and use that value
+                            $grant->setAccessTokenTTL($token_ttl);
 
                             $grant->setVerifyCredentialsCallback(function ($username, $password)
                             {
@@ -65,21 +93,41 @@ class Resource extends \Pickles\Resource
 
                         case 'refresh_token':
                             throw new \Exception('Not Implemented', 501);
+
+                            // @todo Need to work through this, appears lib is busted
+                            $grant = new RefreshTokenGrant;
+                            //$grant->setAccessTokenTTL($refresh_ttl);
+                            $server->addGrantType($grant);
                             break;
                     }
 
                     $server->addGrantType($grant);
 
-                    $refreshTokenGrant = new RefreshTokenGrant;
-                    $server->addGrantType($refreshTokenGrant);
+                    // Adds the refresh token grant if enabled
+                    if ($grant_type != 'refresh_token'
+                        && in_array('refresh_token', $grants))
+                    {
+                        if (isset($config['ttl']['refresh_token']))
+                        {
+                            $refresh_ttl = $config['ttl']['refresh_token'];
+                        }
+
+                        $grant = new RefreshTokenGrant;
+                        $grant->setAccessTokenTTL($refresh_ttl);
+                        $server->addGrantType($grant);
+                    }
 
                     $response = $server->issueAccessToken();
 
                     return $response;
                 }
-                catch (\Exception $e)
+                catch (OAuthException $e)
                 {
                     throw new \Exception($e->getMessage(), $e->httpStatusCode);
+                }
+                catch (\Exception $e)
+                {
+                    throw new \Exception($e->getMessage(), $e->getCode());
                 }
 
                 break;

@@ -19,9 +19,9 @@ class RefreshTokenStorage extends StorageAdapter implements RefreshTokenInterfac
         if (count($results) === 1)
         {
             return (new RefreshTokenEntity($this->server))
-                ->setId($result[0]['refresh_token'])
-                ->setExpireTime($result[0]['expires_at'])
-                ->setAccessTokenId($result[0]['access_token_id']);
+                ->setId($results[0]['refresh_token'])
+                ->setExpireTime($results[0]['expires_at'])
+                ->setAccessTokenId($results[0]['access_token_id']);
         }
 
         return null;
