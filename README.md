@@ -1,9 +1,9 @@
 # Pickles
 
-[![License](http://img.shields.io/packagist/l/picklesphp/pickles.svg?style=flat)][packagist]
-[![Build](http://img.shields.io/travis/picklesphp/pickles.svg?style=flat)][travis]
-[![Coverage](http://img.shields.io/coveralls/picklesphp/pickles.svg?style=flat)][coveralls]
-[![Downloads](http://img.shields.io/packagist/dt/picklesphp/pickles.svg?style=flat)][packagist]
+[![License](http://img.shields.io/packagist/l/joshtronic/pickles.svg?style=flat)][packagist]
+[![Build](http://img.shields.io/travis/joshtronic/pickles.svg?style=flat)][travis]
+[![Coverage](http://img.shields.io/coveralls/joshtronic/pickles.svg?style=flat)][coveralls]
+[![Downloads](http://img.shields.io/packagist/dt/joshtronic/pickles.svg?style=flat)][packagist]
 
 Pickles f/k/a PICKLES (PHP Interface Collection of Killer Libraries to Enhance
 Stuff) is an open source framework for the rapid development of RESTful
@@ -20,9 +20,9 @@ contributor, [Justin Davis][JustinDavis] for romanticizing the v2 reimagining
 and [Dean Jones][DeanJones] for helping to come up with the original PICKLES v1
 acronym.
 
-[coveralls]:   https://coveralls.io/r/picklesphp/pickles
-[packagist]:   https://packagist.org/packages/picklesphp/pickles
-[travis]:      http://travis-ci.org/picklesphp/pickles
+[coveralls]:   https://coveralls.io/r/joshtronic/pickles
+[packagist]:   https://packagist.org/packages/joshtronic/pickles
+[travis]:      http://travis-ci.org/joshtronic/pickles
 [DeanJones]:   https://github.com/deanproxy
 [GeoffOliver]: https://github.com/geoffoliver
 [JustinDavis]: http://justindavis.co
