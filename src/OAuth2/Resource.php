@@ -4,6 +4,7 @@ namespace Pickles\OAuth2;
 
 use \League\OAuth2\Server\AuthorizationServer;
 use \League\OAuth2\Server\Grant\PasswordGrant;
+use \League\OAuth2\Server\Grant\RefreshTokenGrant;
 use \Pickles\App\Models\User;
 use \Pickles\Config;
 
@@ -27,6 +28,7 @@ class Resource extends \Pickles\Resource
                     $server->setAccessTokenStorage(new AccessTokenStorage);
                     $server->setClientStorage(new ClientStorage);
                     $server->setScopeStorage(new ScopeStorage);
+                    $server->setRefreshTokenStorage(new RefreshTokenStorage);
 
                     switch ($_REQUEST['grant_type'])
                     {
@@ -44,6 +46,8 @@ class Resource extends \Pickles\Resource
 
                         case 'password':
                             $grant = new PasswordGrant;
+                            $grant->setAccessTokenTTL(3600);
+                            // @todo ^^^ check config and use that value
 
                             $grant->setVerifyCredentialsCallback(function ($username, $password)
                             {
@@ -65,6 +69,9 @@ class Resource extends \Pickles\Resource
                     }
 
                     $server->addGrantType($grant);
+
+                    $refreshTokenGrant = new RefreshTokenGrant;
+                    $server->addGrantType($refreshTokenGrant);
 
                     $response = $server->issueAccessToken();
 
