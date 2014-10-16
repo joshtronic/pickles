@@ -4,14 +4,14 @@ namespace Pickles\OAuth2;
 
 use \League\OAuth2\Server\AuthorizationServer;
 use \League\OAuth2\Server\Grant\PasswordGrant;
+use \League\OAuth2\Server\Grant\RefreshTokenGrant;
 use \Pickles\App\Models\User;
+use \Pickles\Config;
 
 class Resource extends \Pickles\Resource
 {
-    public function __construct()
+    public function POST()
     {
-        parent::__construct();
-
         if (!isset($this->config['oauth'][$_SERVER['__version']]))
         {
             throw new \Exception('Forbidden.', 403);
@@ -28,6 +28,7 @@ class Resource extends \Pickles\Resource
                     $server->setAccessTokenStorage(new AccessTokenStorage);
                     $server->setClientStorage(new ClientStorage);
                     $server->setScopeStorage(new ScopeStorage);
+                    $server->setRefreshTokenStorage(new RefreshTokenStorage);
 
                     switch ($_REQUEST['grant_type'])
                     {
@@ -45,10 +46,16 @@ class Resource extends \Pickles\Resource
 
                         case 'password':
                             $grant = new PasswordGrant;
+                            $grant->setAccessTokenTTL(3600);
+                            // @todo ^^^ check config and use that value
 
                             $grant->setVerifyCredentialsCallback(function ($username, $password)
                             {
-                                $user = new User(['email' => $username]);
+                                $user = new User([
+                                    'conditions' => [
+                                        'email' => $username,
+                                    ],
+                                ]);
 
                                 return $user->count()
                                     && password_verify($password, $user->record['password']);
@@ -63,7 +70,12 @@ class Resource extends \Pickles\Resource
 
                     $server->addGrantType($grant);
 
+                    $refreshTokenGrant = new RefreshTokenGrant;
+                    $server->addGrantType($refreshTokenGrant);
+
                     $response = $server->issueAccessToken();
+
+                    return $response;
                 }
                 catch (\Exception $e)
                 {

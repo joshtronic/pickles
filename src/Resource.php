@@ -14,6 +14,12 @@
 
 namespace Pickles;
 
+use \League\OAuth2\Server\ResourceServer;
+use Pickles\OAuth2\AccessTokenStorage;
+use Pickles\OAuth2\ClientStorage;
+use Pickles\OAuth2\ScopeStorage;
+use Pickles\OAuth2\SessionStorage;
+
 /**
  * Resource Class
  *
@@ -26,15 +32,6 @@ namespace Pickles;
  */
 class Resource extends Object
 {
-    /**
-     * HTTPS
-     *
-     * Whether or not the page should be loaded via HTTP Secure.
-     *
-     * @var boolean defaults to false
-     */
-    public $https = false;
-
     /**
      * Filter
      *
@@ -83,25 +80,28 @@ class Resource extends Object
 
         try
         {
-            // Determines if we need to serve over HTTP or HTTPS
-            if (($this->https === true
-                || (isset($this->https[$method]) && $this->https[$method]))
-                && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false))
-            {
-                throw new \Exception('HTTPS is required.', 400);
-            }
-
-            // Check auth if flag is explicitly true or is true for the method
+            // Checks if auth flag is explicity true or true for the method
             if ($this->auth === true
                 || (isset($this->auth[$method]) && $this->auth[$method]))
             {
-                if (!isset($this->config['oauth2'][$_SERVER['__version']]))
+                if (isset($this->config['oauth'][$_SERVER['__version']]))
+                {
+                    $server = new ResourceServer(
+                        new SessionStorage,
+                        new AccessTokenStorage,
+                        new ClientStorage,
+                        new ScopeStorage
+                    );
+
+                    $server->isValidRequest();
+                }
+                else
                 {
                     throw new \Exception('Authentication is not configured properly.', 401);
                 }
             }
 
-            // Hack together some new globals
+            // Hacks together some new globals
             if (in_array($method, ['PUT', 'DELETE']))
             {
                 $GLOBALS['_' . $method] = [];
@@ -337,7 +337,7 @@ class Resource extends Object
     {
         http_response_code($this->status);
         header('Content-Type: application/json');
-        header('X-Powered-By: Pickles v2 - https://picklesphp.com');
+        header('X-Powered-By: Pickles (http://picklesphp.com)');
 
         $meta = [
             'status'  => $this->status,

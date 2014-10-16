@@ -39,6 +39,12 @@ class Router extends Object
 
         try
         {
+            // Secure by default
+            if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == false)
+            {
+                throw new \Exception('HTTPS is required.', 400);
+            }
+
             // Grabs the requested page
             $request              = $_REQUEST['request'];
             $components           = explode('/', $request);
