@@ -8,7 +8,7 @@
  *
  * @copyright Copyright 2007-2014, Josh Sherman
  * @license   http://www.opensource.org/licenses/mit-license.html
- * @link      http://picklesphp.com
+ * @link      https://github.com/joshtronic/pickles
  * @package   Pickles
  * @todo      Drop driver, hardcode drivers based on the type
  * @todo      More assumptions for the datasource variables

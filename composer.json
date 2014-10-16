@@ -1,9 +1,9 @@
 {
-    "name":        "picklesphp/pickles",
+    "name":        "joshtronic/pickles",
     "description": "Pickles is a PHP framework for building kick-ass services",
     "type":        "library",
     "keywords":    ["framework", "api", "soa", "oauth"],
-    "homepage":    "http://picklesphp.com",
+    "homepage":    "https://github.com/joshtronic/pickles",
     "license":     "MIT",
     "authors": [
         {
@@ -13,8 +13,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/picklesphp/pickles/issues",
-        "source": "https://github.com/picklesphp/pickles"
+        "issues": "https://github.com/joshtronic/pickles/issues",
+        "source": "https://github.com/joshtronic/pickles"
     },
     "minimum-stability" : "dev",
     "require-dev": {
