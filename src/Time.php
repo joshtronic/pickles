@@ -115,9 +115,6 @@ class Time
      * @static
      * @param  string $date birth / inception date
      * @return integer $age number of years old
-     * @todo   Wondering if this really should live in the Date class since
-     *         it's a Date function. Could flip the aliasing to preserve any
-     *         older code.
      */
     public static function age($date)
     {
