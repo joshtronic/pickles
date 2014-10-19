@@ -290,7 +290,7 @@ class Resource extends Object
                 throw new \Exception('Missing or invalid parameters.', 400);
             }
 
-            parent::__construct(['cache', 'db']);
+            parent::__construct();
 
             // Checks if the request method has been implemented
             if (get_class($this) != 'Pickles\\Resource')
@@ -302,7 +302,7 @@ class Resource extends Object
                 else
                 {
                     // Starts a timer before the resource is executed
-                    if ($this->config['pickles']['profiler'])
+                    if ($this->config['profiler'])
                     {
                         $timer = get_class($this) . '->' . $method . '()';
                         Profiler::timer($timer);
@@ -311,7 +311,7 @@ class Resource extends Object
                     $this->response = $this->$method();
 
                     // Stops the resource timer
-                    if ($this->config['pickles']['profiler'])
+                    if ($this->config['profiler'])
                     {
                         Profiler::timer($timer);
                     }
@@ -374,7 +374,7 @@ class Resource extends Object
             }
         }
 
-        if ($this->config['pickles']['profiler'])
+        if ($this->config['profiler'])
         {
             $response['profiler'] = Profiler::report();
         }

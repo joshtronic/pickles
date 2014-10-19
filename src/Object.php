@@ -39,47 +39,33 @@ class Object
     public $config = null;
 
     /**
-     * Instance of the Cache object
+     * Instance of the Mongo object
      *
      * @var object
      */
-    public $cache = null;
+    public $mongo = null;
 
     /**
-     * Instance of the Database object
+     * Instance of the Redis object
      *
      * @var object
      */
-    public $db = null;
+    public $redis = null;
 
     /**
      * Constructor
      *
      * Establishes a Config instance for all children to enjoy
      */
-    public function __construct($objects = null)
+    public function __construct()
     {
+        // @todo Lazy load these so we're not loading them on every instance
         $this->config = Config::getInstance();
-
-        if ($objects)
-        {
-            if (!is_array($objects))
-            {
-                $objects = [$objects];
-            }
-
-            foreach ($objects as $object)
-            {
-                switch ($object)
-                {
-                    case 'cache': $this->cache = Cache::getInstance();    break;
-                    case 'db':    $this->db    = Database::getInstance(); break;
-                }
-            }
-        }
+        $this->mongo  = Mongo::getInstance();
+        //$this->redis  = Redis::getInstance();
 
         // Optionally logs the constructor to the profiler
-        if ($this->config['pickles']['profiler'])
+        if ($this->config['profiler'])
         {
             Profiler::log($this, '__construct');
         }
@@ -119,7 +105,7 @@ class Object
     public function __destruct()
     {
         // Optionally logs the destructor to the profiler
-        if ($this->config['pickles']['profiler'])
+        if ($this->config['profiler'])
         {
             Profiler::log($this, '__destruct');
         }

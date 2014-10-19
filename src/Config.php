@@ -138,9 +138,9 @@ class Config extends \ArrayObject
             // Defaults expected Pickles variables to false
             foreach (['auth', 'cache', 'profiler'] as $variable)
             {
-                if (!isset($config['pickles'][$variable]))
+                if (!isset($config[$variable]))
                 {
-                    $config['pickles'][$variable] = false;
+                    $config[$variable] = false;
                 }
             }
 
