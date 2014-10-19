@@ -27,8 +27,8 @@
     },
     "suggest": {
         "mongodb/mongo-php-driver": "Required to use the Mongo storage engine",
-        "predis/predis": "Required to use the Redis storage engine",
-    }
+        "predis/predis": "Required to use the Redis storage engine"
+    },
     "autoload": {
         "psr-4": {
             "Pickles\\" : "src/"
