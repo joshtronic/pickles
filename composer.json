@@ -23,7 +23,7 @@
     },
     "require": {
         "php": ">=5.4",
-        "league/oauth2-server": "4.0.x-dev"
+        "bshaffer/oauth2-server-php": "v1.5"
     },
     "suggest": {
         "mongodb/mongo-php-driver": "Required to use the Mongo storage engine",

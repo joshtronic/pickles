@@ -2,10 +2,9 @@
 
 namespace Pickles\OAuth2;
 
-use \League\OAuth2\Exception\OAuthException;
-use \League\OAuth2\Server\AuthorizationServer;
-use \League\OAuth2\Server\Grant\PasswordGrant;
-use \League\OAuth2\Server\Grant\RefreshTokenGrant;
+use \OAuth2\GrantType\UserCredentials;
+use \OAuth2\Request;
+use \OAuth2\Server;
 use \Pickles\Config;
 
 class Resource extends \Pickles\Resource
@@ -28,6 +27,12 @@ class Resource extends \Pickles\Resource
             case 'oauth/access_token':
                 try
                 {
+                    $storage = new Storage($this->mongo, ['user_table' => 'user']);
+                    $server  = new Server($storage);
+                    $server->addGrantType(new UserCredentials($storage));
+                    $server->handleTokenRequest(Request::createFromGlobals())->send();
+                    exit;
+
                     $server = new AuthorizationServer;
 
                     $server->setSessionStorage(new SessionStorage);
