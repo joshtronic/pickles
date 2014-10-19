@@ -37,7 +37,7 @@ class Mongo extends Object
 
             // Instantiates our Mongo client
             $instance = new \MongoClient($mongo['server']);
-            $instance->selectDB($mongo['database']);
+            $instance = $instance->$mongo['database'];
 
             // Caches the instance for possible reuse later
             self::$instances['Mongo'] = $instance;

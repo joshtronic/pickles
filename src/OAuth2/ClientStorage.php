@@ -11,40 +11,27 @@ class ClientStorage extends StorageAdapter implements ClientInterface
 {
     public function get($client_id, $client_secret = null, $redirect_uri = null, $grant_type = null)
     {
-        $sql = 'SELECT oauth_clients.*';
+        $criteria = ['_id' => new \MongoId($client_id)];
 
         if ($redirect_uri)
         {
-            $sql .= ', oauth_client_redirect_uris.*'
-                 .  ' INNER JOIN oauth_redirect_uris'
-                 .  ' ON oauth_clients.id = oauth_redirect_uris.client_id';
+            // @todo join / query oauth_client_redirect_uris
         }
-
-        $sql .= ' FROM oauth_clients WHERE oauth_clients.id = ?';
-
-        $parameters = [$client_id];
 
         if ($client_secret)
         {
-            $sql          .= ' AND oauth_clients.secret = ?';
-            $parameters[]  = $client_secret;
+            $criteria['secret'] = $client_secret; 
         }
 
-        if ($redirect_uri)
-        {
-            $sql          .= 'AND oauth_redirect_uris.redirect_uri = ?';
-            $parameters[]  = $redirect_uri;
-        }
+        $results = $this->mongo->oauth_clients->findOne($criteria);
 
-        $results = $this->db->fetch($sql, $parameters);
-
-        if (count($results) === 1)
+        if ($results)
         {
             $client = new ClientEntity($this->server);
 
             $client->hydrate([
-                'id'   => $results[0]['id'],
-                'name' => $results[0]['name']
+                'id'   => $results['_id']->{'$id'},
+                'name' => $results['name']
             ]);
 
             return $client;

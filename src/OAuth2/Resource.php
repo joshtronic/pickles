@@ -6,7 +6,6 @@ use \League\OAuth2\Exception\OAuthException;
 use \League\OAuth2\Server\AuthorizationServer;
 use \League\OAuth2\Server\Grant\PasswordGrant;
 use \League\OAuth2\Server\Grant\RefreshTokenGrant;
-use \Pickles\App\Models\User;
 use \Pickles\Config;
 
 class Resource extends \Pickles\Resource
@@ -79,14 +78,8 @@ class Resource extends \Pickles\Resource
 
                             $grant->setVerifyCredentialsCallback(function ($username, $password)
                             {
-                                $user = new User([
-                                    'conditions' => [
-                                        'email' => $username,
-                                    ],
-                                ]);
-
-                                return $user->count()
-                                    && password_verify($password, $user->record['password']);
+                                $user = $this->mongo->user->findOne(['email' => $username]);
+                                return $user && password_verify($password, $user['password']);
                             });
 
                             break;

@@ -29,20 +29,17 @@ class RefreshTokenStorage extends StorageAdapter implements RefreshTokenInterfac
 
     public function create($token, $expiration, $access_token)
     {
-        $sql      = 'SELECT id FROM oauth_access_tokens WHERE access_token = ?;';
-        $results  = $this->db->fetch($sql, [$access_token]);
-        $token_id = $results[0]['id'];
+        $results = $this->mongo->oauth_access_tokens->findOne([
+            'access_token' => $access_token,
+        ]);
 
-        $sql = 'INSERT INTO oauth_refresh_tokens'
-             . ' (refresh_token, access_token_id, expires_at, client_id)'
-             . ' VALUES'
-             . ' (?, ?, ?, ?);';
+        $token_id = $results['_id']->{'$id'};
 
-        $this->db->execute($sql, [
-            $token,
-            $token_id,
-            $expiration,
-            $this->server->getRequest()->request->get('client_id', null),
+        return $this->mongo->oauth_refresh_tokens->insert([
+            'refresh_token'   => $token,
+            'access_token_id' => $token_id,
+            'expires_at'      => $expiration,
+            'client_id'       => $this->server->getRequest()->request->get('client_id', null),
         ]);
     }
 

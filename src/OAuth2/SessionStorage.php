@@ -61,16 +61,18 @@ class SessionStorage extends StorageAdapter implements SessionInterface
 
     public function getScopes(SessionEntity $session)
     {
-        $sql = 'SELECT oauth_sessions.*'
-             . ' FROM oauth_sessions'
-             . ' INNER JOIN oauth_access_token_scopes'
-             . ' ON oauth_sessions.id = oauth_access_token_scopes.access_token_id'
-             . ' INNER JOIN oauth_scopes'
-             . ' ON oauth_scopes.id = oauth_access_token_scopes.scope_id'
-             . ' WHERE oauth_sessions.id = ?;';
+        /*
+        // @todo
+        // INNER JOIN oauth_access_token_scopes
+        // ON oauth_sessions.id = oauth_access_token_scopes.access_token_id
+        // INNER JOIN oauth_scopes
+        // ON oauth_scopes.id = oauth_access_token_scopes.scope_id
 
-        $results = $this->db->fetch($sql, [$session->getId()]);
-        $scopes  = [];
+        $results = $this->mongo->oauth_sessions->findOne([
+            '_id' => new \MongoId($session->getId())
+        ]);
+
+        $scopes = [];
 
         foreach ($results as $scope)
         {
@@ -81,16 +83,18 @@ class SessionStorage extends StorageAdapter implements SessionInterface
         }
 
         return $scopes;
+        */
+
+        return [];
     }
 
     public function create($owner_type, $owner_id, $client_id, $client_redirect_uri = null)
     {
-        $sql = 'INSERT INTO oauth_sessions'
-             . ' (owner_type, owner_id, client_id)'
-             . ' VALUES'
-             . ' (?, ?, ?);';
-
-        return $this->db->execute($sql, [$owner_type, $owner_id, $client_id]);
+        return $this->mongo->oauth_sessions->insert([
+            'owner_type' => $owner_type,
+            'owner_id'   => $owner_id,
+            'client_id'  => $client_id,
+        ]);
     }
 
     public function associateScope(SessionEntity $session, ScopeEntity $scope)

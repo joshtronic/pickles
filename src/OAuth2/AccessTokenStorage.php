@@ -30,6 +30,10 @@ class AccessTokenStorage extends StorageAdapter implements AccessTokenInterface
 
     public function getScopes(AbstractTokenEntity $token)
     {
+        $response = [];
+
+        /*
+        @todo Port to Mongo
         $sql = 'SELECT oauth_scopes.id, oauth_scopes.description'
              . ' FROM oauth_access_token_scopes'
              . ' INNER JOIN oauth_scopes'
@@ -37,7 +41,6 @@ class AccessTokenStorage extends StorageAdapter implements AccessTokenInterface
              . ' WHERE oauth_access_token_scopes.access_token_id = ?;';
 
         $results  = $this->db->fetch($sql, [$token->getId()]);
-        $response = [];
 
         if (count($results) > 0)
         {
@@ -49,18 +52,18 @@ class AccessTokenStorage extends StorageAdapter implements AccessTokenInterface
                 ]);
             }
         }
+        */
 
         return $response;
     }
 
     public function create($token, $expiration, $session_id)
     {
-        $sql = 'INSERT INTO oauth_access_tokens'
-             . ' (access_token, session_id, expires_at)'
-             . ' VALUES'
-             . ' (?, ?, ?);';
-
-        $this->db->execute($sql, [$token, $session_id, $expiration]);
+        return $this->mongo->oauth_access_tokens->insert([
+            'access_token' => $token,
+            'session_id'   => $session_id, // @todo Store as MongoId?
+            'expires_at'   => $expiration,
+        ]);
     }
 
     public function associateScope(AbstractTokenEntity $token, ScopeEntity $scope)

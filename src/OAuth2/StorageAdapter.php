@@ -4,17 +4,17 @@ namespace Pickles\OAuth2;
 
 use \League\OAuth2\Server\Storage\Adapter;
 use \Pickles\Config;
-use \Pickles\Database;
+use \Pickles\Mongo;
 
 class StorageAdapter extends Adapter
 {
     protected $config;
-    protected $db;
+    protected $mongo;
 
     public function __construct()
     {
         $this->config = Config::getInstance();
-        $this->db     = Database::getInstance();
+        $this->mongo  = Mongo::getInstance();
     }
 }
 
