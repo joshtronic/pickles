@@ -4,6 +4,7 @@ namespace Pickles\OAuth2;
 
 use \OAuth2\GrantType\UserCredentials;
 use \OAuth2\Request;
+use \OAuth2\Response;
 use \OAuth2\Server;
 use \Pickles\Config;
 
@@ -24,23 +25,9 @@ class Resource extends \Pickles\Resource
 
         switch (substr($_REQUEST['request'], strlen($_SERVER['__version']) + 2))
         {
-            case 'oauth/access_token':
+            case 'oauth2/token':
                 try
                 {
-                    $storage = new Storage($this->mongo, ['user_table' => 'user']);
-                    $server  = new Server($storage);
-                    $server->addGrantType(new UserCredentials($storage));
-                    $server->handleTokenRequest(Request::createFromGlobals())->send();
-                    exit;
-
-                    $server = new AuthorizationServer;
-
-                    $server->setSessionStorage(new SessionStorage);
-                    $server->setAccessTokenStorage(new AccessTokenStorage);
-                    $server->setClientStorage(new ClientStorage);
-                    $server->setScopeStorage(new ScopeStorage);
-                    $server->setRefreshTokenStorage(new RefreshTokenStorage);
-
                     $grant_type = $_REQUEST['grant_type'];
                     $grants     = ['password'];
 
@@ -54,7 +41,7 @@ class Resource extends \Pickles\Resource
                         throw new \Exception('Unsupported grant type.', 403);
                     }
 
-                    // Defaults TTLs to 1 day and 1 week respectively
+                    // @todo Defaults TTLs to 1 day and 1 week respectively
                     $token_ttl   = 3600;
                     $refresh_ttl = 604800;
 
@@ -78,44 +65,33 @@ class Resource extends \Pickles\Resource
                             break;
 
                         case 'password':
-                            $grant = new PasswordGrant;
-                            $grant->setAccessTokenTTL($token_ttl);
+                            $storage = new Storage($this->mongo, ['user_table' => 'user']);
+                            $server  = new Server($storage);
 
-                            $grant->setVerifyCredentialsCallback(function ($username, $password)
+                            $server->addGrantType(new UserCredentials($storage));
+
+                            $request  = Request::createFromGlobals();
+                            $response = new Response;
+                            $response = $server->handleTokenRequest($request, $response);
+                            $body     = json_decode($response->getResponseBody(), true);
+
+                            if (isset($body['error']))
                             {
-                                $user = $this->mongo->user->findOne(['email' => $username]);
-                                return $user && password_verify($password, $user['password']);
-                            });
+                                $parameters = $response->getParameters();
 
+                                throw new \Exception(
+                                    $parameters['error_description'],
+                                    $response->getStatusCode()
+                                );
+                            }
+
+                            $response = $body;
                             break;
 
                         case 'refresh_token':
                             throw new \Exception('Not Implemented', 501);
-
-                            // @todo Need to work through this, appears lib is busted
-                            $grant = new RefreshTokenGrant;
-                            //$grant->setAccessTokenTTL($refresh_ttl);
-                            $server->addGrantType($grant);
                             break;
                     }
-
-                    $server->addGrantType($grant);
-
-                    // Adds the refresh token grant if enabled
-                    if ($grant_type != 'refresh_token'
-                        && in_array('refresh_token', $grants))
-                    {
-                        if (isset($config['ttl']['refresh_token']))
-                        {
-                            $refresh_ttl = $config['ttl']['refresh_token'];
-                        }
-
-                        $grant = new RefreshTokenGrant;
-                        $grant->setAccessTokenTTL($refresh_ttl);
-                        $server->addGrantType($grant);
-                    }
-
-                    $response = $server->issueAccessToken();
 
                     return $response;
                 }

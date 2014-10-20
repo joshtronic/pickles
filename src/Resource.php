@@ -14,12 +14,6 @@
 
 namespace Pickles;
 
-use \League\OAuth2\Server\ResourceServer;
-use Pickles\OAuth2\AccessTokenStorage;
-use Pickles\OAuth2\ClientStorage;
-use Pickles\OAuth2\ScopeStorage;
-use Pickles\OAuth2\SessionStorage;
-
 /**
  * Resource Class
  *

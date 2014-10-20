@@ -54,7 +54,7 @@ class Router extends Object
             $_SERVER['__version'] = substr($version, 1);
 
             // Checks if we're trying to rock some OAuth
-            if ($components[0] == 'oauth')
+            if ($components[0] == 'oauth2')
             {
                 $class = 'Pickles\OAuth2\Resource';
             }
