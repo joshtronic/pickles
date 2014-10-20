@@ -327,6 +327,37 @@ class Resource extends Object
         }
     }
 
+    // Create
+    public function POST()
+    {
+        // @todo Whatever gets POSTed (aside from OAuth stuff) should be inserted to the collection
+    }
+
+    // Read
+    public function GET()
+    {
+        if (current($this->uids))
+        {
+            // @todo Pulls the record with this UID
+        }
+        else
+        {
+            // @todo Do we pull all or return an empty set?
+        }
+    }
+
+    // Update
+    public function PUT()
+    {
+        // @todo If we have a UID, update the record with whatever is posted
+    }
+
+    // Delete
+    public function DELETE()
+    {
+        // @todo If we have a UID, delete it
+    }
+
     public function respond()
     {
         http_response_code($this->status);

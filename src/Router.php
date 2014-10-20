@@ -69,7 +69,8 @@ class Router extends Object
                     }
                     else
                     {
-                        $nouns[] = $component;
+                        $nouns[]          = $component;
+                        $uids[$component] = null;
                     }
                 }
 
