@@ -255,12 +255,14 @@ class Security
 		if (self::checkSession() == true && isset($_SESSION['__pickles']['security']['user_id']))
 		{
 			// Checks the session against the cookie
+			/*
 			if (isset($_SESSION['__pickles']['security']['token'], $_COOKIE['pickles_security_token'])
 				&& $_SESSION['__pickles']['security']['token'] != $_COOKIE['pickles_security_token'])
 			{
 				Security::logout();
 			}
-			elseif (isset($_SESSION['__pickles']['security']['level']) && $_SESSION['__pickles']['security']['level'] != null)
+			else*/
+			if (isset($_SESSION['__pickles']['security']['level']) && $_SESSION['__pickles']['security']['level'] != null)
 			{
 				return $_SESSION['__pickles']['security']['level'];
 			}
